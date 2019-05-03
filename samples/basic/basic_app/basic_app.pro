@@ -10,7 +10,7 @@ INCLUDEPATH += \
 INCLUDEPATH += /usr/local/include/opencv
 INCLUDEPATH += /usr/local/include/opencv2
 
-INCLUDEPATH += /home/ulrich/c_source/opencv/mysource/ueye_for_opencv
+# INCLUDEPATH += /home/ulrich/c_source/opencv/mysource/ueye_for_opencv
 
 LIBS += -L/usr/local/lib \
 -lopencv_core \
@@ -19,10 +19,10 @@ LIBS += -L/usr/local/lib \
 -lopencv_imgproc \
 -lopencv_video \
 -lopencv_videoio \
--lueye_api \
 -lpthread \
 -lrt \
 -lm
+# -lueye_api \
 # -lubtools
 
 SOURCES += main.cpp

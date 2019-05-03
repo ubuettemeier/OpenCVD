@@ -290,7 +290,8 @@ struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
     foo->first_para = foo->end_para = NULL;
     // Level 0
     QTreeWidgetItem *tw = new QTreeWidgetItem(ui->treeWidget);
-    tw->setText(0, QString("%1 %2").arg(QString::number(foo->line_nr)).arg(QString::asprintf("%s", foo->func_name)));
+    // tw->setText(0, QString("%1 %2").arg(QString::number(foo->line_nr)).arg(QString::asprintf("%s", foo->func_name)));
+    tw->setText(0, QString("%1 %2").arg(QString::number(foo->line_nr)).arg(QString(foo->func_name)));
     tw->setIcon(0, aktiv_icon[ foo->aktiv_icon ]);
     foo->tree_pointer = (void *)tw;
 

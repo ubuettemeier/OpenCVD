@@ -629,7 +629,7 @@ Slide::Slide(QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *paren
 
         if (cp->type == SLIDE_INT_TWO_STEP_PARA) stepwidth = 2;
 
-        l = new QLabel (QString("%1=%2  min=%3  max=%4").arg(QString::asprintf("%s", cp->para_name))
+        l = new QLabel (QString("%1=%2  min=%3  max=%4").arg(QString(cp->para_name))
                                                          .arg(QString::number(sp->value))
                                                          .arg(QString::number(sp->min))
                                                          .arg(QString::number(sp->max)));
@@ -669,7 +669,7 @@ Slide::Slide(QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *paren
 
     case SLIDE_DOUBLE_PARA: {
         struct _double_para_ *sp = (struct _double_para_ *)cp->data;
-        l = new QLabel (QString("%1=%2  min=%3  max=%4").arg(QString::asprintf("%s", cp->para_name))
+        l = new QLabel (QString("%1=%2  min=%3  max=%4").arg(QString(cp->para_name))
                                                          .arg(QString::number(sp->value))
                                                          .arg(QString::number(sp->min))
                                                          .arg(QString::number(sp->max)));
@@ -727,7 +727,7 @@ void Slide::slide_value_changed (int val)
             if (val % 2)            // in zweiter Schritten arbeiten 1, 3, 5, ...
                 sp->value = val;
         }
-        l->setText(QString("%1=%2  min=%3  max=%4").arg(QString::asprintf("%s", cp->para_name))
+        l->setText(QString("%1=%2  min=%3  max=%4").arg(QString(cp->para_name))
                                                     .arg(QString::number(sp->value))
                                                     .arg(QString::number(sp->min))
                                                     .arg(QString::number(sp->max)));
@@ -736,7 +736,7 @@ void Slide::slide_value_changed (int val)
     case SLIDE_DOUBLE_PARA: {
         struct _double_para_ *sp = (struct _double_para_ *)cp->data;
         sp->value = val;
-        l->setText(QString("%1=%2  min=%3  max=%4").arg(QString::asprintf("%s", cp->para_name))
+        l->setText(QString("%1=%2  min=%3  max=%4").arg(QString(cp->para_name))
                                                     .arg(QString::number(sp->value))
                                                     .arg(QString::number(sp->min))
                                                     .arg(QString::number(sp->max)));
