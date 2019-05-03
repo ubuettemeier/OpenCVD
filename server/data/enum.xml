@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <enum>
+        <NormTypes>
+            <NORM_INF> 1 </NORM_INF>
+            <NORM_L1> 2 </NORM_L1>
+            <NORM_L2> 4 </NORM_L2>
+            <NORM_L2SQR> 5 </NORM_L2SQR>
+            <NORM_HAMMING> 6 </NORM_HAMMING>
+            <NORM_HAMMING2> 7 </NORM_HAMMING2>
+            <NORM_TYPE_MASK> 7 </NORM_TYPE_MASK>
+            <NORM_RELATIVE> 8 </NORM_RELATIVE>
+            <NORM_MINMAX> 32 </NORM_MINMAX>
+        </NormTypes>
+
+        <MorphTypes>
+            <MORPH_ERODE> 0 </MORPH_ERODE>
+            <MORPH_DILATE> 1 </MORPH_DILATE>
+            <MORPH_OPEN> 2 </MORPH_OPEN>
+            <MORPH_CLOSE> 3 </MORPH_CLOSE>
+            <MORPH_GRADIENT> 4 </MORPH_GRADIENT>
+            <MORPH_TOPHAT> 5 </MORPH_TOPHAT>
+            <MORPH_BLACKHAT> 6 </MORPH_BLACKHAT>
+            <MORPH_HITMISS> 7 </MORPH_HITMISS>
+        </MorphTypes>
+
+        <MorphShapes>
+            <MORPH_RECT>  0 </MORPH_RECT>
+            <MORPH_CROSS>  1 </MORPH_CROSS>
+            <MORPH_ELLIPSE>  2 </MORPH_ELLIPSE>
+        </MorphShapes>
+
+        <GrabCutModes>
+            <GC_INIT_WITH_RECT>  0 </GC_INIT_WITH_RECT>
+            <GC_INIT_WITH_MASK>  1 </GC_INIT_WITH_MASK>
+            <GC_EVAL>  2 </GC_EVAL>
+        </GrabCutModes>
+
+        <ImreadModes>
+            <IMREAD_UNCHANGED> -1 </IMREAD_UNCHANGED>
+            <IMREAD_GRAYSCALE>  0 </IMREAD_GRAYSCALE>
+            <IMREAD_COLOR> 1 </IMREAD_COLOR>
+            <IMREAD_ANYDEPTH> 2 </IMREAD_ANYDEPTH>
+            <IMREAD_ANYCOLOR> 4 </IMREAD_ANYCOLOR>
+            <IMREAD_LOAD_GDAL> 8 </IMREAD_LOAD_GDAL>
+            <IMREAD_REDUCED_GRAYSCALE_2> 16 </IMREAD_REDUCED_GRAYSCALE_2>
+            <IMREAD_REDUCED_COLOR_2> 17 </IMREAD_REDUCED_COLOR_2>
+            <IMREAD_REDUCED_GRAYSCALE_4> 32 </IMREAD_REDUCED_GRAYSCALE_4>
+            <IMREAD_REDUCED_COLOR_4> 33 </IMREAD_REDUCED_COLOR_4>
+            <IMREAD_REDUCED_GRAYSCALE_8> 64 </IMREAD_REDUCED_GRAYSCALE_8>
+            <IMREAD_REDUCED_COLOR_8> 65 </IMREAD_REDUCED_COLOR_8>
+            <IMREAD_IGNORE_ORIENTATION> 128 </IMREAD_IGNORE_ORIENTATION>
+        </ImreadModes>
+
+        <filterdepth_CV_8U>
+            <SAME_DEPTH> -1 </SAME_DEPTH>
+            <CV_16S> 3 </CV_16S>
+            <CV_32F> 5 </CV_32F>
+            <CV_64F> 6 </CV_64F>
+        </filterdepth_CV_8U>
+
+        <filterdepth_CV_16U_CV_16S>
+            <SAME_DEPTH> -1 </SAME_DEPTH>
+            <CV_32F> 5 </CV_32F>
+            <CV_64F> 6 </CV_64F>
+        </filterdepth_CV_16U_CV_16S>
+
+        <filterdepth_CV_32F>
+            <SAME_DEPTH> -1 </SAME_DEPTH>
+            <CV_32F> 5 </CV_32F>
+            <CV_64F> 6 </CV_64F>
+        </filterdepth_CV_32F>
+
+        <filterdepth_CV_64F>
+            <SAME_DEPTH> -1 </SAME_DEPTH>
+            <CV_64F> 6 </CV_64F>
+        </filterdepth_CV_64F>
+
+        <boolType>
+            <false> 0 </false>
+            <true> 1 </true>
+        </boolType>
+
+        <RetrievalModes>
+            <RETR_EXTERNAL> 0 </RETR_EXTERNAL>
+            <RETR_LIST> 1 </RETR_LIST>
+            <RETR_CCOMP> 2 </RETR_CCOMP>
+            <RETR_TREE> 3 </RETR_TREE>
+            <RETR_FLOODFILL> 4 </RETR_FLOODFILL>
+        </RetrievalModes>
+
+        <ContourApproximationModes>
+            <CHAIN_APPROX_NONE> 1 </CHAIN_APPROX_NONE>
+            <CHAIN_APPROX_SIMPLE> 2 </CHAIN_APPROX_SIMPLE>
+            <CHAIN_APPROX_TC89_L1> 3 </CHAIN_APPROX_TC89_L1>
+            <CHAIN_APPROX_TC89_KCOS> 4 </CHAIN_APPROX_TC89_KCOS>
+        </ContourApproximationModes>
+
+        <BorderTypes>
+            <BORDER_CONSTANT> 0 </BORDER_CONSTANT>
+            <BORDER_REPLICATE> 1 </BORDER_REPLICATE>
+            <BORDER_REFLECT> 2 </BORDER_REFLECT>
+            <BORDER_WRAP> 3 </BORDER_WRAP>
+            <BORDER_REFLECT_101> 4 </BORDER_REFLECT_101>
+            <BORDER_TRANSPARENT> 5 </BORDER_TRANSPARENT>
+
+            <BORDER_REFLECT101> 4 </BORDER_REFLECT101>
+            <BORDER_DEFAULT> 4 </BORDER_DEFAULT>
+            <BORDER_ISOLATED> 16 </BORDER_ISOLATED>
+        </BorderTypes>
+
+        <DistanceTransformMasks>
+            <DIST_MASK_3> 3 </DIST_MASK_3>
+            <DIST_MASK_5> 5 </DIST_MASK_5>
+            <DIST_MASK_PRECISE> 0 </DIST_MASK_PRECISE>
+        </DistanceTransformMasks>
+
+        <ThresholdTypes>
+            <THRESH_BINARY> 0 </THRESH_BINARY>
+            <THRESH_BINARY_INV> 1 </THRESH_BINARY_INV>
+            <THRESH_TRUNC> 2 </THRESH_TRUNC>
+            <THRESH_TOZERO> 3 </THRESH_TOZERO>
+            <THRESH_TOZERO_INV> 4 </THRESH_TOZERO_INV>
+            <THRESH_MASK> 7 </THRESH_MASK>
+            <THRESH_OTSU> 8 </THRESH_OTSU>
+            <THRESH_TRIANGLE> 16 </THRESH_TRIANGLE>
+        </ThresholdTypes>
+
+        <ColorConversionCodes>
+            <COLOR_BGR2BGRA> 0 </COLOR_BGR2BGRA>
+            <COLOR_RGB2RGBA> 0 </COLOR_RGB2RGBA>
+
+            <COLOR_BGRA2BGR> 1 </COLOR_BGRA2BGR>
+            <COLOR_RGBA2RGB> 1 </COLOR_RGBA2RGB>
+
+            <COLOR_BGR2GRAY> 6 </COLOR_BGR2GRAY>
+            <COLOR_RGB2GRAY> 7 </COLOR_RGB2GRAY>
+
+            <COLOR_BGR2BGR565> 12 </COLOR_BGR2BGR565>
+            <COLOR_RGB2BGR565> 13 </COLOR_RGB2BGR565>
+            <COLOR_BGR5652BGR> 14 </COLOR_BGR5652BGR>
+            <COLOR_BGR5652RGB> 15 </COLOR_BGR5652RGB>
+            <COLOR_BGRA2BGR565> 16 </COLOR_BGRA2BGR565>
+            <COLOR_RGBA2BGR565> 17 </COLOR_RGBA2BGR565>
+            <COLOR_BGR5652BGRA> 18 </COLOR_BGR5652BGRA>
+            <COLOR_BGR5652RGBA> 19 </COLOR_BGR5652RGBA>
+
+            <COLOR_BGR2HSV> 40 </COLOR_BGR2HSV>
+            <COLOR_RGB2HSV> 41 </COLOR_RGB2HSV>
+
+            <COLOR_BGR2HLS> 52 </COLOR_BGR2HLS>
+            <COLOR_RGB2HLS> 53 </COLOR_RGB2HLS>
+
+        </ColorConversionCodes>
+
+        <ddepth>
+            <CV_SAME_AS> -1 </CV_SAME_AS>
+            <CV_8UC1> 0 </CV_8UC1>
+            <CV_8UC2> 8 </CV_8UC2>
+            <CV_8UC3> 16 </CV_8UC3>
+            <CV_8UC4> 24 </CV_8UC4>
+
+            <CV_8SC1> 1 </CV_8SC1>
+            <CV_8SC2> 9 </CV_8SC2>
+            <CV_8SC3> 17 </CV_8SC3>
+            <CV_8SC4> 25 </CV_8SC4>
+
+            <CV_8SC1> 1 </CV_8SC1>
+            <CV_8SC2> 9 </CV_8SC2>
+            <CV_8SC3> 17 </CV_8SC3>
+            <CV_8SC4> 25 </CV_8SC4>
+
+            <CV_16UC1> 2 </CV_16UC1>
+            <CV_16UC2> 10 </CV_16UC2>
+            <CV_16UC3> 18 </CV_16UC3>
+            <CV_16UC4> 26 </CV_16UC4>
+
+            <CV_16SC1> 3 </CV_16SC1>
+            <CV_16SC2> 11 </CV_16SC2>
+            <CV_16SC3> 19 </CV_16SC3>
+            <CV_16SC4> 27 </CV_16SC4>
+
+            <CV_32SC1> 4 </CV_32SC1>
+            <CV_32SC2> 12 </CV_32SC2>
+            <CV_32SC3> 20 </CV_32SC3>
+            <CV_32SC4> 28 </CV_32SC4>
+
+            <CV_32FC1> 5 </CV_32FC1>
+            <CV_32FC2> 13 </CV_32FC2>
+            <CV_32FC3> 21 </CV_32FC3>
+            <CV_32FC4> 29 </CV_32FC4>
+
+            <CV_64FC1> 6 </CV_64FC1>
+            <CV_64FC2> 14 </CV_64FC2>
+            <CV_64FC3> 22 </CV_64FC3>
+            <CV_64FC4> 30 </CV_64FC4>
+        </ddepth>
+    </enum>
+</root>

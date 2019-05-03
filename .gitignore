@@ -1,0 +1,19 @@
+
+# Build Verzeinisse ausschlissen
+build*/
+
+# Verzeichnis wiki ausschliessen
+wiki/
+
+# no object-files
+*.o
+
+*.user
+
+short_sample
+filtering
+findcontours
+imread
+edge
+demhist
+

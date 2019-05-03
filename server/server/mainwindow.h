@@ -1,0 +1,113 @@
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include <QMainWindow>
+#include <QTcpServer>
+#include <QTcpSocket>
+#include <QIODevice>
+#include <QTreeWidgetItem>
+#include <QDialog>
+#include <QDomDocument>
+#include <QFile>
+#include <QVector>
+#include <QDir>
+#include <QTimer>
+
+#include "opencvd_types.hpp"
+
+//! @brief  control debug outputs
+#define DEBUG_OUTPUTS                        // controls debug outputs
+
+/*
+#ifdef DEBUG_OUTPUTS
+    std::ostream &dout = std::cout;         // enable debug outputs to std::cout
+#else
+    std::ofstream dev_null("/dev/null");    // disenable debug control outputs
+    std::ostream &dout = dev_null;
+#endif
+*/
+enum _icon_name_ {
+    OK_ICON = 0,            // Haken Zeichen
+    PAUSE_ICON = 1,         // Pause Zeichen
+    EIGENSCHAFT_ICON = 2,
+    CHECK_IN_ICON = 3
+};
+
+extern QDomDocument doc;        // XML Datei
+
+extern QDir home_dir;
+extern QDir data_dir;
+extern QDir icon_dir;
+extern QDir current_dir;
+
+namespace Ui {
+class MainWindow;
+}
+
+//!
+//! \brief The MainWindow class
+//!
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
+
+    void get_sys_path( void );
+    void clear_system();
+    int write_data (const char *data, uint32_t len);
+    int get_level (QTreeWidgetItem *item);
+    bool ack_detected = 0;
+
+public:
+    bool d_is_aktiv;
+    QVector<QIcon> iconlist;
+    QVector<QIcon> aktiv_icon;  // 0..3
+
+private slots:
+    void closeEvent(QCloseEvent *event);
+    void new_connect();
+    void client_read_ready();
+    void client_discontect();
+    void on_actionBeenden_triggered();          // Beenden  Strg+Q
+    void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);          // tree click
+    void on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column);    // tree double click
+
+    void on_actionBaumstruktur_zuklappen_triggered();   // Ansicht / Baumstruktur zuklappen ????
+    void on_actionSpeichern_triggered();                // Datei / Speichern    ????
+    void on_actionAlle_Fenster_schli_en_triggered();    // Ansicht / Alle Fenster schließen    
+
+    void on_actionCVD_OFF_triggered();                  // Extra / set CVD OFF
+    void trigger_timer ( void );                        // Timer 1s
+
+    void on_actionset_all_Function_OFF_triggered();     // Extra / all Function OFF
+    void on_actionset_all_Function_ON_triggered();      // Extra / all Function ON
+    void on_actionall_Breakpoint_s_OFF_triggered();     // Extra / all Breakpoint's OFF
+
+private:
+    struct _cvd_func_ *new_func (struct _func_data_transfer_ *cf);
+
+    Ui::MainWindow *ui;
+    QTcpServer *tcpServer;
+    QTcpSocket *client = NULL;
+
+    void write_state (struct _cvd_func_ *cf);
+    void write_header_bef (int befehl);
+
+    struct _cvd_func_ *first_func = NULL, *last_func = NULL;
+    void kill_func (struct _cvd_func_ *foo);
+    void kill_all_func (void);
+    struct _cvd_func_ *grep_func_addr (uint64_t addr);
+
+    struct _cvd_para_ *new_para (struct _cvd_func_ *cf, struct _para_data_transfer_ *cp);
+    struct _cvd_func_ *grep_func_by_para_pointer (QTreeWidgetItem *item);           // Parameter
+    struct _cvd_func_ *grep_func_by_func_off_pointer (QTreeWidgetItem *item);       // Function OFF
+    struct _cvd_func_ *grep_func_by_show_image_pointer (QTreeWidgetItem *item);     // Show Image
+    struct _cvd_func_ *grep_func_by_break_func_pointer (QTreeWidgetItem *item);     // Break
+
+    struct _cvd_para_ *grep_para_by_tree_pointer (QTreeWidgetItem *item);           // Wird nicht mehr benötigt.
+};
+
+#endif // MAINWINDOW_H

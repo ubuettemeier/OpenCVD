@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>222</width>
+    <height>746</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QTreeWidget" name="treeWidget">
+      <property name="maximumSize">
+       <size>
+        <width>16777214</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::SingleSelection</enum>
+      </property>
+      <property name="columnCount">
+       <number>1</number>
+      </property>
+      <column>
+       <property name="text">
+        <string notr="true">1</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTextEdit" name="textEdit">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>150</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>222</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuDatei">
+    <property name="title">
+     <string>Da&amp;tei</string>
+    </property>
+    <addaction name="actionSpeichern"/>
+    <addaction name="separator"/>
+    <addaction name="actionBeenden"/>
+   </widget>
+   <widget class="QMenu" name="menuAnsicht">
+    <property name="title">
+     <string>A&amp;nsicht</string>
+    </property>
+    <addaction name="actionAlle_Fenster_schli_en"/>
+    <addaction name="actionBaumstruktur_zuklappen"/>
+   </widget>
+   <widget class="QMenu" name="menuEinstellung">
+    <property name="title">
+     <string>Ext&amp;ra</string>
+    </property>
+    <addaction name="actionCVD_OFF"/>
+    <addaction name="separator"/>
+    <addaction name="actionset_all_Function_OFF"/>
+    <addaction name="actionset_all_Function_ON"/>
+    <addaction name="separator"/>
+    <addaction name="actionall_Breakpoint_s_OFF"/>
+   </widget>
+   <addaction name="menuDatei"/>
+   <addaction name="menuAnsicht"/>
+   <addaction name="menuEinstellung"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionBeenden">
+   <property name="text">
+    <string>&amp;Beenden</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionAlle_Fenster_schli_en">
+   <property name="text">
+    <string>&amp;Alle Fenster schließen</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="actionAlle_Breakpoints_zur_cksetzen">
+   <property name="text">
+    <string>Alle &amp;Breakpoints zurücksetzen</string>
+   </property>
+  </action>
+  <action name="actionAlle_Funktionen_OFF">
+   <property name="text">
+    <string>Alle &amp;Funktionen OFF</string>
+   </property>
+  </action>
+  <action name="actionAlle_Funktionen_ON">
+   <property name="text">
+    <string>Alle Funktionen &amp;ON</string>
+   </property>
+  </action>
+  <action name="actionBaumstruktur_zuklappen">
+   <property name="text">
+    <string>Baumstruktur &amp;zuklappen</string>
+   </property>
+  </action>
+  <action name="actionSpeichern">
+   <property name="text">
+    <string>&amp;Speichern</string>
+   </property>
+  </action>
+  <action name="actionCVD_OFF">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;set CVD OFF</string>
+   </property>
+  </action>
+  <action name="actionset_all_Function_OFF">
+   <property name="text">
+    <string>&amp;all Function OFF</string>
+   </property>
+  </action>
+  <action name="actionset_all_Function_ON">
+   <property name="text">
+    <string>all &amp;Function ON</string>
+   </property>
+  </action>
+  <action name="actionall_Breakpoint_s_OFF">
+   <property name="text">
+    <string>all &amp;Breakpoint's OFF</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
