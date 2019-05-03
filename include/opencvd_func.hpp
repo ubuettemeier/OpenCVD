@@ -122,6 +122,44 @@ CV_EXPORTS_W void normalize( cv::InputArray src, cv::InputOutputArray dst, doubl
                              int norm_type = cv::NORM_L2, int dtype = -1, cv::InputArray mask = cv::noArray()
                              BUILDIN);
 
+CV_EXPORTS void calcHist( const cv::Mat* images, int nimages,
+                          const int* channels, cv::InputArray mask,
+                          cv::OutputArray hist, int dims, const int* histSize,
+                          const float** ranges, bool uniform = true, bool accumulate = false
+                          BUILDIN);
+
+//!
+//! \brief calcHist
+//!
+CV_EXPORTS void calcHist( const cv::Mat* images, int nimages,
+                          const int* channels, cv::InputArray mask,
+                          cv::OutputArray hist, int dims,
+                          const int* histSize, const float** ranges,
+                          bool uniform, bool accumulate
+                          BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::calcHist (images, nimages, channels, mask, hist, dims, histSize, ranges, uniform, accumulate);
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for erode
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), CALCHIST, "calcHist", 0x0003, BUILIN_PARA);  // Achtung: Funktion hat kein ON/OFF, kein Break und kein show !!!
+        func.push_back( foo );
+
+    }
+
+    if (foo->state.flag.func_off) {
+        // src.copyTo ( dst );
+    } else {
+        cv::calcHist (images, nimages, channels, mask, hist, dims, histSize, ranges, uniform, accumulate);
+        foo->control_func_run_time ();
+    }
+}
+
 //!
 //! \brief normalize
 //!        Normalizes the norm or value range of an array.

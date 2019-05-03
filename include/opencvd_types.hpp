@@ -38,6 +38,7 @@ enum _data_types_ {
     GETSTRUCTURINGELEMENT = 0x1016,    
     MORPHOLOGYEX = 0x1017,
     NORMALIZE = 0x1018,
+    CALCHIST = 0x1019,
     // ----- Parameter 0x2000...0x2FFF --------
     SLIDE_INT_TWO_STEP_PARA = 0x2000,       // z.B. 1, 3, 5, ... 21 (int)
     SLIDE_INT_PARA = 0x2001,                // z.B. 0..255 (int)
