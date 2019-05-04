@@ -8,7 +8,11 @@ wiki/
 # no object-files
 *.o
 
+# no user Projekt-Files
 *.user
+
+# no special script
+set_group.sh
 
 short_sample
 filtering

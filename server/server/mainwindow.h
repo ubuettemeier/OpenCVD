@@ -12,6 +12,7 @@
 #include <QVector>
 #include <QDir>
 #include <QTimer>
+#include <QMessageBox>
 
 #include "opencvd_types.hpp"
 
@@ -71,20 +72,24 @@ private slots:
     void new_connect();
     void client_read_ready();
     void client_discontect();
-    void on_actionBeenden_triggered();          // Beenden  Strg+Q
+
     void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);          // tree click
     void on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column);    // tree double click
 
+    void on_actionSpeichern_triggered();                // Datei / Speichern    not yet implemented
+    void on_actionBeenden_triggered();                  // Datei / Beenden  Strg+Q
+
     void on_actionBaumstruktur_zuklappen_triggered();   // Ansicht / Baumstruktur zuklappen ????
-    void on_actionSpeichern_triggered();                // Datei / Speichern    ????
     void on_actionAlle_Fenster_schli_en_triggered();    // Ansicht / Alle Fenster schließen    
 
-    void on_actionCVD_OFF_triggered();                  // Extra / set CVD OFF
-    void trigger_timer ( void );                        // Timer 1s
-
+    void on_actionCVD_OFF_triggered();                  // Extra / set CVD OFF    
     void on_actionset_all_Function_OFF_triggered();     // Extra / all Function OFF
     void on_actionset_all_Function_ON_triggered();      // Extra / all Function ON
     void on_actionall_Breakpoint_s_OFF_triggered();     // Extra / all Breakpoint's OFF
+
+    void on_actionAbout_triggered();                    // Help / About
+
+    void trigger_timer ( void );                        // Timer 1s
 
 private:
     struct _cvd_func_ *new_func (struct _func_data_transfer_ *cf);

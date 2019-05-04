@@ -1,3 +1,5 @@
+#define VERSION "v0.1"
+
 #include <cstring>
 #include <iostream>
 #include <unistd.h>
@@ -26,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->setWindowTitle("Server 3");
+    this->setWindowTitle("Server");
     this->setGeometry(0, 0, 220, 760);
 
     tcpServer = new QTcpServer(this);
@@ -86,6 +88,7 @@ void MainWindow::trigger_timer ( void )
 //!
 //! \brief MainWindow::get_sys_path
 //!
+#define SHOW_GET_PATH_RESULT_
 void MainWindow::get_sys_path()
 {
     home_dir = QDir(QCoreApplication::applicationDirPath());
@@ -95,10 +98,14 @@ void MainWindow::get_sys_path()
     foo.cdUp();                             // Basisverzeichniss
     data_dir = QDir(foo.path() + "/data");
     icon_dir = QDir(foo.path() + "/icon");
+
+#ifdef SHOW_GET_PATH_RESULT
     qDebug() << "home_dir: " << home_dir.path() << " " << home_dir.exists();
     qDebug() << "current_dir: " << current_dir.path() << " " << home_dir.exists();
     qDebug() << "data_dir: " << data_dir.path() << " " << data_dir.exists();
     qDebug() << "icon_dir: " << icon_dir.path() << " " << icon_dir.exists();
+#endif
+
 }
 
 //!
@@ -162,7 +169,6 @@ void MainWindow::new_connect()
     client = tcpServer->nextPendingConnection();
     connect (client, SIGNAL(readyRead()), this, SLOT(client_read_ready()));
     connect (client, SIGNAL(disconnected()), this, SLOT(client_discontect()));
-    // printf ("readBufferSize=%lli\n", client->readBufferSize());
 }
 
 //!
@@ -174,7 +180,7 @@ void MainWindow::client_read_ready()
     uint16_t *bef;
 
     QByteArray buf = client->readAll();    // Daten einlesen
-    // if (buf.size() >= 4) {
+
     while (buf.size() >= 4) {
         len = (uint32_t*)buf.data();
         if (*len >= (uint32_t)buf.size()) {
@@ -233,10 +239,10 @@ void MainWindow::client_read_ready()
                     std::cout << "system message: 0x" << std::hex << *bef << std::endl;
                     break;
                 }
-            }            
-        } // else printf ("ERROR: len=%i != buf.size()=%i. bef=%4X\n", *len, buf.size(), *(uint16_t*)(buf.data()+4));
+            } // if (*bef >= 0xF000)
+        } // if (*len >= (uint32_t)buf.size())
         buf.remove(0, *len);
-    } // else printf ("ERROR: buf.size() < 4\n");
+    } // while (buf.size() >= 4)
 }
 
 //!
@@ -818,4 +824,20 @@ void MainWindow::on_actionall_Breakpoint_s_OFF_triggered()
         }
         foo = foo->next;
     }
+}
+
+//!
+//! \brief MainWindow::on_actionAbout_triggered
+//!        Help / About
+//!
+void MainWindow::on_actionAbout_triggered()
+{
+    char buf[4096];
+
+    sprintf (buf, "OpenCVD Server\n" \
+                  "Version %s\n" \
+                  "Date: %s, %s",
+                  VERSION, __DATE__, __TIME__);
+
+    QMessageBox::information ( this, "About", buf, QMessageBox::Ok );
 }
