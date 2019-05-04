@@ -37,4 +37,5 @@ folgende OpenCV Funktionen sind implementiert
 - Laplacian
 - imread
 - normalize
+- calcHist
 

@@ -37,6 +37,16 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case CALCHIST:
+        new IntEdit (client, cf->first_para, 20, 10+55*0, this );                       // nimages
+        new IntEdit (client, cf->first_para->next, 20, 10+55*1, this );                 // dims
+        new EnumDrop (client, cf->first_para->next->next, 20, 10+55*2, this );          // uniform
+        new EnumDrop (client, cf->first_para->next->next->next, 20, 10+55*3, this );    // accumulate
+
+        new mButton (client, cf, 20, 10+55*4+10, mCLOSE, this, mw );                            // Close
+        new mButton (client, cf, 20+m_button[mCLOSE].width+10, 10+55*4+10, mRESET, this, mw );  // Reset
+        setGeometry(320, 150, 260, 10+55*5);
+        break;
     case NORMALIZE:
         new DoubleEdit (client, cf->first_para, 20, 10+55*0, this );   // alpha
         new DoubleEdit (client, cf->first_para->next, 20, 10+55*1, this );   // beta

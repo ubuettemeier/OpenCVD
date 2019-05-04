@@ -130,13 +130,27 @@ CV_EXPORTS void calcHist( const cv::Mat* images, int nimages,
 
 //!
 //! \brief calcHist
+//!        Calculates a histogram of a set of arrays.
+//! \param images
+//! \param nimages      Number of source images.
+//! \param channels
+//! \param mask
+//! \param hist
+//! \param dims         Histogram dimensionality that must be positive and not greater than CV_MAX_DIMS
+//!                     (equal to 32 in the current OpenCV version).
+//! \param histSize
+//! \param ranges
+//! \param uniform
+//! \param accumulate
+//!
+//! \todo overload functions still need to be implemented.
 //!
 CV_EXPORTS void calcHist( const cv::Mat* images, int nimages,
                           const int* channels, cv::InputArray mask,
                           cv::OutputArray hist, int dims,
                           const int* histSize, const float** ranges,
                           bool uniform, bool accumulate
-                          BUILDIN_FUNC)
+                          BUILDIN_FUNC )
 {
     if (cvd_off) {
         cv::calcHist (images, nimages, channels, mask, hist, dims, histSize, ranges, uniform, accumulate);
@@ -147,17 +161,31 @@ CV_EXPORTS void calcHist( const cv::Mat* images, int nimages,
     opencvd_func *foo = NULL;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
-        foo = new opencvd_func((uint64_t)__builtin_return_address(0), CALCHIST, "calcHist", 0x0003, BUILIN_PARA);  // Achtung: Funktion hat kein ON/OFF, kein Break und kein show !!!
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), CALCHIST, "calcHist", 0x0001, BUILIN_PARA);  // Achtung: Funktion hat kein ON/OFF, kein Break und kein show !!!
         func.push_back( foo );
 
+        struct _int_para_ ni = {nimages, 0, 255};
+        foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&ni, "nimages");
+
+        struct _int_para_ di = {dims, 0, 255};              // Wertebereich 0 ... CV_MAX_DIMS
+        foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&di, "dims");
+
+        struct _enum_para_ un = {uniform, "boolType"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&un, "uniform" );
+
+        struct _enum_para_ ac = {accumulate, "boolType"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&ac, "accumulate" );
     }
 
-    if (foo->state.flag.func_off) {
-        // src.copyTo ( dst );
-    } else {
-        cv::calcHist (images, nimages, channels, mask, hist, dims, histSize, ranges, uniform, accumulate);
-        foo->control_func_run_time ();
-    }
+    cv::calcHist (images,
+                  *(int*)foo->para[0]->data,    // nimages
+                  channels, mask, hist,
+                  *(int*)foo->para[1]->data,    // dims
+                  histSize, ranges,
+                  *(int*)foo->para[2]->data,    // uniform
+                  *(int*)foo->para[3]->data);   // accumulate
+
+    foo->control_func_run_time ();
 }
 
 //!
@@ -188,7 +216,6 @@ CV_EXPORTS_W void normalize( cv::InputArray src, cv::InputOutputArray dst,
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), NORMALIZE, "normalize", 0x0003, BUILIN_PARA);  // Achtung: Funktion hat kein ON/OFF, kein Break und kein show !!!
         func.push_back( foo );
 
-        printf ("alpha=%f\n", alpha);
         struct _double_para_ al = {alpha, -1000.0, 1000.0};
         foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&al, "alpha" );
 
