@@ -209,7 +209,7 @@ int write_data (uint8_t *data, uint32_t len)
 
 #ifndef USE_SETSOCKOPT
     // usleep (1000*5);
-    for (int i=0; i<50; i++) usleep (100);
+    for (int i=0; i<50; i++) usleep (100);      // 5ms
 #endif
 
     write_data_blocked = 0;

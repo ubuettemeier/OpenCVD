@@ -11,8 +11,9 @@ wiki/
 # no user Projekt-Files
 *.user
 
-# no special script
+# Hilfsdateien
 set_group.sh
+Readme.odt
 
 short_sample
 filtering
