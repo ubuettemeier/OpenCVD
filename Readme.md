@@ -26,6 +26,11 @@ The working method is as follows:
 ![alt](Readme.png)
 
 ----------------------------------------------------------------------------------------------
+**Example**
+
+see: samples/short_sample/short_sample.cpp
+
+----------------------------------------------------------------------------------------------
 **Entwicklungsumgebung / development-environment:**
 
 - Ubuntu 18.04.2 LTS

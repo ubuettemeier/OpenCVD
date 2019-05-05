@@ -130,7 +130,6 @@ int MainWindow::write_data (const char *data, uint32_t len)
         anz = client->write((const char *)data, len);
         client->flush();
         client->waitForBytesWritten(3000);
-        // usleep (1000*10);       // kleine Verweilzeit !!! Muß auf Client Seite noch behoben werden !!!
     }
 
     return anz;
@@ -183,7 +182,7 @@ void MainWindow::client_read_ready()
 
     while (buf.size() >= 4) {
         len = (uint32_t*)buf.data();
-        if (*len >= (uint32_t)buf.size()) {
+        if ((uint32_t)buf.size() >= *len) {
             bef = (uint16_t*)(buf.data()+4);
             // printf ("bef = %4X\n", *bef);
             // ---------------------------------------------------------------------------------------------------
@@ -240,8 +239,8 @@ void MainWindow::client_read_ready()
                     break;
                 }
             } // if (*bef >= 0xF000)
-        } // if (*len >= (uint32_t)buf.size())
-        buf.remove(0, *len);
+        } // if ((uint32_t)buf.size() >= *len)
+        buf.remove(0, *len);            // Stream: cut the first bytes
     } // while (buf.size() >= 4)
 }
 
@@ -718,7 +717,6 @@ void MainWindow::on_actionAlle_Fenster_schli_en_triggered()
                 item->setTextColor(0, QColor("black"));
             }
             write_state  ( foo );
-            usleep (1000*40);       // kleine Verweilzeit !!! Muß auf Serverseite noch behoben werden !!!
         }
         foo = foo->next;
     }
@@ -765,7 +763,6 @@ void MainWindow::on_actionset_all_Function_OFF_triggered()
                 item->setIcon(0, iconlist[OK_ICON]);
                 item->setTextColor(0, QColor("red"));
                 write_state( foo );     // client benachrichtigen !
-                usleep (1000 * 40);
             }
         }
         foo = foo->next;
@@ -788,7 +785,6 @@ void MainWindow::on_actionset_all_Function_ON_triggered()
                 item->setIcon(0, QIcon());
                 item->setTextColor(0, QColor("black"));
                 write_state  ( foo );
-                usleep (1000*40);       // kleine Verweilzeit !!! Muß auf Serverseite noch behoben werden !!!
             }
         }
         foo = foo->next;

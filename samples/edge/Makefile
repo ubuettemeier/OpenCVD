@@ -3,7 +3,10 @@ CC = g++
 # FLAGS = --std=gnu++11
 FLAGS = --std=c++11
 
-# OpenCVD include Path = ../../include
+OPENCVD = ../../include/opencvd.hpp
+OPENCVD += ../../include/opencvd_basic.hpp
+OPENCVD += ../../include/opencvd_func.hpp
+OPENCVD += ../../include/opencvd_types.hpp
 
 CFLAGS = -Wall -c -O0 -DNDEBUG
 CFLAGS += \
@@ -23,8 +26,7 @@ LDFLAGS += -L/usr/local/lib \
 -lopencv_features2d \
 -lm \
 -lpthread \
--lrt \
-# -lueye_api
+-lrt
 
 FILENAME = edge
 BUILDFILE = $(FILENAME)
@@ -39,7 +41,7 @@ BIN = $(BUILDFILE)
 $(BIN): $(OBJ)
 	$(CC) -o $(BIN) $(OBJ) $(LDFLAGS)
 
-$(OBJ): $(SOURCE) $(HEADER)
+$(OBJ): $(SOURCE) $(HEADER) $(OPENCVD)
 	$(CC) $(CFLAGS) $(FLAGS) $(INC) $(SOURCE)
 
 .PHONEY:	clean

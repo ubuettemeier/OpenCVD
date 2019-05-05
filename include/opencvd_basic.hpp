@@ -177,40 +177,15 @@ int write_data (uint8_t *data, uint32_t len)
     if (sock < 0 )
         return 0;
 
-#ifdef USE_SETSOCKOPT
-    int flag = 1;
-    setsockopt(sock,
-                            IPPROTO_TCP, // IPPROTO_TCP,    // SOL_SOCKET
-                            TCP_CORK, // TCP_NODELAY,
-                            (const char *) &flag,   // flag=1 -> ption aktivieren ?
-                            sizeof(int));
-
     int anz = write ( sock, data, len );
 
-    flag = 0;
-    setsockopt(sock,
-                            IPPROTO_TCP, // IPPROTO_TCP,    // SOL_SOCKET
-                            TCP_CORK, // TCP_NODELAY,
-                            (const char *) &flag,   // flag=1 -> ption aktivieren ?
-                            sizeof(int));
-
-#else
-    int anz = write ( sock, data, len );
-    // fflush (sock);
-#endif
-
-    if ((uint32_t)anz != len) {
+    if ((uint32_t)anz != len) {                 // ERROR
         if (anz_error < 6) anz_error++;
         if (anz_error < 5)
             cout << "opencvd_client::write ERROR\n";
         else if (anz_error == 5)
             cout << "opencvd_client::write ERROR ...\n";
     }
-
-#ifndef USE_SETSOCKOPT
-    // usleep (1000*5);
-    for (int i=0; i<50; i++) usleep (100);      // 5ms
-#endif
 
     write_data_blocked = 0;
     return anz;
