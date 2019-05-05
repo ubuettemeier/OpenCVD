@@ -6,7 +6,7 @@
 #include <iostream>
 
 #define USE_CVD
-#include <opencvd.hpp>
+#include "opencvd.hpp"
 
 using namespace cv;
 using namespace std;

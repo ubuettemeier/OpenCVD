@@ -1,7 +1,8 @@
 #ifndef OPENCVD_FUNC_HPP
 #define OPENCVD_FUNC_HPP
 
-#include <opencv.hpp>
+#include "opencv2/opencv.hpp"
+
 
 namespace cvd {
 

@@ -9,7 +9,7 @@ using namespace cv;
 using namespace std;
 
 #define USE_CVD             // using namespace cvd
-#include <opencvd.hpp>     
+#include "opencvd.hpp"
 
 int edgeThresh = 1;
 int edgeThreshScharr=1;

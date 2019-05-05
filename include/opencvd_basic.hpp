@@ -2,9 +2,7 @@
 #define OPENCVD_BASIC_HPP
 
 #include <stdlib.h>
-// #include <limits.h>
 #include <linux/limits.h>
-// #include <dirent.h>
 
 #include <iostream>
 #include <thread>

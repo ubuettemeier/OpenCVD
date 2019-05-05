@@ -1,8 +1,8 @@
 #include <iostream>
-#include <opencv.hpp>
+#include "opencv2/opencv.hpp"
 
 #define USE_CVD
-#include <opencvd.hpp>
+#include "opencvd.hpp"
 
 using namespace std;
 using namespace cv;

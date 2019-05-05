@@ -9,10 +9,10 @@
     #define KILL_CVD
 #endif
 
-#include <opencv.hpp>
+#include "opencv2/opencv.hpp"
 
-#include <opencvd_types.hpp>
-#include <opencvd_basic.hpp>
-#include <opencvd_func.hpp>
+#include "opencvd_types.hpp"
+#include "opencvd_basic.hpp"
+#include "opencvd_func.hpp"
 
 #endif // OPENCVD_HPP
