@@ -126,6 +126,7 @@
     </property>
     <addaction name="actionAlle_Fenster_schli_en"/>
     <addaction name="actionBaumstruktur_zuklappen"/>
+    <addaction name="actionSource_Window_schlie_en"/>
    </widget>
    <widget class="QMenu" name="menuEinstellung">
     <property name="title">
@@ -225,6 +226,11 @@
   <action name="actionAbout">
    <property name="text">
     <string>&amp;About</string>
+   </property>
+  </action>
+  <action name="actionSource_Window_schlie_en">
+   <property name="text">
+    <string>Source Window schließen</string>
    </property>
   </action>
  </widget>

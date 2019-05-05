@@ -6,6 +6,7 @@
 #include <thread>
 
 // #include "dialog.h"
+#include "sourcewin.h"
 #include "parawin.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -29,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowTitle("Server");
-    this->setGeometry(0, 0, 220, 760);
+    this->setGeometry(0, 0, 220, 760);        
 
     tcpServer = new QTcpServer(this);
     if (!tcpServer->listen(QHostAddress::Any, 51717)) {
@@ -250,6 +251,11 @@ void MainWindow::client_read_ready()
 void MainWindow::client_discontect()
 {
     printf ("client disconnect\n");
+    if (sourcewin != NULL)
+        delete sourcewin;
+
+    sourcewin = NULL;
+
     if (parawin != NULL)
         delete parawin;
 
@@ -505,6 +511,21 @@ struct _cvd_func_ *MainWindow::grep_func_by_break_func_pointer (QTreeWidgetItem 
 }
 
 //!
+//! \brief MainWindow::grep_func_by_source_pointer
+//! \param item
+//! \return
+//!
+struct _cvd_func_ *MainWindow::grep_func_by_source_pointer (QTreeWidgetItem *item)         // Source
+{
+    struct _cvd_func_ *foo = first_func;
+
+    while ((foo != NULL) && (foo->source_pointer != item))
+        foo = foo->next;
+
+    return foo;
+}
+
+//!
 //! \brief MainWindow::grep_para_by_tree_pointer
 //! \param item
 //! \return
@@ -596,7 +617,7 @@ void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
     Q_UNUSED (column);
     struct _cvd_func_ *cf = NULL;
 
-    int n = get_level( item );
+    int n = get_level( item );    
 
     if (n == 1) {
         cf = grep_func_by_para_pointer ( item );            // Parameter
@@ -664,6 +685,42 @@ void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
             write_state  ( cf );
             return;
         }
+
+        cf = grep_func_by_source_pointer( item );           // Source Window
+        if ( cf ) {
+            // Achtung: Die beiden Abfragen 1) und 2) dürfen nicht zusammengefasst/optimiert werden !
+            if ((sourcewin != NULL) && (sourcewin->cf != cf)) { // Abfrage 1)
+                on_actionSource_Window_schlie_en_triggered();
+            }
+            if ((sourcewin != NULL) && (sourcewin->cf == cf)) { // Abfrage 2)
+                on_actionSource_Window_schlie_en_triggered();
+                return;
+            }
+            if (sourcewin == NULL) {
+                item->setIcon(0, iconlist[OK_ICON]);
+                sourcewin = new Sourcewin (cf, this);
+            }
+        } // if ( cf )
+    }
+}
+
+//!
+//! \brief MainWindow::set_all_source_icon
+//! \param wert
+//!
+void MainWindow::set_all_source_icon (bool wert)
+{
+    struct _cvd_func_ *foo = first_func;
+
+    while (foo != NULL) {
+        if (foo->source_pointer != NULL) {
+            QTreeWidgetItem *i = (QTreeWidgetItem *)foo->source_pointer;
+            if (i != NULL) {
+                if (wert == false)
+                    i->setIcon(0, QIcon());
+            }
+        }
+        foo = foo->next;
     }
 }
 
@@ -836,4 +893,10 @@ void MainWindow::on_actionAbout_triggered()
                   VERSION, __DATE__, __TIME__);
 
     QMessageBox::information ( this, "About", buf, QMessageBox::Ok );
+}
+
+void MainWindow::on_actionSource_Window_schlie_en_triggered()
+{
+    delete sourcewin;
+    set_all_source_icon (false);
 }

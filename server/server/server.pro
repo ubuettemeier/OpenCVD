@@ -31,11 +31,13 @@ INCLUDEPATH += \
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    parawin.cpp
+    parawin.cpp \
+    sourcewin.cpp
 
 HEADERS += \
         mainwindow.h \
-    parawin.h
+    parawin.h \
+    sourcewin.h
 
 FORMS += \
         mainwindow.ui

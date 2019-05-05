@@ -13,6 +13,7 @@
 #include <QDir>
 #include <QTimer>
 #include <QMessageBox>
+#include <QFontMetrics>
 
 #include "opencvd_types.hpp"
 
@@ -61,6 +62,7 @@ public:
     int write_data (const char *data, uint32_t len);
     int get_level (QTreeWidgetItem *item);
     bool ack_detected = 0;
+    void set_all_source_icon (bool wert);
 
 public:
     bool d_is_aktiv;
@@ -80,7 +82,8 @@ private slots:
     void on_actionBeenden_triggered();                  // Datei / Beenden  Strg+Q
 
     void on_actionBaumstruktur_zuklappen_triggered();   // Ansicht / Baumstruktur zuklappen ????
-    void on_actionAlle_Fenster_schli_en_triggered();    // Ansicht / Alle Fenster schließen    
+    void on_actionAlle_Fenster_schli_en_triggered();    // Ansicht / Alle Fenster schließen
+    void on_actionSource_Window_schlie_en_triggered();  // Ansicht / Source Window schließen
 
     void on_actionCVD_OFF_triggered();                  // Extra / set CVD OFF    
     void on_actionset_all_Function_OFF_triggered();     // Extra / all Function OFF
@@ -89,7 +92,7 @@ private slots:
 
     void on_actionAbout_triggered();                    // Help / About
 
-    void trigger_timer ( void );                        // Timer 1s
+    void trigger_timer ( void );                        // Timer 1s    
 
 private:
     struct _cvd_func_ *new_func (struct _func_data_transfer_ *cf);
@@ -111,6 +114,7 @@ private:
     struct _cvd_func_ *grep_func_by_func_off_pointer (QTreeWidgetItem *item);       // Function OFF
     struct _cvd_func_ *grep_func_by_show_image_pointer (QTreeWidgetItem *item);     // Show Image
     struct _cvd_func_ *grep_func_by_break_func_pointer (QTreeWidgetItem *item);     // Break
+    struct _cvd_func_ *grep_func_by_source_pointer (QTreeWidgetItem *item);         // Source
 
     struct _cvd_para_ *grep_para_by_tree_pointer (QTreeWidgetItem *item);           // Wird nicht mehr benötigt.
 };
