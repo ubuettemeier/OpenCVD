@@ -24,9 +24,7 @@ LDFLAGS += -L/usr/local/lib \
 -lopencv_video \
 -lopencv_videoio \
 -lopencv_features2d \
--lm \
--lpthread \
--lrt
+-lpthread
 
 FILENAME = demhist
 BUILDFILE = $(FILENAME)

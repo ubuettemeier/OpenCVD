@@ -38,7 +38,7 @@ DISTNAME      = basic_app1.0.0
 DISTDIR = /home/ulrich/c_source/opencv/mysource/with_qt/opencv_d/OpenCVD/samples/basic/build-basic_app-Desktop-Debug/.tmp/basic_app1.0.0
 LINK          = g++
 LFLAGS        = 
-LIBS          = $(SUBLIBS) -L/usr/local/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio -lpthread -lrt -lm 
+LIBS          = $(SUBLIBS) -L/usr/local/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -113,6 +113,7 @@ DIST          = ../../../Readme.txt \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		../basic_app/.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -201,6 +202,7 @@ Makefile: ../basic_app/basic_app.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -276,6 +278,7 @@ Makefile: ../basic_app/basic_app.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:

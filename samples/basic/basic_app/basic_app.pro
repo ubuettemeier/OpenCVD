@@ -19,11 +19,7 @@ LIBS += -L/usr/local/lib \
 -lopencv_imgproc \
 -lopencv_video \
 -lopencv_videoio \
--lpthread \
--lrt \
--lm
-# -lueye_api \
-# -lubtools
+-lpthread
 
 SOURCES += main.cpp
 
