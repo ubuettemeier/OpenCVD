@@ -1,4 +1,8 @@
-
+//!
+//! \file   sourcewin.cpp
+//! \author Ulrich Buettemeier
+//! \mainclass MainWindow
+//!
 #include <QMainWindow>
 // #include <QLayout>
 // #include <QVBoxLayout>

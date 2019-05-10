@@ -119,4 +119,6 @@ private:
     struct _cvd_para_ *grep_para_by_tree_pointer (QTreeWidgetItem *item);           // Wird nicht mehr benötigt.
 };
 
+extern MainWindow *glob_mw;
+
 #endif // MAINWINDOW_H

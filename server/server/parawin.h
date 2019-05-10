@@ -153,8 +153,10 @@ public:
     struct _cvd_para_ *cp;
     QSlider *s;
     QTcpSocket *client;
+    QPushButton *para_button;
 private slots:
     void slide_value_changed (int val);
+    void para_button_pushed ();
 
 private:
     QLabel *l;

@@ -1,3 +1,9 @@
+//!
+//! \file   mainwindow.cpp
+//! \author Ulrich Buettemeier
+//! \mainclass MainWindow
+//!
+
 #define VERSION "v0.1"
 
 #include <cstring>
@@ -20,6 +26,8 @@ QDir current_dir;
 QDir data_dir;
 QDir icon_dir;
 
+MainWindow *glob_mw = NULL;
+
 //!
 //! \brief MainWindow::MainWindow
 //! \param parent
@@ -29,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    glob_mw = this;
     this->setWindowTitle("Server");
     this->setGeometry(0, 0, 220, 760);        
 

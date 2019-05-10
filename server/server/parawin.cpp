@@ -1,3 +1,8 @@
+//!
+//! \file   parawin.cpp
+//! \author Ulrich Buettemeier
+//!
+
 #include <iostream>
 #include <unistd.h>
 #include <QKeyEvent>
@@ -658,11 +663,6 @@ Slide::Slide(QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *paren
         s->setMinimum( sp->min / stepwidth);
         s->setMaximum( sp->max / stepwidth);
         s->setSliderPosition( sp->value / stepwidth);
-        /*
-        s->setTickInterval( stepwidth );
-        s->setSingleStep( stepwidth );
-        s->setPageStep( stepwidth );
-        */
 
         s->setStyleSheet("QSlider::groove:horizontal { "            // Slider Aussehen veraendern.
                               "border: 1px solid #999999; "
@@ -679,7 +679,10 @@ Slide::Slide(QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *paren
 
         s->setParent( parent );
 
-        connect (s, SIGNAL(valueChanged(int)), this, SLOT(slide_value_changed(int)));
+
+
+        connect (s, SIGNAL(valueChanged(int)), this, SLOT(slide_value_changed(int)));        
+
         }
         break;
 
@@ -695,14 +698,12 @@ Slide::Slide(QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *paren
         s = new QSlider ( Qt::Horizontal );
         s->setPageStep( 1 );
         s->setSingleStep( 1 );
+        s->setTickInterval( 1 );
         s->setGeometry(x, y+20, 200, 30);
 
         s->setMinimum( sp->min);
         s->setMaximum( sp->max);
-        s->setSliderPosition( sp->value);
-        s->setTickInterval( stepwidth );        
-        s->setSingleStep( stepwidth );        
-        s->setPageStep( stepwidth );
+        s->setSliderPosition( sp->value);        
 
         s->setStyleSheet("QSlider::groove:horizontal { "            // Slider Aussehen veraendern.
                               "border: 1px solid #999999; "
@@ -724,6 +725,15 @@ Slide::Slide(QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *paren
         }
         break;
     }
+
+    para_button = new QPushButton();
+    para_button->setIcon(glob_mw->iconlist[2]);
+    para_button->setGeometry(x+210, y+25, 20, 20);
+    para_button->setParent( parent );
+    para_button->setToolTip( "Eigenschaft" );
+
+    connect (para_button, SIGNAL(clicked(bool)), this, SLOT(para_button_pushed()));
+
 }
 
 //!
@@ -740,10 +750,9 @@ void Slide::slide_value_changed (int val)
 
         if (cp->type == SLIDE_INT_PARA)
             sp->value = val;
-        else {
-            // if (val % 2)            // in zweiter Schritten arbeiten 1, 3, 5, ...
-                sp->value = val * stepwidth + 1;
-        }
+        else
+            sp->value = val * stepwidth + 1;
+
         l->setText(QString("%1=%2  min=%3  max=%4").arg(QString(cp->para_name))
                                                     .arg(QString::number(sp->value))
                                                     .arg(QString::number(sp->min))
@@ -762,6 +771,14 @@ void Slide::slide_value_changed (int val)
     }
 
     parawin->rewrite_para_data( cp );
+}
+
+//!
+//! \brief Slide::para_button_pushed
+//!
+void Slide::para_button_pushed ()
+{
+    printf ("Treffer\n");
 }
 
 //!
