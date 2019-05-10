@@ -654,8 +654,9 @@ CV_EXPORTS_W void Canny( cv::InputArray image, cv::OutputArray edges,
         struct _double_para_ dp2 = {threshold2, 0.0, 255.0};
         foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&dp2, "threshold2" );
 
-        struct _int_para_ sp = {apertureSize, 3, 7};
+        struct _int_para_ sp = {apertureSize, 3, 7};    // 3, 5, 7
         foo->new_para ( SLIDE_INT_TWO_STEP_PARA, sizeof(struct _int_para_), (uint8_t*)&sp, "apertureSize" );
+
 
         struct _enum_para_ ep = {L2gradient, "boolType"};
         foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&ep, "L2gradient" );

@@ -26,6 +26,9 @@ ParaWin::ParaWin(MainWindow *main_win, QWidget *parent) : QWidget(parent)
 //! \param main_win
 //! \param parent
 //!
+
+#define LEFT_POS 15
+
 ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QWidget *parent)
 {
     Q_UNUSED (parent);
@@ -38,192 +41,192 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
 
     switch (cf->type) {
     case CALCHIST:
-        new IntEdit (client, cf->first_para, 20, 10+55*0, this );                       // nimages
-        new IntEdit (client, cf->first_para->next, 20, 10+55*1, this );                 // dims
-        new EnumDrop (client, cf->first_para->next->next, 20, 10+55*2, this );          // uniform
-        new EnumDrop (client, cf->first_para->next->next->next, 20, 10+55*3, this );    // accumulate
+        new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );                       // nimages
+        new IntEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );                 // dims
+        new EnumDrop (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );          // uniform
+        new EnumDrop (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );    // accumulate
 
-        new mButton (client, cf, 20, 10+55*4+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, 20+m_button[mCLOSE].width+10, 10+55*4+10, mRESET, this, mw );  // Reset
+        new mButton (client, cf, LEFT_POS, 10+55*4+10, mCLOSE, this, mw );                            // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*4+10, mRESET, this, mw );  // Reset
         setGeometry(320, 150, 260, 10+55*5);
         break;
     case NORMALIZE:
-        new DoubleEdit (client, cf->first_para, 20, 10+55*0, this );   // alpha
-        new DoubleEdit (client, cf->first_para->next, 20, 10+55*1, this );   // beta
-        new EnumDrop (client, cf->first_para->next->next, 20, 10+55*2, this );   // norm_type
-        new EnumDrop (client, cf->first_para->next->next->next, 20, 10+55*3, this );   // ddepth
+        new DoubleEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );   // alpha
+        new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );   // beta
+        new EnumDrop (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );   // norm_type
+        new EnumDrop (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );   // ddepth
 
-        new mButton (client, cf, 20, 10+55*4+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, 20+m_button[mCLOSE].width+10, 10+55*4+10, mRESET, this, mw );  // Reset
+        new mButton (client, cf, LEFT_POS, 10+55*4+10, mCLOSE, this, mw );                            // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*4+10, mRESET, this, mw );  // Reset
         setGeometry(320, 150, 260, 10+55*5);
         break;
     case GETSTRUCTURINGELEMENT:
-        new EnumDrop (client, cf->first_para, 20, 10+55*0, this );   // shape = DropDown enum MorphShapes
-        new PointInt ( client, cf->first_para->next, 20, 10+55*1, this );   // ksize
-        new PointInt ( client, cf->first_para->next->next, 20, 10+55*2, this );   // annchor
+        new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );   // shape = DropDown enum MorphShapes
+        new PointInt ( client, cf->first_para->next, LEFT_POS, 10+55*1, this );   // ksize
+        new PointInt ( client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );   // annchor
 
-        new mButton (client, cf, 20, 10+55*3+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, 20+m_button[mCLOSE].width+10, 10+55*3+10, mRESET, this, mw );  // Reset
+        new mButton (client, cf, LEFT_POS, 10+55*3+10, mCLOSE, this, mw );                            // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*3+10, mRESET, this, mw );  // Reset
         setGeometry(320, 150, 260, 10+55*4);
         break;
     case GRABCUT:
-        new IntEdit (client, cf->first_para, 20, 10+55*0, this );     // Iteration
-        new EnumDrop (client, cf->first_para->next, 20, 10+55*1, this );   // DropDown enum ImreadModes
+        new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );     // Iteration
+        new EnumDrop (client, cf->first_para->next, LEFT_POS, 10+55*1, this );   // DropDown enum ImreadModes
         setGeometry(320, 150, 320, 10+55*2+20);
         break;
     case IMREAD:
-        new StringEdit (client, cf->first_para, 20, 10+55*0, this );
-        new EnumDrop (client, cf->first_para->next, 20, 10+55*1, this );   // DropDown enum ImreadModes
+        new StringEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );
+        new EnumDrop (client, cf->first_para->next, LEFT_POS, 10+55*1, this );   // DropDown enum ImreadModes
 
-        new mButton (client, cf, 20, 10+55*2+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, 20+m_button[mCLOSE].width+10, 10+55*2+10, mRESET, this, mw );  // Reset
+        new mButton (client, cf, LEFT_POS, 10+55*2+10, mCLOSE, this, mw );                            // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*2+10, mRESET, this, mw );  // Reset
         setGeometry(320, 150, 330, 10+55*3);
         break;
     case OPERATOR_INT_MUL_EQUAL:
-        new IntEdit (client, cf->first_para, 20, 10, this );   // Double Edit für scale
+        new IntEdit (client, cf->first_para, LEFT_POS, 10, this );   // Double Edit für scale
         setGeometry(340, 150, 260, 80);
         break;
     case OPERATOR_FLOAT_MUL_EQUAL:
-        new FloatEdit (client, cf->first_para, 20, 10, this );   // Float Edit für scale. Achtung:
+        new FloatEdit (client, cf->first_para, LEFT_POS, 10, this );   // Float Edit für scale. Achtung:
         setGeometry(340, 150, 260, 80);
         break;
     case OPERATOR_DOUBLE_MUL_EQUAL:
-        new DoubleEdit (client, cf->first_para, 20, 10, this );   // Double Edit für scale
+        new DoubleEdit (client, cf->first_para, LEFT_POS, 10, this );   // Double Edit für scale
         setGeometry(340, 150, 260, 80);
         break;
     case CONVERTTO:
-        new EnumDrop (client, cf->first_para, 20, 10, this );   // DropDown enum ddepth
-        new DoubleEdit (client, cf->first_para->next, 20, 65, this );   // Double Edit für scale
-        new DoubleEdit (client, cf->first_para->next->next, 20, 65+55, this );   // Double Edit für delta
+        new EnumDrop (client, cf->first_para, LEFT_POS, 10, this );   // DropDown enum ddepth
+        new DoubleEdit (client, cf->first_para->next, LEFT_POS, 65, this );   // Double Edit für scale
+        new DoubleEdit (client, cf->first_para->next->next, LEFT_POS, 65+55, this );   // Double Edit für delta
         setGeometry(320, 150, 260, 80+55+55);
         break;
     case CONVERTSCALEABS:
-        new DoubleEdit (client, cf->first_para, 20, 10+55*0, this );            // Double Edit für alpha
-        new DoubleEdit (client, cf->first_para->next, 20, 10+55*1, this );   // Double Edit für beta
+        new DoubleEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );            // Double Edit für alpha
+        new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );   // Double Edit für beta
 
-        new mButton (client, cf, 20, 10+55*2+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, 20+m_button[mCLOSE].width+10, 10+55*2+10, mRESET, this, mw );  // Reset
+        new mButton (client, cf, LEFT_POS, 10+55*2+10, mCLOSE, this, mw );                            // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*2+10, mRESET, this, mw );  // Reset
         setGeometry(320, 150, 260, 10+55*3);
         break;
     case CANNY_2:
-        new Slide ( client, cf->first_para, 20, 10+55*0, this );                     // Slider für threshold1
-        new Slide ( client, cf->first_para->next, 20, 10+55*1, this );            // Slider für threshold2
-        new EnumDrop (client, cf->first_para->next->next, 20, 10+55*2, this );   // DropDown enum L2gradient (bool)
+        new Slide ( client, cf->first_para, LEFT_POS, 10+55*0, this );                     // Slider für threshold1
+        new Slide ( client, cf->first_para->next, LEFT_POS, 10+55*1, this );            // Slider für threshold2
+        new EnumDrop (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );   // DropDown enum L2gradient (bool)
 
-        new mButton (client, cf, 20, 10+55*3+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, 20+m_button[mCLOSE].width+10, 10+55*3+10, mRESET, this, mw );  // Reset
+        new mButton (client, cf, LEFT_POS, 10+55*3+10, mCLOSE, this, mw );                            // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*3+10, mRESET, this, mw );  // Reset
         setGeometry(320, 150, 260, 10+55*4);
         break;
     case CANNY:
-        new Slide ( client, cf->first_para, 20, 10+55*0, this );                     // Slider für threshold1
-        new Slide ( client, cf->first_para->next, 20, 10+55*1, this );            // Slider für threshold2
-        new Slide ( client, cf->first_para->next->next, 10, 10+55*2, this );   // Slider für apertureSize 3.. ???
-        new EnumDrop (client, cf->first_para->next->next->next, 20, 10+55*3, this );   // DropDown enum L2gradient (bool)
+        new Slide ( client, cf->first_para, LEFT_POS, 10+55*0, this );                    // Slider für threshold1
+        new Slide ( client, cf->first_para->next, LEFT_POS, 10+55*1, this );              // Slider für threshold2
+        new Slide ( client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );        // Slider für apertureSize 3.. ???
+        new EnumDrop (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );   // DropDown enum L2gradient (bool)
 
-        new mButton (client, cf, 20, 10+55*4+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, 20+m_button[mCLOSE].width+10, 10+55*4+10, mRESET, this, mw );  // Reset
+        new mButton (client, cf, LEFT_POS, 10+55*4+10, mCLOSE, this, mw );                            // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*4+10, mRESET, this, mw );  // Reset
         setGeometry(320, 150, 260, 10+55*5);
         break;
     case LAPLACIAN:
-        new EnumDrop (client, cf->first_para, 20, 10+55*0, this );   // DropDown enum
-        new Slide ( client, cf->first_para->next, 20, 10+55*1, this );   // Slider für kzise
-        new DoubleEdit (client, cf->first_para->next->next, 20, 10+55*2, this );   // Double Edit für scale
-        new DoubleEdit (client, cf->first_para->next->next->next, 20, 10+55*3, this );   // Double Edit für delta
-        new EnumDrop (client, cf->first_para->next->next->next->next, 20, 10+55*4, this );   // DropDown enum BorderType
+        new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );   // DropDown enum
+        new Slide ( client, cf->first_para->next, LEFT_POS, 10+55*1, this );   // Slider für kzise
+        new DoubleEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );   // Double Edit für scale
+        new DoubleEdit (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );   // Double Edit für delta
+        new EnumDrop (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );   // DropDown enum BorderType
 
-        new mButton (client, cf, 20, 10+55*5+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, 20+m_button[mCLOSE].width+10, 10+55*5+10, mRESET, this, mw );  // Reset
+        new mButton (client, cf, LEFT_POS, 10+55*5+10, mCLOSE, this, mw );                            // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*5+10, mRESET, this, mw );  // Reset
         setGeometry(320, 150, 260, 10+55*6);
         break;
     case CVTCOLOR:
-        new EnumDrop (client, cf->first_para, 20, 10+55*0, this );   // DropDown enum
-        new IntEdit (client, cf->first_para->next, 20, 10+55*1, this );     // Iteration
+        new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );   // DropDown enum
+        new IntEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );     // Iteration
 
-        new mButton (client, cf, 20, 10+55*2+10, mCLOSE, this, mw );   // Close
-        new mButton (client, cf, 20+m_button[mCLOSE].width+10, 10+55*2+10, mRESET, this, mw );   // Reset
+        new mButton (client, cf, LEFT_POS, 10+55*2+10, mCLOSE, this, mw );   // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*2+10, mRESET, this, mw );   // Reset
         setGeometry(320, 150, 260, 10+55*3);
         break;
     case GAUSSIANBLUR:
-        new Slide ( client, cf->first_para, 20, 10+55*0, this );                     // Slider für ksize.width
-        new Slide ( client, cf->first_para->next, 20, 10+55*1, this );            // Slider für ksize.height
-        new DoubleEdit (client, cf->first_para->next->next, 20, 10+55*2, this );               // sigmaX
-        new DoubleEdit (client, cf->first_para->next->next->next, 20, 10+55*3, this );      // sigmaY
-        new EnumDrop (client, cf->first_para->next->next->next->next, 20, 10+55*4, this );   // DropDown enum BorderType
+        new Slide ( client, cf->first_para, LEFT_POS, 10+55*0, this );                     // Slider für ksize.width
+        new Slide ( client, cf->first_para->next, LEFT_POS, 10+55*1, this );            // Slider für ksize.height
+        new DoubleEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );               // sigmaX
+        new DoubleEdit (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );      // sigmaY
+        new EnumDrop (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );   // DropDown enum BorderType
 
-        new mButton (client, cf, 20, 10+55*5+10, mCLOSE, this, mw );   // Close
-        new mButton (client, cf, 20+m_button[mCLOSE].width+10, 10+55*5+10, mRESET, this, mw );   // Reset
+        new mButton (client, cf, LEFT_POS, 10+55*5+10, mCLOSE, this, mw );   // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*5+10, mRESET, this, mw );   // Reset
         setGeometry(320, 150, 260, 10+55*6);
         break;
     case BLUR_FUNC:
-        new Slide ( client, cf->first_para, 20, 10+55*0, this );            // Slider für ksize.width
-        new Slide ( client, cf->first_para->next, 20, 10+55*1, this );      // Slider für ksize.height
-        new PointInt ( client, cf->first_para->next->next, 20, 10+55*2, this );      // Point
-        new EnumDrop (client, cf->first_para->next->next->next, 20, 10+55*3, this );   // DropDown enum BorderType
+        new Slide ( client, cf->first_para, LEFT_POS, 10+55*0, this );            // Slider für ksize.width
+        new Slide ( client, cf->first_para->next, LEFT_POS, 10+55*1, this );      // Slider für ksize.height
+        new PointInt ( client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );      // Point
+        new EnumDrop (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );   // DropDown enum BorderType
 
-        new mButton (client, cf, 20, 10+55*4+10, mCLOSE, this, mw );   // Close
-        new mButton (client, cf, 20+m_button[mCLOSE].width+10, 10+55*4+10, mRESET, this, mw );   // Reset
+        new mButton (client, cf, LEFT_POS, 10+55*4+10, mCLOSE, this, mw );   // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*4+10, mRESET, this, mw );   // Reset
         setGeometry(320, 150, 260, 10+55*5);
         break;
     case MEDIANBLUR:
-        new Slide ( client, cf->first_para, 20, 10+55*0, this );   // Slider für kzise
+        new Slide ( client, cf->first_para, LEFT_POS, 10+55*0, this );   // Slider für kzise
 
-        new mButton (client, cf, 20, 10+55*1+10, mCLOSE, this, mw );   // Close
-        new mButton (client, cf, 20+m_button[mCLOSE].width+10, 10+55*1+10, mRESET, this, mw );   // Reset
+        new mButton (client, cf, LEFT_POS, 10+55*1+10, mCLOSE, this, mw );   // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*1+10, mRESET, this, mw );   // Reset
         setGeometry(320, 150, 260, 10+55*2);
         break;
     case THRESHOLD:
-        new Slide ( client, cf->first_para, 20, 10+55*0, this );         // Slider für thresh
-        new Slide ( client, cf->first_para->next, 20, 10+55*1, this );   // Slider für maxval
-        new EnumDrop (client, cf->first_para->next->next, 20, 10+55*2, this );   // DropDown enum
+        new Slide ( client, cf->first_para, LEFT_POS, 10+55*0, this );         // Slider für thresh
+        new Slide ( client, cf->first_para->next, LEFT_POS, 10+55*1, this );   // Slider für maxval
+        new EnumDrop (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );   // DropDown enum
 
-        new mButton (client, cf, 20, 10+55*3+10, mCLOSE, this, mw );     // Close
-        new mButton (client, cf, 20+m_button[mCLOSE].width+10, 10+55*3+10, mRESET, this, mw );   // Reset
+        new mButton (client, cf, LEFT_POS, 10+55*3+10, mCLOSE, this, mw );     // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*3+10, mRESET, this, mw );   // Reset
         setGeometry(320, 150, 260, 10+55*4);
         break;
     case SCALAR_FUNC_4:
-        new ScalarDouble ( client, cf->first_para, 20, 10+55*0, this );  //
+        new ScalarDouble ( client, cf->first_para, LEFT_POS, 10+55*0, this );  //
         setGeometry(320, 150, 370, 10+55*1+20);
         break;
     case SCALAR_ALL:
-        new DoubleEdit (client, cf->first_para, 20, 10+55*0, this );    // v0
+        new DoubleEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );    // v0
         setGeometry(320, 150, 370, 10+55*1+20);
         break;
     case ERODE:
     case DILATE:
-        new PointInt ( client, cf->first_para, 20, 10+55*0, this );         // Point
-        new IntEdit (client, cf->first_para->next, 20, 10+55*1, this );     // Iteration
-        new EnumDrop (client, cf->first_para->next->next, 20, 10+55*2, this );   // DropDown enum
+        new PointInt ( client, cf->first_para, LEFT_POS, 10+55*0, this );         // Point
+        new IntEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );     // Iteration
+        new EnumDrop (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );   // DropDown enum
 
-        new mButton (client, cf, 20, 10+55*3+10, mCLOSE, this, mw );     // Close
-        new mButton (client, cf, 20+m_button[mCLOSE].width+10, 10+55*3+10, mRESET, this, mw );   // Reset
+        new mButton (client, cf, LEFT_POS, 10+55*3+10, mCLOSE, this, mw );     // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*3+10, mRESET, this, mw );   // Reset
         setGeometry(320, 150, 260, 10+55*4);
         break;
     case MORPHOLOGYEX:
-        new EnumDrop (client, cf->first_para, 20, 10+55*0, this );   // op
-        new PointInt ( client, cf->first_para->next, 20, 10+55*1, this );   // annchor
-        new IntEdit (client, cf->first_para->next->next, 20, 10+55*2, this );     // Iteration
-        new EnumDrop (client, cf->first_para->next->next->next, 20, 10+55*3, this );   // borderType
+        new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );   // op
+        new PointInt ( client, cf->first_para->next, LEFT_POS, 10+55*1, this );   // annchor
+        new IntEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );     // Iteration
+        new EnumDrop (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );   // borderType
 
-        new mButton (client, cf, 20, 10+55*4+10, mCLOSE, this, mw );     // Close
-        new mButton (client, cf, 20+m_button[mCLOSE].width+10, 10+55*4+10, mRESET, this, mw );   // Reset
+        new mButton (client, cf, LEFT_POS, 10+55*4+10, mCLOSE, this, mw );     // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*4+10, mRESET, this, mw );   // Reset
         setGeometry(320, 150, 260, 10+55*5);
         break;
     case FINDCONTOURS:
-        new EnumDrop (client, cf->first_para, 20, 10+55*0, this );                  // DropDown enum RetrievalModes
-        new EnumDrop (client, cf->first_para->next, 20, 10+55*1, this );            // DropDown enum ContourApproximationModes
-        new PointInt ( client, cf->first_para->next->next, 20, 10+55*2, this );     // Point offset
+        new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );                  // DropDown enum RetrievalModes
+        new EnumDrop (client, cf->first_para->next, LEFT_POS, 10+55*1, this );            // DropDown enum ContourApproximationModes
+        new PointInt ( client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );     // Point offset
 
-        new mButton (client, cf, 20, 10+55*3+10, mCLOSE, this, mw );     // Close
-        new mButton (client, cf, 20+m_button[mCLOSE].width+10, 10+55*3+10, mRESET, this, mw );   // Reset
+        new mButton (client, cf, LEFT_POS, 10+55*3+10, mCLOSE, this, mw );     // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*3+10, mRESET, this, mw );   // Reset
         setGeometry(320, 150, 260, 10+55*4);
         break;
     case SCHARR: {
-        new EnumDrop (client, cf->first_para, 20, 10+55*0, this );                  // DropDown enum filterdepth_CV_8U | filterdepth_CV_16U_CV_16S
-        new IntEdit (client, cf->first_para->next, 20, 10+55*1, this );             // dx
-        new IntEdit (client, cf->first_para->next->next, 20, 10+55*2, this );       // dy
-        new DoubleEdit (client, cf->first_para->next->next->next, 20, 10+55*3, this );
-        new DoubleEdit (client, cf->first_para->next->next->next->next, 20, 10+55*4, this );
-        new EnumDrop (client, cf->first_para->next->next->next->next->next, 20, 10+55*5, this );
+        new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );                  // DropDown enum filterdepth_CV_8U | filterdepth_CV_16U_CV_16S
+        new IntEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );             // dx
+        new IntEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );       // dy
+        new DoubleEdit (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );
+        new DoubleEdit (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );
+        new EnumDrop (client, cf->first_para->next->next->next->next->next, LEFT_POS, 10+55*5, this );
         setGeometry(320, 150, 370, 10+55*6+20);
         }
         break;
@@ -630,7 +633,7 @@ void EnumDrop::new_enum_select(const QString &s)
 Slide::Slide(QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *parent) : QWidget (parent)
 {
     cp = foo;
-    client = c;
+    client = c;    
 
     switch (cp->type) {
     case SLIDE_INT_TWO_STEP_PARA:
@@ -649,14 +652,17 @@ Slide::Slide(QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *paren
         s = new QSlider ( Qt::Horizontal );
         s->setPageStep( 1 );
         s->setSingleStep( 1 );
+        s->setTickInterval( 1 );
         s->setGeometry(x, y+20, 200, 30);
 
-        s->setMinimum( sp->min);
-        s->setMaximum( sp->max);
-        s->setSliderPosition( sp->value);
+        s->setMinimum( sp->min / stepwidth);
+        s->setMaximum( sp->max / stepwidth);
+        s->setSliderPosition( sp->value / stepwidth);
+        /*
         s->setTickInterval( stepwidth );
         s->setSingleStep( stepwidth );
         s->setPageStep( stepwidth );
+        */
 
         s->setStyleSheet("QSlider::groove:horizontal { "            // Slider Aussehen veraendern.
                               "border: 1px solid #999999; "
@@ -694,8 +700,8 @@ Slide::Slide(QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *paren
         s->setMinimum( sp->min);
         s->setMaximum( sp->max);
         s->setSliderPosition( sp->value);
-        s->setTickInterval( stepwidth );
-        s->setSingleStep( stepwidth );
+        s->setTickInterval( stepwidth );        
+        s->setSingleStep( stepwidth );        
         s->setPageStep( stepwidth );
 
         s->setStyleSheet("QSlider::groove:horizontal { "            // Slider Aussehen veraendern.
@@ -731,11 +737,12 @@ void Slide::slide_value_changed (int val)
     case SLIDE_INT_TWO_STEP_PARA:
     case SLIDE_INT_PARA: {
         struct _int_para_ *sp = (struct _int_para_ *)cp->data;
+
         if (cp->type == SLIDE_INT_PARA)
             sp->value = val;
         else {
-            if (val % 2)            // in zweiter Schritten arbeiten 1, 3, 5, ...
-                sp->value = val;
+            // if (val % 2)            // in zweiter Schritten arbeiten 1, 3, 5, ...
+                sp->value = val * stepwidth + 1;
         }
         l->setText(QString("%1=%2  min=%3  max=%4").arg(QString(cp->para_name))
                                                     .arg(QString::number(sp->value))
