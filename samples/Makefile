@@ -1,4 +1,5 @@
 
+.PHONY: clean
 
 all:
 	$(MAKE)  -C basic/build-basic_app-Desktop-Debug/

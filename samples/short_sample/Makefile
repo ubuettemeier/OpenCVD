@@ -9,23 +9,11 @@ OPENCVD += ../../include/opencvd_func.hpp
 OPENCVD += ../../include/opencvd_types.hpp
 
 CFLAGS = -Wall -c -O0 -DNDEBUG
-CFLAGS += \
--I../../include \
--I/usr/local/include \
--I/usr/include \
--I/usr/local/include/opencv2 \
--I/usr/local/include/opencv
+CFLAGS += $(shell pkg-config --cflags opencv)
+CFLAGS += -I../../include \
 
-LDFLAGS += -L/usr/local/lib \
--lopencv_core \
--lopencv_imgcodecs \
--lopencv_highgui \
--lopencv_imgproc \
--lopencv_video \
--lopencv_videoio \
--lopencv_features2d \
--lpthread 
-
+LDFLAGS += $(shell pkg-config --libs opencv)
+LDFLAGS += -lpthread
 
 FILENAME = short_sample
 BUILDFILE = $(FILENAME)
@@ -38,12 +26,12 @@ OBJ = $(FILENAME).o
 BIN = $(BUILDFILE)
 
 $(BIN): $(OBJ)
-	$(CC) -o $(BIN) $(OBJ) $(LDFLAGS)
+	$(CC) -o $@ $< $(LDFLAGS) 
 
 $(OBJ): $(SOURCE) $(HEADER) $(OPENCVD)
-	$(CC) $(CFLAGS) $(FLAGS) $(INC) $(SOURCE)
+	$(CC) $(CFLAGS) $(FLAGS) $(INC) $<
 
-.PHONEY:	clean
+.PHONEY: clean
 clean:	
 	$(RM) -r -f $(OBJ)	
 	$(RM) -r -f $(BUILDFILE)

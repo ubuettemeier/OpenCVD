@@ -299,9 +299,8 @@ struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
     foo->func_is_modifyt = 0;
 
     foo->first_para = foo->end_para = NULL;
-    // Level 0
+    // Level 0  func name
     QTreeWidgetItem *tw = new QTreeWidgetItem(ui->treeWidget);
-    // tw->setText(0, QString("%1 %2").arg(QString::number(foo->line_nr)).arg(QString::asprintf("%s", foo->func_name)));
     tw->setText(0, QString("%1 %2").arg(QString::number(foo->line_nr)).arg(QString(foo->func_name)));
     tw->setIcon(0, aktiv_icon[ foo->aktiv_icon ]);
     foo->tree_pointer = (void *)tw;
@@ -347,11 +346,16 @@ struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
 
     if (strlen(foo->filename) == 0)
         foo->source_pointer = NULL;
-    else {
-        QTreeWidgetItem *fb = new QTreeWidgetItem();
-        fb->setText(0, QString("Source"));              // Source
-        tw->addChild( fb );
-        foo->source_pointer = (void *)fb;
+    else {        
+        QFile qf(foo->filename);            // Prüfen, ob File existiert !
+        if (!qf.exists()) {                 // file not found
+            foo->source_pointer = NULL;
+        } else {
+            QTreeWidgetItem *fb = new QTreeWidgetItem();
+            fb->setText(0, QString("Source"));              // Source
+            tw->addChild( fb );
+            foo->source_pointer = (void *)fb;
+        }
     }
 
     foo->state.val = 0x0000;

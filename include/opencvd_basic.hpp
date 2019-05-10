@@ -504,9 +504,12 @@ opencvd_func::opencvd_func (uint64_t addr, uint16_t type, const char *f_name, ui
         strcpy (file_name, "");
     else {
         char foo[4096*2];
+        // GetCurrentDir (foo, sizeof(foo));
+        // char *path;
+        // _get_pgmptr (&path);
         getcwd ( foo, 4096*2 );
         strcat (foo, "/");
-        strcat (foo, src_file);
+        strcat (foo, src_file);     // make filename
 
         if (strlen(foo) > MAX_FILENAME_LEN) {
             strcpy (file_name, "");

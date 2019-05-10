@@ -9,22 +9,11 @@ OPENCVD += ../../include/opencvd_func.hpp
 OPENCVD += ../../include/opencvd_types.hpp
 
 CFLAGS = -Wall -c -O0 -DNDEBUG
-CFLAGS += \
--I../../include \
--I/usr/local/include \
--I/usr/include \
--I/usr/local/include/opencv2 \
--I/usr/local/include/opencv
+CFLAGS += $(shell pkg-config --cflags opencv)
+CFLAGS += -I../../include \
 
-LDFLAGS += -L/usr/local/lib \
--lopencv_core \
--lopencv_imgcodecs \
--lopencv_highgui \
--lopencv_imgproc \
--lopencv_video \
--lopencv_videoio \
--lopencv_features2d \
--lpthread 
+LDFLAGS += $(shell pkg-config --libs opencv)
+LDFLAGS += -lpthread
 
 FILENAME = imread
 BUILDFILE = $(FILENAME)
