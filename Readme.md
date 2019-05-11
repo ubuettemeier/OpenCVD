@@ -18,7 +18,7 @@ In addition, specializedcomponents are also available.
 
 The working method is as follows:
 - In the image processing application, the namespace CVD:: is used instead of cv::.
-- The called CVD::: functions redirect their parameters to a local server.
+- The called CVD:: functions redirect their parameters to a local server.
 - This server now offers the possibility to change function parameters during runtime.
 
 ---------------------------------------------------------------------------------------------

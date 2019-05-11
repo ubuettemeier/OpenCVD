@@ -14,6 +14,9 @@ wiki/
 # no user Projekt-Files
 *.user
 
+# no doxygen
+config_doxygen
+
 # Hilfsdateien
 set_group.sh
 Readme.odt
