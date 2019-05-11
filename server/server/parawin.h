@@ -89,8 +89,11 @@ public:
     QTcpSocket *client;
     QLabel *out_str;
     QSpinBox *iedit;
+    QPushButton *para_button;
+
 private slots:
     void int_edit_finish();
+    void int_edit_para_button_pushed ();    // Eigenschaft
 };
 //!
 //! \brief The FloatEdit class
@@ -120,8 +123,10 @@ public:
     QTcpSocket *client;
     QLabel *out_str;
     QDoubleSpinBox *dedit;
+    QPushButton *para_button;
 private slots:
     void double_edit_finish();
+    void double_edit_para_button_pushed ();    // Eigenschaft
     // void new_double_val (double val);
 };
 
@@ -156,7 +161,7 @@ public:
     QPushButton *para_button;
 private slots:
     void slide_value_changed (int val);
-    void para_button_pushed ();
+    void slide_para_button_pushed ();       // Eigenschaft
 
 private:
     QLabel *l;

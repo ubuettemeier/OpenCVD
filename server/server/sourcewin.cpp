@@ -53,12 +53,11 @@ Sourcewin::Sourcewin (struct _cvd_func_ *func, MainWindow *main_win, QWidget *pa
                 uint32_t znr = 0;
                 while (!in.atEnd()) {
                     QString s = in.readLine();      // Zeile einlesen
-                    znr++;
-                    if (znr == cf->line_nr) {
-
-                    }
+                    znr++;                    
                     if (!in.atEnd()) {
-                        te->insertPlainText(QString("%1 %2\n").arg(QString::asprintf("%-4i", znr)).arg(QString(s)));
+                        char a[16];
+                        sprintf (a, "%-4i", znr);   // Zeilen-Nr to string
+                        te->insertPlainText(QString("%1 %2\n").arg(QString(a)).arg(QString(s)));
                     }
                 }
             } // if (qf.open( QIODevice::ReadOnly | QIODevice::Text ))
@@ -71,11 +70,6 @@ Sourcewin::Sourcewin (struct _cvd_func_ *func, MainWindow *main_win, QWidget *pa
     te->setTextCursor(cursor);
     highlightCurrentLine();         // Cursor-Pos Zeile wird gehighlightet
     te->setReadOnly( true );
-
-    /*
-    te->moveCursor (QTextCursor::Start);
-    te->ensureCursorVisible();
-    */
 
     this->show();
 }

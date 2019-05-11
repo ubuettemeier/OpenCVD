@@ -456,6 +456,14 @@ IntEdit::IntEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *
     iedit->setParent( parent );
 
     connect (iedit, SIGNAL(editingFinished()), this, SLOT(int_edit_finish()));
+
+    para_button = new QPushButton();
+    para_button->setIcon(glob_mw->iconlist[2]);
+    para_button->setGeometry(x+210, y+25, 20, 20);
+    para_button->setParent( parent );
+    para_button->setToolTip( "Eigenschaft" );
+
+    connect (para_button, SIGNAL(clicked(bool)), this, SLOT(int_edit_para_button_pushed()));
 }
 //!
 //! \brief IntEdit::int_edit_finish
@@ -468,6 +476,14 @@ void IntEdit::int_edit_finish()
     out_str->setText(QString("%1=%2").arg(QString(cp->para_name)).arg(QString::number(val->value)));
 
     parawin->rewrite_para_data( cp );
+}
+
+//!
+//! \brief IntEdit::int_edit_para_button_pushed
+//!
+void IntEdit::int_edit_para_button_pushed ()
+{
+    printf ("IntEdit Treffer\n");
 }
 
 //!
@@ -545,6 +561,14 @@ DoubleEdit::DoubleEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWi
     dedit->setParent( parent );
 
     connect (dedit, SIGNAL(editingFinished()), this, SLOT(double_edit_finish()));
+
+    para_button = new QPushButton();
+    para_button->setIcon(glob_mw->iconlist[2]);
+    para_button->setGeometry(x+210, y+25, 20, 20);
+    para_button->setParent( parent );
+    para_button->setToolTip( "Eigenschaft" );
+
+    connect (para_button, SIGNAL(clicked(bool)), this, SLOT(double_edit_para_button_pushed()));
 }
 
 //!
@@ -558,6 +582,14 @@ void DoubleEdit::double_edit_finish()
     out_str->setText(QString("%1=%2").arg(QString(cp->para_name)).arg(QString::number(val->value)));
 
     parawin->rewrite_para_data( cp );
+}
+
+//!
+//! \brief DoubleEdit::double_edit_para_button_pushed
+//!
+void DoubleEdit::double_edit_para_button_pushed ()    // Eigenschaft
+{
+    printf ("Treffer double_edit_para_button_pushed\n");
 }
 
 //!
@@ -732,7 +764,7 @@ Slide::Slide(QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *paren
     para_button->setParent( parent );
     para_button->setToolTip( "Eigenschaft" );
 
-    connect (para_button, SIGNAL(clicked(bool)), this, SLOT(para_button_pushed()));
+    connect (para_button, SIGNAL(clicked(bool)), this, SLOT(slide_para_button_pushed()));   // Eigenschaft
 
 }
 
@@ -774,9 +806,9 @@ void Slide::slide_value_changed (int val)
 }
 
 //!
-//! \brief Slide::para_button_pushed
+//! \brief Slide::slide_para_button_pushed
 //!
-void Slide::para_button_pushed ()
+void Slide::slide_para_button_pushed ()
 {
     printf ("Treffer\n");
 }

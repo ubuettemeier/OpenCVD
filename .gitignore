@@ -4,6 +4,7 @@ build*/
 
 latex*/
 html*/
+test_app*/
 
 # Verzeichnis wiki ausschliessen
 wiki/
@@ -21,6 +22,7 @@ config_doxygen
 set_group.sh
 Readme.odt
 
+basic_test
 short_sample
 filtering
 findcontours
