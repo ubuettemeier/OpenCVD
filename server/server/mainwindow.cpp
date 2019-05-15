@@ -20,6 +20,7 @@
 using namespace std;
 
 QDomDocument doc;           // XML doc global. Fuer alle classen sichtbar
+QDomDocument para;          // XML Parameter
 
 QDir home_dir;
 QDir current_dir;
@@ -60,6 +61,19 @@ MainWindow::MainWindow(QWidget *parent) :
         }
         file.close();
     }
+
+    QFile param_file( data_dir.path()+"/param.xml" );
+    if (!param_file.open(QIODevice::ReadOnly))        // open
+        ui->textEdit->insertPlainText("File param.xml nicht gefunden\n");
+    else {
+        ui->textEdit->insertPlainText("param.xml geöffnet\n");
+        if (para.setContent( &param_file )) {
+            ui->textEdit->insertPlainText("param.xml angelegt\n");
+            check_param_list ();
+        }
+        param_file.close();
+    }
+
 
     QTimer *timer = new QTimer ( this );
     connect ( timer, SIGNAL (timeout()), this, SLOT(trigger_timer()));
@@ -908,8 +922,32 @@ void MainWindow::on_actionAbout_triggered()
     QMessageBox::information ( this, "About", buf, QMessageBox::Ok );
 }
 
+//!
+//! \brief MainWindow::on_actionSource_Window_schlie_en_triggered
+//!
 void MainWindow::on_actionSource_Window_schlie_en_triggered()
 {
     delete sourcewin;
     set_all_source_icon (false);
+}
+
+void MainWindow::check_param_list ()
+{
+    QDomNodeList nl = para.elementsByTagName("THRESHOLD");
+
+    if (nl.length()) {                                  // es ist ein Element gefunden worden.
+        QDomElement e = nl.at(0).toElement();           // 1.Element verwenden
+        qDebug() << e.tagName();
+        QDomElement c = e.firstChild().toElement();     // 1.Child vom 1.Element
+        int n = 0;
+        while (c.parentNode() == e) {
+            n++;
+            if (c.tagName() == "parameter") {
+                if (c.hasAttributes())
+                    qDebug() << c.attribute("Name") << c.attribute("type") << c.attribute("showtype");
+            }
+            c = c.nextSibling().toElement();
+        }
+        qDebug() << n << " Parameter gefunden";
+    }
 }

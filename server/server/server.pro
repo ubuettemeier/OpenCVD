@@ -43,4 +43,5 @@ FORMS += \
         mainwindow.ui
 
 DISTFILES += \
-    ../data/enum.xml
+    ../data/enum.xml \
+    ../data/param.xml

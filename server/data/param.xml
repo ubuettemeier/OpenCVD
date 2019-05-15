@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <param>
+        <MEDIANBLUR>
+
+        </MEDIANBLUR>
+        <THRESHOLD>
+            <parameter showtype="SLIDE_DOUBLE_PARA" Name="thresh" type="double" min="0" max="255"> </parameter>
+            <parameter Name="maxval" type="double" showtype="SLIDE_DOUBLE_PARA" min="0" max="255"> </parameter>
+            <parameter Name="type" type="int" showtype="ENUM_DROP_DOWN" enumname="ThresholdTypes"> </parameter>
+        </THRESHOLD>
+    </param>
+</root>

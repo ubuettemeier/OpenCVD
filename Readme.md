@@ -46,8 +46,6 @@ see: samples/short_sample/short_sample.cpp
 
 - gcc version 7.3.0
 - g++ --std=c++11
-- qtcreator
-- Qt 5.9.5
 ----------------------------------------------------------------------------------------------
 **folgende OpenCV Funktionen sind implementiert / the following OpenCV functions are implemented**
 

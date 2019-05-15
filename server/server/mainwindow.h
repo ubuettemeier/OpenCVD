@@ -36,6 +36,7 @@ enum _icon_name_ {
 };
 
 extern QDomDocument doc;        // XML Datei
+extern QDomDocument para;       // XML Parameter
 
 extern QDir home_dir;
 extern QDir data_dir;
@@ -117,6 +118,8 @@ private:
     struct _cvd_func_ *grep_func_by_source_pointer (QTreeWidgetItem *item);         // Source
 
     struct _cvd_para_ *grep_para_by_tree_pointer (QTreeWidgetItem *item);           // Wird nicht mehr benötigt.
+
+    void check_param_list ( void );
 };
 
 extern MainWindow *glob_mw;

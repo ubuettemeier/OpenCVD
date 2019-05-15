@@ -632,7 +632,7 @@ EnumDrop::EnumDrop (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget
     out_str->setParent( parent );
 
     drop = new QComboBox();
-    drop->addItems( items );
+    drop->addItems( items );                    // QStringList insert.
     drop->setCurrentIndex( current_index );
     drop->setGeometry(x, y+20, 200, 30);
     drop->setParent( parent );
