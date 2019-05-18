@@ -9,6 +9,7 @@ all:
 	$(MAKE)  -C imread/
 	$(MAKE)  -C short_sample/
 	$(MAKE)  -C demhist/
+	$(MAKE)  -C HoughCircles/
 clean:
 	$(MAKE)  -C basic/  clean
 	$(MAKE)  -C edge/  clean
@@ -17,4 +18,5 @@ clean:
 	$(MAKE)  -C imread/  clean
 	$(MAKE)  -C short_sample/  clean
 	$(MAKE)  -C demhist/  clean
+	$(MAKE)  -C HoughCircles/ clean
 

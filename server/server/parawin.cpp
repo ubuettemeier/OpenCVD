@@ -45,6 +45,20 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case HOUGHCIRCLES:
+        new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );                    // method
+        new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );            // dp
+        new DoubleEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );      // minDist
+        new Slide (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );      // param1
+        new Slide (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );      // param2
+
+        new IntEdit (client, cf->first_para->next->next->next->next->next, LEFT_POS, 10+55*5, this );                 // minRadius
+        new IntEdit (client, cf->first_para->next->next->next->next->next->next, LEFT_POS, 10+55*6, this );                 // maxRadius
+
+        new mButton (client, cf, LEFT_POS, 10+55*7+10, mCLOSE, this, mw );                            // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*7+10, mRESET, this, mw );  // Reset
+        setGeometry(320, 150, 260, 10+55*8);
+        break;
     case CALCHIST:
         new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );                       // nimages
         new IntEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );                 // dims
@@ -836,15 +850,15 @@ PointInt::PointInt(QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget 
     l->setParent( parent );
 
     x_koor = new QSpinBox();
-    x_koor->setMinimum( -1000 );
-    x_koor->setMaximum( 1000 );
+    x_koor->setMinimum( val->min_x );
+    x_koor->setMaximum( val->max_x );
     x_koor->setValue( val->x );
     x_koor->setGeometry(x, y+20, 100, 30);
     x_koor->setParent( parent );
 
     y_koor = new QSpinBox();
-    y_koor->setMinimum( -1000 );
-    y_koor->setMaximum( 1000 );
+    y_koor->setMinimum( val->min_y );
+    y_koor->setMaximum( val->max_y );
     y_koor->setValue( val->y );
     y_koor->setGeometry(x+120, y+20, 100, 30);
     y_koor->setParent( parent );

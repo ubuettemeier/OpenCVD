@@ -129,6 +129,12 @@ CV_EXPORTS void calcHist( const cv::Mat* images, int nimages,
                           const float** ranges, bool uniform = true, bool accumulate = false
                           BUILDIN);
 
+CV_EXPORTS_W void HoughCircles( cv::InputArray image, cv::OutputArray circles,
+                               int method, double dp, double minDist,
+                               double param1 = 100, double param2 = 100,
+                               int minRadius = 0, int maxRadius = 0
+                               BUILDIN);
+
 //!
 //! \brief calcHist
 //!        Calculates a histogram of a set of arrays.
@@ -276,10 +282,10 @@ CV_EXPORTS_W cv::Mat getStructuringElement(int shape, cv::Size ksize, cv::Point 
         struct _enum_para_ ep = {shape, "MorphShapes"};
         foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&ep, "shape" );
 
-        struct _point_int_ ip = {ksize.width, ksize.height};
+        struct _point_int_ ip = {ksize.width, 1, 20000, ksize.height, 1, 20000};
         foo->new_para (POINT_INT, sizeof(struct _point_int_), (uint8_t*)&ip, "ksize");      // Matrix w, h
 
-        struct _point_int_ ac = {anchor.x, anchor.y};
+        struct _point_int_ ac = {anchor.x, -1, 20000, anchor.y, -1, 20000};
         foo->new_para (POINT_INT_XY, sizeof(struct _point_int_), (uint8_t*)&ac, "anchor");     // Ankerpunkt default -1 / -1
     }
 
@@ -315,7 +321,7 @@ CV_EXPORTS_W void erode( cv::InputArray src, cv::OutputArray dst, cv::InputArray
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), ERODE, "erode", 0x000F, BUILIN_PARA);
         func.push_back( foo );
 
-        struct _point_int_ ip = {anchor.x, anchor.y};
+        struct _point_int_ ip = {anchor.x, -1, 20000, anchor.y, -1, 20000};
         foo->new_para (POINT_INT_XY, sizeof(struct _point_int_), (uint8_t*)&ip, "anchor");
 
         struct _int_para_ sp = {iterations, -10000, 10000};
@@ -387,7 +393,7 @@ CV_EXPORTS_W void dilate( cv::InputArray src, cv::OutputArray dst, cv::InputArra
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), DILATE, "dilate", 0x000F, BUILIN_PARA);
         func.push_back( foo );
 
-        struct _point_int_ ip = {anchor.x, anchor.y};
+        struct _point_int_ ip = {anchor.x, -1, 20000, anchor.y, -1, 20000};
         foo->new_para (POINT_INT_XY, sizeof(struct _point_int_), (uint8_t*)&ip, "anchor");
 
         struct _int_para_ sp = {iterations, -10000, 10000};
@@ -421,7 +427,7 @@ CV_EXPORTS_W void dilate( cv::InputArray src, cv::OutputArray dst, cv::InputArra
         struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
         cv::dilate( src, dst, kernel,
                     cv::Point(ip->x, ip->y),
-                    *(int*)foo->para[1]->data,
+                    *(int*)foo->para[1]->data,                
                     *(int*)foo->para[2]->data,
                     borderValue);
         foo->control_func_run_time ();
@@ -468,7 +474,7 @@ CV_EXPORTS_W void morphologyEx( cv::InputArray src, cv::OutputArray dst,
         struct _enum_para_ ep = {op, "MorphTypes"};
         foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&ep, "op" );
 
-        struct _point_int_ ip = {anchor.x, anchor.y};
+        struct _point_int_ ip = {anchor.x, -1, 20000, anchor.y, -1, 20000};
         foo->new_para (POINT_INT_XY, sizeof(struct _point_int_), (uint8_t*)&ip, "anchor");
 
         struct _int_para_ sp = {iterations, -10000, 10000};
@@ -836,7 +842,7 @@ CV_EXPORTS_W void blur( cv::InputArray src, cv::OutputArray dst,
         struct _int_para_ sh = {ksize.height, 1, 31};
         foo->new_para (SLIDE_INT_PARA, sizeof(struct _int_para_), (uint8_t*)&sh, "ksize height");
 
-        struct _point_int_ ip = {anchor.x, anchor.y};
+        struct _point_int_ ip = {anchor.x, -1, 20000, anchor.y, -1, 20000};
         foo->new_para (POINT_INT_XY, sizeof(struct _point_int_), (uint8_t*)&ip, "anchor");
 
         struct _enum_para_ bt = {borderType, "BorderTypes"};
@@ -1035,7 +1041,7 @@ CV_EXPORTS_W void findContours( cv::InputOutputArray image,
         struct _enum_para_ bt2 = {method, "ContourApproximationModes"};
         foo->new_para (ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt2, "method");
 
-        struct _point_int_ ip = {offset.x, offset.y};
+        struct _point_int_ ip = {offset.x, -20000, 20000, offset.y, -20000, 20000};
         foo->new_para (POINT_INT, sizeof(struct _point_int_), (uint8_t*)&ip, "offset");
     }
 
@@ -1229,6 +1235,86 @@ CV_EXPORTS_W cv::Mat imread( const cv::String& filename, int flags
         foo->control_imshow( ret );
 
     return ret;
+}
+
+//!
+//! \brief HoughCircles
+//! \param image
+//! \param circles
+//! \param method
+//!        Erkennungsmethode, siehe cv::HoughModes. Derzeit ist die einzige implementierte Methode HOUGH_GRADIENT.
+//! \param dp
+//! \param minDist
+//!        minDist Mindestabstand zwischen den Mittelpunkten der erfassten Kreise.
+//!        Wenn der Parameter zu klein ist, können neben einem echten auch mehrere Nachbarkreise falsch erkannt werden.
+//!        Wenn er zu groß ist, können einige Kreise übersehen werden.
+//! \param param1
+//!        Erster methodenspezifischer Parameter. Im Falle von CV_HOUGH_GRADIENT ist es der höhere Schwellenwert der beiden,
+//!        die an den Canny-Kantendetektor übergeben werden (der niedrigere ist zweimal kleiner).
+//! \param param2
+//!        Zweiter methodenspezifischer Parameter. Im Falle von CV_HOUGH_GRADIENT ist es die Akkumulatorschwelle für die Kreismittelpunkte
+//!        in der Erkennungsphase. Je kleiner sie ist, desto mehr falsche Kreise können erkannt werden. Kreise,
+//!        die den größeren Akkumulatorwerten entsprechen, werden als kehrte zuerst zurück.
+//! \param minRadius
+//! \param maxRadius
+//! \param line_nr
+//! \param src_file
+//!
+CV_EXPORTS_W void HoughCircles( cv::InputArray image, cv::OutputArray circles,
+                               int method, double dp, double minDist,
+                               double param1, double param2,
+                               int minRadius, int maxRadius
+                               BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::HoughCircles( image, circles, method, dp, minDist, param1, param2, minRadius, maxRadius);
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), HOUGHCIRCLES, "HoughCircles", 0x0003, BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _enum_para_ bt = {method, "HoughModes"};
+        foo->new_para (ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt, "method");
+
+        struct _double_para_ al = {dp, 0.0, std::numeric_limits<double>::max()};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&al, "dp");
+
+        struct _double_para_ md = {minDist, 0.0, std::numeric_limits<double>::max()};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&md, "minDist");
+
+        struct _double_para_ p1 = {param1, 1.0, 255.0};            // threshold
+        foo->new_para (SLIDE_DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&p1, "param1");
+
+        struct _double_para_ p2 = {param2, 1.0, 255.0};
+        foo->new_para (SLIDE_DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&p2, "param2");
+
+        struct _int_para_ minr = {minRadius, 0, 200000};
+        foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&minr, "minRadius");
+
+        struct _int_para_ maxr = {maxRadius, 0, 200000};
+        foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&maxr, "maxRadius");
+
+    }
+
+    if (foo->state.flag.func_off) {
+        circles.clear();    // do nothing
+    } else {
+        cv::HoughCircles( image, circles,
+                          *(int*)foo->para[0]->data,         // method,
+                          *(double*)foo->para[1]->data,      // dp,
+                          *(double*)foo->para[2]->data,      // minDist,
+                          *(double*)foo->para[3]->data,      // param1
+                          *(double*)foo->para[4]->data,      // param2
+                          *(int*)foo->para[5]->data,         // minRadius,
+                          *(int*)foo->para[6]->data);        // maxRadius);
+        foo->control_func_run_time ();
+    }
+    // foo->control_imshow( image );
 }
 
 

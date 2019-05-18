@@ -72,7 +72,7 @@ MainWindow::MainWindow(QWidget *parent) :
         }
         param_file.close();
     }
-    // check_param_list ();    // it's a test
+    check_param_list ();    // it's a test
 
     QTimer *timer = new QTimer ( this );
     connect ( timer, SIGNAL (timeout()), this, SLOT(trigger_timer()));
@@ -963,6 +963,7 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "MORPHOLOGYEX") == 0) return MORPHOLOGYEX;
     if (strcmp(enum_name, "NORMALIZE") == 0) return NORMALIZE;
     if (strcmp(enum_name, "CALCHIST") == 0) return CALCHIST;
+    if (strcmp(enum_name, "HOUGHCIRCLES") == 0) return HOUGHCIRCLES;
 
     if (strcmp(enum_name, "SLIDE_INT_TWO_STEP_PARA") == 0) return SLIDE_INT_TWO_STEP_PARA;
     if (strcmp(enum_name, "SLIDE_INT_PARA") == 0) return SLIDE_INT_PARA;
@@ -1026,7 +1027,7 @@ char *MainWindow::get_enum_text (int val)
     if (val == MORPHOLOGYEX) strcpy (buf, "MORPHOLOGYEX");
     if (val == NORMALIZE) strcpy (buf, "NORMALIZE");
     if (val == CALCHIST) strcpy (buf, "CALCHIST");
-
+    if (val == HOUGHCIRCLES) strcpy (buf, "HOUGHCIRCLES");
 
     if (val == SLIDE_INT_TWO_STEP_PARA) strcpy (buf, "SLIDE_INT_TWO_STEP_PARA");
     if (val == SLIDE_INT_PARA) strcpy (buf, "SLIDE_INT_PARA");
@@ -1055,9 +1056,10 @@ char *MainWindow::get_enum_text (int val)
 
 void MainWindow::check_param_list ()
 {
-    QDomNodeList nl = para.elementsByTagName("BLUR_FUNC");
+    QDomNodeList nl = para.elementsByTagName("BLUR_FUNC");  // Elemet suchen
 
-    if (nl.length()) {                                  // es ist ein Element gefunden worden.
+    // if (nl.length()) {  // es ist ein Element gefunden worden.
+    if (!nl.isEmpty()) {
         // qDebug() << "size=" << nl.length();
         QDomElement e = nl.at(0).toElement();           // 1.Element verwenden
         qDebug() << e.tagName();
@@ -1069,10 +1071,12 @@ void MainWindow::check_param_list ()
             if (c.tagName() == "parameter") {           // parameter gefunden
                 if (c.hasAttributes()) {
                     std::cout << "Name=" << c.attributeNode("Name").nodeValue().toStdString() << "\n";
-                    QString dummy = QString::fromLocal8Bit(c.attributeNode("showtype").nodeValue().toStdString().c_str());
-                    std::cout << "dummy=" << c.attributeNode("showtype").nodeValue().toStdString().c_str() << "\n";
-                    qDebug() << "dummy=" << dummy;
-                    std::cout << "showtype=" << std::hex << std::uppercase << grep_enum(c.attributeNode("showtype").nodeValue().toStdString().c_str()) << "\n";
+                    // QString dummy = QString::fromLocal8Bit(c.attributeNode("showtype").nodeValue().toStdString().c_str());
+                    // std::cout << "dummy=" << c.attributeNode("showtype").nodeValue().toStdString().c_str() << "\n";
+                    // qDebug() << "dummy=" << dummy;
+                    int type = grep_enum(c.attributeNode("showtype").nodeValue().toStdString().c_str());
+                    // std::cout << "showtype=" << std::hex << std::uppercase << type << "\n";
+                    std::cout << "showtype=" << type << "\n";
                     std::cout << "type=" << c.attributeNode("type").nodeValue().toStdString() << "\n";
                     std::cout << "min=" << c.attributeNode("min").nodeValue().toStdString() << "\n";
                     std::cout << "max=" << c.attributeNode("max").nodeValue().toStdString() << "\n";
@@ -1082,5 +1086,6 @@ void MainWindow::check_param_list ()
             c = c.nextSibling().toElement();            // nächster Parameter
         }
         qDebug() << n << " Parameter gefunden";
-    }
+    } else
+        qDebug() << "kein Element gefunden";
 }

@@ -65,3 +65,4 @@ see: samples/short_sample/short_sample.cpp
 - imread
 - normalize
 - calcHist
+- HoughCircles

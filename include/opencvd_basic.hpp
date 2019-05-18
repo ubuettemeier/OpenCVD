@@ -47,8 +47,6 @@ void read_thread ( void );
 void show_func_list( void );
 void delete_cvd( void );
 
-// const char *funci (const char *func = __builtin_FUNCTION ());
-const char *funci (const char *func = __builtin_FILE ());
 signed long long cvd_difference_micro (struct timeval *start, struct timeval *stop);
 signed long long cvd_time_differnce (struct timeval *start);
 
@@ -421,12 +419,6 @@ void delete_cvd( void )
         delete func_list[i];
     }
 }
-
-const char *funci (const char *func)
-{
-  return func;
-}
-
 
 //!
 //! \brief cvd_difference_micro

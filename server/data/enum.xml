@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
     <enum>
+        <HoughModes>
+            <HOUGH_STANDARD> 0 </HOUGH_STANDARD>
+            <HOUGH_PROBABILISTIC> 1 </HOUGH_PROBABILISTIC>
+            <HOUGH_MULTI_SCALE> 2 </HOUGH_MULTI_SCALE>
+            <HOUGH_GRADIENT> 3 </HOUGH_GRADIENT>
+        </HoughModes>
+
         <NormTypes>
             <NORM_INF> 1 </NORM_INF>
             <NORM_L1> 2 </NORM_L1>

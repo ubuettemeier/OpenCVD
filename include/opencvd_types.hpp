@@ -45,18 +45,19 @@ enum _data_types_ {
     MORPHOLOGYEX = 0x1017,
     NORMALIZE = 0x1018,
     CALCHIST = 0x1019,
+    HOUGHCIRCLES = 0x101A,
     // ----- Parameter 0x2000...0x2FFF --------
     SLIDE_INT_TWO_STEP_PARA = 0x2000,       // z.B. 1, 3, 5, ... 21 (int)
     SLIDE_INT_PARA = 0x2001,                // z.B. 0..255 (int)
     SLIDE_DOUBLE_PARA = 0x2002,             // z.B  0.0 ... 255.0
-    DOUBLE_PARA = 0x2003,                   // double value
+    DOUBLE_PARA = 0x2003,                   // double value, min, max
     INT_PARA = 0x2004,                      // int value
     ENUM_DROP_DOWN = 0x2005,                // es muss der Name der enum Deklaration uebergeben werden. Z.B.: "ThresholdTypes". S.auch <struct _enum_para_>
-    FLOAT_PARA = 0x2006,                    // float value
-    POINT_INT = 0x2007,                     // {int, int} Anzeige erfolgt in W=..., H=....
+    FLOAT_PARA = 0x2006,                    // float value, min, max
+    POINT_INT = 0x2007,                     // {W int value, min, max, H int value, min, max} Anzeige erfolgt in W=..., H=....  Parameter ohne Grenzwerte
     SCALAR_PARA = 0x2008,                   // s.auch: struct _scalar_double_
-    STRING_PARA = 0x2009,
-    POINT_INT_XY = 0x200A,                  // {int, int} Anzeige erfolgt in X=..., Y=....
+    STRING_PARA = 0x2009,                   // "String"
+    POINT_INT_XY = 0x200A,                  // {X int value, min, max, Y int value, min, max} Anzeige erfolgt in X=..., Y=....  Parameter ohne Grenzwerte
     // ----- Special -----------
     FUNC_FLAGS = 0x3000,                    // s.auch struct _cvd_flags_
     TIME_TRIGGER = 0x3001,                  // s.auch struct _time_trigger_
@@ -74,7 +75,11 @@ enum _data_types_ {
 //!
 struct _point_int_ {
     int x;
+    int min_x;
+    int max_x;
     int y;
+    int min_y;
+    int max_y;
 };
 
 //!
