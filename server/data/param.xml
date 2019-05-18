@@ -2,12 +2,20 @@
 <root>
     <param>
         <MEDIANBLUR>
-
+            <parameter Name="ksize" showtype="SLIDE_INT_TWO_STEP_PARA" type="int" min="1" max="31"> </parameter>
         </MEDIANBLUR>
+
+        <BLUR_FUNC>
+            <parameter Name="ksize width" showtype="SLIDE_INT_PARA" type="int" min="1" max="31"> </parameter>
+            <parameter Name="ksize height" showtype="SLIDE_INT_PARA" type="int" min="1" max="31"> </parameter>
+            <parameter Name="anchor" showtype="POINT_INT_XY" type="int"> </parameter>
+            <parameter Name="borderType" showtype="ENUM_DROP_DOWN" type="int" enumname="BorderTypes"> </parameter>
+        </BLUR_FUNC>
+
         <THRESHOLD>
-            <parameter showtype="SLIDE_DOUBLE_PARA" Name="thresh" type="double" min="0" max="255"> </parameter>
-            <parameter Name="maxval" type="double" showtype="SLIDE_DOUBLE_PARA" min="0" max="255"> </parameter>
-            <parameter Name="type" type="int" showtype="ENUM_DROP_DOWN" enumname="ThresholdTypes"> </parameter>
+            <parameter Name="thresh" showtype="SLIDE_DOUBLE_PARA" type="double" min="0" max="255"> </parameter>
+            <parameter Name="maxval" showtype="SLIDE_DOUBLE_PARA" type="double" min="0" max="255"> </parameter>
+            <parameter Name="type" showtype="ENUM_DROP_DOWN" type="int" enumname="ThresholdTypes"> </parameter>
         </THRESHOLD>
     </param>
 </root>

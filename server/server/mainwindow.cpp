@@ -4,7 +4,7 @@
 //! \mainclass MainWindow
 //!
 
-#define VERSION "v0.1"
+#define VERSION "v0.4"
 
 #include <cstring>
 #include <iostream>
@@ -68,12 +68,11 @@ MainWindow::MainWindow(QWidget *parent) :
     else {
         ui->textEdit->insertPlainText("param.xml geöffnet\n");
         if (para.setContent( &param_file )) {
-            ui->textEdit->insertPlainText("param.xml angelegt\n");
-            check_param_list ();
+            ui->textEdit->insertPlainText("param.xml angelegt\n");            
         }
         param_file.close();
     }
-
+    // check_param_list ();    // it's a test
 
     QTimer *timer = new QTimer ( this );
     connect ( timer, SIGNAL (timeout()), this, SLOT(trigger_timer()));
@@ -931,22 +930,156 @@ void MainWindow::on_actionSource_Window_schlie_en_triggered()
     set_all_source_icon (false);
 }
 
+//!
+//! \brief MainWindow::grep_enum
+//! \param enum_name
+//! \return  -1  FAILURE
+//!
+int MainWindow::grep_enum (const char *enum_name)
+{
+    if (strcmp(enum_name, "INITFUNC") == 0) return INITFUNC;
+    if (strcmp(enum_name, "MEDIANBLUR") == 0) return MEDIANBLUR;
+    if (strcmp(enum_name, "THRESHOLD") == 0) return THRESHOLD;
+    if (strcmp(enum_name, "CVTCOLOR") == 0) return CVTCOLOR;
+    if (strcmp(enum_name, "LAPLACIAN") == 0) return LAPLACIAN;
+    if (strcmp(enum_name, "CANNY") == 0) return CANNY;
+    if (strcmp(enum_name, "CANNY_2") == 0) return CANNY_2;
+    if (strcmp(enum_name, "CONVERTTO") == 0) return CONVERTTO;
+    if (strcmp(enum_name, "OPERATOR_INT_MUL_EQUAL") == 0) return OPERATOR_INT_MUL_EQUAL;
+    if (strcmp(enum_name, "OPERATOR_FLOAT_MUL_EQUAL") == 0) return OPERATOR_FLOAT_MUL_EQUAL;
+    if (strcmp(enum_name, "OPERATOR_DOUBLE_MUL_EQUAL") == 0) return OPERATOR_DOUBLE_MUL_EQUAL;
+    if (strcmp(enum_name, "GAUSSIANBLUR") == 0) return GAUSSIANBLUR;
+    if (strcmp(enum_name, "BLUR_FUNC") == 0) return BLUR_FUNC;
+    if (strcmp(enum_name, "SCALAR_FUNC_4") == 0) return SCALAR_FUNC_4;
+    if (strcmp(enum_name, "DILATE") == 0) return DILATE;
+    if (strcmp(enum_name, "ERODE") == 0) return ERODE;
+    if (strcmp(enum_name, "FINDCONTOURS") == 0) return FINDCONTOURS;
+    if (strcmp(enum_name, "CONVERTSCALEABS") == 0) return CONVERTSCALEABS;
+    if (strcmp(enum_name, "SCALAR_ALL") == 0) return SCALAR_ALL;
+    if (strcmp(enum_name, "SCHARR") == 0) return SCHARR;
+    if (strcmp(enum_name, "IMREAD") == 0) return IMREAD;
+    if (strcmp(enum_name, "GRABCUT") == 0) return GRABCUT;
+    if (strcmp(enum_name, "GETSTRUCTURINGELEMENT") == 0) return GETSTRUCTURINGELEMENT;
+    if (strcmp(enum_name, "MORPHOLOGYEX") == 0) return MORPHOLOGYEX;
+    if (strcmp(enum_name, "NORMALIZE") == 0) return NORMALIZE;
+    if (strcmp(enum_name, "CALCHIST") == 0) return CALCHIST;
+
+    if (strcmp(enum_name, "SLIDE_INT_TWO_STEP_PARA") == 0) return SLIDE_INT_TWO_STEP_PARA;
+    if (strcmp(enum_name, "SLIDE_INT_PARA") == 0) return SLIDE_INT_PARA;
+    if (strcmp(enum_name, "SLIDE_DOUBLE_PARA") == 0) return SLIDE_DOUBLE_PARA;
+    if (strcmp(enum_name, "DOUBLE_PARA") == 0) return DOUBLE_PARA;
+    if (strcmp(enum_name, "INT_PARA") == 0) return INT_PARA;
+    if (strcmp(enum_name, "ENUM_DROP_DOWN") == 0) return ENUM_DROP_DOWN;
+    if (strcmp(enum_name, "FLOAT_PARA") == 0) return FLOAT_PARA;
+    if (strcmp(enum_name, "POINT_INT") == 0) return POINT_INT;
+    if (strcmp(enum_name, "SCALAR_PARA") == 0) return SCALAR_PARA;
+    if (strcmp(enum_name, "STRING_PARA") == 0) return STRING_PARA;
+    if (strcmp(enum_name, "POINT_INT_XY") == 0) return POINT_INT_XY;
+
+    if (strcmp(enum_name, "FUNC_FLAGS") == 0) return FUNC_FLAGS;
+    if (strcmp(enum_name, "TIME_TRIGGER") == 0) return TIME_TRIGGER;
+    if (strcmp(enum_name, "SET_CVD_OFF") == 0) return SET_CVD_OFF;
+    if (strcmp(enum_name, "SET_CVD_ON") == 0) return SET_CVD_ON;
+
+    if (strcmp(enum_name, "CLOSE_CLIENT") == 0) return CLOSE_CLIENT;
+    if (strcmp(enum_name, "CLOSE_SERVER") == 0) return CLOSE_SERVER;
+    if (strcmp(enum_name, "SOCKET_ACK") == 0) return SOCKET_ACK;
+
+    return -1;
+}
+
+//!
+//! \brief MainWindow::get_enum_text
+//! \param val
+//! \return
+//!
+char *MainWindow::get_enum_text (int val)
+{
+    static char buf[64];
+
+    strcpy (buf, "");
+
+    if (val == INITFUNC) strcpy (buf, "INITFUNC");
+
+    if (val == MEDIANBLUR) strcpy (buf, "MEDIANBLUR");
+    if (val == THRESHOLD) strcpy (buf, "THRESHOLD");
+    if (val == CVTCOLOR) strcpy (buf, "CVTCOLOR");
+    if (val == LAPLACIAN) strcpy (buf, "LAPLACIAN");
+    if (val == CANNY) strcpy (buf, "CANNY");
+    if (val == CANNY_2) strcpy (buf, "CANNY_2");
+    if (val == CONVERTTO) strcpy (buf, "CONVERTTO");
+    if (val == OPERATOR_INT_MUL_EQUAL) strcpy (buf, "OPERATOR_INT_MUL_EQUAL");
+    if (val == OPERATOR_FLOAT_MUL_EQUAL) strcpy (buf, "OPERATOR_FLOAT_MUL_EQUAL");
+    if (val == OPERATOR_DOUBLE_MUL_EQUAL) strcpy (buf, "OPERATOR_DOUBLE_MUL_EQUAL");
+    if (val == GAUSSIANBLUR) strcpy (buf, "GAUSSIANBLUR");
+    if (val == BLUR_FUNC) strcpy (buf, "BLUR_FUNC");
+    if (val == SCALAR_FUNC_4) strcpy (buf, "SCALAR_FUNC_4");
+    if (val == DILATE) strcpy (buf, "DILATE");
+    if (val == ERODE) strcpy (buf, "ERODE");
+    if (val == FINDCONTOURS) strcpy (buf, "FINDCONTOURS");
+    if (val == CONVERTSCALEABS) strcpy (buf, "CONVERTSCALEABS");
+    if (val == SCALAR_ALL) strcpy (buf, "SCALAR_ALL");
+    if (val == SCHARR) strcpy (buf, "SCHARR");
+    if (val == IMREAD) strcpy (buf, "IMREAD");
+    if (val == GRABCUT) strcpy (buf, "GRABCUT");
+    if (val == GETSTRUCTURINGELEMENT) strcpy (buf, "GETSTRUCTURINGELEMENT");
+    if (val == MORPHOLOGYEX) strcpy (buf, "MORPHOLOGYEX");
+    if (val == NORMALIZE) strcpy (buf, "NORMALIZE");
+    if (val == CALCHIST) strcpy (buf, "CALCHIST");
+
+
+    if (val == SLIDE_INT_TWO_STEP_PARA) strcpy (buf, "SLIDE_INT_TWO_STEP_PARA");
+    if (val == SLIDE_INT_PARA) strcpy (buf, "SLIDE_INT_PARA");
+    if (val == SLIDE_DOUBLE_PARA) strcpy (buf, "SLIDE_DOUBLE_PARA");
+    if (val == DOUBLE_PARA) strcpy (buf, "DOUBLE_PARA");
+    if (val == INT_PARA) strcpy (buf, "INT_PARA");
+    if (val == ENUM_DROP_DOWN) strcpy (buf, "ENUM_DROP_DOWN");
+    if (val == FLOAT_PARA) strcpy (buf, "FLOAT_PARA");
+    if (val == POINT_INT) strcpy (buf, "POINT_INT");
+    if (val == SCALAR_PARA) strcpy (buf, "SCALAR_PARA");
+    if (val == STRING_PARA) strcpy (buf, "STRING_PARA");
+    if (val == POINT_INT_XY) strcpy (buf, "POINT_INT_XY");
+
+
+    if (val == FUNC_FLAGS) strcpy (buf, "FUNC_FLAGS");
+    if (val == TIME_TRIGGER) strcpy (buf, "TIME_TRIGGER");
+    if (val == SET_CVD_OFF) strcpy (buf, "SET_CVD_OFF");
+    if (val == SET_CVD_ON) strcpy (buf, "SET_CVD_ON");
+
+    if (val == CLOSE_CLIENT) strcpy (buf, "CLOSE_CLIENT");
+    if (val == CLOSE_SERVER) strcpy (buf, "CLOSE_SERVER");
+    if (val == SOCKET_ACK) strcpy (buf, "SOCKET_ACK");
+
+    return buf;
+}
+
 void MainWindow::check_param_list ()
 {
-    QDomNodeList nl = para.elementsByTagName("THRESHOLD");
+    QDomNodeList nl = para.elementsByTagName("BLUR_FUNC");
 
     if (nl.length()) {                                  // es ist ein Element gefunden worden.
+        // qDebug() << "size=" << nl.length();
         QDomElement e = nl.at(0).toElement();           // 1.Element verwenden
         qDebug() << e.tagName();
         QDomElement c = e.firstChild().toElement();     // 1.Child vom 1.Element
         int n = 0;
-        while (c.parentNode() == e) {
+
+        while (c.parentNode() == e) {                   // Parameterliste abarbeiten.
             n++;
-            if (c.tagName() == "parameter") {
-                if (c.hasAttributes())
-                    qDebug() << c.attribute("Name") << c.attribute("type") << c.attribute("showtype");
+            if (c.tagName() == "parameter") {           // parameter gefunden
+                if (c.hasAttributes()) {
+                    std::cout << "Name=" << c.attributeNode("Name").nodeValue().toStdString() << "\n";
+                    QString dummy = QString::fromLocal8Bit(c.attributeNode("showtype").nodeValue().toStdString().c_str());
+                    std::cout << "dummy=" << c.attributeNode("showtype").nodeValue().toStdString().c_str() << "\n";
+                    qDebug() << "dummy=" << dummy;
+                    std::cout << "showtype=" << std::hex << std::uppercase << grep_enum(c.attributeNode("showtype").nodeValue().toStdString().c_str()) << "\n";
+                    std::cout << "type=" << c.attributeNode("type").nodeValue().toStdString() << "\n";
+                    std::cout << "min=" << c.attributeNode("min").nodeValue().toStdString() << "\n";
+                    std::cout << "max=" << c.attributeNode("max").nodeValue().toStdString() << "\n";
+                }
+                std::cout << "\n";
             }
-            c = c.nextSibling().toElement();
+            c = c.nextSibling().toElement();            // nächster Parameter
         }
         qDebug() << n << " Parameter gefunden";
     }

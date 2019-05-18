@@ -11,6 +11,12 @@
 #define MAX_PARA_DATA 256
 #define MAX_FILENAME_LEN 256
 
+//!
+//! \brief The _data_types_ enum
+//! \todo if you change it, please also update the functions
+//!       grep_enum()
+//!       get_enum_text()
+//!
 enum _data_types_ {
     // ---- Function 0x1000...0x1FFF -------
     INITFUNC = 0x1000,          // ????

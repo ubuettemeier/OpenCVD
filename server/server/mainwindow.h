@@ -119,6 +119,8 @@ private:
 
     struct _cvd_para_ *grep_para_by_tree_pointer (QTreeWidgetItem *item);           // Wird nicht mehr benötigt.
 
+    int grep_enum (const char *str);    // emittelt den Wert der Variablen
+    char *get_enum_text (int val);
     void check_param_list ( void );
 };
 

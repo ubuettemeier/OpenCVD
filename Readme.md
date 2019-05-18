@@ -14,7 +14,7 @@ Die Arbeitsweise stellt sich wie folgt dar:
 OpenCVD is an interactive visualization software.
 It enables fast and effective support in the development of image processing applications. 
 It supports a large number of OpenCV functions. 
-In addition, specializedcomponents are also available.
+In addition, specialized components are also available.
 
 The working method is as follows:
 - In the image processing application, the namespace CVD:: is used instead of cv::.
