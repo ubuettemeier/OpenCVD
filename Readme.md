@@ -66,3 +66,4 @@ see: samples/short_sample/short_sample.cpp
 - normalize
 - calcHist
 - HoughCircles
+- HoughLinesP

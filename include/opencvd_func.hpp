@@ -135,6 +135,11 @@ CV_EXPORTS_W void HoughCircles( cv::InputArray image, cv::OutputArray circles,
                                int minRadius = 0, int maxRadius = 0
                                BUILDIN);
 
+CV_EXPORTS_W void HoughLinesP( cv::InputArray image, cv::OutputArray lines,
+                               double rho, double theta, int threshold,
+                               double minLineLength = 0, double maxLineGap = 0
+                               BUILDIN);
+
 /*
 class CV_EXPORTS Mat : public cv::Mat
 {
@@ -1413,8 +1418,6 @@ CV_EXPORTS_W cv::Mat imread( const cv::String& filename, int flags
 //!        die den größeren Akkumulatorwerten entsprechen, werden als kehrte zuerst zurück.
 //! \param minRadius
 //! \param maxRadius
-//! \param line_nr
-//! \param src_file
 //!
 CV_EXPORTS_W void HoughCircles( cv::InputArray image, cv::OutputArray circles,
                                int method, double dp, double minDist,
@@ -1478,6 +1481,67 @@ CV_EXPORTS_W void HoughCircles( cv::InputArray image, cv::OutputArray circles,
         foo->control_func_run_time ();
     }
     // foo->control_imshow( image );
+}
+
+//!
+//! \brief HoughLinesP
+//! \param image: 8-bit, single-channel binary source image. The image may be modified by the function.
+//! \param lines
+//! \param rho: Distance resolution of the accumulator in pixels.
+//! \param theta: Angle resolution of the accumulator in radians.
+//! \param threshold:
+//! \param minLineLength: Minimum line length. Line segments shorter than that are rejected.
+//! \param maxLineGap: Maximum allowed gap between points on the same line to link them.
+//!
+CV_EXPORTS_W void HoughLinesP( cv::InputArray image, cv::OutputArray lines,
+                               double rho, double theta, int threshold,
+                               double minLineLength, double maxLineGap
+                               BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::HoughLinesP( image, lines, rho, theta, threshold, minLineLength, maxLineGap);
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), HOUGHLINESP, "HoughLinesP", 0x0003, BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _double_para_ ro = {rho, -100000.0, std::numeric_limits<double>::max()};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&ro, "rho");
+
+        struct _double_para_ ta = {theta, -100000.0, std::numeric_limits<double>::max()};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&ta, "theta");
+
+        struct _int_para_ sw = {threshold, 0, 255};
+        foo->new_para (SLIDE_INT_PARA, sizeof(struct _int_para_), (uint8_t*)&sw, "threshold");
+
+        struct _double_para_ mll = {minLineLength, -100000.0, std::numeric_limits<double>::max()};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&mll, "minLineLength");
+
+        struct _double_para_ mlg = {maxLineGap, -100000.0, std::numeric_limits<double>::max()};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&mlg, "maxLineGap");
+    }
+    foo->error_flag = 0;
+
+    if (foo->state.flag.func_off) {
+        lines.clear();    // do nothing
+    } else {
+        try {
+            cv::HoughLinesP( image, lines,
+                             *(double*)foo->para[0]->data,      // rho
+                             *(double*)foo->para[1]->data,      // theta
+                             *(int*)foo->para[2]->data,         // threshold
+                             *(double*)foo->para[3]->data,      // minLineLength
+                             *(double*)foo->para[4]->data);     // maxLineGap
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
+        foo->control_func_run_time ();
+    }
 }
 
 

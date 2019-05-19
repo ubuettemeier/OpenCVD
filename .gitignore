@@ -30,4 +30,5 @@ imread
 edge
 demhist
 HoughCircles
+HoughLines
 

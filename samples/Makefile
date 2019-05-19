@@ -10,6 +10,7 @@ all:
 	$(MAKE)  -C short_sample/
 	$(MAKE)  -C demhist/
 	$(MAKE)  -C HoughCircles/
+	$(MAKE)  -C HoughLines/
 clean:
 	$(MAKE)  -C basic/  clean
 	$(MAKE)  -C edge/  clean
@@ -19,4 +20,5 @@ clean:
 	$(MAKE)  -C short_sample/  clean
 	$(MAKE)  -C demhist/  clean
 	$(MAKE)  -C HoughCircles/ clean
+	$(MAKE)  -C HoughLines/ clean
 

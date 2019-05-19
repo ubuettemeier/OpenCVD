@@ -4,7 +4,7 @@
 //! \mainclass MainWindow
 //!
 
-#define VERSION "v0.4"
+#define VERSION "v0.5"
 
 #include <cstring>
 #include <iostream>

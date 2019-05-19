@@ -45,6 +45,17 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case HOUGHLINESP:
+        new DoubleEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );            // rho
+        new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );      // theta
+        new Slide (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );      // threshold
+        new DoubleEdit (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );            // minLineLength
+        new DoubleEdit (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );      // maxLineGap
+
+        new mButton (client, cf, LEFT_POS, 10+55*5+10, mCLOSE, this, mw );                            // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*5+10, mRESET, this, mw );  // Reset
+        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*6);
+        break;
     case HOUGHCIRCLES:
         new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );                    // method
         new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );            // dp
