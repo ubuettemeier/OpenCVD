@@ -82,6 +82,7 @@ MainWindow::MainWindow(QWidget *parent) :
     iconlist.push_back(QIcon(icon_dir.path()+"/func_off.ico"));             // PAUSE_ICON
     iconlist.push_back(QIcon(icon_dir.path()+"/eigenschaft_icon.ico"));     // EIGENSCHAFT_ICON
     iconlist.push_back(QIcon(icon_dir.path()+"/check_in_icon.ico"));        // CHECK_IN_ICON
+    iconlist.push_back(QIcon(icon_dir.path()+"/alarm.ico"));                // ALARM = 4
 
     aktiv_icon.push_back(QIcon(icon_dir.path()+"/aktiv_0.ico"));
     aktiv_icon.push_back(QIcon(icon_dir.path()+"/aktiv_1.ico"));
@@ -97,9 +98,9 @@ void MainWindow::trigger_timer ( void )
     struct _cvd_func_ *foo = first_func;
 
     while (foo != NULL) {
-        QTreeWidgetItem *t = (QTreeWidgetItem *)foo->tree_pointer;      // Tree Eintrag besorgen.
+        QTreeWidgetItem *t = (QTreeWidgetItem *)foo->tree_pointer;      // Tree Eintrag für Funktionsnamen besorgen.
         if (t != NULL) {            
-            if (foo->func_is_modifyt != 0)
+            if (foo->func_is_modifyt != 0)                              // Sind etweigige parameter verändert ?
                 t->setTextColor(0, QColor("red"));
             else
                 t->setTextColor(0, QColor("black"));
@@ -235,9 +236,13 @@ void MainWindow::client_read_ready()
                         // std::cout << "special message: TIME_TRIGGER: " << cf->func_name << std::endl;
 
                         if (cf) {
-                            cf->aktiv_icon = (cf->aktiv_icon < 6) ? cf->aktiv_icon+1 : 0;
-                            QTreeWidgetItem *tw = (QTreeWidgetItem *)cf->tree_pointer;
-                            tw->setIcon(0, aktiv_icon[ (cf->aktiv_icon < 4) ? cf->aktiv_icon : 7-cf->aktiv_icon ]);
+                            cf->aktiv_icon = (cf->aktiv_icon < 6) ? cf->aktiv_icon+1 : 0;                                   // calc icon number
+                            QTreeWidgetItem *tw = (QTreeWidgetItem *)cf->tree_pointer;                                      // get tree pointer
+                            if (tt.error_flag == 0) {                                                                       // no ERROR detected
+                                tw->setIcon(0, aktiv_icon[ (cf->aktiv_icon < 4) ? cf->aktiv_icon : 7-cf->aktiv_icon ]);     // set icon
+                            } else {
+                                tw->setIcon(0, iconlist[ ALARM ]);      // ERROR: Alaram Icon anzeigen
+                            }
                         }
                     }
                     break;

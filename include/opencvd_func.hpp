@@ -135,6 +135,23 @@ CV_EXPORTS_W void HoughCircles( cv::InputArray image, cv::OutputArray circles,
                                int minRadius = 0, int maxRadius = 0
                                BUILDIN);
 
+/*
+class CV_EXPORTS Mat : public cv::Mat
+{
+public:
+    Mat();
+    void convertTo( cv::OutputArray m, int rtype, double alpha=1, double beta=0 ) const;
+};
+
+cvd::Mat::Mat() : cv::Mat() {}
+
+void cvd::Mat::convertTo( cv::OutputArray m, int rtype, double alpha, double beta ) const
+{
+    printf ("bin drin\n");
+    cv::Mat::convertTo(m, rtype, alpha, beta);
+}
+*/
+
 //!
 //! \brief calcHist
 //!        Calculates a histogram of a set of arrays.
@@ -183,15 +200,19 @@ CV_EXPORTS void calcHist( const cv::Mat* images, int nimages,
         struct _enum_para_ ac = {accumulate, "boolType"};
         foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&ac, "accumulate" );
     }
+    foo->error_flag = 0;
 
-    cv::calcHist (images,
-                  *(int*)foo->para[0]->data,    // nimages
-                  channels, mask, hist,
-                  *(int*)foo->para[1]->data,    // dims
-                  histSize, ranges,
-                  *(int*)foo->para[2]->data,    // uniform
-                  *(int*)foo->para[3]->data);   // accumulate
-
+    try {
+        cv::calcHist (images,
+                      *(int*)foo->para[0]->data,    // nimages
+                      channels, mask, hist,
+                      *(int*)foo->para[1]->data,    // dims
+                      histSize, ranges,
+                      *(int*)foo->para[2]->data,    // uniform
+                      *(int*)foo->para[3]->data);   // accumulate
+    } catch( cv::Exception& e ) {
+        foo->error_flag = 1;
+    }
     foo->control_func_run_time ();
 }
 
@@ -235,17 +256,21 @@ CV_EXPORTS_W void normalize( cv::InputArray src, cv::InputOutputArray dst,
         struct _enum_para_ dd = {dtype, "ddepth"};
         foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&dd, "dtype" );
     }
+    foo->error_flag = 0;
 
     if (foo->state.flag.func_off) {
         src.copyTo ( dst );
     } else {
-        cv::normalize (src, dst,
-                    *(double*)foo->para[0]->data,
-                    *(double*)foo->para[1]->data,
-                    *(int*)foo->para[2]->data,
-                    *(int*)foo->para[3]->data,
-                    mask);
-
+        try {
+            cv::normalize (src, dst,
+                        *(double*)foo->para[0]->data,
+                        *(double*)foo->para[1]->data,
+                        *(int*)foo->para[2]->data,
+                        *(int*)foo->para[3]->data,
+                        mask);
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
         foo->control_func_run_time ();
     }
     // foo->control_imshow( dst );
@@ -288,13 +313,18 @@ CV_EXPORTS_W cv::Mat getStructuringElement(int shape, cv::Size ksize, cv::Point 
         struct _point_int_ ac = {anchor.x, -1, 20000, anchor.y, -1, 20000};
         foo->new_para (POINT_INT_XY, sizeof(struct _point_int_), (uint8_t*)&ac, "anchor");     // Ankerpunkt default -1 / -1
     }
+    foo->error_flag = 0;
 
     // Achtung: Funktion hat kein ON/OFF, kein Break und kein show !!!
     struct _point_int_ *ip = (struct _point_int_ *)foo->para[1]->data;
     struct _point_int_ *ac = (struct _point_int_ *)foo->para[2]->data;
-    ret = cv::getStructuringElement ( *(int*)foo->para[0]->data,
-                                      cv::Size(ip->x, ip->y),
-                                      cv::Point(ac->x, ac->y) );
+    try {
+        ret = cv::getStructuringElement ( *(int*)foo->para[0]->data,
+                                          cv::Size(ip->x, ip->y),
+                                          cv::Point(ac->x, ac->y) );
+    } catch( cv::Exception& e ) {
+        foo->error_flag = 1;
+    }
     foo->control_func_run_time ();
     return ret;
 }
@@ -332,17 +362,22 @@ CV_EXPORTS_W void erode( cv::InputArray src, cv::OutputArray dst, cv::InputArray
 
         // cv::Scalar& borderValue   not implemented
     }
+    foo->error_flag = 0;
 
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
             cv::Mat out;
-            struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
-            cv::erode( src, out, kernel,
-                        cv::Point(ip->x, ip->y),
-                        *(int*)foo->para[1]->data,
-                        *(int*)foo->para[2]->data,
-                        borderValue);
+            try {
+                struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
+                cv::erode( src, out, kernel,
+                            cv::Point(ip->x, ip->y),
+                            *(int*)foo->para[1]->data,
+                            *(int*)foo->para[2]->data,
+                            borderValue);
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
             foo->control_imshow( out );                 // Ausgabe
             cv::waitKey(10);
             foo->control_func_run_time ();
@@ -352,12 +387,16 @@ CV_EXPORTS_W void erode( cv::InputArray src, cv::OutputArray dst, cv::InputArray
     if (foo->state.flag.func_off) {
         src.copyTo ( dst );
     } else {
-        struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
-        cv::erode( src, dst, kernel,
-                    cv::Point(ip->x, ip->y),
-                    *(int*)foo->para[1]->data,
-                    *(int*)foo->para[2]->data,
-                    borderValue);
+        try {
+            struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
+            cv::erode( src, dst, kernel,
+                        cv::Point(ip->x, ip->y),
+                        *(int*)foo->para[1]->data,
+                        *(int*)foo->para[2]->data,
+                        borderValue);
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );    
@@ -404,17 +443,22 @@ CV_EXPORTS_W void dilate( cv::InputArray src, cv::OutputArray dst, cv::InputArra
 
         // cv::Scalar& borderValue   not implemented
     }
+    foo->error_flag = 0;
 
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
             cv::Mat out;
-            struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
-            cv::dilate( src, out, kernel,
-                        cv::Point(ip->x, ip->y),
-                        *(int*)foo->para[1]->data,
-                        *(int*)foo->para[2]->data,
-                        borderValue);
+            try {
+                struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
+                cv::dilate( src, out, kernel,
+                            cv::Point(ip->x, ip->y),
+                            *(int*)foo->para[1]->data,
+                            *(int*)foo->para[2]->data,
+                            borderValue);
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
             foo->control_imshow( out );                 // Ausgabe
             cv::waitKey(10);
             foo->control_func_run_time ();
@@ -424,12 +468,16 @@ CV_EXPORTS_W void dilate( cv::InputArray src, cv::OutputArray dst, cv::InputArra
     if (foo->state.flag.func_off) {
         src.copyTo ( dst );
     } else {
+        try {
         struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
-        cv::dilate( src, dst, kernel,
-                    cv::Point(ip->x, ip->y),
-                    *(int*)foo->para[1]->data,                
-                    *(int*)foo->para[2]->data,
-                    borderValue);
+            cv::dilate( src, dst, kernel,
+                        cv::Point(ip->x, ip->y),
+                        *(int*)foo->para[1]->data,
+                        *(int*)foo->para[2]->data,
+                        borderValue);
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );
@@ -485,19 +533,24 @@ CV_EXPORTS_W void morphologyEx( cv::InputArray src, cv::OutputArray dst,
 
         // cv::Scalar& borderValue   not implemented
     }
+    foo->error_flag = 0;
 
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
             cv::Mat out;
-            struct _point_int_ *ip = (struct _point_int_ *)foo->para[1]->data;
-            cv::morphologyEx( src, out,
-                        *(int*)foo->para[0]->data,      // op
-                        kernel,
-                        cv::Point(ip->x, ip->y),        // anchor
-                        *(int*)foo->para[2]->data,      // iterations
-                        *(int*)foo->para[3]->data,      // borderType
-                        borderValue);
+            try {
+                struct _point_int_ *ip = (struct _point_int_ *)foo->para[1]->data;
+                cv::morphologyEx( src, out,
+                            *(int*)foo->para[0]->data,      // op
+                            kernel,
+                            cv::Point(ip->x, ip->y),        // anchor
+                            *(int*)foo->para[2]->data,      // iterations
+                            *(int*)foo->para[3]->data,      // borderType
+                            borderValue);
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
             foo->control_imshow( out );                 // Ausgabe
             cv::waitKey(10);
             foo->control_func_run_time ();
@@ -507,14 +560,18 @@ CV_EXPORTS_W void morphologyEx( cv::InputArray src, cv::OutputArray dst,
     if (foo->state.flag.func_off) {
         src.copyTo ( dst );
     } else {
-        struct _point_int_ *ip = (struct _point_int_ *)foo->para[1]->data;
-        cv::morphologyEx( src, dst,
-                    *(int*)foo->para[0]->data,      // op
-                    kernel,
-                    cv::Point(ip->x, ip->y),        // anchor
-                    *(int*)foo->para[2]->data,      // iterations
-                    *(int*)foo->para[3]->data,      // borderType
-                    borderValue);
+        try {
+            struct _point_int_ *ip = (struct _point_int_ *)foo->para[1]->data;
+            cv::morphologyEx( src, dst,
+                        *(int*)foo->para[0]->data,      // op
+                        kernel,
+                        cv::Point(ip->x, ip->y),        // anchor
+                        *(int*)foo->para[2]->data,      // iterations
+                        *(int*)foo->para[3]->data,      // borderType
+                        borderValue);
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );
@@ -548,14 +605,19 @@ CV_EXPORTS_W void cvtColor( cv::InputArray src, cv::OutputArray dst, int code, i
         struct _int_para_ sp = {dstCn, 0, 10};
         foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&sp, "dstCn");
     }
+    foo->error_flag = 0;
 
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
             cv::Mat out;
-            cv::cvtColor(src, out,
-                         *(int*)foo->para[0]->data,
-                         *(int*)foo->para[1]->data);
+            try {
+                cv::cvtColor(src, out,
+                             *(int*)foo->para[0]->data,
+                             *(int*)foo->para[1]->data);
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
             foo->control_imshow( out );                 // Ausgabe
             cv::waitKey(10);
             foo->control_func_run_time ();
@@ -565,9 +627,14 @@ CV_EXPORTS_W void cvtColor( cv::InputArray src, cv::OutputArray dst, int code, i
     if (foo->state.flag.func_off) {
         src.copyTo ( dst );
     } else {
-        cv::cvtColor(src, dst,
-                     *(int*)foo->para[0]->data,
-                     *(int*)foo->para[1]->data);
+        try {
+            cv::cvtColor(src, dst,
+                         *(int*)foo->para[0]->data,
+                         *(int*)foo->para[1]->data);
+        }
+        catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );
@@ -600,15 +667,20 @@ CV_EXPORTS_W double threshold( cv::InputArray src, cv::OutputArray dst,
         struct _enum_para_ ep = {type, "ThresholdTypes"};
         foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&ep, "type" );
     }
+    foo->error_flag = 0;
 
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
             cv::Mat out;
-            ret = cv::threshold( src, out,
-                               *(double*)foo->para[0]->data,
-                               *(double*)foo->para[1]->data,
-                               *(int*)foo->para[2]->data);
+            try {
+                ret = cv::threshold( src, out,
+                                   *(double*)foo->para[0]->data,
+                                   *(double*)foo->para[1]->data,
+                                   *(int*)foo->para[2]->data);
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
             foo->control_imshow( out );                 // Ausgabe
             cv::waitKey(10);
             foo->control_func_run_time ();
@@ -618,10 +690,14 @@ CV_EXPORTS_W double threshold( cv::InputArray src, cv::OutputArray dst,
     if (foo->state.flag.func_off) {
         src.copyTo ( dst );
     } else {
-        ret = cv::threshold( src, dst,
-                           *(double*)foo->para[0]->data,
-                           *(double*)foo->para[1]->data,
-                           *(int*)foo->para[2]->data);
+        try {
+            ret = cv::threshold( src, dst,
+                               *(double*)foo->para[0]->data,
+                               *(double*)foo->para[1]->data,
+                               *(int*)foo->para[2]->data);
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );    
@@ -668,16 +744,21 @@ CV_EXPORTS_W void Canny( cv::InputArray image, cv::OutputArray edges,
         foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&ep, "L2gradient" );
 
     }
+    foo->error_flag = 0;
 
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
             cv::Mat out;
-            cv::Canny (image, out,
-                       *(double*)foo->para[0]->data,
-                       *(double*)foo->para[1]->data,
-                       *(int*)foo->para[2]->data,
-                       *(int*)foo->para[3]->data);
+            try {
+                cv::Canny (image, out,
+                           *(double*)foo->para[0]->data,
+                           *(double*)foo->para[1]->data,
+                           *(int*)foo->para[2]->data,
+                           *(int*)foo->para[3]->data);
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
             foo->control_imshow( out );                 // Ausgabe
             cv::waitKey(10);
             foo->control_func_run_time ();
@@ -690,11 +771,15 @@ CV_EXPORTS_W void Canny( cv::InputArray image, cv::OutputArray edges,
         cv::Mat b = edges.getMat();
         b = cv::Scalar(0);
     } else {
-        cv::Canny (image, edges,
-                   *(double*)foo->para[0]->data,
-                   *(double*)foo->para[1]->data,
-                   *(int*)foo->para[2]->data,
-                   *(int*)foo->para[3]->data);
+        try {
+            cv::Canny (image, edges,
+                       *(double*)foo->para[0]->data,
+                       *(double*)foo->para[1]->data,
+                       *(int*)foo->para[2]->data,
+                       *(int*)foo->para[3]->data);
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
         foo->control_func_run_time ();
     }        
     foo->control_imshow( edges );
@@ -737,15 +822,20 @@ CV_EXPORTS_W void Canny( cv::InputArray dx, cv::InputArray dy,                  
         foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&ep, "L2gradient" );
 
     }
+    foo->error_flag = 0;
 
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
             cv::Mat out;
-            cv::Canny (dx, dy, out,
-                       *(double*)foo->para[0]->data,
-                       *(double*)foo->para[1]->data,
-                       *(int*)foo->para[2]->data);
+            try {
+                cv::Canny (dx, dy, out,
+                           *(double*)foo->para[0]->data,
+                           *(double*)foo->para[1]->data,
+                           *(int*)foo->para[2]->data);
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
             foo->control_imshow( out );                 // Ausgabe
             cv::waitKey(10);
             foo->control_func_run_time ();
@@ -755,10 +845,14 @@ CV_EXPORTS_W void Canny( cv::InputArray dx, cv::InputArray dy,                  
     if (foo->state.flag.func_off) {                 // Function OFF
         (cv::Mat&)edges = cv::Scalar(0);
     } else {
-        cv::Canny (dx, dy, edges,
-                   *(double*)foo->para[0]->data,
-                   *(double*)foo->para[1]->data,
-                   *(int*)foo->para[2]->data);
+        try {
+            cv::Canny (dx, dy, edges,
+                       *(double*)foo->para[0]->data,
+                       *(double*)foo->para[1]->data,
+                       *(int*)foo->para[2]->data);
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
         foo->control_func_run_time ();
     }
     foo->control_imshow( edges );   
@@ -788,13 +882,18 @@ CV_EXPORTS_W void medianBlur( cv::InputArray src, cv::OutputArray dst, int ksize
         struct _int_para_ sp = {ksize, 1, 31};
         foo->new_para (SLIDE_INT_TWO_STEP_PARA, sizeof(struct _int_para_), (uint8_t*)&sp, "ksize");
     }
+    foo->error_flag = 0;
 
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
-            cv::Mat out;
-            cv::medianBlur (src, out,
-                        *(int*)foo->para[0]->data);
+            cv::Mat out;            
+            try {
+                cv::medianBlur (src, out,
+                                *(int*)foo->para[0]->data);
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
             foo->control_imshow( out );                 // Ausgabe
             cv::waitKey(10);
             foo->control_func_run_time ();
@@ -803,13 +902,19 @@ CV_EXPORTS_W void medianBlur( cv::InputArray src, cv::OutputArray dst, int ksize
 
     if (foo->state.flag.func_off) {
         src.copyTo ( dst );
-    } else {
-        cv::medianBlur (src, dst,
-                    *(int*)foo->para[0]->data);
+    } else {        
+        try {
+            cv::medianBlur (src, dst,
+                            *(int*)foo->para[0]->data);
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );
 }
+
+
 //!
 //! \brief blur
 //!        Blurs an image using the normalized box filter.
@@ -848,18 +953,21 @@ CV_EXPORTS_W void blur( cv::InputArray src, cv::OutputArray dst,
         struct _enum_para_ bt = {borderType, "BorderTypes"};
         foo->new_para (ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt, "borderType");
     }
+    foo->error_flag = 0;
 
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
             cv::Mat out;
-
-            struct _point_int_ *ip = (struct _point_int_ *)foo->para[2]->data;
-            cv::blur( src, out,
-                      cv::Size(*(int*)foo->para[0]->data, *(int*)foo->para[1]->data),   // ksize
-                      cv::Point(ip->x, ip->y),                                          // anchor
-                      *(int*)foo->para[3]->data );                                      // borderType
-
+            try {
+                struct _point_int_ *ip = (struct _point_int_ *)foo->para[2]->data;
+                cv::blur( src, out,
+                          cv::Size(*(int*)foo->para[0]->data, *(int*)foo->para[1]->data),   // ksize
+                          cv::Point(ip->x, ip->y),                                          // anchor
+                          *(int*)foo->para[3]->data );                                      // borderType
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
             foo->control_imshow( out );                 // Ausgabe
             cv::waitKey(10);
             foo->control_func_run_time ();
@@ -869,15 +977,21 @@ CV_EXPORTS_W void blur( cv::InputArray src, cv::OutputArray dst,
     if (foo->state.flag.func_off) {
         src.copyTo ( dst );
     } else {
-        struct _point_int_ *ip = (struct _point_int_ *)foo->para[2]->data;
-        cv::blur( src, dst,
-                  cv::Size(*(int*)foo->para[0]->data, *(int*)foo->para[1]->data),   // ksize
-                  cv::Point(ip->x, ip->y),                                          // anchor
-                  *(int*)foo->para[3]->data );                                      // borderType
+        try {
+            struct _point_int_ *ip = (struct _point_int_ *)foo->para[2]->data;
+            cv::blur( src, dst,
+                      cv::Size(*(int*)foo->para[0]->data, *(int*)foo->para[1]->data),   // ksize
+                      cv::Point(ip->x, ip->y),                                          // anchor
+                      *(int*)foo->para[3]->data );                                      // borderType
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );    
 }
+
+
 //!
 //! \brief GaussianBlur
 //!        Blurs an image using a Gaussian filter.
@@ -920,16 +1034,21 @@ CV_EXPORTS_W void GaussianBlur( cv::InputArray src, cv::OutputArray dst, cv::Siz
         struct _enum_para_ bt = {borderType, "BorderTypes"};
         foo->new_para (ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt, "borderType");
     }
+    foo->error_flag = 0;
 
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
             cv::Mat out;
-            cv::GaussianBlur( src, out,
-                              cv::Size(*(int*)foo->para[0]->data, *(int*)foo->para[1]->data),   // ksize
-                              *(double*)foo->para[2]->data,                                     // sigmaX
-                              *(double*)foo->para[3]->data,                                     // sigmaY
-                              *(int*)foo->para[4]->data );                                      // borderType
+            try {
+                cv::GaussianBlur( src, out,
+                                  cv::Size(*(int*)foo->para[0]->data, *(int*)foo->para[1]->data),   // ksize
+                                  *(double*)foo->para[2]->data,                                     // sigmaX
+                                  *(double*)foo->para[3]->data,                                     // sigmaY
+                                  *(int*)foo->para[4]->data );                                      // borderType
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
             foo->control_imshow( out );                 // Ausgabe
             cv::waitKey(10);
             foo->control_func_run_time ();
@@ -939,11 +1058,15 @@ CV_EXPORTS_W void GaussianBlur( cv::InputArray src, cv::OutputArray dst, cv::Siz
     if (foo->state.flag.func_off) {
         src.copyTo( dst );
     } else {
-        cv::GaussianBlur( src, dst,
-                          cv::Size(*(int*)foo->para[0]->data, *(int*)foo->para[1]->data),   // ksize
-                          *(double*)foo->para[2]->data,                                     // sigmaX
-                          *(double*)foo->para[3]->data,                                     // sigmaY
-                          *(int*)foo->para[4]->data );                                      // borderType
+        try {
+            cv::GaussianBlur( src, dst,
+                              cv::Size(*(int*)foo->para[0]->data, *(int*)foo->para[1]->data),   // ksize
+                              *(double*)foo->para[2]->data,                                     // sigmaX
+                              *(double*)foo->para[3]->data,                                     // sigmaY
+                              *(int*)foo->para[4]->data );                                      // borderType
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );    
@@ -979,15 +1102,19 @@ CV_EXPORTS_W void convertScaleAbs(cv::InputArray src, cv::OutputArray dst,
         struct _double_para_ be = {beta, 0.0, std::numeric_limits<double>::max()};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&be, "beta");
     }
+    foo->error_flag = 0;
 
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
             cv::Mat out;
-            cv::convertScaleAbs( src, out,
-                                 *(double*)foo->para[0]->data,      // alpha
-                                 *(double*)foo->para[1]->data);     // beta
-
+            try {
+                cv::convertScaleAbs( src, out,
+                                     *(double*)foo->para[0]->data,      // alpha
+                                     *(double*)foo->para[1]->data);     // beta
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
             foo->control_imshow( out );                 // Ausgabe
             cv::waitKey(10);
             foo->control_func_run_time ();
@@ -997,10 +1124,13 @@ CV_EXPORTS_W void convertScaleAbs(cv::InputArray src, cv::OutputArray dst,
     if (foo->state.flag.func_off) {
         src.copyTo( dst );
     } else {
-        cv::convertScaleAbs( src, dst,
-                             *(double*)foo->para[0]->data,      // alpha
-                             *(double*)foo->para[1]->data);     // beta
-
+        try {
+            cv::convertScaleAbs( src, dst,
+                                 *(double*)foo->para[0]->data,      // alpha
+                                 *(double*)foo->para[1]->data);     // beta
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );
@@ -1044,6 +1174,7 @@ CV_EXPORTS_W void findContours( cv::InputOutputArray image,
         struct _point_int_ ip = {offset.x, -20000, 20000, offset.y, -20000, 20000};
         foo->new_para (POINT_INT, sizeof(struct _point_int_), (uint8_t*)&ip, "offset");
     }
+    foo->error_flag = 0;
 
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
@@ -1052,13 +1183,15 @@ CV_EXPORTS_W void findContours( cv::InputOutputArray image,
         vector<cv::Vec4i> break_hierarchy;
 
         while (foo->state.flag.func_break) {
-
-            struct _point_int_ *ac = (struct _point_int_ *)foo->para[2]->data;  // offset
-            cv::findContours( image, break_contours, break_hierarchy,
-                              *(int*)foo->para[0]->data,      // mode,
-                              *(int*)foo->para[1]->data,      // method,
-                              cv::Point(ac->x, ac->y) );
-
+            try {
+                struct _point_int_ *ac = (struct _point_int_ *)foo->para[2]->data;  // offset
+                cv::findContours( image, break_contours, break_hierarchy,
+                                  *(int*)foo->para[0]->data,      // mode,
+                                  *(int*)foo->para[1]->data,      // method,
+                                  cv::Point(ac->x, ac->y) );
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
             foo->control_contours_imshow ( image, break_contours, break_hierarchy );    // Contours Ausgabe
             cv::waitKey(10);
             foo->control_func_run_time ();
@@ -1070,11 +1203,15 @@ CV_EXPORTS_W void findContours( cv::InputOutputArray image,
         hierarchy.clear();
         // src.copyTo( dst );
     } else {
-        struct _point_int_ *ac = (struct _point_int_ *)foo->para[2]->data;  // offset
-        cv::findContours( image, contours, hierarchy,
-                          *(int*)foo->para[0]->data,      // mode,
-                          *(int*)foo->para[1]->data,      // method,
-                          cv::Point(ac->x, ac->y) );
+        try {
+            struct _point_int_ *ac = (struct _point_int_ *)foo->para[2]->data;  // offset
+            cv::findContours( image, contours, hierarchy,
+                              *(int*)foo->para[0]->data,      // mode,
+                              *(int*)foo->para[1]->data,      // method,
+                              cv::Point(ac->x, ac->y) );
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
         foo->control_func_run_time ();
     }
 
@@ -1136,17 +1273,22 @@ CV_EXPORTS_W void Laplacian( cv::InputArray src, cv::OutputArray dst, int ddepth
         struct _enum_para_ bt = {borderType, "BorderTypes"};
         foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt, "borderType" );
     }
+    foo->error_flag = 0;
 
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
             cv::Mat out;
-            cv::Laplacian( src, out,
-                              *(int*)foo->para[0]->data,        // ddepth
-                              *(int*)foo->para[1]->data,        // ksize
-                              *(double*)foo->para[2]->data,     // scale
-                              *(double*)foo->para[3]->data,     // delta
-                              *(int*)foo->para[4]->data);       // borderType
+            try {
+                cv::Laplacian( src, out,
+                                  *(int*)foo->para[0]->data,        // ddepth
+                                  *(int*)foo->para[1]->data,        // ksize
+                                  *(double*)foo->para[2]->data,     // scale
+                                  *(double*)foo->para[3]->data,     // delta
+                                  *(int*)foo->para[4]->data);       // borderType
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
             foo->control_imshow( out );                 // Ausgabe
             cv::waitKey(10);
             foo->control_func_run_time ();
@@ -1156,12 +1298,16 @@ CV_EXPORTS_W void Laplacian( cv::InputArray src, cv::OutputArray dst, int ddepth
     if (foo->state.flag.func_off) {
         src.copyTo( dst );
     } else {
-        cv::Laplacian( src, dst,
-                          *(int*)foo->para[0]->data,        // ddepth
-                          *(int*)foo->para[1]->data,        // ksize
-                          *(double*)foo->para[2]->data,     // scale
-                          *(double*)foo->para[3]->data,     // delta
-                          *(int*)foo->para[4]->data);       // borderType
+        try {
+            cv::Laplacian( src, dst,
+                              *(int*)foo->para[0]->data,        // ddepth
+                              *(int*)foo->para[1]->data,        // ksize
+                              *(double*)foo->para[2]->data,     // scale
+                              *(double*)foo->para[3]->data,     // delta
+                              *(int*)foo->para[4]->data);       // borderType
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
         foo->control_func_run_time ();
     }
 
@@ -1198,6 +1344,7 @@ CV_EXPORTS_W cv::Mat imread( const cv::String& filename, int flags
         struct _enum_para_ ep = {flags, "ImreadModes"};
         foo->new_para (ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&ep, "flags");
     }
+    foo->error_flag = 0;
 
 
     if (foo->state.flag.func_break) {                   // Break
@@ -1205,8 +1352,12 @@ CV_EXPORTS_W cv::Mat imread( const cv::String& filename, int flags
         while (foo->state.flag.func_break) {
             cv::Mat buf_image;
             struct _string_para_ *al = (struct _string_para_ *)foo->para[0]->data;
-            buf_image = cv::imread( al->val,
-                              *(int*)foo->para[1]->data );
+            try {
+                buf_image = cv::imread( al->val,
+                                  *(int*)foo->para[1]->data );
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
 
             if (buf_image.empty()) {                                      // Es ist kein Bild geladen worden !
                 cv::Mat out(200, 200, CV_8UC1, cv::Scalar(128));    // fiktive cv::Mat erzeugen !
@@ -1222,9 +1373,13 @@ CV_EXPORTS_W cv::Mat imread( const cv::String& filename, int flags
     if (foo->state.flag.func_off) {     // imread ist ausgeschaltet.
         return ret;                     // return ist empty !!!
     } else {
-        struct _string_para_ *al = (struct _string_para_ *)foo->para[0]->data;
-        ret = cv::imread( al->val,
-                          *(int*)foo->para[1]->data );
+        try {
+            struct _string_para_ *al = (struct _string_para_ *)foo->para[0]->data;
+            ret = cv::imread( al->val,
+                              *(int*)foo->para[1]->data );
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
         foo->control_func_run_time ();
     }
 
@@ -1240,6 +1395,7 @@ CV_EXPORTS_W cv::Mat imread( const cv::String& filename, int flags
 //!
 //! \brief HoughCircles
 //! \param image
+//!        8-bit, single-channel, grayscale
 //! \param circles
 //! \param method
 //!        Erkennungsmethode, siehe cv::HoughModes. Derzeit ist die einzige implementierte Methode HOUGH_GRADIENT.
@@ -1266,6 +1422,8 @@ CV_EXPORTS_W void HoughCircles( cv::InputArray image, cv::OutputArray circles,
                                int minRadius, int maxRadius
                                BUILDIN_FUNC)
 {
+    // static uint32_t anz_error = 0;
+
     if (cvd_off) {
         cv::HoughCircles( image, circles, method, dp, minDist, param1, param2, minRadius, maxRadius);
         return;
@@ -1300,18 +1458,23 @@ CV_EXPORTS_W void HoughCircles( cv::InputArray image, cv::OutputArray circles,
         foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&maxr, "maxRadius");
 
     }
+    foo->error_flag = 0;
 
     if (foo->state.flag.func_off) {
         circles.clear();    // do nothing
     } else {
-        cv::HoughCircles( image, circles,
-                          *(int*)foo->para[0]->data,         // method,
-                          *(double*)foo->para[1]->data,      // dp,
-                          *(double*)foo->para[2]->data,      // minDist,
-                          *(double*)foo->para[3]->data,      // param1
-                          *(double*)foo->para[4]->data,      // param2
-                          *(int*)foo->para[5]->data,         // minRadius,
-                          *(int*)foo->para[6]->data);        // maxRadius);
+        try {
+            cv::HoughCircles( image, circles,
+                              *(int*)foo->para[0]->data,         // method,
+                              *(double*)foo->para[1]->data,      // dp,
+                              *(double*)foo->para[2]->data,      // minDist,
+                              *(double*)foo->para[3]->data,      // param1
+                              *(double*)foo->para[4]->data,      // param2
+                              *(int*)foo->para[5]->data,         // minRadius,
+                              *(int*)foo->para[6]->data);        // maxRadius);
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
         foo->control_func_run_time ();
     }
     // foo->control_imshow( image );

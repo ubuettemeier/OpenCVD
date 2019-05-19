@@ -32,7 +32,8 @@ enum _icon_name_ {
     OK_ICON = 0,            // Haken Zeichen
     PAUSE_ICON = 1,         // Pause Zeichen
     EIGENSCHAFT_ICON = 2,
-    CHECK_IN_ICON = 3
+    CHECK_IN_ICON = 3,
+    ALARM = 4
 };
 
 extern QDomDocument doc;        // XML Datei

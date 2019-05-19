@@ -257,6 +257,7 @@ struct _time_trigger_ {                         // s.auch enum _bef_ TIME_TRIGGE
     uint32_t len;
     uint16_t type;                              // THRESHOLD, MEDIANBLUR, ...
     uint64_t func_addr;                         // Funktions Adresse
+    uint8_t error_flag;                         // 0=no error
 };
 #pragma pack()
 

@@ -111,9 +111,9 @@ public:
     vector <opencvd_para *> para{};     // Leere Parameterliste erzeugen.
     uint8_t window_is_create = 0;       // sobald das Ausgabefenster mit namedWindow() erzeugt wird, ändert das Flag seinen Wert auf 1
                                         // See: control_imshow()
+    uint8_t error_flag = 0;
 private:
     struct timeval time_stemp;
-
 };
 
 vector <opencvd_func *> func_list{};    // empty list (Global)
@@ -621,7 +621,12 @@ void opencvd_func::control_imshow ( cv::OutputArray dst )
                 cv::namedWindow ( window_name );
                 window_is_create = 1;
             }
-            cv::imshow( window_name, dst );
+
+            try {
+                cv::imshow( window_name, dst );
+            } catch( cv::Exception& e ) {
+                error_flag = 1;
+            }
         }
     } else
         if (window_is_create != 0)
@@ -692,6 +697,7 @@ int opencvd_func::control_func_run_time ()
         tt.func_addr = func_addr;
         tt.type = TIME_TRIGGER;
         tt.len = sizeof(struct _time_trigger_);
+        tt.error_flag = error_flag;
         write_data( (uint8_t*)&tt, sizeof(struct _time_trigger_));
     }
 

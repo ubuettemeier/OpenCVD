@@ -39,7 +39,7 @@ int main(int argc, char** argv)
 		cout << "can not open " << filename << endl;
 		return -1;
 	    }	    
-	    CVD::cvtColor(img, gray, COLOR_BGR2GRAY);
+            CVD::cvtColor(img, gray, COLOR_BGR2GRAY);
 	    CVD::medianBlur(gray, gray, 5);	    
             CVD::HoughCircles(gray, circles, HOUGH_GRADIENT, 1,
                               gray.rows/16,     // change this value to detect circles with different distances to each other
