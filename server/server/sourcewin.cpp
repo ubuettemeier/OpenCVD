@@ -12,11 +12,12 @@
 #include "sourcewin.h"
 
 
-Sourcewin *sourcewin = NULL;
+Sourcewin *sourcewin = NULL;    // global pointer
 
 //!
 //! \brief Sourcewin::Sourcewin
 //! \param func
+//! \todo parameter main_win enventuell entfernen. Es gibt den blobal pointer MainWindow *glob_mw
 //!
 Sourcewin::Sourcewin (struct _cvd_func_ *func, MainWindow *main_win, QWidget *parent)
 {
@@ -25,7 +26,10 @@ Sourcewin::Sourcewin (struct _cvd_func_ *func, MainWindow *main_win, QWidget *pa
     cf = func;
     mw = main_win;
 
-    this->setGeometry(350, 10, 700, 150);
+    this->setGeometry(glob_mw->source_win_pos.x(),
+                      glob_mw->source_win_pos.y(),
+                      glob_mw->source_win_pos.width(),
+                      glob_mw->source_win_pos.height());
 
     QFont font;
     font.setFamily("Courier");
@@ -79,7 +83,10 @@ Sourcewin::Sourcewin (struct _cvd_func_ *func, MainWindow *main_win, QWidget *pa
 //!
 Sourcewin::~Sourcewin ()
 {
-    // printf ("Destruktor Sourcewin\n");
+    glob_mw->source_win_pos = this->geometry();
+    // glob_mw->source_width = this->width();
+    // glob_mw->source_height = this->height();
+
     mw->set_all_source_icon ( false );
     sourcewin = NULL;
 }

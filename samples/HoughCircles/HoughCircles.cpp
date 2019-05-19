@@ -38,7 +38,7 @@ int main(int argc, char** argv)
 		help();
 		cout << "can not open " << filename << endl;
 		return -1;
-	    }	    
+            }
             CVD::cvtColor(img, gray, COLOR_BGR2GRAY);
 	    CVD::medianBlur(gray, gray, 5);	    
             CVD::HoughCircles(gray, circles, HOUGH_GRADIENT, 1,

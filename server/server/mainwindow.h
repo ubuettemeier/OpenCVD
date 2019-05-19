@@ -68,8 +68,11 @@ public:
 
 public:
     bool d_is_aktiv;
-    QVector<QIcon> iconlist;
-    QVector<QIcon> aktiv_icon;  // 0..3
+    QVector<QIcon> iconlist;        // see: enum _icon_name_
+    QVector<QIcon> aktiv_icon;      // 0..3
+
+    QPoint para_win_pos = {320, 150};
+    QRect source_win_pos = {350, 10, 700, 150};         // Source Window Position and Size. See: Konstruktor class Sourcewin
 
 private slots:
     void closeEvent(QCloseEvent *event);
