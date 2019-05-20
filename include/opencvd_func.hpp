@@ -1,3 +1,9 @@
+//!
+//! @author Ulrich Buettemeier
+//! @todo create function HoughLines(...). See: HoughLinesP(...)
+//!
+
+
 #ifndef OPENCVD_FUNC_HPP
 #define OPENCVD_FUNC_HPP
 
@@ -42,6 +48,8 @@ namespace cvd {
     #define BUILDIN_FUNC
 #endif
 */
+
+// define CV_EXPORTS_W __attribute__ ((visibility ("default")))  // Funktion ist sichtbar
 
 CV_EXPORTS_W void medianBlur( cv::InputArray src, cv::OutputArray dst, int ksize
                               BUILDIN);
@@ -139,6 +147,11 @@ CV_EXPORTS_W void HoughLinesP( cv::InputArray image, cv::OutputArray lines,
                                double rho, double theta, int threshold,
                                double minLineLength = 0, double maxLineGap = 0
                                BUILDIN);
+
+CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
+                          int dx, int dy, double scale = 1, double delta = 0,
+                          int borderType = cv::BORDER_DEFAULT
+                          BUILDIN);
 
 /*
 class CV_EXPORTS Mat : public cv::Mat
@@ -1315,7 +1328,6 @@ CV_EXPORTS_W void Laplacian( cv::InputArray src, cv::OutputArray dst, int ddepth
         }
         foo->control_func_run_time ();
     }
-
     foo->control_imshow( dst );
 }
 
@@ -1481,7 +1493,7 @@ CV_EXPORTS_W void HoughCircles( cv::InputArray image, cv::OutputArray circles,
         foo->control_func_run_time ();
     }
     // foo->control_imshow( image );
-}
+} // HoughCircles
 
 //!
 //! \brief HoughLinesP
@@ -1542,8 +1554,99 @@ CV_EXPORTS_W void HoughLinesP( cv::InputArray image, cv::OutputArray lines,
         }
         foo->control_func_run_time ();
     }
-}
+} // HoughLinesP
 
+//!
+//! \brief Scharr input image.
+//! \param src dst output image of the same size and the same number of channels as src.
+//! \param dst output image of the same size and the same number of channels as src.
+//! \param ddept houtput image depth, see @ref filter_depths "combinations"
+//! \param dx order of the derivative x.
+//! \param dy order of the derivative y.
+//! \param scale optional scale factor for the computed derivative values; by default, no scaling is
+//!        applied (see getDerivKernels for details).
+//! \param delta optional delta value that is added to the results prior to storing them in dst.
+//! \param borderType pixel extrapolation method, see cv::BorderTypes
+//!
+CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
+                          int dx, int dy, double scale, double delta,
+                          int borderType
+                          BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::Scharr( src, dst, ddepth, dx, dy, scale, delta, borderType );
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), SCHARR, "Scharr", 0x000F, BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _enum_para_ ep = {ddepth, "ddepth"};
+        foo->new_para (ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&ep, "ddepth");
+
+        struct _int_para_ sw = {dx, -10000, 10000};
+        foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&sw, "dx");
+
+        struct _int_para_ sh = {dy, -10000, 10000};
+        foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&sh, "sh");
+
+        struct _double_para_ sc = {scale, -100000.0, std::numeric_limits<double>::max()};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&sc, "scale");
+
+        struct _double_para_ dt = {delta, -100000.0, std::numeric_limits<double>::max()};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&dt, "delta");
+
+        struct _enum_para_ bt = {borderType, "BorderTypes"};
+        foo->new_para (ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt, "borderType");
+
+    }
+    foo->error_flag = 0;
+
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::Mat out;
+            try {
+                cv::Scharr( src, out,
+                            *(int*)foo->para[0]->data,          // ddepth,
+                            *(int*)foo->para[1]->data,          // dx,
+                            *(int*)foo->para[2]->data,          // dy,
+                            *(double*)foo->para[3]->data,       // scale,
+                            *(double*)foo->para[4]->data,       // delta,
+                            *(int*)foo->para[5]->data);         // borderType
+
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
+            foo->control_imshow( out );                 // Ausgabe
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
+
+    if (foo->state.flag.func_off) {
+        src.copyTo( dst );
+    } else {
+        try {
+            cv::Scharr( src, dst,
+                        *(int*)foo->para[0]->data,          // ddepth,
+                        *(int*)foo->para[1]->data,          // dx,
+                        *(int*)foo->para[2]->data,          // dy,
+                        *(double*)foo->para[3]->data,       // scale,
+                        *(double*)foo->para[4]->data,       // delta,
+                        *(int*)foo->para[5]->data);         // borderType
+
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( dst );
+} // Scharr
 
 } // namespace cvd
 

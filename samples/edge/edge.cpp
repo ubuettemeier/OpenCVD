@@ -26,8 +26,8 @@ void doit()
     image.copyTo(cedge, edge1);
     imshow(window_name1, cedge);
     Mat dx,dy;
-    Scharr(blurImage,dx,CV_16S,1,0);
-    Scharr(blurImage,dy,CV_16S,0,1);
+    CVD::Scharr(blurImage,dx,CV_16S,1,0);
+    CVD::Scharr(blurImage,dy,CV_16S,0,1);
     CVD::Canny( dx,dy, edge2, edgeThreshScharr, edgeThreshScharr*3 );
     cedge = Scalar::all(0);
     image.copyTo(cedge, edge2);

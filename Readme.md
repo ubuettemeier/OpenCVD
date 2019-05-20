@@ -67,3 +67,4 @@ see: samples/short_sample/short_sample.cpp
 - calcHist
 - HoughCircles
 - HoughLinesP
+- Scharr

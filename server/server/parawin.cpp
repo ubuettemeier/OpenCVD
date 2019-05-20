@@ -254,10 +254,13 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );                  // DropDown enum filterdepth_CV_8U | filterdepth_CV_16U_CV_16S
         new IntEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );             // dx
         new IntEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );       // dy
-        new DoubleEdit (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );
-        new DoubleEdit (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );
-        new EnumDrop (client, cf->first_para->next->next->next->next->next, LEFT_POS, 10+55*5, this );
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 370, 10+55*6+20);
+        new DoubleEdit (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );            // scale
+        new DoubleEdit (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );      // delta
+        new EnumDrop (client, cf->first_para->next->next->next->next->next, LEFT_POS, 10+55*5, this );  // borderType
+
+        new mButton (client, cf, LEFT_POS, 10+55*6+10, mCLOSE, this, mw );                              // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*6+10, mRESET, this, mw );    // Reset
+        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*7);
         }
         break;
     default:
