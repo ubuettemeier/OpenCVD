@@ -59,12 +59,15 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void get_sys_path( void );
     void clear_system();
     int write_data (const char *data, uint32_t len);
     int get_level (QTreeWidgetItem *item);
     bool ack_detected = 0;
     void set_all_source_icon (bool wert);
+
+private:
+    void get_sys_path( void );
+    void get_icon ( void );
 
 public:
     bool d_is_aktiv;

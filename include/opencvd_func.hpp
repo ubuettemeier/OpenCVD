@@ -25,9 +25,9 @@ namespace cvd {
     #define BUILDIN_FUNC  , int line_nr, \
                           const char *src_file
 #else
-    #define BUILDIN  , int line_nr = 0 \
+    #define BUILDIN  , int line_nr = 0, \
                      const char *src_file = NULL
-    #define BUILDIN_FUNC  , int line_nr \
+    #define BUILDIN_FUNC  , int line_nr, \
                           const char *src_file
 #endif
 

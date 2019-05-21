@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     glob_mw = this;
-    this->setWindowTitle("Server");
+    this->setWindowTitle("OpenCVD");
     this->setGeometry(0, 0, 220, 760);        
 
     tcpServer = new QTcpServer(this);
@@ -72,26 +72,17 @@ MainWindow::MainWindow(QWidget *parent) :
         }
         param_file.close();
     }
-    check_param_list ();    // it's a test
+    // check_param_list ();    // it's a test
 
     QTimer *timer = new QTimer ( this );
     connect ( timer, SIGNAL (timeout()), this, SLOT(trigger_timer()));
     timer->start( 1000 );
 
-    iconlist.push_back(QIcon(icon_dir.path()+"/func_on.ico"));              // OK_ICON  s. auch <enum _icon_name_>
-    iconlist.push_back(QIcon(icon_dir.path()+"/func_off.ico"));             // PAUSE_ICON
-    iconlist.push_back(QIcon(icon_dir.path()+"/eigenschaft_icon.ico"));     // EIGENSCHAFT_ICON
-    iconlist.push_back(QIcon(icon_dir.path()+"/check_in_icon.ico"));        // CHECK_IN_ICON
-    iconlist.push_back(QIcon(icon_dir.path()+"/alarm.ico"));                // ALARM = 4
-
-    aktiv_icon.push_back(QIcon(icon_dir.path()+"/aktiv_0.ico"));
-    aktiv_icon.push_back(QIcon(icon_dir.path()+"/aktiv_1.ico"));
-    aktiv_icon.push_back(QIcon(icon_dir.path()+"/aktiv_2.ico"));
-    aktiv_icon.push_back(QIcon(icon_dir.path()+"/aktiv_3.ico"));
+    get_icon();     // load icon's from icon_dir
 }
 
 //!
-//! \brief MainWindow::trigger_timer
+//! \brief MainWindow::trigger_timer 1000ms
 //!
 void MainWindow::trigger_timer ( void )
 {
@@ -107,6 +98,23 @@ void MainWindow::trigger_timer ( void )
         }
         foo = foo->next;
     }
+}
+
+//!
+//! \brief MainWindow::get_icon
+//!
+void MainWindow::get_icon ()
+{
+    iconlist.push_back(QIcon(icon_dir.path()+"/func_on.ico"));              // OK_ICON  s. auch <enum _icon_name_>
+    iconlist.push_back(QIcon(icon_dir.path()+"/func_off.ico"));             // PAUSE_ICON
+    iconlist.push_back(QIcon(icon_dir.path()+"/eigenschaft_icon.ico"));     // EIGENSCHAFT_ICON
+    iconlist.push_back(QIcon(icon_dir.path()+"/check_in_icon.ico"));        // CHECK_IN_ICON
+    iconlist.push_back(QIcon(icon_dir.path()+"/alarm.ico"));                // ALARM = 4
+
+    aktiv_icon.push_back(QIcon(icon_dir.path()+"/aktiv_0.ico"));
+    aktiv_icon.push_back(QIcon(icon_dir.path()+"/aktiv_1.ico"));
+    aktiv_icon.push_back(QIcon(icon_dir.path()+"/aktiv_2.ico"));
+    aktiv_icon.push_back(QIcon(icon_dir.path()+"/aktiv_3.ico"));
 }
 
 //!

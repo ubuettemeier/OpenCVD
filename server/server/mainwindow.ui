@@ -230,7 +230,10 @@
   </action>
   <action name="actionSource_Window_schlie_en">
    <property name="text">
-    <string>Source Window schließen</string>
+    <string>&amp;Source Window schließen</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
  </widget>

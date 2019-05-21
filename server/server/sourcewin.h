@@ -65,7 +65,8 @@ public:
     Highlighter *highlighter;
 
 private:
-    void closeEvent(QCloseEvent *bar);
+    void closeEvent(QCloseEvent *bar);    
+    void keyPressEvent(QKeyEvent *event);
     void highlightCurrentLine( void );
 
 private:

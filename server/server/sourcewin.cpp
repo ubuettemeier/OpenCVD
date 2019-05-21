@@ -83,14 +83,21 @@ Sourcewin::Sourcewin (struct _cvd_func_ *func, MainWindow *main_win, QWidget *pa
 //!
 Sourcewin::~Sourcewin ()
 {
-    glob_mw->source_win_pos = this->geometry();
-    // glob_mw->source_width = this->width();
-    // glob_mw->source_height = this->height();
+    glob_mw->source_win_pos = this->geometry();     // get rectangle
 
     mw->set_all_source_icon ( false );
     sourcewin = NULL;
 }
 
+//!
+//! \brief Sourcewin::keyPressEvent
+//! \param event
+//!
+void Sourcewin::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Escape)
+        close();
+}
 //!
 //! \brief Sourcewin::closeEvent
 //! \param bar unused

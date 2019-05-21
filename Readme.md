@@ -49,22 +49,16 @@ see: samples/short_sample/short_sample.cpp
 ----------------------------------------------------------------------------------------------
 **folgende OpenCV Funktionen sind implementiert / the following OpenCV functions are implemented**
 
-- medianBlur
 - blur
-- GaussianBlur
-- Canny
-- threshold
-- cvtColor
+- Canny, cvtColor, calcHist, convertScaleAbs
 - dilate
 - erode
-- morphologyEx
-- getStructuringElement
-- convertScaleAbs
 - findContours
-- Laplacian
+- GaussianBlur, getStructuringElement
+- HoughCircles, HoughLinesP
 - imread
+- Laplacian
+- medianBlur, morphologyEx
 - normalize
-- calcHist
-- HoughCircles
-- HoughLinesP
 - Scharr
+- threshold
