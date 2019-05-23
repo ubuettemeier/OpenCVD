@@ -55,7 +55,7 @@ see: samples/short_sample/short_sample.cpp
 - erode
 - findContours
 - GaussianBlur, getStructuringElement
-- HoughCircles, HoughLinesP
+- HoughCircles, HoughLinesP, HoughLines
 - imread
 - Laplacian
 - medianBlur, morphologyEx

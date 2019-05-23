@@ -143,6 +143,12 @@ CV_EXPORTS_W void HoughCircles( cv::InputArray image, cv::OutputArray circles,
                                int minRadius = 0, int maxRadius = 0
                                BUILDIN);
 
+CV_EXPORTS_W void HoughLines( cv::InputArray image, cv::OutputArray lines,
+                              double rho, double theta, int threshold,
+                              double srn = 0, double stn = 0,
+                              double min_theta = 0, double max_theta = CV_PI
+                              BUILDIN);
+
 CV_EXPORTS_W void HoughLinesP( cv::InputArray image, cv::OutputArray lines,
                                double rho, double theta, int threshold,
                                double minLineLength = 0, double maxLineGap = 0
@@ -232,7 +238,7 @@ CV_EXPORTS void calcHist( const cv::Mat* images, int nimages,
         foo->error_flag = 1;
     }
     foo->control_func_run_time ();
-}
+} // calcHist
 
 //!
 //! \brief normalize
@@ -292,7 +298,7 @@ CV_EXPORTS_W void normalize( cv::InputArray src, cv::InputOutputArray dst,
         foo->control_func_run_time ();
     }
     // foo->control_imshow( dst );
-}
+} // normalize
 
 //! @brief  getStructuringElement
 //!         Returns a structuring element of the specified size and shape for morphological operations.
@@ -345,7 +351,7 @@ CV_EXPORTS_W cv::Mat getStructuringElement(int shape, cv::Size ksize, cv::Point 
     }
     foo->control_func_run_time ();
     return ret;
-}
+} // getStructuringElement
 
 //! @brief  Erodes an image by using a specific structuring element.
 //! @param  kernel = Mat (anchor.x, anchor.y)
@@ -386,8 +392,8 @@ CV_EXPORTS_W void erode( cv::InputArray src, cv::OutputArray dst, cv::InputArray
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
             cv::Mat out;
+            struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
             try {
-                struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
                 cv::erode( src, out, kernel,
                             cv::Point(ip->x, ip->y),
                             *(int*)foo->para[1]->data,
@@ -405,8 +411,8 @@ CV_EXPORTS_W void erode( cv::InputArray src, cv::OutputArray dst, cv::InputArray
     if (foo->state.flag.func_off) {
         src.copyTo ( dst );
     } else {
+        struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
         try {
-            struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
             cv::erode( src, dst, kernel,
                         cv::Point(ip->x, ip->y),
                         *(int*)foo->para[1]->data,
@@ -418,7 +424,7 @@ CV_EXPORTS_W void erode( cv::InputArray src, cv::OutputArray dst, cv::InputArray
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );    
-}
+} // erode
 
 //! \brief dilate
 //!        Dilates an image by using a specific structuring element.
@@ -467,8 +473,8 @@ CV_EXPORTS_W void dilate( cv::InputArray src, cv::OutputArray dst, cv::InputArra
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
             cv::Mat out;
+            struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
             try {
-                struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
                 cv::dilate( src, out, kernel,
                             cv::Point(ip->x, ip->y),
                             *(int*)foo->para[1]->data,
@@ -486,8 +492,8 @@ CV_EXPORTS_W void dilate( cv::InputArray src, cv::OutputArray dst, cv::InputArra
     if (foo->state.flag.func_off) {
         src.copyTo ( dst );
     } else {
-        try {
         struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
+        try {
             cv::dilate( src, dst, kernel,
                         cv::Point(ip->x, ip->y),
                         *(int*)foo->para[1]->data,
@@ -499,10 +505,9 @@ CV_EXPORTS_W void dilate( cv::InputArray src, cv::OutputArray dst, cv::InputArra
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );
-}
+} // dilate
 
-//! \brief morphologyEx
-//!        Performs advanced morphological transformations.
+//! \brief morphologyEx Performs advanced morphological transformations.
 //! \param src
 //! \param dst
 //! \param op
@@ -557,8 +562,8 @@ CV_EXPORTS_W void morphologyEx( cv::InputArray src, cv::OutputArray dst,
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
             cv::Mat out;
+            struct _point_int_ *ip = (struct _point_int_ *)foo->para[1]->data;
             try {
-                struct _point_int_ *ip = (struct _point_int_ *)foo->para[1]->data;
                 cv::morphologyEx( src, out,
                             *(int*)foo->para[0]->data,      // op
                             kernel,
@@ -578,8 +583,8 @@ CV_EXPORTS_W void morphologyEx( cv::InputArray src, cv::OutputArray dst,
     if (foo->state.flag.func_off) {
         src.copyTo ( dst );
     } else {
+        struct _point_int_ *ip = (struct _point_int_ *)foo->para[1]->data;
         try {
-            struct _point_int_ *ip = (struct _point_int_ *)foo->para[1]->data;
             cv::morphologyEx( src, dst,
                         *(int*)foo->para[0]->data,      // op
                         kernel,
@@ -593,10 +598,9 @@ CV_EXPORTS_W void morphologyEx( cv::InputArray src, cv::OutputArray dst,
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );
-}
+} // morphologyEx
 
-//! \brief cvtColor
-//!        Converts an image from one color space to another.
+//! \brief cvtColor Converts an image from one color space to another.
 //! \param src
 //! \param dst
 //! \param code
@@ -656,10 +660,19 @@ CV_EXPORTS_W void cvtColor( cv::InputArray src, cv::OutputArray dst, int code, i
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );
-}
-//! -------------------------------------------------------------------------
-//! @brief Applies a fixed-level threshold to each array element.
-//! -------------------------------------------------------------------------
+} // cvtColor
+
+//!
+//! \brief threshold Applies a fixed-level threshold to each array element.
+//! \param src
+//! \param dst
+//! \param thresh
+//! \param maxval
+//! \param type
+//! \param line_nr
+//! \param src_file
+//! \return
+//!
 CV_EXPORTS_W double threshold( cv::InputArray src, cv::OutputArray dst,
                                double thresh, double maxval, int type
                                BUILDIN_FUNC)
@@ -720,10 +733,10 @@ CV_EXPORTS_W double threshold( cv::InputArray src, cv::OutputArray dst,
     }
     foo->control_imshow( dst );    
     return ret;
-}
+} // threshold
+
 //!
-//! \brief Canny
-//!        Finds edges in an image using the Canny algorithm @cite Canny86 .
+//! \brief Canny Finds edges in an image using the Canny algorithm @cite Canny86 .
 //! \param image
 //! \param edges
 //! \param threshold1
@@ -801,7 +814,7 @@ CV_EXPORTS_W void Canny( cv::InputArray image, cv::OutputArray edges,
         foo->control_func_run_time ();
     }        
     foo->control_imshow( edges );
-}
+} // Canny
 //!
 //! \brief Canny
 //!        Finds edges in an image using the Canny algorithm @cite Canny86. Canny Typ 2
@@ -874,7 +887,8 @@ CV_EXPORTS_W void Canny( cv::InputArray dx, cv::InputArray dy,                  
         foo->control_func_run_time ();
     }
     foo->control_imshow( edges );   
-}
+} // Canny
+
 //!
 //! \brief medianBlur
 //!        Blurs an image using the median filter.
@@ -930,8 +944,7 @@ CV_EXPORTS_W void medianBlur( cv::InputArray src, cv::OutputArray dst, int ksize
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );
-}
-
+} // medianBlur
 
 //!
 //! \brief blur
@@ -977,8 +990,8 @@ CV_EXPORTS_W void blur( cv::InputArray src, cv::OutputArray dst,
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
             cv::Mat out;
+            struct _point_int_ *ip = (struct _point_int_ *)foo->para[2]->data;
             try {
-                struct _point_int_ *ip = (struct _point_int_ *)foo->para[2]->data;
                 cv::blur( src, out,
                           cv::Size(*(int*)foo->para[0]->data, *(int*)foo->para[1]->data),   // ksize
                           cv::Point(ip->x, ip->y),                                          // anchor
@@ -995,8 +1008,8 @@ CV_EXPORTS_W void blur( cv::InputArray src, cv::OutputArray dst,
     if (foo->state.flag.func_off) {
         src.copyTo ( dst );
     } else {
+        struct _point_int_ *ip = (struct _point_int_ *)foo->para[2]->data;
         try {
-            struct _point_int_ *ip = (struct _point_int_ *)foo->para[2]->data;
             cv::blur( src, dst,
                       cv::Size(*(int*)foo->para[0]->data, *(int*)foo->para[1]->data),   // ksize
                       cv::Point(ip->x, ip->y),                                          // anchor
@@ -1007,8 +1020,7 @@ CV_EXPORTS_W void blur( cv::InputArray src, cv::OutputArray dst,
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );    
-}
-
+} // blur
 
 //!
 //! \brief GaussianBlur
@@ -1088,7 +1100,7 @@ CV_EXPORTS_W void GaussianBlur( cv::InputArray src, cv::OutputArray dst, cv::Siz
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );    
-}
+} // GaussianBlur
 
 //!
 //! \brief cvd::convertScaleAbs
@@ -1152,7 +1164,7 @@ CV_EXPORTS_W void convertScaleAbs(cv::InputArray src, cv::OutputArray dst,
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );
-}
+} // convertScaleAbs
 
 //!
 //! \brief findContours
@@ -1201,8 +1213,8 @@ CV_EXPORTS_W void findContours( cv::InputOutputArray image,
         vector<cv::Vec4i> break_hierarchy;
 
         while (foo->state.flag.func_break) {
+            struct _point_int_ *ac = (struct _point_int_ *)foo->para[2]->data;  // offset
             try {
-                struct _point_int_ *ac = (struct _point_int_ *)foo->para[2]->data;  // offset
                 cv::findContours( image, break_contours, break_hierarchy,
                                   *(int*)foo->para[0]->data,      // mode,
                                   *(int*)foo->para[1]->data,      // method,
@@ -1221,8 +1233,8 @@ CV_EXPORTS_W void findContours( cv::InputOutputArray image,
         hierarchy.clear();
         // src.copyTo( dst );
     } else {
+        struct _point_int_ *ac = (struct _point_int_ *)foo->para[2]->data;  // offset
         try {
-            struct _point_int_ *ac = (struct _point_int_ *)foo->para[2]->data;  // offset
             cv::findContours( image, contours, hierarchy,
                               *(int*)foo->para[0]->data,      // mode,
                               *(int*)foo->para[1]->data,      // method,
@@ -1234,7 +1246,7 @@ CV_EXPORTS_W void findContours( cv::InputOutputArray image,
     }
 
     foo->control_contours_imshow ( image, contours, hierarchy );    // Contours Ausgabe
-}
+} // findContours
 
 //!
 //! @overload
@@ -1407,7 +1419,7 @@ CV_EXPORTS_W cv::Mat imread( const cv::String& filename, int flags
         foo->control_imshow( ret );
 
     return ret;
-}
+} // imread
 
 //!
 //! \brief HoughCircles
@@ -1557,6 +1569,81 @@ CV_EXPORTS_W void HoughLinesP( cv::InputArray image, cv::OutputArray lines,
 } // HoughLinesP
 
 //!
+//! \brief HoughLines
+//! \param image 8-bit, single-channel binary source image. The image may be modified by the function.
+//! \param lines
+//! \param rho Distance resolution of the accumulator in pixels.
+//! \param theta Angle resolution of the accumulator in radians.
+//! \param threshold
+//! \param srn For the multi-scale Hough transform, it is a divisor for the distance resolution rho .
+//! The coarse accumulator distance resolution is rho and the accurate accumulator resolution is
+//! rho/srn . If both srn=0 and stn=0 , the classical Hough transform is used. Otherwise, both these
+//! parameters should be positive.
+//! \param stn For the multi-scale Hough transform, it is a divisor for the distance resolution theta.
+//! \param min_theta For standard and multi-scale Hough transform, minimum angle to check for lines. Must fall between 0 and max_theta.
+//! \param max_theta For standard and multi-scale Hough transform, maximum angle to check for lines. Must fall between min_theta and CV_PI.
+//!
+CV_EXPORTS_W void HoughLines( cv::InputArray image, cv::OutputArray lines,
+                              double rho, double theta, int threshold,
+                              double srn, double stn,
+                              double min_theta, double max_theta
+                              BUILDIN_FUNC )
+{
+    if (cvd_off) {
+        cv::HoughLines( image, lines, rho, theta, threshold, srn, stn, min_theta, max_theta);
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), HOUGHLINES, "HoughLines", 0x0003, BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _double_para_ ro = {rho, -100000.0, std::numeric_limits<double>::max()};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&ro, "rho");
+
+        struct _double_para_ ta = {theta, -100000.0, std::numeric_limits<double>::max()};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&ta, "theta");
+
+        struct _int_para_ sw = {threshold, 0, 255};
+        foo->new_para (SLIDE_INT_PARA, sizeof(struct _int_para_), (uint8_t*)&sw, "threshold");
+
+        struct _double_para_ sr = {srn, 0.0, std::numeric_limits<double>::max()};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&sr, "srn");
+
+        struct _double_para_ st = {stn, 0.0, std::numeric_limits<double>::max()};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&st, "srn");
+
+        struct _double_para_ mit = {min_theta, 0.0, CV_PI};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&mit, "min_theta");
+
+        struct _double_para_ mat = {max_theta, 0.0, CV_PI};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&mat, "max_theta");
+    }
+    foo->error_flag = 0;
+
+    if (foo->state.flag.func_off) {
+        lines.clear();    // do nothing
+    } else {
+        try {
+            cv::HoughLines( image, lines,
+                            *(double*)foo->para[0]->data,      // rho
+                            *(double*)foo->para[1]->data,      // theta
+                            *(int*)foo->para[2]->data,         // threshold
+                            *(double*)foo->para[3]->data,      // srn
+                            *(double*)foo->para[4]->data,      // stn
+                            *(double*)foo->para[5]->data,      // min_theta
+                            *(double*)foo->para[6]->data);     // max_theta
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
+        foo->control_func_run_time ();
+    }
+} // HoughLines
+
+//!
 //! \brief Scharr input image.
 //! \param src dst output image of the same size and the same number of channels as src.
 //! \param dst output image of the same size and the same number of channels as src.
@@ -1618,7 +1705,6 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                             *(double*)foo->para[3]->data,       // scale,
                             *(double*)foo->para[4]->data,       // delta,
                             *(int*)foo->para[5]->data);         // borderType
-
             } catch( cv::Exception& e ) {
                 foo->error_flag = 1;
             }
@@ -1639,7 +1725,6 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                         *(double*)foo->para[3]->data,       // scale,
                         *(double*)foo->para[4]->data,       // delta,
                         *(int*)foo->para[5]->data);         // borderType
-
         } catch( cv::Exception& e ) {
             foo->error_flag = 1;
         }

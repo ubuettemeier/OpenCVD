@@ -32,10 +32,9 @@ int main(int argc, char** argv)
         CVD::Canny( mor, dst, 50, 200, 3 );
         CVD::cvtColor( dst, color_dst, COLOR_GRAY2BGR );
 
-    #if 0
+    #if 1
         vector<Vec2f> lines;
-        HoughLines( dst, lines, 1, CV_PI/180, 100 );
-
+        CVD::HoughLines( dst, lines, 1, CV_PI/180, 100 );
         for( size_t i = 0; i < lines.size(); i++ )
         {
             float rho = lines[i][0];
@@ -47,6 +46,20 @@ int main(int argc, char** argv)
             Point pt2(cvRound(x0 - 1000*(-b)),
                       cvRound(y0 - 1000*(a)));
             line( color_dst, pt1, pt2, Scalar(0,0,255), 3, 8 );
+        }
+
+        CVD::HoughLines( dst, lines, 1, CV_PI/180, 100 );
+        for( size_t i = 0; i < lines.size(); i++ )
+        {
+            float rho = lines[i][0];
+            float theta = lines[i][1];
+            double a = cos(theta), b = sin(theta);
+            double x0 = a*rho, y0 = b*rho;
+            Point pt1(cvRound(x0 + 1000*(-b)),
+                      cvRound(y0 + 1000*(a)));
+            Point pt2(cvRound(x0 - 1000*(-b)),
+                      cvRound(y0 - 1000*(a)));
+            line( color_dst, pt1, pt2, Scalar(0,255,0), 3, 8 );
         }
     #else
         vector<Vec4i> lines;
