@@ -51,8 +51,12 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new Slide (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );      // threshold
         new DoubleEdit (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );      // srn
         new DoubleEdit (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );      // stn
+        new Slide (client, cf->first_para->next->next->next->next->next, LEFT_POS, 10+55*5, this );      // min_theta
+        new Slide (client, cf->first_para->next->next->next->next->next->next, LEFT_POS, 10+55*6, this );      // max_theta
+        /*
         new DoubleEdit (client, cf->first_para->next->next->next->next->next, LEFT_POS, 10+55*5, this );      // min_theta
         new DoubleEdit (client, cf->first_para->next->next->next->next->next->next, LEFT_POS, 10+55*6, this );      // max_theta
+        */
 
         new mButton (client, cf, LEFT_POS, 10+55*7+10, mCLOSE, this, mw );                            // Close
         new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*7+10, mRESET, this, mw );  // Reset
@@ -762,7 +766,7 @@ Slide::Slide(QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *paren
         break;
 
     case SLIDE_DOUBLE_PARA: {
-        struct _double_para_ *sp = (struct _double_para_ *)cp->data;
+        struct _slide_double_para_ *sp = (struct _slide_double_para_ *)cp->data;
         l = new QLabel (QString("%1=%2  min=%3  max=%4").arg(QString(cp->para_name))
                                                          .arg(QString::number(sp->value))
                                                          .arg(QString::number(sp->min))
@@ -776,9 +780,9 @@ Slide::Slide(QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *paren
         s->setTickInterval( 1 );
         s->setGeometry(x, y+20, 200, 30);
 
-        s->setMinimum( sp->min);
-        s->setMaximum( sp->max);
-        s->setSliderPosition( sp->value);        
+        s->setMinimum( sp->min * sp->divisor);
+        s->setMaximum( sp->max * sp->divisor);
+        s->setSliderPosition( sp->value * sp->divisor);
 
         s->setStyleSheet("QSlider::groove:horizontal { "            // Slider Aussehen veraendern.
                               "border: 1px solid #999999; "
@@ -835,9 +839,9 @@ void Slide::slide_value_changed (int val)
         }
         break;
     case SLIDE_DOUBLE_PARA: {
-        struct _double_para_ *sp = (struct _double_para_ *)cp->data;
-        sp->value = val;
-        l->setText(QString("%1=%2  min=%3  max=%4").arg(QString(cp->para_name))
+        struct _slide_double_para_ *sp = (struct _slide_double_para_ *)cp->data;
+        sp->value = (double)val / sp->divisor;
+        l->setText(QString("%1=%2 min=%3 max=%4").arg(QString(cp->para_name))
                                                     .arg(QString::number(sp->value))
                                                     .arg(QString::number(sp->min))
                                                     .arg(QString::number(sp->max)));

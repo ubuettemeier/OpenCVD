@@ -311,10 +311,16 @@ void control_socket ()
                         write_ack();
                         }
                         break;
-                    case DOUBLE_PARA:               // Achtung: "struct _double_para_" und "struct _double_step_para_" sind identisch !!!
-                    case SLIDE_DOUBLE_PARA: {
+                    case DOUBLE_PARA: {               // Achtung: "struct _double_para_" und "struct _double_step_para_" sind identisch !!!
                         struct _double_para_ *foo_sp = (struct _double_para_ *)foo->data;   // pointer to buffer->data
                         struct _double_para_ *cp_sp = (struct _double_para_ *)cp->data;     // pointer to parameter->data
+                        cp_sp->value = foo_sp->value;                                           // value neu setzen !
+                        write_ack();
+                        }
+                        break;
+                    case SLIDE_DOUBLE_PARA: {
+                        struct _slide_double_para_ *foo_sp = (struct _slide_double_para_ *)foo->data;   // pointer to buffer->data
+                        struct _slide_double_para_ *cp_sp = (struct _slide_double_para_ *)cp->data;     // pointer to parameter->data
                         cp_sp->value = foo_sp->value;                                           // value neu setzen !
                         write_ack();
                         }

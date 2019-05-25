@@ -689,11 +689,11 @@ CV_EXPORTS_W double threshold( cv::InputArray src, cv::OutputArray dst,
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), THRESHOLD, "threshold", 0x000F, BUILIN_PARA);
         func.push_back( foo );
 
-        struct _double_para_ dp = {thresh, 0.0, 255.0};
-        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&dp, "thresh" );
+        struct _slide_double_para_ dp = {thresh, 0.0, 255.0, 1.0};
+        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&dp, "thresh" );
 
-        struct _double_para_ dp2 = {maxval, 0.0, 255};
-        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&dp2, "maxval" );
+        struct _slide_double_para_ dp2 = {maxval, 0.0, 255, 1.0};
+        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&dp2, "maxval" );
 
         struct _enum_para_ ep = {type, "ThresholdTypes"};
         foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&ep, "type" );
@@ -761,11 +761,11 @@ CV_EXPORTS_W void Canny( cv::InputArray image, cv::OutputArray edges,
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), CANNY, "Canny", 0x000F, BUILIN_PARA);
         func.push_back( foo );
 
-        struct _double_para_ dp = {threshold1, 0.0, 255.0};
-        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&dp, "threshold1" );
+        struct _slide_double_para_ dp = {threshold1, 0.0, 255.0, 1.0};
+        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&dp, "threshold1" );
 
-        struct _double_para_ dp2 = {threshold2, 0.0, 255.0};
-        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&dp2, "threshold2" );
+        struct _slide_double_para_ dp2 = {threshold2, 0.0, 255.0, 1.0};
+        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&dp2, "threshold2" );
 
         struct _int_para_ sp = {apertureSize, 3, 7};    // 3, 5, 7
         foo->new_para ( SLIDE_INT_TWO_STEP_PARA, sizeof(struct _int_para_), (uint8_t*)&sp, "apertureSize" );
@@ -843,11 +843,11 @@ CV_EXPORTS_W void Canny( cv::InputArray dx, cv::InputArray dy,                  
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), CANNY_2, "Canny Typ 2", 0x000F, BUILIN_PARA);
         func.push_back( foo );
 
-        struct _double_para_ dp = {threshold1, 0.0, 255.0};
-        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&dp, "threshold1" );
+        struct _slide_double_para_ dp = {threshold1, 0.0, 255.0, 1.0};
+        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&dp, "threshold1" );
 
-        struct _double_para_ dp2 = {threshold2, 0.0, 255.0};
-        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&dp2, "threshold2" );
+        struct _slide_double_para_ dp2 = {threshold2, 0.0, 255.0, 1.0};
+        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&dp2, "threshold2" );
 
         struct _enum_para_ ep = {L2gradient, "boolType"};
         foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&ep, "L2gradient" );
@@ -1472,11 +1472,11 @@ CV_EXPORTS_W void HoughCircles( cv::InputArray image, cv::OutputArray circles,
         struct _double_para_ md = {minDist, 0.0, std::numeric_limits<double>::max()};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&md, "minDist");
 
-        struct _double_para_ p1 = {param1, 1.0, 255.0};            // threshold
-        foo->new_para (SLIDE_DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&p1, "param1");
+        struct _slide_double_para_ p1 = {param1, 1.0, 255.0, 1.0};            // threshold
+        foo->new_para (SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&p1, "param1");
 
-        struct _double_para_ p2 = {param2, 1.0, 255.0};
-        foo->new_para (SLIDE_DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&p2, "param2");
+        struct _slide_double_para_ p2 = {param2, 1.0, 255.0, 1.0};
+        foo->new_para (SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&p2, "param2");
 
         struct _int_para_ minr = {minRadius, 0, 200000};
         foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&minr, "minRadius");
@@ -1616,11 +1616,19 @@ CV_EXPORTS_W void HoughLines( cv::InputArray image, cv::OutputArray lines,
         struct _double_para_ st = {stn, 0.0, std::numeric_limits<double>::max()};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&st, "srn");
 
+        struct _slide_double_para_ mit = {min_theta, 0.0, CV_PI, 100.0};
+        foo->new_para (SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&mit, "min_theta");
+
+        struct _slide_double_para_ mat = {max_theta, 0.0, CV_PI, 100.0};
+        foo->new_para (SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&mat, "max_theta");
+
+        /*
         struct _double_para_ mit = {min_theta, 0.0, CV_PI};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&mit, "min_theta");
 
         struct _double_para_ mat = {max_theta, 0.0, CV_PI};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&mat, "max_theta");
+        */
     }
     foo->error_flag = 0;
 

@@ -34,7 +34,7 @@ int main(int argc, char** argv)
 
     #if 1
         vector<Vec2f> lines;
-        CVD::HoughLines( dst, lines, 1, CV_PI/180, 100 );
+        CVD::HoughLines( dst, lines, 1, CV_PI/180, 100 );	// red line
         for( size_t i = 0; i < lines.size(); i++ )
         {
             float rho = lines[i][0];
@@ -46,9 +46,11 @@ int main(int argc, char** argv)
             Point pt2(cvRound(x0 - 1000*(-b)),
                       cvRound(y0 - 1000*(a)));
             line( color_dst, pt1, pt2, Scalar(0,0,255), 3, 8 );
+	    if (lines.size() < 20) 
+	    	line( src, pt1, pt2, Scalar(0,0,255), 3, 8 );
         }
 
-        CVD::HoughLines( dst, lines, 1, CV_PI/180, 100 );
+        CVD::HoughLines( dst, lines, 1, CV_PI/180, 100 );	// green line
         for( size_t i = 0; i < lines.size(); i++ )
         {
             float rho = lines[i][0];
@@ -60,6 +62,8 @@ int main(int argc, char** argv)
             Point pt2(cvRound(x0 - 1000*(-b)),
                       cvRound(y0 - 1000*(a)));
             line( color_dst, pt1, pt2, Scalar(0,255,0), 3, 8 );
+	    if (lines.size() < 20)
+            	line( src, pt1, pt2, Scalar(0,255,0), 3, 8 );
         }
     #else
         vector<Vec4i> lines;

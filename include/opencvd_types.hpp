@@ -112,6 +112,16 @@ struct _double_para_ {
 };
 
 //!
+//! \brief The _slide_double_para_ struct
+//!
+struct _slide_double_para_ {
+    double value;
+    double min;
+    double max;
+    double divisor;
+};
+
+//!
 //! \brief The _enum_para_ struct
 //!
 struct _enum_para_ {
