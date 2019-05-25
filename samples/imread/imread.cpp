@@ -1,4 +1,4 @@
-#include <cv.h>
+#include "opencv2/opencv.hpp"
 #include <stdio.h>
 
 #define USE_CVD             // using namespace cvd
