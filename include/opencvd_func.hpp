@@ -76,6 +76,11 @@ CV_EXPORTS_W void Canny( cv::InputArray dx, cv::InputArray dy,          // Canny
                          bool L2gradient = false,
                          BUILDIN);
 
+CV_EXPORTS_W void adaptiveThreshold( cv::InputArray src, cv::OutputArray dst,
+                                     double maxValue, int adaptiveMethod,
+                                     int thresholdType, int blockSize, double C,
+                                     BUILDIN);
+
 CV_EXPORTS_W double threshold( cv::InputArray src, cv::OutputArray dst,
                                double thresh, double maxval, int type,
                                BUILDIN);
@@ -662,6 +667,90 @@ CV_EXPORTS_W void cvtColor( cv::InputArray src, cv::OutputArray dst, int code, i
     }
     foo->control_imshow( dst );
 } // cvtColor
+
+
+//!
+//! \brief adaptiveThreshold
+//! \param src
+//! \param dst
+//! \param maxValue
+//! \param adaptiveMethod
+//! \param thresholdType
+//! \param blockSize
+//! \param C
+//!
+CV_EXPORTS_W void adaptiveThreshold( cv::InputArray src, cv::OutputArray dst,
+                                     double maxValue, int adaptiveMethod,
+                                     int thresholdType, int blockSize, double C
+                                     BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::adaptiveThreshold (src, dst, maxValue, adaptiveMethod, thresholdType, blockSize, C);
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for threshold
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), ADAPTIVETHRESHOLD, "adaptiveThreshold", 0x000F, BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _slide_double_para_ mv = {maxValue, 0.0, 255.0, 1.0};
+        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&mv, "maxValue" );
+
+        struct _enum_para_ aty = { adaptiveMethod, "AdaptiveThresholdTypes" };
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&aty, "adaptiveMethod" );
+
+        struct _enum_para_ ep = {thresholdType, "ThresholdTypes_2"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&ep, "thresholdType" );
+
+        struct _int_para_ bs = {blockSize, 3, 31};
+        foo->new_para ( SLIDE_INT_TWO_STEP_PARA, sizeof(struct _int_para_), (uint8_t*)&bs, "blockSize" );
+
+        struct _double_para_ cv = {C, -1000.0, 1000.0};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&cv, "C" );
+
+    }
+    foo->error_flag = 0;
+
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::Mat out;
+            try {
+                cv::adaptiveThreshold (src, out,
+                                       *(double*)foo->para[0]->data,    // maxValue,
+                                       *(int*)foo->para[1]->data,       // adaptiveMethod,
+                                       *(int*)foo->para[2]->data,       // thresholdType,
+                                       *(int*)foo->para[3]->data,       // blockSize,
+                                       *(double*)foo->para[4]->data);   // C
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
+            foo->control_imshow( out );                 // Ausgabe
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
+
+    if (foo->state.flag.func_off) {
+        src.copyTo ( dst );
+    } else {
+        try {
+            cv::adaptiveThreshold (src, dst,
+                                   *(double*)foo->para[0]->data,    // maxValue,
+                                   *(int*)foo->para[1]->data,       // adaptiveMethod,
+                                   *(int*)foo->para[2]->data,       // thresholdType,
+                                   *(int*)foo->para[3]->data,       // blockSize,
+                                   *(double*)foo->para[4]->data);   // C
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( dst );
+}
 
 //!
 //! \brief threshold Applies a fixed-level threshold to each array element.

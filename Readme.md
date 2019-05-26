@@ -51,6 +51,7 @@ see: samples/short_sample/short_sample.cpp
 ----------------------------------------------------------------------------------------------
 **folgende OpenCV Funktionen sind implementiert / the following OpenCV functions are implemented**
 
+- adaptiveThreshold
 - blur
 - Canny, cvtColor, calcHist, convertScaleAbs
 - dilate

@@ -133,6 +133,16 @@
             <THRESH_TRIANGLE> 16 </THRESH_TRIANGLE>
         </ThresholdTypes>
 
+        <ThresholdTypes_2>
+            <THRESH_BINARY> 0 </THRESH_BINARY>
+            <THRESH_BINARY_INV> 1 </THRESH_BINARY_INV>
+        </ThresholdTypes_2>
+
+        <AdaptiveThresholdTypes>
+            <ADAPTIVE_THRESH_MEAN_C> 0 </ADAPTIVE_THRESH_MEAN_C>
+            <ADAPTIVE_THRESH_GAUSSIAN_C> 1 </ADAPTIVE_THRESH_GAUSSIAN_C>
+        </AdaptiveThresholdTypes>
+
         <ColorConversionCodes>
             <COLOR_BGR2BGRA> 0 </COLOR_BGR2BGRA>
             <COLOR_RGB2RGBA> 0 </COLOR_RGB2RGBA>
