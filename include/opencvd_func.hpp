@@ -3,12 +3,10 @@
 //! @todo create function HoughLines(...). See: HoughLinesP(...)
 //!
 
-
 #ifndef OPENCVD_FUNC_HPP
 #define OPENCVD_FUNC_HPP
 
 #include "opencv2/opencv.hpp"
-
 
 namespace cvd {
 
@@ -19,19 +17,22 @@ namespace cvd {
 //! @see    https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
 //!
 #ifdef USE_BUILDIN
-    #define BUILDIN  , int line_nr = __builtin_LINE(), \
-                     const char *src_file = __builtin_FILE()
-
-    #define BUILDIN_FUNC  , int line_nr, \
-                          const char *src_file
+    #define BUILDIN  int line_nr = __builtin_LINE(), \
+                     const char *src_file = __builtin_FILE()   
 #else
-    #define BUILDIN  , int line_nr = 0, \
+    #define BUILDIN  int line_nr = 0, \
                      const char *src_file = NULL
-    #define BUILDIN_FUNC  , int line_nr, \
-                          const char *src_file
 #endif
 
+//! -------------------------------------------------------------
+#define BUILDIN_FUNC  , int line_nr, \
+                      const char *src_file
+
+#define ONLY_BUILD_FUNC int line_nr, \
+                        const char *src_file
+
 #define BUILIN_PARA line_nr, src_file
+
 
 /** @todo   eventuell BUILDIN mit __builtin_FILE und __builtin_FUNCTION erweitern
  *  @example
@@ -51,112 +52,112 @@ namespace cvd {
 
 // define CV_EXPORTS_W __attribute__ ((visibility ("default")))  // Funktion ist sichtbar
 
-CV_EXPORTS_W void medianBlur( cv::InputArray src, cv::OutputArray dst, int ksize
+CV_EXPORTS_W void medianBlur( cv::InputArray src, cv::OutputArray dst, int ksize,
                               BUILDIN);
 
 CV_EXPORTS_W void blur( cv::InputArray src, cv::OutputArray dst,
                         cv::Size ksize, cv::Point anchor = cv::Point(-1,-1),
-                        int borderType = cv::BORDER_DEFAULT
+                        int borderType = cv::BORDER_DEFAULT,
                         BUILDIN);
 
 CV_EXPORTS_W void GaussianBlur( cv::InputArray src, cv::OutputArray dst, cv::Size ksize,
                                 double sigmaX, double sigmaY = 0,
-                                int borderType = cv::BORDER_DEFAULT
+                                int borderType = cv::BORDER_DEFAULT,
                                 BUILDIN);
 
 CV_EXPORTS_W void Canny( cv::InputArray image, cv::OutputArray edges,
                          double threshold1, double threshold2,
-                         int apertureSize = 3, bool L2gradient = false
+                         int apertureSize = 3, bool L2gradient = false,
                          BUILDIN);
 
 CV_EXPORTS_W void Canny( cv::InputArray dx, cv::InputArray dy,          // Canny Typ 2
                          cv::OutputArray edges,
                          double threshold1, double threshold2,
-                         bool L2gradient = false
+                         bool L2gradient = false,
                          BUILDIN);
 
 CV_EXPORTS_W double threshold( cv::InputArray src, cv::OutputArray dst,
-                               double thresh, double maxval, int type
+                               double thresh, double maxval, int type,
                                BUILDIN);
 
-CV_EXPORTS_W void cvtColor( cv::InputArray src, cv::OutputArray dst, int code, int dstCn=0
+CV_EXPORTS_W void cvtColor( cv::InputArray src, cv::OutputArray dst, int code, int dstCn=0,
                             BUILDIN);
 
 CV_EXPORTS_W void dilate( cv::InputArray src, cv::OutputArray dst, cv::InputArray kernel,
                            cv::Point anchor = cv::Point(-1,-1), int iterations = 1,
                            int borderType = cv::BORDER_CONSTANT,
-                           const cv::Scalar& borderValue = cv::morphologyDefaultBorderValue()    // morphologyDefaultBorderValue() = Scalar::all(DBL_MAX)
+                           const cv::Scalar& borderValue = cv::morphologyDefaultBorderValue(),    // morphologyDefaultBorderValue() = Scalar::all(DBL_MAX)
                            BUILDIN);
 
 CV_EXPORTS_W void erode( cv::InputArray src, cv::OutputArray dst, cv::InputArray kernel,
                          cv::Point anchor = cv::Point(-1,-1), int iterations = 1,
                          int borderType = cv::BORDER_CONSTANT,
-                         const cv::Scalar& borderValue = cv::morphologyDefaultBorderValue()      // morphologyDefaultBorderValue() = Scalar::all(DBL_MAX)
+                         const cv::Scalar& borderValue = cv::morphologyDefaultBorderValue(),      // morphologyDefaultBorderValue() = Scalar::all(DBL_MAX)
                          BUILDIN);
 
 CV_EXPORTS_W void morphologyEx( cv::InputArray src, cv::OutputArray dst,
                                 int op, cv::InputArray kernel,
                                 cv::Point anchor = cv::Point(-1,-1), int iterations = 1,
                                 int borderType = cv::BORDER_CONSTANT,
-                                const cv::Scalar& borderValue = cv::morphologyDefaultBorderValue()
+                                const cv::Scalar& borderValue = cv::morphologyDefaultBorderValue(),
                                 BUILDIN);
 
-CV_EXPORTS_W cv::Mat getStructuringElement(int shape, cv::Size ksize, cv::Point anchor = cv::Point(-1,-1)
+CV_EXPORTS_W cv::Mat getStructuringElement(int shape, cv::Size ksize, cv::Point anchor = cv::Point(-1,-1),
                                            BUILDIN);
 
 CV_EXPORTS_W void convertScaleAbs(cv::InputArray src, cv::OutputArray dst,
-                                  double alpha = 1, double beta = 0
+                                  double alpha = 1, double beta = 0,
                                   BUILDIN);
 
 CV_EXPORTS_W void findContours( cv::InputOutputArray image,
                                 cv::OutputArrayOfArrays contours,
                                 cv::OutputArray hierarchy,
                                 int mode,
-                                int method, cv::Point offset = cv::Point()
+                                int method, cv::Point offset = cv::Point(),
                                 BUILDIN);
 
 CV_EXPORTS void findContours( cv::InputOutputArray image, cv::OutputArrayOfArrays contours,     // overload
-                              int mode, int method, cv::Point offset = cv::Point()
+                              int mode, int method, cv::Point offset = cv::Point(),
                               BUILDIN);
 
 CV_EXPORTS_W void Laplacian( cv::InputArray src, cv::OutputArray dst, int ddepth,
                              int ksize = 1, double scale = 1, double delta = 0,
-                             int borderType = cv::BORDER_DEFAULT
+                             int borderType = cv::BORDER_DEFAULT,
                              BUILDIN);
 
-CV_EXPORTS_W cv::Mat imread( const cv::String& filename, int flags = cv::IMREAD_COLOR
+CV_EXPORTS_W cv::Mat imread( const cv::String& filename, int flags = cv::IMREAD_COLOR,
                              BUILDIN);
 
 CV_EXPORTS_W void normalize( cv::InputArray src, cv::InputOutputArray dst, double alpha = 1, double beta = 0,
-                             int norm_type = cv::NORM_L2, int dtype = -1, cv::InputArray mask = cv::noArray()
+                             int norm_type = cv::NORM_L2, int dtype = -1, cv::InputArray mask = cv::noArray(),
                              BUILDIN);
 
 CV_EXPORTS void calcHist( const cv::Mat* images, int nimages,
                           const int* channels, cv::InputArray mask,
                           cv::OutputArray hist, int dims, const int* histSize,
-                          const float** ranges, bool uniform = true, bool accumulate = false
+                          const float** ranges, bool uniform = true, bool accumulate = false,
                           BUILDIN);
 
 CV_EXPORTS_W void HoughCircles( cv::InputArray image, cv::OutputArray circles,
                                int method, double dp, double minDist,
                                double param1 = 100, double param2 = 100,
-                               int minRadius = 0, int maxRadius = 0
+                               int minRadius = 0, int maxRadius = 0,
                                BUILDIN);
 
 CV_EXPORTS_W void HoughLines( cv::InputArray image, cv::OutputArray lines,
                               double rho, double theta, int threshold,
                               double srn = 0, double stn = 0,
-                              double min_theta = 0, double max_theta = CV_PI
+                              double min_theta = 0, double max_theta = CV_PI,
                               BUILDIN);
 
 CV_EXPORTS_W void HoughLinesP( cv::InputArray image, cv::OutputArray lines,
                                double rho, double theta, int threshold,
-                               double minLineLength = 0, double maxLineGap = 0
+                               double minLineLength = 0, double maxLineGap = 0,
                                BUILDIN);
 
 CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           int dx, int dy, double scale = 1, double delta = 0,
-                          int borderType = cv::BORDER_DEFAULT
+                          int borderType = cv::BORDER_DEFAULT,
                           BUILDIN);
 
 /*

@@ -8,6 +8,7 @@
 #include <thread>
 #include <sys/time.h>
 
+#include "opencv2/opencv.hpp"
 
 #ifdef _WIN32
     #include <winsock.h>
@@ -35,6 +36,7 @@ uint8_t write_data_blocked = 0;         // Atomic
 std::thread *client_thread = NULL;
 
 uint32_t para_id_counter = 0x00000001;
+char cv_version[32] = "3.3.0";
 
 // --------------- Func Deklaration ------------------------------
 int init_socket ( void );
@@ -371,6 +373,15 @@ void control_socket ()
                 }
 
                 printf ("server is closed\n");
+                break;
+            case GET_CV_VERSION: {
+                // printf ("CV_VERSION angefordert\n");
+                struct _cvd_string_ cs;
+                cs.len = sizeof(struct _cvd_string_);
+                cs.type = SET_CV_VERSION;
+                sprintf (cs.val, "CV_VERSION = %s", CV_VERSION);
+                write_data ((uint8_t*)&cs, sizeof(struct _cvd_string_));
+                }
                 break;
             default:
                 printf ("unbekanntes Datenpaket\n");

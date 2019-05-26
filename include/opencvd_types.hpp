@@ -48,6 +48,7 @@ enum _data_types_ {
     HOUGHCIRCLES = 0x101A,
     HOUGHLINESP = 0x101B,
     HOUGHLINES = 0x101C,
+    GETBUILDINFORMATION = 0x101D,
     // ----- Parameter 0x2000...0x2FFF --------
     SLIDE_INT_TWO_STEP_PARA = 0x2000,       // z.B. 1, 3, 5, ... 21 (int)
     SLIDE_INT_PARA = 0x2001,                // z.B. 0..255 (int)
@@ -64,11 +65,13 @@ enum _data_types_ {
     FUNC_FLAGS = 0x3000,                    // s.auch struct _cvd_flags_
     TIME_TRIGGER = 0x3001,                  // s.auch struct _time_trigger_
     SET_CVD_OFF = 0x3002,
-    SET_CVD_ON = 0x3003,
+    SET_CVD_ON = 0x3003,    
     // ----- System 0xF000...0xFFFF --------
     CLOSE_CLIENT = 0xF000,      // Zeigt dem Server, das der client beendet wird. Verbindung kann geschlossen werden.
     CLOSE_SERVER = 0xF001,      // Zeigt dem Client, das der Server beendet wird.
     SOCKET_ACK = 0xF002,        // currently unused
+    GET_CV_VERSION = 0xF003,    // Server to Client
+    SET_CV_VERSION = 0xF004,    // Client to Server
 };
 
 #pragma pack(1)
@@ -270,6 +273,12 @@ struct _time_trigger_ {                         // s.auch enum _bef_ TIME_TRIGGE
     uint16_t type;                              // THRESHOLD, MEDIANBLUR, ...
     uint64_t func_addr;                         // Funktions Adresse
     uint8_t error_flag;                         // 0=no error
+};
+
+struct _cvd_string_ {
+    uint32_t len;
+    uint16_t type;
+    char val[MAX_STRING_VAL_LEN ];
 };
 #pragma pack()
 

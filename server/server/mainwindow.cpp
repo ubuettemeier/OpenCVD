@@ -68,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
     else {
         ui->textEdit->insertPlainText("param.xml geöffnet\n");
         if (para.setContent( &param_file )) {
-            ui->textEdit->insertPlainText("param.xml angelegt\n");            
+            ui->textEdit->insertPlainText("param.xml angelegt\n");
         }
         param_file.close();
     }
@@ -268,7 +268,14 @@ void MainWindow::client_read_ready()
                     break;
                 case CLOSE_CLIENT:
                     std::cout << "system message: CLOSE_CLIENT" << std::endl;
-                    clear_system();     // ???
+                    clear_system();
+                    break;
+                case SET_CV_VERSION:    // 0xF004
+                    struct _cvd_string_ cv;
+                    memcpy (&cv, buf.data(), sizeof(struct _cvd_string_));
+                    printf ("%s\n", cv.val);
+                    ui->textEdit->insertPlainText(QString(cv.val));
+                    ui->textEdit->insertPlainText("\n");
                     break;
                 default:
                     std::cout << "system message: 0x" << std::hex << *bef << std::endl;
@@ -311,6 +318,7 @@ void MainWindow::clear_system()
     ui->actionCVD_OFF->setChecked( false );
     ui->textEdit->clear();
     ui->treeWidget->clear();
+    ui->actionOpenCv_Version->setEnabled( false );
 }
 
 //!
@@ -402,6 +410,8 @@ struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
         foo->prev = last_func;
         last_func = foo;
     }
+
+    ui->actionOpenCv_Version->setEnabled( true );
 
     return foo;
 }
@@ -1101,4 +1111,17 @@ void MainWindow::check_param_list ()
         qDebug() << n << " Parameter gefunden";
     } else
         qDebug() << "kein Element gefunden";
+}
+
+//!
+//! \brief MainWindow::on_actionOpenCv_Version_triggered
+//!        Ansicht / OpenCV Version
+//!
+void MainWindow::on_actionOpenCv_Version_triggered()
+{
+    struct _cvd_header_ h;
+    h.len = sizeof (struct _cvd_header_);
+    h.bef = GET_CV_VERSION;
+
+    write_data ((const char *)&h, sizeof(struct _cvd_header_));
 }

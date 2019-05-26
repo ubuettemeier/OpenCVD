@@ -34,7 +34,7 @@ see: samples/short_sample/short_sample.cpp
 **Entwicklungsumgebung / development-environment:**
 
 - Ubuntu 18.04.2 LTS
-- OpneCV 3.3.0
+- OpenCV 3.3.0
 
 **Server:**
 
@@ -46,6 +46,7 @@ see: samples/short_sample/short_sample.cpp
 
 - gcc version 7.3.0
 - g++ --std=c++11
+- OpenCV 3.3.0
 - Makefile's use pkg-config --cflag --clib opencv. For OpenCV 4.x use: make cv4=1
 ----------------------------------------------------------------------------------------------
 **folgende OpenCV Funktionen sind implementiert / the following OpenCV functions are implemented**

@@ -92,6 +92,7 @@ private slots:
     void on_actionBaumstruktur_zuklappen_triggered();   // Ansicht / Baumstruktur zuklappen ????
     void on_actionAlle_Fenster_schli_en_triggered();    // Ansicht / Alle Fenster schließen
     void on_actionSource_Window_schlie_en_triggered();  // Ansicht / Source Window schließen
+    void on_actionOpenCv_Version_triggered();           // Ansicht / OpenCV Version
 
     void on_actionCVD_OFF_triggered();                  // Extra / set CVD OFF    
     void on_actionset_all_Function_OFF_triggered();     // Extra / all Function OFF
@@ -100,7 +101,7 @@ private slots:
 
     void on_actionAbout_triggered();                    // Help / About
 
-    void trigger_timer ( void );                        // Timer 1s    
+    void trigger_timer ( void );                        // Timer 1s        
 
 private:
     struct _cvd_func_ *new_func (struct _func_data_transfer_ *cf);
