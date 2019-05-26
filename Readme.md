@@ -46,7 +46,7 @@ see: samples/short_sample/short_sample.cpp
 
 - gcc version 7.3.0
 - g++ --std=c++11
-- Makefile's use pkg-config --cflag --clib opencv. For OpenCV 4.x change opencv with opencv4.
+- Makefile's use pkg-config --cflag --clib opencv. For OpenCV 4.x use: make cv4=1
 ----------------------------------------------------------------------------------------------
 **folgende OpenCV Funktionen sind implementiert / the following OpenCV functions are implemented**
 
