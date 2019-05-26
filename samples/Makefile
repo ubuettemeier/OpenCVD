@@ -1,37 +1,23 @@
 
 .PHONY: clean
 
-all:	
+val=
+
 ifdef cv4
-	$(MAKE)  cv4=1 -C basic/
-	$(MAKE)  cv4=1 -C edge/
-	$(MAKE)  cv4=1 -C filtering/
-	$(MAKE)  cv4=1 -C findcontours/
-	$(MAKE)  cv4=1 -C imread/
-	$(MAKE)  cv4=1 -C short_sample/
-	$(MAKE)  cv4=1 -C demhist/
-	$(MAKE)  cv4=1 -C HoughCircles/
-	$(MAKE)  cv4=1 -C HoughLines/
-else
-	$(MAKE)  -C basic/
-	$(MAKE)  -C edge/
-	$(MAKE)  -C filtering/
-	$(MAKE)  -C findcontours/
-	$(MAKE)  -C imread/
-	$(MAKE)  -C short_sample/
-	$(MAKE)  -C demhist/
-	$(MAKE)  -C HoughCircles/
-	$(MAKE)  -C HoughLines/
+val=cv4=1
 endif
 
+SAMPLE_PATH = basic/ edge/ filtering/ findcontours/ imread/ short_sample/ demhist/ HoughCircles/ HoughLines/
+
+all:	
+	for dir in $(SAMPLE_PATH); do \
+	$(MAKE) $(val) -C $$dir; \
+	echo "-------------"; \
+	done
+
 clean:
-	$(MAKE)  -C basic/  clean
-	$(MAKE)  -C edge/  clean
-	$(MAKE)  -C filtering/  clean
-	$(MAKE)  -C findcontours/  clean
-	$(MAKE)  -C imread/  clean
-	$(MAKE)  -C short_sample/  clean
-	$(MAKE)  -C demhist/  clean
-	$(MAKE)  -C HoughCircles/ clean
-	$(MAKE)  -C HoughLines/ clean
+	for dir in $(SAMPLE_PATH); do \
+	make clean -C $$dir; \
+	echo "----------"; \
+	done
 
