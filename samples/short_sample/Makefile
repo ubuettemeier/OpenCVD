@@ -8,15 +8,12 @@ OPENCVD += ../../include/opencvd_basic.hpp
 OPENCVD += ../../include/opencvd_func.hpp
 OPENCVD += ../../include/opencvd_types.hpp
 
-# ---- set pkg-config file -----
-# Example OpenCV 4.x: make cv4=1
-
-OPENCV_LIBS = opencv
-
-ifdef cv4
-OPENCV_LIBS = opencv4
+# ---- get pkg-config files -----
+ifeq ($(shell pkg-config --list-all | grep -ow opencv4), opencv4)
+OPENCV_LIBS := opencv4
+else
+OPENCV_LIBS := opencv
 endif
-
 
 CFLAGS = -Wall -c -O0 -DNDEBUG
 CFLAGS += $(shell pkg-config --cflags $(OPENCV_LIBS))
@@ -41,7 +38,7 @@ all: $(BIN)
 $(BIN): $(OBJ)
 	$(CC) -o $@ $< $(LDFLAGS) 
 
-$(OBJ): $(SOURCE) $(HEADER) $(OPENCVD)
+$(OBJ): $(SOURCE) $(HEADER) $(OPENCVD)	
 	$(CC) $(CFLAGS) $(FLAGS) $(INC) $<
 
 .PHONEY: clean
