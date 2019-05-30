@@ -64,6 +64,9 @@ public:
     int get_level (QTreeWidgetItem *item);
     bool ack_detected = 0;
     void set_all_source_icon (bool wert);
+    void refresh_source_win( _cvd_func_ *cf );
+
+    QString make_source_line ( struct _cvd_func_ *cf );
 
 private:
     void get_sys_path( void );
@@ -75,7 +78,9 @@ public:
     QVector<QIcon> aktiv_icon;      // 0..3
 
     QPoint para_win_pos = {320, 150};
-    QRect source_win_pos = {350, 10, 700, 150};         // Source Window Position and Size. See: Konstruktor class Sourcewin
+    QRect source_win_pos = {350, 10, 700, 300};         // Source Window Position and Size. See: Konstruktor class Sourcewin
+
+    struct _cvd_func_ *first_func = NULL, *last_func = NULL;
 
 private slots:
     void closeEvent(QCloseEvent *event);
@@ -113,7 +118,7 @@ private:
     void write_state (struct _cvd_func_ *cf);
     void write_header_bef (int befehl);
 
-    struct _cvd_func_ *first_func = NULL, *last_func = NULL;
+
     void kill_func (struct _cvd_func_ *foo);
     void kill_all_func (void);
     struct _cvd_func_ *grep_func_addr (uint64_t addr);

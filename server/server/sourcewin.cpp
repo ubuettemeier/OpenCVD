@@ -36,6 +36,27 @@ Sourcewin::Sourcewin (struct _cvd_func_ *func, MainWindow *main_win, QWidget *pa
     font.setFixedPitch(true);
     font.setPointSize(12);
 
+    mod_source = new QPushButton ("insert parameter comment");
+    mod_source->setParent( this );
+    connect (mod_source, SIGNAL(clicked(bool)), this, SLOT(source_mod()));
+
+    close_win = new QPushButton ("Close");
+    close_win->setFixedWidth( 150 );
+    close_win->setParent( this );
+    connect (close_win, SIGNAL(clicked(bool)), this, SLOT(close_win_pushed()));
+
+    HBox = new QHBoxLayout;
+
+    HBox->setMargin(2);
+    HBox->setSpacing(0);
+    HBox->addWidget( mod_source );
+    HBox->addWidget( close_win );    
+    HBox->insertSpacing(3, 200);
+
+    HGroup = new QGroupBox ();
+    HGroup->setStyleSheet("QGroupBox{padding-top:15px; margin-top:-15px}");     // HGroup without title
+    HGroup->setLayout( HBox );
+
     te = new QPlainTextEdit();
     te->setFont( font );
     te->setLineWrapMode(te->NoWrap);
@@ -45,8 +66,22 @@ Sourcewin::Sourcewin (struct _cvd_func_ *func, MainWindow *main_win, QWidget *pa
     VBox->setMargin(2);
     VBox->setSpacing(0);
 
-    VBox->addWidget (te);
+    VBox->addWidget ( te );         // Editor
+    VBox->addWidget( HGroup );      // Buttons
+
     setLayout( VBox );
+
+    read_source();
+
+    this->show();
+}
+
+//!
+//! \brief Sourcewin::read_source
+//!
+void Sourcewin::read_source ()
+{
+    te->clear();
 
     if (cf != NULL) {
         this->setWindowTitle(cf->func_name);
@@ -57,25 +92,69 @@ Sourcewin::Sourcewin (struct _cvd_func_ *func, MainWindow *main_win, QWidget *pa
                 uint32_t znr = 0;
                 while (!in.atEnd()) {
                     QString s = in.readLine();      // Zeile einlesen
-                    znr++;                    
+                    znr++;
                     if (!in.atEnd()) {
                         char a[16];
                         sprintf (a, "%-4i", znr);   // Zeilen-Nr to string
                         te->insertPlainText(QString("%1 %2\n").arg(QString(a)).arg(QString(s)));
                     }
                 }
+                qf.close();
             } // if (qf.open( QIODevice::ReadOnly | QIODevice::Text ))
         } // if (qf.exists())
     } else {
         this->setWindowTitle("No source data");
-    }    
+    }
 
     QTextCursor cursor(te->document()->findBlockByLineNumber(cf->line_nr-1)); // ln-1 because line number starts from 0
     te->setTextCursor(cursor);
     highlightCurrentLine();         // Cursor-Pos Zeile wird gehighlightet
     te->setReadOnly( true );
 
-    this->show();
+    te->show();
+}
+
+//!
+//! \brief Sourcewin::modify_source
+//! \param z_nr
+//!
+void Sourcewin::modify_source (uint32_t z_nr)
+{
+    std::vector <QString> vs = {};
+
+    if (cf != NULL) {
+        this->setWindowTitle(cf->func_name);
+        QFile qf( cf->filename );
+        if (qf.exists()) {
+            if (qf.open( QIODevice::ReadOnly | QIODevice::Text )) {
+                QTextStream in(&qf);
+                uint32_t znr = 0;
+                while (!in.atEnd()) {
+                    vs.push_back(in.readLine());    // Zeile einlesen
+                    znr++;
+                    if (znr == z_nr)                // Kommentar einfuegen
+                        vs.push_back( mw->make_source_line(cf) );
+
+                }
+                qf.close();
+
+                QFile qf( cf->filename );
+                if (qf.open( QIODevice::WriteOnly | QIODevice::Text )) {
+
+                    for (uint32_t i=0; i < (uint32_t)vs.size(); i++) {
+                        qf.write(vs[i].toStdString().c_str(), vs[i].length());      // write Zeile
+                        qf.write("\n");                                             // Line Feed
+                    }
+                    qf.close();
+                } else {
+                    printf ("Kann Datei nicht öffnen\n");
+                }
+            } // if (qf.open( QIODevice::ReadOnly | QIODevice::Text ))
+        } // if (qf.exists())
+    } else {
+        this->setWindowTitle("No source data");
+    }
+
 }
 
 //!
@@ -87,6 +166,32 @@ Sourcewin::~Sourcewin ()
 
     mw->set_all_source_icon ( false );
     sourcewin = NULL;
+}
+
+//!
+//! \brief Sourcewin::source_mod
+//!
+void Sourcewin::source_mod ()
+{
+    struct _cvd_func_ *foo = mw->first_func;
+
+    modify_source (cf->line_nr);
+
+    while (foo != NULL) {
+        if (foo->line_nr > cf->line_nr)
+            foo->line_nr++;
+        foo = foo->next;
+    }
+
+    mw->refresh_source_win( cf );
+}
+
+//!
+//! \brief Sourcewin::close_win_pushed
+//!
+void Sourcewin::close_win_pushed ()
+{
+    close();
 }
 
 //!

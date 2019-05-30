@@ -5,6 +5,7 @@
 #include <QTextEdit>
 #include <QPlainTextEdit>
 #include <QVBoxLayout>
+#include <QGroupBox>
 #include <QSyntaxHighlighter>
 #include <QTextCharFormat>
 #include <QRegularExpression>
@@ -58,6 +59,8 @@ class Sourcewin : public QWidget
 public:
     Sourcewin (struct _cvd_func_ *func, MainWindow *main_win, QWidget *parent = nullptr);
     ~Sourcewin ();
+    void read_source ();
+    void modify_source ( uint32_t z_nr );
 
 public:
     struct _cvd_func_ *cf = NULL;
@@ -69,9 +72,18 @@ private:
     void keyPressEvent(QKeyEvent *event);
     void highlightCurrentLine( void );
 
+private slots:
+    void close_win_pushed( void );
+    void source_mod( void );
+
 private:
     MainWindow *mw = NULL;    
     QVBoxLayout *VBox = NULL;
+    QHBoxLayout *HBox = NULL;
+    QGroupBox *HGroup = NULL;
+    QWidget *wid = NULL;
+    QPushButton *mod_source = NULL;
+    QPushButton *close_win = NULL;
 };
 
 extern Sourcewin *sourcewin;

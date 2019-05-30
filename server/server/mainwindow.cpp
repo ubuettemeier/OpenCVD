@@ -3,6 +3,10 @@
 //! \author Ulrich Buettemeier
 //! \mainclass MainWindow
 //!
+//! \see decimal separartor: in bash eistellen.
+//!      export LC_NUMERIC="en_US.UTF-8"
+//!      locale
+//!
 
 #define VERSION "v0.5"
 
@@ -751,6 +755,62 @@ void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
             }
         } // if ( cf )
     }
+}
+
+//!
+//! \brief MainWindow::make_source_line
+//! \param cf
+//! \return
+//! \todo insert CVD_COMMENT
+//! \remark
+//!
+#define CVD_COMMENT "// "
+
+QString MainWindow::make_source_line ( struct _cvd_func_ *cf )
+{
+    QString s;    
+
+    switch (cf->type) {
+    case MEDIANBLUR:
+            s = QString("// CVD::medianBlur( src, dst, %2);")
+                        .arg(QString(CVD_COMMENT))
+                        .arg(QString::number(*(int*)cf->first_para->data));
+            break;
+        case GAUSSIANBLUR:
+            s = QString("// CVD::GaussianBlur (src, dst, cv::Size(%1,%2), %3, %4, %5);")
+                        .arg(QString::number(*(int*)cf->first_para->data))
+                        .arg(QString::number(*(int*)cf->first_para->next->data))
+                        .arg(QString::number(*(double*)cf->first_para->next->next->data))
+                        .arg(QString::number(*(double*)cf->first_para->next->next->next->data))
+                        .arg(QString::number(*(int*)cf->first_para->next->next->next->next->data));
+            break;
+        case BLUR_FUNC: {
+            struct _point_int_ *ip = (struct _point_int_ *)cf->first_para->next->next->data;
+            s = QString ("// CVD::blur( src, dst, cv::Size(%1,%2), cv::Point(%3,%4), %5);")
+                        .arg(QString::number(*(int*)cf->first_para->data))
+                        .arg(QString::number(*(int*)cf->first_para->next->data))
+                        .arg(QString::number(ip->x))
+                        .arg(QString::number(ip->y))
+                        .arg(QString::number(*(int*)cf->first_para->next->next->next->data));
+            }
+            break;
+        default:
+            s = "// unbekannte Funktion";
+            break;
+    }
+
+    return s;
+}
+
+//!
+//! \brief MainWindow::refresh_source_win
+//! \param cf
+//!
+void MainWindow::refresh_source_win( _cvd_func_ *cf )
+{
+    on_actionSource_Window_schlie_en_triggered();
+    // item->setIcon(0, iconlist[OK_ICON]);
+    sourcewin = new Sourcewin (cf, this);
 }
 
 //!
