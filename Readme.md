@@ -11,10 +11,8 @@ Die Arbeitsweise stellt sich wie folgt dar:
 - Die aufgerufenen CVD:: Funktionen leiten ihre Parameter zu einem lokalen Server.
 - Dieser bietet nun die Möglichkeit, Funktionsparameter während der Laufzeit zu verändern.
 
-Der Server bietet vollen Zugriff auf alle Funktionsparameter.
-Das einbinden von Eingabefeldern und Trackbars entfällt.
+<p>Der Server bietet vollen Zugriff auf alle Funktionsparameter. Das einbinden von Eingabefeldern und Trackbars entfällt.</p>
 -----------------------------------------------------------------------------------------
-
 OpenCVD is an interactive visualization software.
 It enables fast and effective support in the development of image processing applications. 
 It supports a large number of OpenCV functions. 
@@ -26,8 +24,7 @@ The working method is as follows:
 - The called CVD:: functions redirect their parameters to a local server.
 - This server now offers the possibility to change function parameters during runtime.
 
-The server offers full access to all function parameters.
-There is no need to integrate input fields and trackbars.
+<p>The server offers full access to all function parameters. There is no need to integrate input fields and trackbars.</p>
 ---------------------------------------------------------------------------------------------
 
 ![alt](Readme.png)
