@@ -758,7 +758,33 @@ void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 }
 
 //!
-//! \brief MainWindow::make_source_line
+//! \brief MainWindow::grep_enum_text
+//! \param group_name
+//! \param enum_val
+//! \return
+//!
+QString MainWindow::grep_enum_text (QString group_name, int enum_val)
+{
+    QString foo = {};
+
+    QDomNodeList nl = doc.elementsByTagName(group_name);
+    if (nl.length()) {                                  // es ist ein Element gefunden worden.
+        QDomElement e = nl.at(0).toElement();           // 1.Element verwenden
+        QDomElement c = e.firstChild().toElement();     // 1.Child vom 1.Element
+        uint8_t ende = 0;
+        while ((c.parentNode() == e) && !ende) {
+            if (c.text().toInt() == enum_val) {
+                foo = c.tagName();
+                ende = 1;
+            } else
+                c = c.nextSibling().toElement();
+        }
+    }
+    return foo;
+}
+
+//!
+//! \brief MainWindow::build_source_line_comment
 //! \param cf
 //! \return
 //! \todo insert CVD_COMMENT
@@ -766,33 +792,80 @@ void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 //!
 #define CVD_COMMENT "// "
 
-QString MainWindow::make_source_line ( struct _cvd_func_ *cf )
+QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
 {
     QString s;    
 
     switch (cf->type) {
-    case MEDIANBLUR:
+        case MEDIANBLUR:
             s = QString("// CVD::medianBlur( src, dst, %2);")
                         .arg(QString(CVD_COMMENT))
                         .arg(QString::number(*(int*)cf->first_para->data));
             break;
-        case GAUSSIANBLUR:
-            s = QString("// CVD::GaussianBlur (src, dst, cv::Size(%1,%2), %3, %4, %5);")
+        case BLUR_FUNC: {
+            struct _point_int_ *ip = (struct _point_int_ *)cf->first_para->next->next->data;            // anchor
+
+            QString bt = grep_enum_text("BorderTypes", *(int*)cf->first_para->next->next->next->data);  // borderType
+            if (bt.length() == 0) bt = QString::number(*(int*)cf->first_para->next->next->next->data);
+
+            s = QString ("// CVD::blur( src, dst, cv::Size(%1,%2), cv::Point(%3,%4), %5 );")
+                        .arg(QString::number(*(int*)cf->first_para->data))                          // ksize width
+                        .arg(QString::number(*(int*)cf->first_para->next->data))                    // ksize height
+                        .arg(QString::number(ip->x))                                                // anchor
+                        .arg(QString::number(ip->y))
+                        .arg(bt);                                                                   // borderType
+            }
+            break;
+        case GAUSSIANBLUR: {
+            QString bt = grep_enum_text("BorderTypes", *(int*)cf->first_para->next->next->next->next->data);    // borderType
+            if (bt.length() == 0) bt = QString::number(*(int*)cf->first_para->next->next->next->next->data);
+
+            s = QString("// CVD::GaussianBlur (src, dst, cv::Size(%1,%2), %3, %4, %5 );")
                         .arg(QString::number(*(int*)cf->first_para->data))
                         .arg(QString::number(*(int*)cf->first_para->next->data))
                         .arg(QString::number(*(double*)cf->first_para->next->next->data))
                         .arg(QString::number(*(double*)cf->first_para->next->next->next->data))
-                        .arg(QString::number(*(int*)cf->first_para->next->next->next->next->data));
-            break;
-        case BLUR_FUNC: {
-            struct _point_int_ *ip = (struct _point_int_ *)cf->first_para->next->next->data;
-            s = QString ("// CVD::blur( src, dst, cv::Size(%1,%2), cv::Point(%3,%4), %5);")
-                        .arg(QString::number(*(int*)cf->first_para->data))
-                        .arg(QString::number(*(int*)cf->first_para->next->data))
-                        .arg(QString::number(ip->x))
-                        .arg(QString::number(ip->y))
-                        .arg(QString::number(*(int*)cf->first_para->next->next->next->data));
+                        .arg(bt);                                                                   // // borderType
             }
+            break;
+        case CANNY: {
+            QString L2 = grep_enum_text ("boolType", *(int*)cf->first_para->next->next->next->data);        // L2gradient
+            if (L2.length() == 0) L2 = QString::number(*(int*)cf->first_para->next->next->next->data);
+
+            s = QString("// CVD::Canny( image, edges, %1, %2, %3, %4 );")
+                        .arg(QString::number(*(double*)cf->first_para->data))                               // threshold1
+                        .arg(QString::number(*(double*)cf->first_para->next->data))                         // threshold2
+                        .arg(QString::number(*(int*)cf->first_para->next->next->data))                      // apertureSize
+                        .arg(L2);                                                                           // L2gradient
+            }
+            break;
+        case CANNY_2: {
+            QString L2 = grep_enum_text ("boolType", *(int*)cf->first_para->next->next->data);              // L2gradient
+            if (L2.length() == 0) L2 = QString::number(*(int*)cf->first_para->next->next->data);
+
+            s = QString("// CVD::Canny( dx, dy, edges, %1, %2, %3 );")
+                        .arg(QString::number(*(double*)cf->first_para->data))                               // threshold1
+                        .arg(QString::number(*(double*)cf->first_para->next->data))                         // threshold2
+                        .arg(L2);
+            }
+            break;
+        case HOUGHLINES:
+            s = QString("// CVD::HoughLines( image, lines, %1, %2, %3, %4, %5, %6, %7 );")
+                        .arg(QString::number(*(double*)cf->first_para->data))                               // rho
+                        .arg(QString::number(*(double*)cf->first_para->next->data))                         // theta
+                        .arg(QString::number(*(int*)cf->first_para->next->next->data))                      // threshold
+                        .arg(QString::number(*(double*)cf->first_para->next->next->next->data))             // srn
+                        .arg(QString::number(*(double*)cf->first_para->next->next->next->next->data))       // stn
+                        .arg(QString::number(*(double*)cf->first_para->next->next->next->next->next->data))         // min_theta
+                        .arg(QString::number(*(double*)cf->first_para->next->next->next->next->next->next->data));  // max_theta
+            break;
+        case HOUGHLINESP:
+            s = QString("// CVD::HoughLinesP( image, lines, %1, %2, %3, %4, %5 );")
+                        .arg(QString::number(*(double*)cf->first_para->data))                               // rho
+                        .arg(QString::number(*(double*)cf->first_para->next->data))                         // theta
+                        .arg(QString::number(*(int*)cf->first_para->next->next->data))                      // threshold
+                        .arg(QString::number(*(double*)cf->first_para->next->next->next->data))             // minLineLength
+                        .arg(QString::number(*(double*)cf->first_para->next->next->next->next->data));      // maxLineGap
             break;
         default:
             s = "// unbekannte Funktion";

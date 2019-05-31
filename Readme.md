@@ -6,9 +6,13 @@ Sie unterstützt eine Großzahl von OpenCV Funktionen.
 Darüber hinaus sind auch spezialisierte Bausteine verfügbar.
 
 Die Arbeitsweise stellt sich wie folgt dar:
+
 - In der Bildverarbeitungsapplikation wird anstelle von cv:: der namespace CVD:: verwendet.
 - Die aufgerufenen CVD:: Funktionen leiten ihre Parameter zu einem lokalen Server.
 - Dieser bietet nun die Möglichkeit, Funktionsparameter während der Laufzeit zu verändern.
+
+Der Server bietet vollen Zugriff auf alle Funktionsparameter.
+Das einbinden von Eingabefeldern und Trackbars entfällt.
 -----------------------------------------------------------------------------------------
 
 OpenCVD is an interactive visualization software.
@@ -17,10 +21,13 @@ It supports a large number of OpenCV functions.
 In addition, specialized components are also available.
 
 The working method is as follows:
+
 - In the image processing application, the namespace CVD:: is used instead of cv::.
 - The called CVD:: functions redirect their parameters to a local server.
 - This server now offers the possibility to change function parameters during runtime.
 
+The server offers full access to all function parameters.
+There is no need to integrate input fields and trackbars.
 ---------------------------------------------------------------------------------------------
 
 ![alt](Readme.png)
@@ -49,7 +56,7 @@ see: samples/short_sample/short_sample.cpp
 - OpenCV 3.3.0
 - Makefile's use pkg-config --cflag --clib opencv.
 ----------------------------------------------------------------------------------------------
-**folgende OpenCV Funktionen sind implementiert / the following OpenCV functions are implemented**
+**aktuell folgende OpenCV Funktionen sind implementiert / currently the following OpenCV functions are implemented**
 
 - adaptiveThreshold
 - blur

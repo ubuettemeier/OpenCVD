@@ -673,13 +673,13 @@ EnumDrop::EnumDrop (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget
     if (nl.length()) {                                  // es ist ein Element gefunden worden.
         QDomElement e = nl.at(0).toElement();           // 1.Element verwenden
         QDomElement c = e.firstChild().toElement();     // 1.Child vom 1.Element
-        int n =0;
+        int n = 0;
         while (c.parentNode() == e) {
             if (c.text().toInt() == ep->value) {
                 current_index = n;
             }
             // qDebug()  << c.tagName();
-            items += c.tagName();
+            items += c.tagName();                       // tagName-Text in stringlist eintragen
             c = c.nextSibling().toElement();
             n++;
         }
