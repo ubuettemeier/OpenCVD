@@ -45,6 +45,16 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case RESIZE:
+        new PointInt ( client, cf->first_para, LEFT_POS, 10+55*0, this );                       // dsize
+        new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );                // fx
+        new DoubleEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );          // fy
+        new EnumDrop (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );          // DropDown maxValue
+
+        new mButton (client, cf, LEFT_POS, 10+55*4+10, mCLOSE, this, mw );                            // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*4+10, mRESET, this, mw );  // Reset
+        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*5);
+        break;
     case ADAPTIVETHRESHOLD:
         new Slide (client, cf->first_para, LEFT_POS, 10+55*0, this );                   // threshold
         new EnumDrop (client, cf->first_para->next, LEFT_POS, 10+55*1, this );          // DropDown maxValue

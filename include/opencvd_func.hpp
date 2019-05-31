@@ -51,6 +51,10 @@ namespace cvd {
 */
 
 // define CV_EXPORTS_W __attribute__ ((visibility ("default")))  // Funktion ist sichtbar
+CV_EXPORTS_W void resize( cv::InputArray src, cv::OutputArray dst,
+                          cv::Size dsize, double fx = 0, double fy = 0,
+                          int interpolation = cv::INTER_LINEAR,
+                          BUILDIN );
 
 CV_EXPORTS_W void medianBlur( cv::InputArray src, cv::OutputArray dst, int ksize,
                               BUILDIN);
@@ -978,6 +982,90 @@ CV_EXPORTS_W void Canny( cv::InputArray dx, cv::InputArray dy,                  
     }
     foo->control_imshow( edges );   
 } // Canny
+
+//!
+//! \brief resize
+//! \param src
+//! \param dst
+//! \param dsize output image size; if it equals zero, it is computed as:
+//!        \f[\texttt{dsize = Size(round(fx*src.cols), round(fy*src.rows))}\f]
+//!        Either dsize or both fx and fy must be non-zero.
+//! \param fx scale factor along the horizontal axis; when it equals 0, it is computed as
+//!        \f[\texttt{(double)dsize.width/src.cols}\f]
+//! \param fy scale factor along the vertical axis; when it equals 0, it is computed as
+//!        \f[\texttt{(double)dsize.height/src.rows}\f]
+//! \param interpolation method, see cv::InterpolationFlags
+//!
+CV_EXPORTS_W void resize( cv::InputArray src, cv::OutputArray dst,
+                          cv::Size dsize, double fx, double fy,
+                          int interpolation
+                          BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::resize (src, dst, dsize, fx, fy, interpolation);
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), RESIZE, "resize", 0x000F, BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _point_int_ ip = {dsize.width, 0, 0xFFFF, dsize.height, 0, 0xFFFF};
+        foo->new_para (POINT_INT, sizeof(struct _point_int_), (uint8_t*)&ip, "dsize");
+
+        struct _double_para_ sx = {fx, 0.0, 1000.0};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&sx, "fx");
+
+        struct _double_para_ sy = {fy, 0.0, 1000.0};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&sy, "fy");
+
+        struct _enum_para_ bt = {interpolation, "InterpolationFlags"};
+        foo->new_para (ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt, "interpolation");
+    }
+    foo->error_flag = 0;
+
+    // -------------------------------
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::Mat out;
+            struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
+            try {
+                cv::resize (src, out,
+                            cv::Point(ip->x, ip->y),        // dsize
+                            *(double*)foo->para[1]->data,   // fx
+                            *(double*)foo->para[2]->data,   // fy
+                            *(int *)foo->para[3]->data);    // interpolation
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
+            foo->control_imshow( out );                 // Ausgabe
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
+    // -------------------------------
+
+    if (foo->state.flag.func_off) {
+        src.copyTo ( dst );
+    } else {
+        struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
+        try {
+            cv::resize (src, dst,
+                        cv::Point(ip->x, ip->y),        // dsize
+                        *(double*)foo->para[1]->data,   // fx
+                        *(double*)foo->para[2]->data,   // fy
+                        *(int *)foo->para[3]->data);    // interpolation
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( dst );     // Bildausgabe
+} // resize
 
 //!
 //! \brief medianBlur

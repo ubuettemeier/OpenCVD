@@ -797,6 +797,20 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;    
 
     switch (cf->type) {
+        case RESIZE: {
+            struct _point_int_ *ip = (struct _point_int_ *)cf->first_para->data;            // dsize
+
+            QString bt = grep_enum_text("InterpolationFlags", *(int*)cf->first_para->next->next->next->data);  // interpolation
+            if (bt.length() == 0) bt = QString::number(*(int*)cf->first_para->next->next->next->data);
+
+            s = QString ("// CVD::resize( src, dst, cv::Size(%1,%2), %3, %4, %5 );")
+                    .arg(QString::number(ip->x))                                                // dsize
+                    .arg(QString::number(ip->y))
+                    .arg(QString::number(*(double*)cf->first_para->next->data))                 // fx
+                    .arg(QString::number(*(double*)cf->first_para->next->next->data))           // fy
+                    .arg(bt);                                                                   // interpolation
+            }
+            break;
         case MEDIANBLUR:
             s = QString("// CVD::medianBlur( src, dst, %2);")
                         .arg(QString(CVD_COMMENT))
@@ -871,7 +885,7 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
             s = "// unbekannte Funktion";
             break;
     }
-
+    qDebug() << s << "\n";
     return s;
 }
 

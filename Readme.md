@@ -1,9 +1,9 @@
 **OpenCVD**
 
-OpenCVD ist eine interaktive Visualisierungssoftware.
+<p>OpenCVD ist eine interaktive Visualisierungssoftware.
 Sie ermöglicht eine schnelle und effektive Unterstützung bei der Entwicklung von Bildverarbeitungs Applikationen.
 Sie unterstützt eine Großzahl von OpenCV Funktionen. 
-Darüber hinaus sind auch spezialisierte Bausteine verfügbar.
+Darüber hinaus sind auch spezialisierte Bausteine verfügbar.</p>
 
 Die Arbeitsweise stellt sich wie folgt dar:
 
@@ -13,10 +13,10 @@ Die Arbeitsweise stellt sich wie folgt dar:
 
 <p>Der Server bietet vollen Zugriff auf alle Funktionsparameter. Das einbinden von Eingabefeldern und Trackbars entfällt.</p>
 -----------------------------------------------------------------------------------------
-OpenCVD is an interactive visualization software.
+<p>OpenCVD is an interactive visualization software.
 It enables fast and effective support in the development of image processing applications. 
 It supports a large number of OpenCV functions. 
-In addition, specialized components are also available.
+In addition, specialized components are also available.</p>
 
 The working method is as follows:
 
@@ -67,5 +67,6 @@ see: samples/short_sample/short_sample.cpp
 - Laplacian
 - medianBlur, morphologyEx
 - normalize
+- resize
 - Scharr
 - threshold
