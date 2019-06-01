@@ -773,7 +773,8 @@ QString MainWindow::grep_enum_text (QString group_name, int enum_val)
         QDomElement c = e.firstChild().toElement();     // 1.Child vom 1.Element
         uint8_t ende = 0;
         while ((c.parentNode() == e) && !ende) {
-            if (c.text().toInt() == enum_val) {
+            if (c.text().toInt() == enum_val) {                
+                // foo = "cv::"+c.tagName();        // Achtung: tagName ohne cv:: namespace übergeben.
                 foo = c.tagName();
                 ende = 1;
             } else
@@ -797,6 +798,31 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;    
 
     switch (cf->type) {
+        case ADAPTIVETHRESHOLD: {
+            QString bt = grep_enum_text("AdaptiveThresholdTypes", *(int*)cf->first_para->next->data);   // adaptiveMethod
+            if (bt.length() == 0) bt = QString::number(*(int*)cf->first_para->next->data);
+
+            QString tt = grep_enum_text("ThresholdTypes_2", *(int*)cf->first_para->next->next->data);   // thresholdType
+            if (tt.length() == 0) tt = QString::number(*(int*)cf->first_para->next->next->data);
+
+            s = QString ("// CVD::adaptiveThreshold ( src, dst, %1, %2, %3, %4, %5 );")
+                        .arg(QString::number(*(double*)cf->first_para->data))                           // maxValue
+                        .arg(bt)              // adaptiveMethod
+                        .arg(tt)              // thresholdType
+                        .arg(QString::number(*(int*)cf->first_para->next->next->next->data))            // blockSize
+                        .arg(QString::number(*(double*)cf->first_para->next->next->next->next->data));  // C
+            }
+            break;
+
+        case CVTCOLOR: {
+            QString bt = grep_enum_text("ColorConversionCodes", *(int*)cf->first_para->data);   // ddepth
+            if (bt.length() == 0) bt = QString::number(*(int*)cf->first_para->data);
+
+            s = QString ("// CVD::cvtColor ( src, dst, %1, %2 );")
+                        .arg(bt)                                                            // code
+                        .arg(QString::number(*(int*)cf->first_para->next->data));           // dstCn
+            }
+            break;
         case SOBEL: {
             QString bt = grep_enum_text("Sobel_filterdepth", *(int*)cf->first_para->data);          // ddepth
             if (bt.length() == 0) bt = QString::number(*(int*)cf->first_para->data);
@@ -897,6 +923,20 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
                         .arg(QString::number(*(int*)cf->first_para->next->next->data))                      // threshold
                         .arg(QString::number(*(double*)cf->first_para->next->next->next->data))             // minLineLength
                         .arg(QString::number(*(double*)cf->first_para->next->next->next->next->data));      // maxLineGap
+            break;
+        case HOUGHCIRCLES: {
+            QString bt = grep_enum_text("HoughModes", *(int*)cf->first_para->data);   // method
+            if (bt.length() == 0) bt = QString::number(*(int*)cf->first_para->data);
+
+            s = QString ("// CVD::HoughCircles ( image, circles, %1, %2, %3, %4, %5, %6, %7);")
+                        .arg(bt)
+                        .arg(QString::number(*(double*)cf->first_para->next->data))                         // dp
+                        .arg(QString::number(*(double*)cf->first_para->next->next->data))                         // minDist
+                        .arg(QString::number(*(double*)cf->first_para->next->next->next->data)) //
+                        .arg(QString::number(*(double*)cf->first_para->next->next->next->next->data)) //
+                        .arg(QString::number(*(int*)cf->first_para->next->next->next->next->next->data)) //
+                        .arg(QString::number(*(int*)cf->first_para->next->next->next->next->next->next->data));
+            }
             break;
         default:
             s = "// unbekannte Funktion";

@@ -43,8 +43,8 @@ int main(int argc, char** argv)
 	    CVD::medianBlur(gray, gray, 5);	    
             CVD::HoughCircles(gray, circles, HOUGH_GRADIENT, 1,
                               gray.rows/16,     // change this value to detect circles with different distances to each other
-                              100, 30, 25, 50); // change the last two parameters
-                                                // (min_radius & max_radius) to detect larger circles
+                              100, 30, 		// change the last two parameters
+			      25, 50); 		// (min_radius & max_radius) to detect larger circles                                                
 
 	    for( size_t i = 0; i < circles.size(); i++ )
 	    {

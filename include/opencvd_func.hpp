@@ -1734,8 +1734,6 @@ CV_EXPORTS_W void HoughCircles( cv::InputArray image, cv::OutputArray circles,
                                int minRadius, int maxRadius
                                BUILDIN_FUNC)
 {
-    // static uint32_t anz_error = 0;
-
     if (cvd_off) {
         cv::HoughCircles( image, circles, method, dp, minDist, param1, param2, minRadius, maxRadius);
         return;
@@ -1906,14 +1904,6 @@ CV_EXPORTS_W void HoughLines( cv::InputArray image, cv::OutputArray lines,
 
         struct _slide_double_para_ mat = {max_theta, 0.0, CV_PI, 100.0};
         foo->new_para (SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&mat, "max_theta");
-
-        /*
-        struct _double_para_ mit = {min_theta, 0.0, CV_PI};
-        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&mit, "min_theta");
-
-        struct _double_para_ mat = {max_theta, 0.0, CV_PI};
-        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&mat, "max_theta");
-        */
     }
     foo->error_flag = 0;
 

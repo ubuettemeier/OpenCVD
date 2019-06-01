@@ -20,18 +20,18 @@
 enum _data_types_ {
     // ---- Function 0x1000...0x1FFF -------
     INITFUNC = 0x1000,          // ????
-    MEDIANBLUR = 0x1001,
+    MEDIANBLUR = 0x1001,        // *
     THRESHOLD = 0x1002,
-    CVTCOLOR = 0x1003,
+    CVTCOLOR = 0x1003,          // *
     LAPLACIAN = 0x1004,
-    CANNY = 0x1005,
-    CANNY_2 = 0x1006,
+    CANNY = 0x1005,             // *
+    CANNY_2 = 0x1006,           // *
     CONVERTTO = 0x1007,
     OPERATOR_INT_MUL_EQUAL = 0x1008,        // operator *= <int>
     OPERATOR_FLOAT_MUL_EQUAL = 0x1009,      // operator *= <float>
     OPERATOR_DOUBLE_MUL_EQUAL = 0x100A,     // operator *= <double>
-    GAUSSIANBLUR = 0x100B,
-    BLUR_FUNC = 0x100C,
+    GAUSSIANBLUR = 0x100B,          // *
+    BLUR_FUNC = 0x100C,             // *
     SCALAR_FUNC_4 = 0x100D,
     DILATE = 0x100E,
     ERODE = 0x100F,
@@ -45,13 +45,13 @@ enum _data_types_ {
     MORPHOLOGYEX = 0x1017,
     NORMALIZE = 0x1018,
     CALCHIST = 0x1019,
-    HOUGHCIRCLES = 0x101A,
-    HOUGHLINESP = 0x101B,
-    HOUGHLINES = 0x101C,
+    HOUGHCIRCLES = 0x101A,          // *
+    HOUGHLINESP = 0x101B,           // *
+    HOUGHLINES = 0x101C,            // *
     GETBUILDINFORMATION = 0x101D,
-    ADAPTIVETHRESHOLD = 0x101E,
-    RESIZE = 0x101F,
-    SOBEL = 0x1020,
+    ADAPTIVETHRESHOLD = 0x101E,     // *
+    RESIZE = 0x101F,                // *
+    SOBEL = 0x1020,                 // *
     // ----- Parameter 0x2000...0x2FFF --------
     SLIDE_INT_TWO_STEP_PARA = 0x2000,       // z.B. 1, 3, 5, ... 21 (int)
     SLIDE_INT_PARA = 0x2001,                // z.B. 0..255 (int)
