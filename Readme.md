@@ -12,7 +12,7 @@ Die Arbeitsweise stellt sich wie folgt dar:
 - Dieser bietet nun die Möglichkeit, Funktionsparameter während der Laufzeit zu verändern.
 
 <p>Der Server bietet vollen Zugriff auf alle Funktionsparameter. Das einbinden von Eingabefeldern und Trackbars entfällt.</p>
------------------------------------------------------------------------------------------
+<hr></hr>
 <p>OpenCVD is an interactive visualization software.
 It enables fast and effective support in the development of image processing applications. 
 It supports a large number of OpenCV functions. 
@@ -25,16 +25,16 @@ The working method is as follows:
 - This server now offers the possibility to change function parameters during runtime.
 
 <p>The server offers full access to all function parameters. There is no need to integrate input fields and trackbars.</p>
----------------------------------------------------------------------------------------------
+<hr></hr>
 
 ![alt](Readme.png)
 
-----------------------------------------------------------------------------------------------
+<hr></hr>
 **Example**
 
 see: samples/short_sample/short_sample.cpp
 
-----------------------------------------------------------------------------------------------
+<hr></hr>
 **Entwicklungsumgebung / development-environment:**
 
 - Ubuntu 18.04.2 LTS
@@ -52,7 +52,7 @@ see: samples/short_sample/short_sample.cpp
 - g++ --std=c++11
 - OpenCV 3.3.0
 - Makefile's use pkg-config --cflag --clib opencv.
-----------------------------------------------------------------------------------------------
+<hr></hr>
 **aktuell folgende OpenCV Funktionen sind implementiert / currently the following OpenCV functions are implemented**
 
 - adaptiveThreshold
