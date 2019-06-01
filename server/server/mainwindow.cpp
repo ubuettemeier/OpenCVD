@@ -797,6 +797,23 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;    
 
     switch (cf->type) {
+        case SOBEL: {
+            QString bt = grep_enum_text("Sobel_filterdepth", *(int*)cf->first_para->data);          // ddepth
+            if (bt.length() == 0) bt = QString::number(*(int*)cf->first_para->data);
+
+            QString bs = grep_enum_text("boolType", *(int*)cf->first_para->next->next->next->next->next->next->data);     // borderType
+            if (bt.length() == 0) bs = QString::number(*(int*)cf->first_para->next->next->next->next->next->next->data);
+
+            s = QString ("// CVD::Sobel( src, dst, %1, %2, %3, %4, %5, %6, %7 );")
+                        .arg(bt)                                                                    // ddepth
+                        .arg(QString::number(*(int*)cf->first_para->next->data))                    // dx
+                        .arg(QString::number(*(int*)cf->first_para->next->next->data))              // dy
+                        .arg(QString::number(*(int*)cf->first_para->next->next->next->data))              // ksize
+                        .arg(QString::number(*(double*)cf->first_para->next->next->next->next->data))              // scale
+                        .arg(QString::number(*(double*)cf->first_para->next->next->next->next->next->data))              // delta
+                        .arg(bs);
+            }
+            break;
         case RESIZE: {
             struct _point_int_ *ip = (struct _point_int_ *)cf->first_para->data;            // dsize
 

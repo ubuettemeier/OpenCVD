@@ -198,6 +198,9 @@
    </property>
   </action>
   <action name="actionSpeichern">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>&amp;Speichern</string>
    </property>
@@ -243,7 +246,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>OpenCV Version</string>
+    <string>&amp;OpenCV Version</string>
    </property>
   </action>
  </widget>

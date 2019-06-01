@@ -45,6 +45,19 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case SOBEL:
+        new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );          // ddepth  Sobel_filterdepth
+        new IntEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );                 // dx
+        new IntEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );                 // dy
+        new Slide (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );                 // ksize
+        new DoubleEdit (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );            // scale
+        new DoubleEdit (client, cf->first_para->next->next->next->next->next, LEFT_POS, 10+55*5, this );            // delta
+        new EnumDrop (client, cf->first_para->next->next->next->next->next->next, LEFT_POS, 10+55*6, this );          // BorderType
+
+        new mButton (client, cf, LEFT_POS, 10+55*7+10, mCLOSE, this, mw );                            // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*7+10, mRESET, this, mw );  // Reset
+        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*8);
+        break;
     case RESIZE:
         new PointInt ( client, cf->first_para, LEFT_POS, 10+55*0, this );                       // dsize
         new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );                // fx
@@ -525,13 +538,14 @@ IntEdit::IntEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *
 
     connect (iedit, SIGNAL(editingFinished()), this, SLOT(int_edit_finish()));
 
+    /*
     para_button = new QPushButton();
     para_button->setIcon(glob_mw->iconlist[2]);
     para_button->setGeometry(x+210, y+25, 20, 20);
     para_button->setParent( parent );
     para_button->setToolTip( "Eigenschaft" );
-
     connect (para_button, SIGNAL(clicked(bool)), this, SLOT(int_edit_para_button_pushed()));
+    */
 }
 //!
 //! \brief IntEdit::int_edit_finish
@@ -630,13 +644,14 @@ DoubleEdit::DoubleEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWi
 
     connect (dedit, SIGNAL(editingFinished()), this, SLOT(double_edit_finish()));
 
+    /*
     para_button = new QPushButton();
     para_button->setIcon(glob_mw->iconlist[2]);
     para_button->setGeometry(x+210, y+25, 20, 20);
     para_button->setParent( parent );
     para_button->setToolTip( "Eigenschaft" );
-
     connect (para_button, SIGNAL(clicked(bool)), this, SLOT(double_edit_para_button_pushed()));
+    */
 }
 
 //!
@@ -826,14 +841,14 @@ Slide::Slide(QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *paren
         break;
     }
 
+    /*
     para_button = new QPushButton();
     para_button->setIcon(glob_mw->iconlist[2]);
     para_button->setGeometry(x+210, y+25, 20, 20);
     para_button->setParent( parent );
     para_button->setToolTip( "Eigenschaft" );
-
     connect (para_button, SIGNAL(clicked(bool)), this, SLOT(slide_para_button_pushed()));   // Eigenschaft
-
+    */
 }
 
 //!

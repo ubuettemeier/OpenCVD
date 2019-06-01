@@ -68,5 +68,5 @@ see: samples/short_sample/short_sample.cpp
 - medianBlur, morphologyEx
 - normalize
 - resize
-- Scharr
+- Scharr, Sobel
 - threshold

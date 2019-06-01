@@ -69,6 +69,12 @@ CV_EXPORTS_W void GaussianBlur( cv::InputArray src, cv::OutputArray dst, cv::Siz
                                 int borderType = cv::BORDER_DEFAULT,
                                 BUILDIN);
 
+CV_EXPORTS_W void Sobel( cv::InputArray src, cv::OutputArray dst, int ddepth,
+                         int dx, int dy, int ksize = 3,
+                         double scale = 1, double delta = 0,
+                         int borderType = cv::BORDER_DEFAULT,
+                         BUILDIN);
+
 CV_EXPORTS_W void Canny( cv::InputArray image, cv::OutputArray edges,
                          double threshold1, double threshold2,
                          int apertureSize = 3, bool L2gradient = false,
@@ -830,6 +836,106 @@ CV_EXPORTS_W double threshold( cv::InputArray src, cv::OutputArray dst,
 } // threshold
 
 //!
+//! \brief Sobel
+//! \param src
+//! \param dst
+//! \param ddepth output image depth, see @ref filter_depths "combinations"; in the case of
+//!               8-bit input images it will result in truncated derivatives.
+//!        @link https://docs.opencv.org/3.4/d4/d86/group__imgproc__filter.html#filter_depths
+//! \param dx  dx < ksize
+//! \param dy  dy < ksize
+//! \param ksize
+//! \param scale
+//! \param delta
+//! \param borderType
+//!
+CV_EXPORTS_W void Sobel( cv::InputArray src, cv::OutputArray dst, int ddepth,
+                         int dx, int dy, int ksize,
+                         double scale, double delta ,
+                         int borderType
+                         BUILDIN_FUNC )
+{
+    if (cvd_off) {
+        cv::Sobel ( src, dst, ddepth, dx, dy, ksize, scale, delta, borderType);
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), SOBEL, "Sobel", 0x000F, BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _enum_para_ dd = {ddepth, "Sobel_filterdepth"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&dd, "ddepth" );
+
+        struct _int_para_ sx = {dx, 0, 30};                                             // dx < ksize
+        foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&sx, "dx" );
+
+        struct _int_para_ sy = {dy, 0, 30};                                             // dy < ksize
+        foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&sy, "dy" );
+
+        struct _int_para_ sp = {ksize, 1, 31};    // 1, 3, 5, 7, ...
+        foo->new_para ( SLIDE_INT_TWO_STEP_PARA, sizeof(struct _int_para_), (uint8_t*)&sp, "ksize" );
+
+        struct _double_para_ sc = {scale, -100000.0, 100000.0};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&sc, "scale");
+
+        struct _double_para_ dl = {delta, -100000.0, 100000.0};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&dl, "delta");
+
+        struct _enum_para_ bt = {borderType, "boolType"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt, "borderType" );
+    }
+    foo->error_flag = 0;
+    // ----------------------------------
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::Mat out;
+            try {
+                cv::Sobel (src, out,
+                           *(int*)foo->para[0]->data,       // ddepth,
+                           *(int*)foo->para[1]->data,       // dx,
+                           *(int*)foo->para[2]->data,       // dy,
+                           *(int*)foo->para[3]->data,       // ksize,
+                           *(double*)foo->para[4]->data,    // scale,
+                           *(double*)foo->para[5]->data,    // delta,
+                           *(int*)foo->para[6]->data);      // borderType);
+
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
+            foo->control_imshow( out );                 // Ausgabe
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
+    // -----------------------------
+
+    if (foo->state.flag.func_off) {         // Function OFF
+        src.copyTo ( dst );
+    } else {
+        try {
+            cv::Sobel (src, dst,
+                       *(int*)foo->para[0]->data,       // ddepth,
+                       *(int*)foo->para[1]->data,       // dx,
+                       *(int*)foo->para[2]->data,       // dy,
+                       *(int*)foo->para[3]->data,       // ksize,
+                       *(double*)foo->para[4]->data,    // scale,
+                       *(double*)foo->para[5]->data,    // delta,
+                       *(int*)foo->para[6]->data);      // borderType);
+
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( dst );
+} // Sobel
+
+//!
 //! \brief Canny Finds edges in an image using the Canny algorithm @cite Canny86 .
 //! \param image
 //! \param edges
@@ -864,13 +970,12 @@ CV_EXPORTS_W void Canny( cv::InputArray image, cv::OutputArray edges,
         struct _int_para_ sp = {apertureSize, 3, 7};    // 3, 5, 7
         foo->new_para ( SLIDE_INT_TWO_STEP_PARA, sizeof(struct _int_para_), (uint8_t*)&sp, "apertureSize" );
 
-
         struct _enum_para_ ep = {L2gradient, "boolType"};
         foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&ep, "L2gradient" );
 
     }
     foo->error_flag = 0;
-
+    // -----------------------------
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
@@ -889,6 +994,7 @@ CV_EXPORTS_W void Canny( cv::InputArray image, cv::OutputArray edges,
             foo->control_func_run_time ();
         }
     }
+    // -----------------------------
 
     if (foo->state.flag.func_off) {         // Function OFF
         cv::Mat a = image.getMat();
@@ -909,6 +1015,7 @@ CV_EXPORTS_W void Canny( cv::InputArray image, cv::OutputArray edges,
     }        
     foo->control_imshow( edges );
 } // Canny
+
 //!
 //! \brief Canny
 //!        Finds edges in an image using the Canny algorithm @cite Canny86. Canny Typ 2
