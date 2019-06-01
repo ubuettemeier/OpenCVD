@@ -1,4 +1,4 @@
-<p><strong>OpenCVD</strong></p>
+**OpenCVD**
 
 <p>OpenCVD ist eine interaktive Visualisierungssoftware.
 Sie ermöglicht eine schnelle und effektive Unterstützung bei der Entwicklung von Bildverarbeitungs Applikationen.
@@ -30,30 +30,31 @@ The working method is as follows:
 ![alt](Readme.png)
 
 <hr></hr>
-<p><strong>Example</strong></p>
+**Example**
 
 see: samples/short_sample/short_sample.cpp
 
 <hr></hr>
-<p><strong>Entwicklungsumgebung / development-environment:</strong></p>
+**Entwicklungsumgebung / development-environment:**
 
 - Ubuntu 18.04.2 LTS
 - OpenCV 3.3.0
 
-<p><strong>Server:</strong></p>
+**Server:**
 
 - qtcreator
 - Qt 5.9.5
 
-<p><strong>Samples:</strong></p>
-<p><strong>include:</strong></p>
+**Samples:**
+**include:**
 
 - gcc version 7.3.0
 - g++ --std=c++11
 - OpenCV 3.3.0
-- Makefile's use pkg-config --cflag --clib opencv.
+- Makefile's use pkg-config --cflag --clib opencv
+
 <hr></hr>
-<p><strong>aktuell folgende OpenCV Funktionen sind implementiert / currently the following OpenCV functions are implemented</strong></p>
+**aktuell folgende OpenCV Funktionen sind implementiert / currently the following OpenCV functions are implemented:**
 
 - adaptiveThreshold
 - blur

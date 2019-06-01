@@ -147,7 +147,10 @@ void Sourcewin::modify_source (uint32_t z_nr)
                     }
                     qf.close();
                 } else {
-                    printf ("Kann Datei nicht öffnen\n");
+                    QMessageBox::warning(this,
+                                         "File ERROR",
+                                         "File open error.\nPossibly no write permissions.",
+                                         QMessageBox::Ok);
                 }
             } // if (qf.open( QIODevice::ReadOnly | QIODevice::Text ))
         } // if (qf.exists())
