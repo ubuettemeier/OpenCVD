@@ -10,11 +10,7 @@ using namespace cv;
 void my_erode (Mat &src, Mat &dst, int iters, int type)
 {
     int erosion_size = iters;
-    /*
-    Mat element = CVD::getStructuringElement(type,                   // Create a structuring element
-             cv::Size(2 * erosion_size + 1, 2 * erosion_size + 1),
-             cv::Point(erosion_size, erosion_size) );
-    */
+
     Mat element = CVD::getStructuringElement(type,                   // Create a structuring element
              cv::Size(2 * erosion_size + 1, 2 * erosion_size + 1));
     CVD::erode(src, dst, element);                               // Apply erosion or dilation on the image
@@ -23,11 +19,7 @@ void my_erode (Mat &src, Mat &dst, int iters, int type)
 void my_dilate (cv::Mat &src, cv::Mat &dst, int iters, int type)
 {
     int erosion_size = iters;
-    /*
-    Mat element = CVD::getStructuringElement(type,                       // Create a structuring element
-             cv::Size(2 * erosion_size + 1, 2 * erosion_size + 1),
-             cv::Point(erosion_size, erosion_size) );
-    */
+
     Mat element = CVD::getStructuringElement(type,                       // Create a structuring element
              cv::Size(2 * erosion_size + 1, 2 * erosion_size + 1));
     CVD::dilate(src, dst, element);                                  // Apply erosion or dilation on the image
@@ -64,24 +56,7 @@ int main()
 
         cv::Mat b;
         CVD::Laplacian( a, b, 0);
-        /*
-        cv::Mat b, d;
-        my_dilate (a, b, 1, cv::MORPH_ELLIPSE);
-        my_erode(b, d, 1, cv::MORPH_ELLIPSE);
 
-
-        CVD::blur(a, a, cv::Size(3, 3));
-        CVD::medianBlur(a, a, 3);
-        */
-        /*
-        CVD::medianBlur(a, a, 3);
-        CVD::GaussianBlur(a, a, cv::Size(3, 3), 3);
-        CVD::cvtColor(a, a, cv::COLOR_BGR2GRAY);
-        CVD::threshold(a, a, 80, 224, THRESH_BINARY);
-
-        cv::Mat c;
-        CVD::Canny(a, c, 80, 255);
-        */
         if (!b.empty())
             cv::imshow ("image_1", b);
 

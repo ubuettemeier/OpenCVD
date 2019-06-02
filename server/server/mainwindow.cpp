@@ -795,9 +795,24 @@ QString MainWindow::grep_enum_text (QString group_name, int enum_val)
 
 QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
 {
-    QString s;    
+    QString s;
 
     switch (cf->type) {
+        case CONVERTSCALEABS:
+            s = QString ("// CVD::convertScaleAbs ( src, dst, %1, %2 );")
+                        .arg(QString::number(*(double*)cf->first_para->data))           // alpha
+                        .arg(QString::number(*(double*)cf->next->first_para->data));    // beta
+            break;
+        case THRESHOLD: {
+            QString bt = grep_enum_text("ThresholdTypes", *(int*)cf->first_para->next->next->data);   // type
+            if (bt.length() == 0) bt = QString::number(*(int*)cf->first_para->next->next->data);
+
+            s = QString ("// CVD::threshold ( src, dst, %1, %2, %3 );")
+                        .arg(QString::number(*(double*)cf->first_para->data))           // thresh
+                        .arg(QString::number(*(double*)cf->first_para->next->data))     // maxval
+                        .arg(bt);                                                       // type
+            }
+            break;
         case ADAPTIVETHRESHOLD: {
             QString bt = grep_enum_text("AdaptiveThresholdTypes", *(int*)cf->first_para->next->data);   // adaptiveMethod
             if (bt.length() == 0) bt = QString::number(*(int*)cf->first_para->next->data);
@@ -942,7 +957,7 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
             s = "// unbekannte Funktion";
             break;
     }
-    qDebug() << s << "\n";
+    // qDebug() << s << "\n";
     return s;
 }
 

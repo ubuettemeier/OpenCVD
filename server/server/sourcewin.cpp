@@ -133,7 +133,7 @@ void Sourcewin::modify_source (uint32_t z_nr)
                     vs.push_back(in.readLine());    // Zeile einlesen
                     znr++;
                     if (znr == z_nr)                // Kommentar einfuegen
-                        vs.push_back( mw->build_source_line_comment(cf) );
+                        vs.push_back( mw->build_source_line_comment( cf ));
 
                 }
                 qf.close();

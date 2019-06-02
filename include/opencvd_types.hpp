@@ -21,7 +21,7 @@ enum _data_types_ {
     // ---- Function 0x1000...0x1FFF -------
     INITFUNC = 0x1000,          // ????
     MEDIANBLUR = 0x1001,        // *
-    THRESHOLD = 0x1002,
+    THRESHOLD = 0x1002,         // *
     CVTCOLOR = 0x1003,          // *
     LAPLACIAN = 0x1004,
     CANNY = 0x1005,             // *
@@ -36,7 +36,7 @@ enum _data_types_ {
     DILATE = 0x100E,
     ERODE = 0x100F,
     FINDCONTOURS = 0x1010,
-    CONVERTSCALEABS = 0x1011,
+    CONVERTSCALEABS = 0x1011,   // *
     SCALAR_ALL = 0x1012,
     SCHARR = 0x1013,
     IMREAD = 0x1014,
