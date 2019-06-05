@@ -14,5 +14,6 @@
 #include "opencvd_types.hpp"
 #include "opencvd_basic.hpp"
 #include "opencvd_func.hpp"
+#include "opencvd_mat.hpp"
 
 #endif // OPENCVD_HPP

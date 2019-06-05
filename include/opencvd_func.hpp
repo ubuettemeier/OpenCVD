@@ -8,8 +8,6 @@
 
 #include "opencv2/opencv.hpp"
 
-namespace cvd {
-
 #define USE_BUILDIN
 
 //!
@@ -49,6 +47,8 @@ namespace cvd {
     #define BUILDIN_FUNC
 #endif
 */
+
+namespace cvd {
 
 // define CV_EXPORTS_W __attribute__ ((visibility ("default")))  // Funktion ist sichtbar
 CV_EXPORTS_W void resize( cv::InputArray src, cv::OutputArray dst,

@@ -78,6 +78,20 @@ private:
     bool text_changed = false;
 };
 //!
+//! \brief The RectIntEdit class
+//!
+class RectIntEdit : public QWidget {
+    Q_OBJECT
+public:
+    RectIntEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *parent);
+    struct _cvd_para_ *cp;
+    QTcpSocket *client;
+    QLabel *out_str;
+    QSpinBox *iedit[4];
+private slots:
+    void int_rect_finish();
+};
+//!
 //! \brief The IntEdit class
 //!
 class IntEdit : public QWidget {

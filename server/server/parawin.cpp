@@ -45,6 +45,13 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case MAT_ROI:
+        new RectIntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );          // Rect
+
+        new mButton (client, cf, LEFT_POS, 10+55*7+10, mCLOSE, this, mw );                            // Close
+        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*7+10, mRESET, this, mw );  // Reset
+        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 320, 10+55*8);
+        break;
     case SOBEL:
         new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );          // ddepth  Sobel_filterdepth
         new IntEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );                 // dx
@@ -503,7 +510,58 @@ void StringEdit::pb_pushed()
         ledit_finish();
     }
 }
+//!
+//! \brief RectIntEdit::RectIntEdit
+//! \param c
+//! \param foo
+//! \param x
+//! \param y
+//! \param parent
+//!
+RectIntEdit::RectIntEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *parent)
+{
+    cp = foo;
+    client = c;
+    struct _rect_int_ *val = (struct _rect_int_ *)cp->data;
 
+    out_str = new QLabel (QString("%1 %2 %3 %4 %5").arg(QString(cp->para_name))
+                          .arg(QString::number(val->x))
+                          .arg(QString::number(val->y))
+                          .arg(QString::number(val->w))
+                          .arg(QString::number(val->h)));
+    out_str->setGeometry(x, y, 300, 20);
+    out_str->setParent( parent );
+
+    for (int i=0; i<4; i++) {
+        iedit[i] = new QSpinBox();
+        iedit[i]->setRange( val->min_val, val->max_val );
+        iedit[i]->setValue( *(int*)(cp->data + sizeof(int)*i) );
+        iedit[i]->setMinimum( val->min_val);
+        iedit[i]->setMaximum( val->max_val );
+        iedit[i]->setGeometry(x+70*i, y+20, 65, 30);
+        iedit[i]->setParent( parent );
+
+        connect (iedit[i], SIGNAL(editingFinished()), this, SLOT(int_rect_finish()));
+    }
+}
+
+void RectIntEdit::int_rect_finish()
+{
+    struct _rect_int_ *data = (struct _rect_int_ *)cp->data;
+
+    data->x = iedit[0]->value();
+    data->y = iedit[1]->value();
+    data->w = iedit[2]->value();
+    data->h = iedit[3]->value();
+
+    out_str->setText (QString("%1 %2 %3 %4 %5").arg(QString(cp->para_name))
+                      .arg(QString::number(data->x))
+                      .arg(QString::number(data->y))
+                      .arg(QString::number(data->w))
+                      .arg(QString::number(data->h)));
+
+    parawin->rewrite_para_data( cp );
+}
 //!
 //! \brief IntEdit::IntEdit
 //!        Integer Spinbox
