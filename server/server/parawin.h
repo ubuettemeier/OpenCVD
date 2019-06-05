@@ -36,6 +36,7 @@ public:
     explicit ParaWin(MainWindow *main_win = NULL, QWidget *parent = nullptr);
     explicit ParaWin(QTcpSocket *c, struct _cvd_func_ *cf, MainWindow *main_win, QWidget *parent = nullptr);
     ~ParaWin();
+    void set_param_win(int y_pos, int width);
     void close_parawin( void );
     int rewrite_para_data (struct _cvd_para_ *foo);
 

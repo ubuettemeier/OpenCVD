@@ -798,8 +798,14 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
-        case MAT_ROI:
-            s = QString ("// CVD::Mat a = CVD:");
+        case MAT_ROI: {
+            struct _rect_int_ *r = (struct _rect_int_ *)cf->first_para->data;
+            s = QString ("// CVD::Mat dst(src, cv::Rect(%1, %2, %3, %4);")
+                        .arg(QString::number(r->x))
+                        .arg(QString::number(r->y))
+                        .arg(QString::number(r->w))
+                        .arg(QString::number(r->h));
+            }
             break;
         case CONVERTSCALEABS:
             s = QString ("// CVD::convertScaleAbs ( src, dst, %1, %2 );")

@@ -48,9 +48,7 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     case MAT_ROI:
         new RectIntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );          // Rect
 
-        new mButton (client, cf, LEFT_POS, 10+55*7+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*7+10, mRESET, this, mw );  // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 320, 10+55*8);
+        set_param_win( 1, 320 );
         break;
     case SOBEL:
         new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );          // ddepth  Sobel_filterdepth
@@ -61,9 +59,7 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new DoubleEdit (client, cf->first_para->next->next->next->next->next, LEFT_POS, 10+55*5, this );            // delta
         new EnumDrop (client, cf->first_para->next->next->next->next->next->next, LEFT_POS, 10+55*6, this );          // BorderType
 
-        new mButton (client, cf, LEFT_POS, 10+55*7+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*7+10, mRESET, this, mw );  // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*8);
+        set_param_win( 7, 260 );
         break;
     case RESIZE:
         new PointInt ( client, cf->first_para, LEFT_POS, 10+55*0, this );                       // dsize
@@ -71,9 +67,7 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new DoubleEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );          // fy
         new EnumDrop (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );          // DropDown maxValue
 
-        new mButton (client, cf, LEFT_POS, 10+55*4+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*4+10, mRESET, this, mw );  // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*5);
+        set_param_win( 4, 260 );
         break;
     case ADAPTIVETHRESHOLD:
         new Slide (client, cf->first_para, LEFT_POS, 10+55*0, this );                   // threshold
@@ -82,9 +76,7 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new Slide ( client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );          // blockSize
         new DoubleEdit (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );      // C
 
-        new mButton (client, cf, LEFT_POS, 10+55*5+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*5+10, mRESET, this, mw );  // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*6);
+        set_param_win( 5, 260 );
         break;
     case HOUGHLINES:
         new DoubleEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );            // rho
@@ -99,9 +91,7 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new DoubleEdit (client, cf->first_para->next->next->next->next->next->next, LEFT_POS, 10+55*6, this );      // max_theta
         */
 
-        new mButton (client, cf, LEFT_POS, 10+55*7+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*7+10, mRESET, this, mw );  // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*8);
+        set_param_win( 7, 260 );
         break;
     case HOUGHLINESP:
         new DoubleEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );            // rho
@@ -110,9 +100,7 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new DoubleEdit (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );            // minLineLength
         new DoubleEdit (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );      // maxLineGap
 
-        new mButton (client, cf, LEFT_POS, 10+55*5+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*5+10, mRESET, this, mw );  // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*6);
+        set_param_win( 5, 260 );
         break;
     case HOUGHCIRCLES:
         new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );                    // method
@@ -124,9 +112,7 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new IntEdit (client, cf->first_para->next->next->next->next->next, LEFT_POS, 10+55*5, this );                 // minRadius
         new IntEdit (client, cf->first_para->next->next->next->next->next->next, LEFT_POS, 10+55*6, this );                 // maxRadius
 
-        new mButton (client, cf, LEFT_POS, 10+55*7+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*7+10, mRESET, this, mw );  // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*8);
+        set_param_win( 7, 260 );
         break;
     case CALCHIST:
         new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );                       // nimages
@@ -134,9 +120,7 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new EnumDrop (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );          // uniform
         new EnumDrop (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );    // accumulate
 
-        new mButton (client, cf, LEFT_POS, 10+55*4+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*4+10, mRESET, this, mw );  // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*5);
+        set_param_win( 4, 260 );
         break;
     case NORMALIZE:
         new DoubleEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );   // alpha
@@ -144,18 +128,14 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new EnumDrop (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );   // norm_type
         new EnumDrop (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );   // ddepth
 
-        new mButton (client, cf, LEFT_POS, 10+55*4+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*4+10, mRESET, this, mw );  // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*5);
+        set_param_win( 4, 260 );
         break;
     case GETSTRUCTURINGELEMENT:
         new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );   // shape = DropDown enum MorphShapes
         new PointInt ( client, cf->first_para->next, LEFT_POS, 10+55*1, this );   // ksize
         new PointInt ( client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );   // annchor
 
-        new mButton (client, cf, LEFT_POS, 10+55*3+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*3+10, mRESET, this, mw );  // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*4);
+        set_param_win( 3, 260 );
         break;
     case GRABCUT:
         new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );     // Iteration
@@ -166,9 +146,7 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new StringEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );
         new EnumDrop (client, cf->first_para->next, LEFT_POS, 10+55*1, this );   // DropDown enum ImreadModes
 
-        new mButton (client, cf, LEFT_POS, 10+55*2+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*2+10, mRESET, this, mw );  // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 330, 10+55*3);
+        set_param_win( 2, 330 );
         break;
     case OPERATOR_INT_MUL_EQUAL:
         new IntEdit (client, cf->first_para, LEFT_POS, 10, this );   // Double Edit für scale
@@ -192,18 +170,14 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new DoubleEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );            // Double Edit für alpha
         new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );   // Double Edit für beta
 
-        new mButton (client, cf, LEFT_POS, 10+55*2+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*2+10, mRESET, this, mw );  // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*3);
+        set_param_win( 2, 260 );
         break;
     case CANNY_2:
         new Slide ( client, cf->first_para, LEFT_POS, 10+55*0, this );                     // Slider für threshold1
         new Slide ( client, cf->first_para->next, LEFT_POS, 10+55*1, this );            // Slider für threshold2
         new EnumDrop (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );   // DropDown enum L2gradient (bool)
 
-        new mButton (client, cf, LEFT_POS, 10+55*3+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*3+10, mRESET, this, mw );  // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*4);
+        set_param_win( 3, 260 );
         break;
     case CANNY:
         new Slide ( client, cf->first_para, LEFT_POS, 10+55*0, this );                    // Slider für threshold1
@@ -211,9 +185,7 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new Slide ( client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );        // Slider für apertureSize 3.. ???
         new EnumDrop (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );   // DropDown enum L2gradient (bool)
 
-        new mButton (client, cf, LEFT_POS, 10+55*4+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*4+10, mRESET, this, mw );  // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*5);
+        set_param_win( 4, 260 );
         break;
     case LAPLACIAN:
         new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );   // DropDown enum
@@ -222,17 +194,13 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new DoubleEdit (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );   // Double Edit für delta
         new EnumDrop (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );   // DropDown enum BorderType
 
-        new mButton (client, cf, LEFT_POS, 10+55*5+10, mCLOSE, this, mw );                            // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*5+10, mRESET, this, mw );  // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*6);
+        set_param_win( 5, 260 );
         break;
     case CVTCOLOR:
         new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );   // DropDown enum
         new IntEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );     // Iteration
 
-        new mButton (client, cf, LEFT_POS, 10+55*2+10, mCLOSE, this, mw );   // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*2+10, mRESET, this, mw );   // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*3);
+        set_param_win( 2, 260 );
         break;
     case GAUSSIANBLUR:
         new Slide ( client, cf->first_para, LEFT_POS, 10+55*0, this );                     // Slider für ksize.width
@@ -241,9 +209,7 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new DoubleEdit (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );      // sigmaY
         new EnumDrop (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );   // DropDown enum BorderType
 
-        new mButton (client, cf, LEFT_POS, 10+55*5+10, mCLOSE, this, mw );   // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*5+10, mRESET, this, mw );   // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*6);
+        set_param_win( 5, 260 );
         break;
     case BLUR_FUNC:
         new Slide ( client, cf->first_para, LEFT_POS, 10+55*0, this );            // Slider für ksize.width
@@ -251,25 +217,19 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new PointInt ( client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );      // Point
         new EnumDrop (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );   // DropDown enum BorderType
 
-        new mButton (client, cf, LEFT_POS, 10+55*4+10, mCLOSE, this, mw );   // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*4+10, mRESET, this, mw );   // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*5);
+        set_param_win( 4, 260 );
         break;
     case MEDIANBLUR:
         new Slide ( client, cf->first_para, LEFT_POS, 10+55*0, this );   // Slider für kzise
 
-        new mButton (client, cf, LEFT_POS, 10+55*1+10, mCLOSE, this, mw );   // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*1+10, mRESET, this, mw );   // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*2);
+        set_param_win( 1, 260 );
         break;
     case THRESHOLD:
         new Slide ( client, cf->first_para, LEFT_POS, 10+55*0, this );         // Slider für thresh
         new Slide ( client, cf->first_para->next, LEFT_POS, 10+55*1, this );   // Slider für maxval
         new EnumDrop (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );   // DropDown enum
 
-        new mButton (client, cf, LEFT_POS, 10+55*3+10, mCLOSE, this, mw );     // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*3+10, mRESET, this, mw );   // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*4);
+        set_param_win( 3, 260 );
         break;
     case SCALAR_FUNC_4:
         new ScalarDouble ( client, cf->first_para, LEFT_POS, 10+55*0, this );  //
@@ -285,9 +245,7 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new IntEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );     // Iteration
         new EnumDrop (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );   // DropDown enum
 
-        new mButton (client, cf, LEFT_POS, 10+55*3+10, mCLOSE, this, mw );     // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*3+10, mRESET, this, mw );   // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*4);
+        set_param_win( 3, 260 );
         break;
     case MORPHOLOGYEX:
         new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );   // op
@@ -295,18 +253,14 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new IntEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );     // Iteration
         new EnumDrop (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );   // borderType
 
-        new mButton (client, cf, LEFT_POS, 10+55*4+10, mCLOSE, this, mw );     // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*4+10, mRESET, this, mw );   // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*5);
+        set_param_win( 4, 260 );
         break;
     case FINDCONTOURS:
         new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );                  // DropDown enum RetrievalModes
         new EnumDrop (client, cf->first_para->next, LEFT_POS, 10+55*1, this );            // DropDown enum ContourApproximationModes
         new PointInt ( client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );     // Point offset
 
-        new mButton (client, cf, LEFT_POS, 10+55*3+10, mCLOSE, this, mw );     // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*3+10, mRESET, this, mw );   // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*4);
+        set_param_win( 3, 260 );
         break;
     case SCHARR: {
         new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );                  // DropDown enum filterdepth_CV_8U | filterdepth_CV_16U_CV_16S
@@ -316,9 +270,7 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new DoubleEdit (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );      // delta
         new EnumDrop (client, cf->first_para->next->next->next->next->next, LEFT_POS, 10+55*5, this );  // borderType
 
-        new mButton (client, cf, LEFT_POS, 10+55*6+10, mCLOSE, this, mw );                              // Close
-        new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*6+10, mRESET, this, mw );    // Reset
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 10+55*7);
+        set_param_win( 6, 260 );
         }
         break;
     default:
@@ -327,6 +279,17 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     }
 
     this->show();
+}
+
+//!
+//! \brief ParaWin::set_param_win
+//! \param y_pos
+//!
+void ParaWin::set_param_win(int y_pos, int width)
+{
+    new mButton (client, cf, LEFT_POS, 10+55*y_pos+10, mCLOSE, this, mw );                              // Close
+    new mButton (client, cf, LEFT_POS+m_button[mCLOSE].width+10, 10+55*y_pos+10, mRESET, this, mw );    // Reset
+    setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), width, 10+55*(y_pos + 1));
 }
 
 //!

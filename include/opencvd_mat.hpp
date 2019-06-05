@@ -15,8 +15,22 @@ public:
     Mat() : cv::Mat() {}
 
     Mat(const cv::Mat& m, const cv::Rect& roi, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+    void convertTo( cv::OutputArray m, int rtype, double alpha=1, double beta=0 ) const;
 
 };
+
+//!
+//! \brief Mat::convertTo
+//! \param m
+//! \param rtype
+//! \param alpha
+//! \param beta
+//!
+void Mat::convertTo( cv::OutputArray m, int rtype, double alpha, double beta ) const
+{
+    printf ("treffer\n");
+    this->cv::Mat::convertTo(m, rtype, alpha, beta);
+}
 
 //!
 //! \brief Mat::Mat
@@ -39,7 +53,22 @@ Mat::Mat(const cv::Mat& m, const cv::Rect& roi, int line_nr, const char *src_fil
     }
     foo->error_flag = 0;
     // -------------------------------------
-
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::Mat out;
+            struct _rect_int_ *rec_data = (struct _rect_int_ *)foo->para[0]->data;
+            try {
+                cv::Rect r(rec_data->x, rec_data->y, rec_data->w, rec_data->h);
+                cv::Mat(m, r).copyTo( out );  // cv::Mat (Mat &m, Rect *roi)
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
+            foo->control_imshow( out );                 // Ausgabe
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
     // -------------------------------------
     if (foo->state.flag.func_off) {
         m.copyTo( *this );

@@ -53,7 +53,8 @@ enum _data_types_ {
     RESIZE = 0x101F,                // *
     SOBEL = 0x1020,                 // *
 
-    MAT_ROI = 0x1800,
+    MAT_ROI = 0x1800,               // *
+    MAT_CONVERTTO = 0x1801,
     // ----- Parameter 0x2000...0x2FFF --------
     SLIDE_INT_TWO_STEP_PARA = 0x2000,       // z.B. 1, 3, 5, ... 21 (int)
     SLIDE_INT_PARA = 0x2001,                // z.B. 0..255 (int)
