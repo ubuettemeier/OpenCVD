@@ -54,7 +54,7 @@ see: samples/short_sample/short_sample.cpp
 - Makefile's use pkg-config --cflag --clib opencv
 
 <hr></hr>
-**aktuell folgende OpenCV Funktionen sind implementiert / currently the following OpenCV functions are implemented:**
+**aktuell sind folgende OpenCV Funktionen implementiert / currently the following OpenCV functions are implemented:**
 
 - adaptiveThreshold
 - blur
@@ -71,3 +71,9 @@ see: samples/short_sample/short_sample.cpp
 - resized
 - Scharr, Sobel
 - threshold
+
+**cv::Mat Funktionen / cv::Mat functions**
+
+- Mat(Mat &m, Rect &ROI);
+- Mat.convertTo();
+

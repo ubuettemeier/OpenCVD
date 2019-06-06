@@ -45,6 +45,12 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case MAT_CONVERTTO:
+        new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );          // rtype
+        new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );            // alpha
+        new DoubleEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );            // alpha
+        set_param_win( 3, 260 );
+        break;
     case MAT_ROI:
         new RectIntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );          // Rect
 

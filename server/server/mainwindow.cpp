@@ -798,6 +798,16 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case MAT_CONVERTTO: {
+            QString bt = grep_enum_text("Sobel_filterdepth", *(int*)cf->first_para->data);   // rtype
+            if (bt.length() == 0) bt = QString::number(*(int*)cf->first_para->data);
+
+            s = QString ("// src.convertTo (dst, %1, %2, %3);")
+                        .arg(bt)
+                        .arg(QString::number(*(double*)cf->first_para->next->data))           // alpha
+                        .arg(QString::number(*(double*)cf->first_para->next->next->data));    // beta
+            }
+            break;
         case MAT_ROI: {
             struct _rect_int_ *r = (struct _rect_int_ *)cf->first_para->data;
             s = QString ("// CVD::Mat dst(src, cv::Rect(%1, %2, %3, %4);")
@@ -810,7 +820,7 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
         case CONVERTSCALEABS:
             s = QString ("// CVD::convertScaleAbs ( src, dst, %1, %2 );")
                         .arg(QString::number(*(double*)cf->first_para->data))           // alpha
-                        .arg(QString::number(*(double*)cf->next->first_para->data));    // beta
+                        .arg(QString::number(*(double*)cf->first_para->next->data));    // beta
             break;
         case THRESHOLD: {
             QString bt = grep_enum_text("ThresholdTypes", *(int*)cf->first_para->next->next->data);   // type
