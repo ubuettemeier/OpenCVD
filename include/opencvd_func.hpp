@@ -7,6 +7,7 @@
 #define OPENCVD_FUNC_HPP
 
 #include "opencv2/opencv.hpp"
+#include "opencvd_mat.hpp"
 
 #define USE_BUILDIN
 
@@ -117,7 +118,11 @@ CV_EXPORTS_W void morphologyEx( cv::InputArray src, cv::OutputArray dst,
                                 const cv::Scalar& borderValue = cv::morphologyDefaultBorderValue(),
                                 BUILDIN);
 
+/*
 CV_EXPORTS_W cv::Mat getStructuringElement(int shape, cv::Size ksize, cv::Point anchor = cv::Point(-1,-1),
+                                           BUILDIN);
+*/
+CV_EXPORTS_W Mat getStructuringElement(int shape, cv::Size ksize, cv::Point anchor = cv::Point(-1,-1),
                                            BUILDIN);
 
 CV_EXPORTS_W void convertScaleAbs(cv::InputArray src, cv::OutputArray dst,
@@ -329,14 +334,20 @@ CV_EXPORTS_W void normalize( cv::InputArray src, cv::InputOutputArray dst,
 //!
 //! @see    https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_imgproc/py_morphological_ops/py_morphological_ops.html
 //!
+/*
 CV_EXPORTS_W cv::Mat getStructuringElement(int shape, cv::Size ksize, cv::Point anchor
+                                           BUILDIN_FUNC)
+*/
+CV_EXPORTS_W Mat getStructuringElement(int shape, cv::Size ksize, cv::Point anchor
                                            BUILDIN_FUNC)
 {
     if (cvd_off) {
-        return cv::getStructuringElement (shape, ksize, anchor);
+        Mat ret;
+        ret = cv::getStructuringElement (shape, ksize, anchor);
+        return ret;
     }
 
-    cv::Mat ret;
+    Mat ret;
     static std::vector<opencvd_func *> func{};  // reg vector for erode
     opencvd_func *foo = NULL;
 

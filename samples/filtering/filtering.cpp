@@ -25,7 +25,7 @@ int main( int argc, char** argv )
     }
     
     while (!ende) {
-        cv::Mat a;
+        CVD::Mat a;
         cap >> a;                   // Bildeinzug
         
         CVD::medianBlur(a, a, 21);

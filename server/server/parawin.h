@@ -93,6 +93,20 @@ private slots:
     void int_rect_finish();
 };
 //!
+//! \brief The RectDoubleEdit class
+//!
+class RectDoubleEdit : public QWidget {
+    Q_OBJECT
+public:
+    RectDoubleEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *parent);
+    struct _cvd_para_ *cp;
+    QTcpSocket *client;
+    QLabel *out_str;
+    QDoubleSpinBox *dedit[4];
+private slots:
+    void double_rect_finish();
+};
+//!
 //! \brief The IntEdit class
 //!
 class IntEdit : public QWidget {

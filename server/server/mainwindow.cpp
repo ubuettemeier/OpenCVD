@@ -798,6 +798,22 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+    case MAT_ROWS_COLS_TYPE_SCALAR: {
+            QString bt = grep_enum_text("ddepth", *(int*)cf->first_para->next->next->data);   // rtype
+            if (bt.length() == 0) bt = QString::number(*(int*)cf->first_para->next->next->data);
+
+            struct _rect_double_ *r = (struct _rect_double_ *)cf->first_para->next->next->next->data;
+
+            s = QString ("// CVD::Mat(%1, %2, %3, cv::Scalar(%4, %5, %6, %7));")
+                        .arg(QString::number(*(int*)cf->first_para->data))                      // rows
+                        .arg(QString::number(*(int*)cf->first_para->next->data))             // cols
+                        .arg(bt)
+                        .arg(QString::number(r->x))
+                        .arg(QString::number(r->y))
+                        .arg(QString::number(r->w))
+                        .arg(QString::number(r->h));
+            }
+            break;
         case MAT_CONVERTTO: {
             QString bt = grep_enum_text("Sobel_filterdepth", *(int*)cf->first_para->data);   // rtype
             if (bt.length() == 0) bt = QString::number(*(int*)cf->first_para->data);

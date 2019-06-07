@@ -276,12 +276,20 @@ void control_socket ()
             case SLIDE_DOUBLE_PARA:
             case SLIDE_INT_PARA:
             case SLIDE_INT_TWO_STEP_PARA:
+            case RECT_DOUBLE_PARA:
             case RECT_INT_PARA: {
                 struct _para_data_transfer_ *foo = (struct _para_data_transfer_ *)&buffer[pointer];   // buffer casten
                 opencvd_para *cp = opencvd_func::grep_para_id ( foo->para_id );              // Parameter finden. Es werden in allen Funktionen die Parameter durchgefummelt.
                 if (cp != NULL) {
                     // printf ("para %s\n", cp->para_name);
                     switch (cp->para_type) {
+                    case RECT_DOUBLE_PARA: {
+                        struct _rect_double_ *foo_sp = (struct _rect_double_ *)foo->data;   // pointer to buffer->data
+                        struct _rect_double_ *cp_sp = (struct _rect_double_ *)cp->data;     // pointer to parameter->data
+                        memcpy (cp_sp, foo_sp, sizeof(double) * 4);
+                        write_ack();
+                        }
+                        break;
                     case RECT_INT_PARA: {
                         struct _rect_int_ *foo_sp = (struct _rect_int_ *)foo->data;   // pointer to buffer->data
                         struct _rect_int_ *cp_sp = (struct _rect_int_ *)cp->data;     // pointer to parameter->data

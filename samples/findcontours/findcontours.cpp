@@ -23,7 +23,7 @@ int main( int argc, char** argv )
     
     uint8_t ende = 0;
     while (!ende) {
-        cv::Mat a;
+        CVD::Mat a;
         cap >> a;                   // Bildeinzug
         
         CVD::cvtColor (a, a, cv::COLOR_BGR2GRAY);

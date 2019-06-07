@@ -54,7 +54,8 @@ enum _data_types_ {
     SOBEL = 0x1020,                 // *
 
     MAT_ROI = 0x1800,               // *
-    MAT_CONVERTTO = 0x1801,
+    MAT_CONVERTTO = 0x1801,         // *
+    MAT_ROWS_COLS_TYPE_SCALAR = 0x1802,
     // ----- Parameter 0x2000...0x2FFF --------
     SLIDE_INT_TWO_STEP_PARA = 0x2000,       // z.B. 1, 3, 5, ... 21 (int)
     SLIDE_INT_PARA = 0x2001,                // z.B. 0..255 (int)
@@ -68,6 +69,7 @@ enum _data_types_ {
     STRING_PARA = 0x2009,                   // "String"
     POINT_INT_XY = 0x200A,                  // {X int value, min, max, Y int value, min, max} Anzeige erfolgt in X=..., Y=....  Parameter ohne Grenzwerte
     RECT_INT_PARA = 0x200B,                 // sx, sy, ex, ey
+    RECT_DOUBLE_PARA = 0x200C,
     // ----- Special -----------
     FUNC_FLAGS = 0x3000,                    // s.auch struct _cvd_flags_
     TIME_TRIGGER = 0x3001,                  // s.auch struct _time_trigger_
@@ -99,6 +101,13 @@ struct _point_int_ {
 struct _rect_int_ {
     int x, y, w, h;
     int min_val, max_val;
+};
+//!
+//! \brief The _double_int_ struct
+//!
+struct _rect_double_ {
+    double x, y, w, h;
+    double min_val, max_val;
 };
 //!
 //! \brief The _int_para_ struct

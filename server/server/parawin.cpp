@@ -45,15 +45,21 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case MAT_ROWS_COLS_TYPE_SCALAR:
+        new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );                     // rows
+        new IntEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );               // cols
+        new EnumDrop (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );        // type
+        new RectDoubleEdit (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );        // Scalar)
+        set_param_win( 4, 340 );
+        break;
     case MAT_CONVERTTO:
-        new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );          // rtype
+        new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );                    // rtype
         new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );            // alpha
-        new DoubleEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );            // alpha
+        new DoubleEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );      // alpha
         set_param_win( 3, 260 );
         break;
     case MAT_ROI:
         new RectIntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );          // Rect
-
         set_param_win( 1, 320 );
         break;
     case SOBEL:
@@ -478,6 +484,60 @@ void StringEdit::pb_pushed()
         text_changed = true;
         ledit_finish();
     }
+}
+//!
+//! \brief RectDoubleEdit::RectDoubleEdit
+//! \param c
+//! \param foo
+//! \param x
+//! \param y
+//! \param parent
+//!
+RectDoubleEdit::RectDoubleEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *parent)
+{
+    cp = foo;
+    client = c;
+    struct _rect_double_ *val = (struct _rect_double_ *)cp->data;
+
+    out_str = new QLabel (QString("%1 %2 %3 %4 %5").arg(QString(cp->para_name))
+                          .arg(QString::number(val->x))
+                          .arg(QString::number(val->y))
+                          .arg(QString::number(val->w))
+                          .arg(QString::number(val->h)));
+    out_str->setGeometry(x, y, 300, 20);
+    out_str->setParent( parent );
+
+    for (int i=0; i<4; i++) {
+        dedit[i] = new QDoubleSpinBox();
+        dedit[i]->setRange( val->min_val, val->max_val );
+        dedit[i]->setValue( *(double*)(cp->data + sizeof(double)*i) );
+        dedit[i]->setMinimum( val->min_val);
+        dedit[i]->setMaximum( val->max_val );
+        dedit[i]->setGeometry(x+80*i, y+20, 75, 30);
+        dedit[i]->setParent( parent );
+
+        connect (dedit[i], SIGNAL(editingFinished()), this, SLOT(double_rect_finish()));
+    }
+}
+//!
+//!//! \brief oubleEdit::double_rect_finish
+//!
+void RectDoubleEdit::double_rect_finish()
+{
+    struct _rect_double_ *data = (struct _rect_double_ *)cp->data;
+
+    data->x = dedit[0]->value();
+    data->y = dedit[1]->value();
+    data->w = dedit[2]->value();
+    data->h = dedit[3]->value();
+
+    out_str->setText (QString("%1 %2 %3 %4 %5").arg(QString(cp->para_name))
+                      .arg(QString::number(data->x))
+                      .arg(QString::number(data->y))
+                      .arg(QString::number(data->w))
+                      .arg(QString::number(data->h)));
+
+    parawin->rewrite_para_data( cp );
 }
 //!
 //! \brief RectIntEdit::RectIntEdit

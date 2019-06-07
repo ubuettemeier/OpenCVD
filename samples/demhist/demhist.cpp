@@ -41,11 +41,11 @@ static void updateBrightnessContrast( int /*arg*/, void* )
         b = a*brightness + delta;
     }
 
-    Mat dst, hist;
+    CVD::Mat dst, hist;
     image.convertTo(dst, CV_8U, a, b);
     imshow("image", dst);
 
-    CVD::calcHist(&dst, 1, NULL, Mat(), hist, 1, &histSize, 0);
+    CVD::calcHist(&dst, 1, NULL, CVD::Mat(), hist, 1, &histSize, 0);
     Mat histImage = Mat::ones(200, 320, CV_8U)*255;
 
     CVD::normalize(hist, hist, 1.00, histImage.rows, NORM_MINMAX, CV_32F);

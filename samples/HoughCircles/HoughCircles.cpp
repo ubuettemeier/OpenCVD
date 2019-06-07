@@ -27,7 +27,7 @@ int main(int argc, char** argv)
     }
     string filename = parser.get<string>("@image");
 
-    Mat img, gray;
+    CVD::Mat img, gray;
     vector<Vec3f> circles;
 
     int ende = 0;

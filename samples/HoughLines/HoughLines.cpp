@@ -10,15 +10,14 @@ using namespace std;
 
 void my_morphologyEx (cv::Mat &src, cv::Mat &dst, int op)
 {
-    Mat kernel = CVD::getStructuringElement(cv::MORPH_RECT,                       // Create a structuring element
+    CVD::Mat kernel = CVD::getStructuringElement(cv::MORPH_RECT,                       // Create a structuring element
                                             cv::Size(3, 3));
-
     CVD::morphologyEx( src, dst, op, kernel );
 }
 
 int main(int argc, char** argv)
 {
-    Mat src, mor, dst, color_dst;
+    CVD::Mat src, mor, dst, color_dst;
 
     uint8_t ende = 0;
     while (ende == 0) {
