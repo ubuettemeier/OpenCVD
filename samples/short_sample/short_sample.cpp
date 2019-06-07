@@ -8,7 +8,7 @@ int main( int argc, char** argv )
 {    
     uint8_t ende = 0;
     while (!ende) {
-        cv::Mat a = CVD::imread("../../images/baboon.jpg");        
+        CVD::Mat a = CVD::imread("../../images/baboon.jpg");        
         if (!a.empty()) {
 		CVD::cvtColor (a, a, cv::COLOR_BGR2GRAY);
 		CVD::blur(a, a, cv::Size(5, 5));                

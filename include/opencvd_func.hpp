@@ -118,10 +118,6 @@ CV_EXPORTS_W void morphologyEx( cv::InputArray src, cv::OutputArray dst,
                                 const cv::Scalar& borderValue = cv::morphologyDefaultBorderValue(),
                                 BUILDIN);
 
-/*
-CV_EXPORTS_W cv::Mat getStructuringElement(int shape, cv::Size ksize, cv::Point anchor = cv::Point(-1,-1),
-                                           BUILDIN);
-*/
 CV_EXPORTS_W Mat getStructuringElement(int shape, cv::Size ksize, cv::Point anchor = cv::Point(-1,-1),
                                            BUILDIN);
 
@@ -145,7 +141,7 @@ CV_EXPORTS_W void Laplacian( cv::InputArray src, cv::OutputArray dst, int ddepth
                              int borderType = cv::BORDER_DEFAULT,
                              BUILDIN);
 
-CV_EXPORTS_W cv::Mat imread( const cv::String& filename, int flags = cv::IMREAD_COLOR,
+CV_EXPORTS_W Mat imread( const cv::String& filename, int flags = cv::IMREAD_COLOR,
                              BUILDIN);
 
 CV_EXPORTS_W void normalize( cv::InputArray src, cv::InputOutputArray dst, double alpha = 1, double beta = 0,
@@ -334,10 +330,6 @@ CV_EXPORTS_W void normalize( cv::InputArray src, cv::InputOutputArray dst,
 //!
 //! @see    https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_imgproc/py_morphological_ops/py_morphological_ops.html
 //!
-/*
-CV_EXPORTS_W cv::Mat getStructuringElement(int shape, cv::Size ksize, cv::Point anchor
-                                           BUILDIN_FUNC)
-*/
 CV_EXPORTS_W Mat getStructuringElement(int shape, cv::Size ksize, cv::Point anchor
                                            BUILDIN_FUNC)
 {
@@ -1646,13 +1638,14 @@ CV_EXPORTS_W void Laplacian( cv::InputArray src, cv::OutputArray dst, int ddepth
 //! \param flags
 //! \return
 //!
-CV_EXPORTS_W cv::Mat imread( const cv::String& filename, int flags
+CV_EXPORTS_W Mat imread( const cv::String& filename, int flags
                              BUILDIN_FUNC)
 {
-    cv::Mat ret;
+    Mat ret;
 
     if (cvd_off) {
-        return cv::imread( filename, flags );
+        ret = cv::imread( filename, flags );
+        return ret;
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
