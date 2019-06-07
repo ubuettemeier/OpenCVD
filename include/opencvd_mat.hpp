@@ -8,7 +8,7 @@ namespace cvd {
 //!
 //! \brief The Mat class
 //!
-class Mat : public cv::Mat
+class CV_EXPORTS Mat : public cv::Mat
 {
 public:
     Mat() : cv::Mat() {}
@@ -16,10 +16,6 @@ public:
     Mat(const cv::Mat& m, const cv::Rect& roi, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
     void convertTo( cv::OutputArray m, int rtype, double alpha=1, double beta=0, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE() ) const;
     Mat(int rows, int cols, int type, const cv::Scalar& s, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
-
-    // using cv::MatExpr;
-    // static Mat ones(int rows, int cols, int type) : cv::Mat::ones(rows, cols, type) {}
-    // static MatExpr ones(int rows, int cols, int type);
 
     using cv::Mat::operator =;     // Mat& operator = (const Mat& m);
 
@@ -69,7 +65,25 @@ Mat::Mat(int rows, int cols, int type, const cv::Scalar& s, int line_nr, const c
     }
     foo->error_flag = 0;
     // --------------------------------------------
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::Mat out;
+            struct _rect_double_ *s_dat = (struct _rect_double_ *)foo->para[3]->data;
+            try {
+                out = cv::Mat (*(int*)foo->para[0]->data,         // rows,
+                        *(int*)foo->para[1]->data,         // cols,
+                        *(int*)foo->para[2]->data,         // type,
+                        cv::Scalar(s_dat->x, s_dat->y, s_dat->w, s_dat->h));
 
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
+            foo->control_imshow( out );                 // Ausgabe
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
     // --------------------------------------------
     if (foo->state.flag.func_off) {
         *this = cv::Mat();          // leere Matrix

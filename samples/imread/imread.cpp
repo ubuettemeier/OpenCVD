@@ -14,7 +14,7 @@ int main( int argc, char** argv )
     uint8_t ende = 0;
     while (!ende) {
         CVD::Mat a;
-        a = CVD::imread ("../../images/lena_.png");
+        a = CVD::imread ("../../images/lena.png");
         CVD::medianBlur(a, a, 29);
 
         if (a.empty())

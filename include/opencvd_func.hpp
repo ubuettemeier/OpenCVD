@@ -51,7 +51,6 @@
 
 namespace cvd {
 
-// define CV_EXPORTS_W __attribute__ ((visibility ("default")))  // Funktion ist sichtbar
 CV_EXPORTS_W void resize( cv::InputArray src, cv::OutputArray dst,
                           cv::Size dsize, double fx = 0, double fy = 0,
                           int interpolation = cv::INTER_LINEAR,
@@ -175,23 +174,6 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           int dx, int dy, double scale = 1, double delta = 0,
                           int borderType = cv::BORDER_DEFAULT,
                           BUILDIN);
-
-/*
-class CV_EXPORTS Mat : public cv::Mat
-{
-public:
-    Mat();
-    void convertTo( cv::OutputArray m, int rtype, double alpha=1, double beta=0 ) const;
-};
-
-cvd::Mat::Mat() : cv::Mat() {}
-
-void cvd::Mat::convertTo( cv::OutputArray m, int rtype, double alpha, double beta ) const
-{
-    printf ("bin drin\n");
-    cv::Mat::convertTo(m, rtype, alpha, beta);
-}
-*/
 
 //!
 //! \brief calcHist
