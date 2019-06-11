@@ -35,7 +35,7 @@ The working method is as follows:
 see: samples/short_sample/short_sample.cpp
 
 <hr></hr>
-**Entwicklungsumgebung / development-environment:**
+**Entwicklungsumgebung / development-environment**
 
 - Ubuntu 18.04.2 LTS
 - OpenCV 3.3.0
@@ -54,7 +54,7 @@ see: samples/short_sample/short_sample.cpp
 - Makefile's use pkg-config --cflag --clib opencv
 
 <hr></hr>
-**aktuell sind folgende OpenCV Funktionen implementiert / currently the following OpenCV functions are implemented:**
+**aktuell sind folgende OpenCV Funktionen implementiert / currently the following OpenCV functions are implemented**
 
 - adaptiveThreshold
 - blur
@@ -76,5 +76,6 @@ see: samples/short_sample/short_sample.cpp
 
 - Mat(Mat &m, Rect &ROI);
 - Mat.convertTo();
+- Mat(Size size, int type, const Scalar& s);
 - Mat(int rows, int cols, int type, const Scalar& s);
 

@@ -45,11 +45,17 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case MAT_SIZE_TYPE_SCALAR:
+        new PointInt ( client, cf->first_para, LEFT_POS, 10+55*0, this );                   // size
+        new EnumDrop (client, cf->first_para->next, LEFT_POS, 10+55*1, this );              // type
+        new RectDoubleEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );  // Scalar
+        set_param_win( 3, 340 );
+        break;
     case MAT_ROWS_COLS_TYPE_SCALAR:
         new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );                     // rows
         new IntEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );               // cols
         new EnumDrop (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );        // type
-        new RectDoubleEdit (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );        // Scalar)
+        new RectDoubleEdit (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );        // Scalar
         set_param_win( 4, 340 );
         break;
     case MAT_CONVERTTO:
