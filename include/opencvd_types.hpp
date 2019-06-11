@@ -57,7 +57,8 @@ enum _data_types_ {
     MAT_CONVERTTO = 0x1801,         // *
     MAT_ROWS_COLS_TYPE_SCALAR = 0x1802,     // *
     MAT_SIZE_TYPE_SCALAR = 0x1803,  // *
-    MAT_ROWS_COLS_TYPE = 0x1804,
+    MAT_ROWS_COLS_TYPE = 0x1804,    // *
+    MAT_SIZE_TYPE = 0x1805,         // *
 
     // ----- Parameter 0x2000...0x2FFF --------
     SLIDE_INT_TWO_STEP_PARA = 0x2000,       // z.B. 1, 3, 5, ... 21 (int)
