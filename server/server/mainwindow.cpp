@@ -799,6 +799,14 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+    case MAT_ROWS_COLS_TYPE: {
+            QString bt = grep_enum_text("ddepth", *(int*)cf->first_para->next->next->data);   // rtype
+            s = QString ("// CVD::Mat(%1, %2, %3);")
+                        .arg(QString::number(*(int*)cf->first_para->data))
+                        .arg(QString::number(*(int*)cf->first_para->next->data))
+                        .arg(bt);
+            }
+            break;
         case MAT_SIZE_TYPE_SCALAR: {
             struct _point_int_ *ip = (struct _point_int_ *)cf->first_para->data;            // dsize
             QString bt = grep_enum_text("ddepth", *(int*)cf->first_para->next->data);   // rtype
@@ -1257,6 +1265,17 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "NORMALIZE") == 0) return NORMALIZE;
     if (strcmp(enum_name, "CALCHIST") == 0) return CALCHIST;
     if (strcmp(enum_name, "HOUGHCIRCLES") == 0) return HOUGHCIRCLES;
+    if (strcmp(enum_name, "HOUGHLINESP") == 0) return HOUGHLINESP;
+    if (strcmp(enum_name, "HOUGHLINES") == 0) return HOUGHLINES;
+    if (strcmp(enum_name, "GETBUILDINFORMATION") == 0) return GETBUILDINFORMATION;
+    if (strcmp(enum_name, "ADAPTIVETHRESHOLD") == 0) return ADAPTIVETHRESHOLD;
+    if (strcmp(enum_name, "RESIZE") == 0) return RESIZE;
+    if (strcmp(enum_name, "SOBEL") == 0) return SOBEL;
+    if (strcmp(enum_name, "MAT_ROI") == 0) return MAT_ROI;
+    if (strcmp(enum_name, "MAT_CONVERTTO") == 0) return MAT_CONVERTTO;
+    if (strcmp(enum_name, "MAT_ROWS_COLS_TYPE_SCALAR") == 0) return MAT_ROWS_COLS_TYPE_SCALAR;
+    if (strcmp(enum_name, "MAT_SIZE_TYPE_SCALAR") == 0) return MAT_SIZE_TYPE_SCALAR;
+    if (strcmp(enum_name, "MAT_ROWS_COLS_TYPE") == 0) return MAT_ROWS_COLS_TYPE;
 
     if (strcmp(enum_name, "SLIDE_INT_TWO_STEP_PARA") == 0) return SLIDE_INT_TWO_STEP_PARA;
     if (strcmp(enum_name, "SLIDE_INT_PARA") == 0) return SLIDE_INT_PARA;
@@ -1269,6 +1288,8 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "SCALAR_PARA") == 0) return SCALAR_PARA;
     if (strcmp(enum_name, "STRING_PARA") == 0) return STRING_PARA;
     if (strcmp(enum_name, "POINT_INT_XY") == 0) return POINT_INT_XY;
+    if (strcmp(enum_name, "RECT_INT_PARA") == 0) return RECT_INT_PARA;
+    if (strcmp(enum_name, "RECT_DOUBLE_PARA") == 0) return RECT_DOUBLE_PARA;
 
     if (strcmp(enum_name, "FUNC_FLAGS") == 0) return FUNC_FLAGS;
     if (strcmp(enum_name, "TIME_TRIGGER") == 0) return TIME_TRIGGER;
@@ -1321,6 +1342,18 @@ char *MainWindow::get_enum_text (int val)
     if (val == NORMALIZE) strcpy (buf, "NORMALIZE");
     if (val == CALCHIST) strcpy (buf, "CALCHIST");
     if (val == HOUGHCIRCLES) strcpy (buf, "HOUGHCIRCLES");
+    if (val == HOUGHLINESP) strcpy (buf, "HOUGHLINESP");
+    if (val == HOUGHLINES) strcpy (buf, "HOUGHLINES");
+    if (val == GETBUILDINFORMATION) strcpy (buf, "GETBUILDINFORMATION");
+    if (val == ADAPTIVETHRESHOLD) strcpy (buf, "ADAPTIVETHRESHOLD");
+    if (val == RESIZE) strcpy (buf, "RESIZE");
+    if (val == SOBEL) strcpy (buf, "SOBEL");
+
+    if (val == MAT_ROI) strcpy (buf, "MAT_ROI");
+    if (val == MAT_CONVERTTO) strcpy (buf, "MAT_CONVERTTO");
+    if (val == MAT_ROWS_COLS_TYPE_SCALAR) strcpy (buf, "MAT_ROWS_COLS_TYPE_SCALAR");
+    if (val == MAT_SIZE_TYPE_SCALAR) strcpy (buf, "MAT_SIZE_TYPE_SCALAR");
+    if (val == MAT_ROWS_COLS_TYPE) strcpy (buf, "MAT_ROWS_COLS_TYPE");
 
     if (val == SLIDE_INT_TWO_STEP_PARA) strcpy (buf, "SLIDE_INT_TWO_STEP_PARA");
     if (val == SLIDE_INT_PARA) strcpy (buf, "SLIDE_INT_PARA");
@@ -1333,7 +1366,8 @@ char *MainWindow::get_enum_text (int val)
     if (val == SCALAR_PARA) strcpy (buf, "SCALAR_PARA");
     if (val == STRING_PARA) strcpy (buf, "STRING_PARA");
     if (val == POINT_INT_XY) strcpy (buf, "POINT_INT_XY");
-
+    if (val == RECT_INT_PARA) strcpy (buf, "RECT_INT_PARA");
+    if (val == RECT_DOUBLE_PARA) strcpy (buf, "RECT_DOUBLE_PARA");
 
     if (val == FUNC_FLAGS) strcpy (buf, "FUNC_FLAGS");
     if (val == TIME_TRIGGER) strcpy (buf, "TIME_TRIGGER");

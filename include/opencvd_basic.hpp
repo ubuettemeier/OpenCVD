@@ -696,7 +696,7 @@ void opencvd_func::control_contours_imshow ( cv::InputOutputArray image,
     } else
         if (window_is_create != 0)
             cv::destroyWindow ( window_name );
-}
+} // control_contours_imshow
 
 //!
 //! \brief opencvd_func::new_para
@@ -719,12 +719,7 @@ void opencvd_func::new_para (uint16_t type, int len, uint8_t *data, const char *
 #define TRIGGER_TIME 400000  // 600000
 int opencvd_func::control_func_run_time ()
 {
-
-    // signed long long delta;
-
-    // if ((delta = cvd_time_differnce (&time_stemp)) > TRIGGER_TIME) {
     if ((cvd_time_differnce (&time_stemp)) > TRIGGER_TIME) {
-        // printf ("%s=%lli\n", cf->func_name, delta);
         gettimeofday(&time_stemp, NULL);
         struct _time_trigger_ tt;
         tt.func_addr = func_addr;
