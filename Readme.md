@@ -30,11 +30,13 @@ The working method is as follows:
 ![alt](Readme.png)
 
 <hr></hr>
+
 **Example**
 
 see: samples/short_sample/short_sample.cpp
 
 <hr></hr>
+
 **Entwicklungsumgebung / development-environment**
 
 - Ubuntu 18.04.2 LTS
@@ -54,6 +56,7 @@ see: samples/short_sample/short_sample.cpp
 - Makefile's use pkg-config --cflag --clib opencv
 
 <hr></hr>
+
 **aktuell sind folgende OpenCV Funktionen implementiert / currently the following OpenCV functions are implemented**
 
 - adaptiveThreshold
