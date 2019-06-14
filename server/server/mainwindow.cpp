@@ -8,7 +8,6 @@
 //!      locale
 //!
 
-
 #define VERSION "v0.5"
 
 #include <cstring>
@@ -25,7 +24,9 @@
 using namespace std;
 
 QDomDocument doc;           // XML doc global. Fuer alle classen sichtbar
-QDomDocument para;          // XML Parameter
+#ifdef USE_PARAM_XML
+    QDomDocument para;          // XML Parameter
+#endif
 
 QDir home_dir;
 QDir current_dir;
@@ -67,6 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
         file.close();
     }
 
+#ifdef USE_PARAM_XML
     QFile param_file( data_dir.path()+"/param.xml" );
     if (!param_file.open(QIODevice::ReadOnly))        // open
         ui->textEdit->insertPlainText("File param.xml nicht gefunden\n");
@@ -78,6 +80,7 @@ MainWindow::MainWindow(QWidget *parent) :
         param_file.close();
     }
     // check_param_list ();    // it's a test
+#endif
 
     QTimer *timer = new QTimer ( this );
     connect ( timer, SIGNAL (timeout()), this, SLOT(trigger_timer()));
@@ -799,6 +802,24 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+    case PYRUP: {
+            struct _point_int_ *ip = (struct _point_int_ *)cf->first_para->data;        // cv::Size
+            QString bt = grep_enum_text("BorderTypes", *(int*)cf->first_para->next->data);   // borderType
+            s = QString ("// CVD::pyrUp(src, dst, cv::size(%1, %2), %3);")
+                    .arg(QString::number(ip->x))
+                    .arg(QString::number(ip->y))
+                    .arg(bt);
+            }
+            break;
+        case PYRDOWN: {
+            struct _point_int_ *ip = (struct _point_int_ *)cf->first_para->data;        // cv::Size
+            QString bt = grep_enum_text("BorderTypes", *(int*)cf->first_para->next->data);   // borderType
+            s = QString ("// CVD::pyrDown(src, dst, cv::size(%1, %2), %3);")
+                    .arg(QString::number(ip->x))
+                    .arg(QString::number(ip->y))
+                    .arg(bt);
+            }
+            break;
         case MAT_SIZE_TYPE: {
             struct _point_int_ *ip = (struct _point_int_ *)cf->first_para->data;        // size
             QString bt = grep_enum_text("ddepth", *(int*)cf->first_para->next->data);   // rtype
@@ -1392,6 +1413,7 @@ char *MainWindow::get_enum_text (int val)
     return buf;
 }
 
+#ifdef USE_PARAM_XML
 void MainWindow::check_param_list ()
 {
     QDomNodeList nl = para.elementsByTagName("BLUR_FUNC");  // Elemet suchen
@@ -1427,6 +1449,7 @@ void MainWindow::check_param_list ()
     } else
         qDebug() << "kein Element gefunden";
 }
+#endif
 
 //!
 //! \brief MainWindow::on_actionOpenCv_Version_triggered

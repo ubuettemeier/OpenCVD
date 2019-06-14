@@ -71,6 +71,7 @@ see: samples/short_sample/short_sample.cpp
 - Laplacian
 - medianBlur, morphologyEx
 - normalize
+- pyrDown, pyrUp
 - resized
 - Scharr, Sobel
 - threshold

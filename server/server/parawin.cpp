@@ -45,6 +45,12 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case PYRUP:
+    case PYRDOWN:
+        new PointInt ( client, cf->first_para, LEFT_POS, 10+55*0, this );                   // size
+        new EnumDrop (client, cf->first_para->next, LEFT_POS, 10+55*1, this );              // borderType
+        set_param_win( 2, 260 );
+        break;
     case MAT_SIZE_TYPE:
         new PointInt ( client, cf->first_para, LEFT_POS, 10+55*0, this );                   // size
         new EnumDrop (client, cf->first_para->next, LEFT_POS, 10+55*1, this );              // type

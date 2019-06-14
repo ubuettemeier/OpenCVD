@@ -52,6 +52,8 @@ enum _data_types_ {
     ADAPTIVETHRESHOLD = 0x101E,     // *
     RESIZE = 0x101F,                // *
     SOBEL = 0x1020,                 // *
+    PYRDOWN = 0x1021,
+    PYRUP = 0x1022,
 
     MAT_ROI = 0x1800,               // *
     MAT_CONVERTTO = 0x1801,         // *

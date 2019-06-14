@@ -15,14 +15,17 @@ public:
 
     Mat(int rows, int cols, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
     Mat(cv::Size size, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
-    Mat(cv::Size size, int type, const cv::Scalar& s, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
     Mat(int rows, int cols, int type, const cv::Scalar& s, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+    Mat(cv::Size size, int type, const cv::Scalar& s, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+
 
     Mat(const cv::Mat& m, const cv::Rect& roi, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
     void convertTo( cv::OutputArray m, int rtype, double alpha=1, double beta=0, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE() ) const;
 
     using cv::Mat::operator =;     // Mat& operator = (const Mat& m);
 
+    Mat& operator *= (double);
+   // Mat& operator += (double);
 };
 
 //!
@@ -33,6 +36,36 @@ class CV_EXPORTS MatExpr : public cv::MatExpr
 public:
     using cv::MatExpr::MatExpr;
 };
+
+/*
+Mat& Mat::operator += (double val)
+{
+    printf ("+= %f\n", val);
+    cv::Mat *a = static_cast <cv::Mat *>(this);
+
+    // a *= val;
+
+    return *this;
+}
+*/
+//!
+//! \brief Mat::operator *=
+//! \param val
+//! \return
+//!
+Mat& Mat::operator *= (double val)
+{
+    printf ("*= %f\n", val);
+    if (!this->empty()) {
+        try {
+            cv::Mat *a = static_cast <cv::Mat *>(this);
+            *a *= val;
+        } catch( cv::Exception& e ) {
+            printf ("ERROR\n");
+        }
+    }
+    return *this;
+}
 
 //!
 //! \brief Mat::Mat

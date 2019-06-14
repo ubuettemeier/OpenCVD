@@ -51,6 +51,14 @@
 
 namespace cvd {
 
+CV_EXPORTS_W void pyrUp( cv::InputArray src, cv::OutputArray dst,
+                           const cv::Size& dstsize = cv::Size(), int borderType = cv::BORDER_DEFAULT,
+                           BUILDIN );
+
+CV_EXPORTS_W void pyrDown( cv::InputArray src, cv::OutputArray dst,
+                           const cv::Size& dstsize = cv::Size(), int borderType = cv::BORDER_DEFAULT,
+                           BUILDIN );
+
 CV_EXPORTS_W void resize( cv::InputArray src, cv::OutputArray dst,
                           cv::Size dsize, double fx = 0, double fy = 0,
                           int interpolation = cv::INTER_LINEAR,
@@ -176,6 +184,140 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           BUILDIN);
 
 //!
+//! \brief pyrUp
+//! \param src
+//! \param dst
+//! \param dstsize
+//! \param borderType
+//! \param line_nr
+//! \param src_file
+//!
+CV_EXPORTS_W void pyrUp( cv::InputArray src, cv::OutputArray dst,
+                           const cv::Size& dstsize, int borderType
+                           BUILDIN_FUNC )
+{
+    if (cvd_off) {
+        cv::pyrUp (src, dst, dstsize, borderType);
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), PYRUP, "pyrUp", 0x000F, BUILIN_PARA);  // Achtung: Funktion hat kein ON/OFF, kein Break und kein show !!!
+        func.push_back( foo );
+
+        struct _point_int_ ip = {dstsize.width, 0, 0xFFFF, dstsize.height, 0, 0xFFFF};
+        foo->new_para (POINT_INT, sizeof(struct _point_int_), (uint8_t*)&ip, "dstsize");
+
+        struct _enum_para_ bt = {borderType, "BorderTypes"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt, "borderType" );
+    }
+    foo->error_flag = 0;
+    // --------------------------------------------
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::Mat out;
+            struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
+            try {
+                cv::pyrUp( src, out,
+                             cv::Size(ip->x, ip->y),
+                            *(int*)foo->para[1]->data);          // borderType
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
+            foo->control_imshow( out );                 // Ausgabe
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
+    // --------------------------------------------
+    if (foo->state.flag.func_off) {
+        src.copyTo( dst );
+    } else {
+        struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
+        try {
+            cv::pyrUp( src, dst,
+                         cv::Size(ip->x, ip->y),
+                        *(int*)foo->para[1]->data);          // borderType
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( dst );
+}
+
+//!
+//! \brief pyrDown
+//! \param src
+//! \param dst
+//! \param dstsize
+//! \param borderType
+//! \param line_nr
+//! \param src_file
+//!
+CV_EXPORTS_W void pyrDown( cv::InputArray src, cv::OutputArray dst,
+                           const cv::Size& dstsize, int borderType
+                           BUILDIN_FUNC )
+{
+    if (cvd_off) {
+        cv::pyrDown (src, dst, dstsize, borderType);
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for pyrDown
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), PYRDOWN, "pyrDown", 0x000F, BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _point_int_ ip = {dstsize.width, 0, 0xFFFF, dstsize.height, 0, 0xFFFF};
+        foo->new_para (POINT_INT, sizeof(struct _point_int_), (uint8_t*)&ip, "dstsize");
+
+        struct _enum_para_ bt = {borderType, "BorderTypes"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt, "borderType" );
+    }
+    foo->error_flag = 0;
+    // --------------------------------------------
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::Mat out;
+            struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
+            try {
+                cv::pyrDown( src, out,
+                             cv::Size(ip->x, ip->y),            // Size
+                            *(int*)foo->para[1]->data);         // borderType
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
+            foo->control_imshow( out );                 // Ausgabe
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
+    // --------------------------------------------
+    if (foo->state.flag.func_off) {
+        src.copyTo( dst );
+    } else {
+        struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
+        try {
+            cv::pyrDown( src, dst,
+                         cv::Size(ip->x, ip->y),            // Size
+                        *(int*)foo->para[1]->data);         // borderType
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( dst );
+}
+
+//!
 //! \brief calcHist
 //!        Calculates a histogram of a set of arrays.
 //! \param images
@@ -204,7 +346,7 @@ CV_EXPORTS void calcHist( const cv::Mat* images, int nimages,
         return;
     }
 
-    static std::vector<opencvd_func *> func{};  // reg vector for erode
+    static std::vector<opencvd_func *> func{};  // reg vector for calcHist
     opencvd_func *foo = NULL;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
@@ -1961,7 +2103,7 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
 
     }
     foo->error_flag = 0;
-
+    // ---------------------------------------------------------
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
@@ -1982,7 +2124,7 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
             foo->control_func_run_time ();
         }
     }
-
+    // ---------------------------------------------------------
     if (foo->state.flag.func_off) {
         src.copyTo( dst );
     } else {

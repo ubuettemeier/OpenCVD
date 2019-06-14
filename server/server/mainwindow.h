@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#define USE_PARAM_XML_
+
 #include <QMainWindow>
 #include <QTcpServer>
 #include <QTcpSocket>
@@ -135,8 +137,12 @@ private:
 
     int grep_enum (const char *str);    // emittelt den Wert der Variablen
     char *get_enum_text (int val);
+
+#ifdef USE_PARAM_XML
     void check_param_list ( void );
-};
+#endif
+
+};  // class MainWindow
 
 extern MainWindow *glob_mw;
 
