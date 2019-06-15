@@ -802,6 +802,15 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+    case CORNERHARRIS: {
+            QString bt = grep_enum_text("BorderTypes", *(int*)cf->first_para->next->next->next->data);   // borderType
+            s = QString ("// CVD::cornerHarris(src, dst, %1, %2, %3, %4);")
+                        .arg(QString::number(*(int*)cf->first_para->data))     // blockSize
+                        .arg(QString::number(*(int*)cf->first_para->next->data))     // ksize
+                        .arg(QString::number(*(double*)cf->first_para->next->next->data))     // k
+                        .arg(bt);
+            }
+            break;
     case PYRUP: {
             struct _point_int_ *ip = (struct _point_int_ *)cf->first_para->data;        // cv::Size
             QString bt = grep_enum_text("BorderTypes", *(int*)cf->first_para->next->data);   // borderType

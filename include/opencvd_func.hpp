@@ -51,6 +51,11 @@
 
 namespace cvd {
 
+CV_EXPORTS_W void cornerHarris( cv::InputArray src, cv::OutputArray dst, int blockSize,
+                                int ksize, double k,
+                                int borderType = cv::BORDER_DEFAULT,
+                                BUILDIN );
+
 CV_EXPORTS_W void pyrUp( cv::InputArray src, cv::OutputArray dst,
                            const cv::Size& dstsize = cv::Size(), int borderType = cv::BORDER_DEFAULT,
                            BUILDIN );
@@ -183,6 +188,67 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           int borderType = cv::BORDER_DEFAULT,
                           BUILDIN);
 
+
+//!
+//! \brief cornerHarris
+//! \param src
+//! \param dst
+//! \param blockSize Neighborhood size (see the details on cornerEigenValsAndVecs ).
+//! \param ksize Aperture parameter for the Sobel operator.
+//! \param k Harris detector free parameter. See the formula below.
+//! \param borderType
+//!
+CV_EXPORTS_W void cornerHarris( cv::InputArray src, cv::OutputArray dst, int blockSize,
+                                int ksize, double k,
+                                int borderType
+                                BUILDIN_FUNC )
+{
+    if (cvd_off) {
+        cv::cornerHarris( src, dst, blockSize, ksize, k, borderType );
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), CORNERHARRIS, "cornerHarris",
+                               PARAMETER | FUNC_OFF,    // Menu
+                               BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _int_para_ bs = {blockSize, 0, 255};
+        foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&bs, "blockSize");
+
+        struct _int_para_ ks = {blockSize, 1, 31};
+        foo->new_para ( SLIDE_INT_TWO_STEP_PARA, sizeof(struct _int_para_), (uint8_t*)&ks, "ksize" );
+
+        struct _double_para_ kp = {k, -1000.0, 1000.0};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&kp, "k" );
+
+        struct _enum_para_ bt = {borderType, "BorderTypes"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt, "borderType" );
+    }
+    foo->error_flag = 0;
+    // --------------------------------------------
+    // --------------------------------------------
+    if (foo->state.flag.func_off) {
+        src.copyTo( dst );
+    } else {
+        try {
+            cv::cornerHarris( src, dst,
+                            *(int*)foo->para[0]->data,          // blockSize
+                            *(int*)foo->para[1]->data,          // ksize
+                            *(double*)foo->para[2]->data,       // k
+                            *(int*)foo->para[3]->data);         // borderType
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( dst );
+}
+
 //!
 //! \brief pyrUp
 //! \param src
@@ -205,7 +271,9 @@ CV_EXPORTS_W void pyrUp( cv::InputArray src, cv::OutputArray dst,
     opencvd_func *foo = NULL;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
-        foo = new opencvd_func((uint64_t)__builtin_return_address(0), PYRUP, "pyrUp", 0x000F, BUILIN_PARA);  // Achtung: Funktion hat kein ON/OFF, kein Break und kein show !!!
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), PYRUP, "pyrUp",
+                               PARAMETER | FUNC_OFF | SHOW_IMAGE | BREAK,    // Menu 0x000F
+                               BUILIN_PARA);
         func.push_back( foo );
 
         struct _point_int_ ip = {dstsize.width, 0, 0xFFFF, dstsize.height, 0, 0xFFFF};
@@ -272,7 +340,9 @@ CV_EXPORTS_W void pyrDown( cv::InputArray src, cv::OutputArray dst,
     opencvd_func *foo = NULL;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
-        foo = new opencvd_func((uint64_t)__builtin_return_address(0), PYRDOWN, "pyrDown", 0x000F, BUILIN_PARA);
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), PYRDOWN, "pyrDown",
+                               PARAMETER | FUNC_OFF | SHOW_IMAGE | BREAK,    // Menu 0x000F
+                               BUILIN_PARA);
         func.push_back( foo );
 
         struct _point_int_ ip = {dstsize.width, 0, 0xFFFF, dstsize.height, 0, 0xFFFF};

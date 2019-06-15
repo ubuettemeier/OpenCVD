@@ -69,7 +69,7 @@ public:
     void refresh_source_win( _cvd_func_ *cf );
 
     QString grep_enum_text (QString group_name, int enum_val);      // return the enum text of enum_val. see: enum.xml
-    QString build_source_line_comment ( struct _cvd_func_ *cf );
+    QString build_source_line_comment ( struct _cvd_func_ *cf );    // source einbinden
 
 private:
     void get_sys_path( void );

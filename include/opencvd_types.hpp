@@ -52,8 +52,9 @@ enum _data_types_ {
     ADAPTIVETHRESHOLD = 0x101E,     // *
     RESIZE = 0x101F,                // *
     SOBEL = 0x1020,                 // *
-    PYRDOWN = 0x1021,
-    PYRUP = 0x1022,
+    PYRDOWN = 0x1021,               // *
+    PYRUP = 0x1022,                 // *
+    CORNERHARRIS = 0x1023,          // *
 
     MAT_ROI = 0x1800,               // *
     MAT_CONVERTTO = 0x1801,         // *
@@ -87,6 +88,13 @@ enum _data_types_ {
     SOCKET_ACK = 0xF002,        // currently unused
     GET_CV_VERSION = 0xF003,    // Server to Client
     SET_CV_VERSION = 0xF004,    // Client to Server
+};
+
+enum _menu_types_ {
+    PARAMETER = 1,
+    FUNC_OFF = 2,
+    SHOW_IMAGE = 4,
+    BREAK = 8,
 };
 
 #pragma pack(1)

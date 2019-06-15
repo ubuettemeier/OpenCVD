@@ -61,7 +61,7 @@ see: samples/short_sample/short_sample.cpp
 
 - adaptiveThreshold
 - blur
-- Canny, cvtColor, calcHist, convertScaleAbs
+- Canny, cvtColor, calcHist, convertScaleAbs, cornerHarris
 - dilate
 - erode
 - findContours
