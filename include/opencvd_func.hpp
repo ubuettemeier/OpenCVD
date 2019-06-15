@@ -231,6 +231,7 @@ CV_EXPORTS_W void cornerHarris( cv::InputArray src, cv::OutputArray dst, int blo
     }
     foo->error_flag = 0;
     // --------------------------------------------
+    // NO break
     // --------------------------------------------
     if (foo->state.flag.func_off) {
         src.copyTo( dst );
@@ -246,7 +247,7 @@ CV_EXPORTS_W void cornerHarris( cv::InputArray src, cv::OutputArray dst, int blo
         }
         foo->control_func_run_time ();
     }
-    foo->control_imshow( dst );
+    // foo->control_imshow( dst ); // NO show Image
 }
 
 //!

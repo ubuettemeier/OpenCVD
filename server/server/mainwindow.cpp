@@ -1310,6 +1310,10 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "ADAPTIVETHRESHOLD") == 0) return ADAPTIVETHRESHOLD;
     if (strcmp(enum_name, "RESIZE") == 0) return RESIZE;
     if (strcmp(enum_name, "SOBEL") == 0) return SOBEL;
+    if (strcmp(enum_name, "PYRDOWN") == 0) return PYRDOWN;
+    if (strcmp(enum_name, "PYRUP") == 0) return PYRUP;
+    if (strcmp(enum_name, "CORNERHARRIS") == 0) return CORNERHARRIS;
+
     if (strcmp(enum_name, "MAT_ROI") == 0) return MAT_ROI;
     if (strcmp(enum_name, "MAT_CONVERTTO") == 0) return MAT_CONVERTTO;
     if (strcmp(enum_name, "MAT_ROWS_COLS_TYPE_SCALAR") == 0) return MAT_ROWS_COLS_TYPE_SCALAR;
@@ -1388,6 +1392,9 @@ char *MainWindow::get_enum_text (int val)
     if (val == ADAPTIVETHRESHOLD) strcpy (buf, "ADAPTIVETHRESHOLD");
     if (val == RESIZE) strcpy (buf, "RESIZE");
     if (val == SOBEL) strcpy (buf, "SOBEL");
+    if (val == PYRDOWN) strcpy (buf, "PYRDOWN");
+    if (val == PYRUP) strcpy (buf, "PYRUP");
+    if (val == CORNERHARRIS) strcpy (buf, "CORNERHARRIS");
 
     if (val == MAT_ROI) strcpy (buf, "MAT_ROI");
     if (val == MAT_CONVERTTO) strcpy (buf, "MAT_CONVERTTO");

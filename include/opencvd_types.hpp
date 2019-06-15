@@ -36,7 +36,7 @@ enum _data_types_ {
     DILATE = 0x100E,
     ERODE = 0x100F,
     FINDCONTOURS = 0x1010,
-    CONVERTSCALEABS = 0x1011,   // *
+    CONVERTSCALEABS = 0x1011,       // *
     SCALAR_ALL = 0x1012,
     SCHARR = 0x1013,
     IMREAD = 0x1014,
@@ -90,6 +90,11 @@ enum _data_types_ {
     SET_CV_VERSION = 0xF004,    // Client to Server
 };
 
+//!
+//! \brief The _menu_types_ enum
+//!         value for server menu
+//! \see class opencvd_func, union _stateflags_ state.
+//!
 enum _menu_types_ {
     PARAMETER = 1,
     FUNC_OFF = 2,
