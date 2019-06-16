@@ -214,6 +214,9 @@
    </property>
   </action>
   <action name="actionset_all_Function_OFF">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>&amp;all Function OFF</string>
    </property>

@@ -9,6 +9,7 @@
 //!
 //! \todo - Anzahl Nachkommastellen bei class DoubleEdit als Parameter festlegen
 //!       - close Parameter-Window, by Parameter-Node clicked.
+//!       - Main Menu => delete all Function ON delete. use all Funktione OFF with checkable
 //!
 
 #define VERSION "v0.5"
@@ -1333,6 +1334,7 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "PYRUP") == 0) return PYRUP;
     if (strcmp(enum_name, "CORNERHARRIS") == 0) return CORNERHARRIS;
     if (strcmp(enum_name, "FITLINE") == 0) return FITLINE;
+    if (strcmp(enum_name, "APPROXPOLYPD") == 0) return APPROXPOLYPD;
 
     if (strcmp(enum_name, "MAT_ROI") == 0) return MAT_ROI;
     if (strcmp(enum_name, "MAT_CONVERTTO") == 0) return MAT_CONVERTTO;
@@ -1416,6 +1418,7 @@ char *MainWindow::get_enum_text (int val)
     if (val == PYRUP) strcpy (buf, "PYRUP");
     if (val == CORNERHARRIS) strcpy (buf, "CORNERHARRIS");
     if (val == FITLINE) strcpy (buf, "FITLINE");
+    if (val == APPROXPOLYPD) strcpy (buf, "APPROXPOLYPD");
 
     if (val == MAT_ROI) strcpy (buf, "MAT_ROI");
     if (val == MAT_CONVERTTO) strcpy (buf, "MAT_CONVERTTO");
