@@ -1,7 +1,15 @@
 
 .PHONY: clean
 
-SAMPLE_PATH = basic/ edge/ filtering/ findcontours/ imread/ short_sample/ demhist/ HoughCircles/ HoughLines/
+SAMPLE_PATH = 	basic/ \
+		edge/ \
+		filtering/ \
+		findcontours/ \
+		imread/ \
+		short_sample/ \
+		demhist/ \
+		HoughCircles/ \
+		HoughLines/
 
 all:	
 	for dir in $(SAMPLE_PATH); do \

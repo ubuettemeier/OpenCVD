@@ -2,6 +2,7 @@
 #define OPENCV_MAT_HPP
 
 #include "opencv2/opencv.hpp"
+// #include "opencv2/features2d/features2d.hpp"
 
 namespace cvd {
 
@@ -25,7 +26,6 @@ public:
     using cv::Mat::operator =;     // Mat& operator = (const Mat& m);
 
     Mat& operator *= (double);
-   // Mat& operator += (double);
 };
 
 //!
@@ -37,17 +37,44 @@ public:
     using cv::MatExpr::MatExpr;
 };
 
-/*
-Mat& Mat::operator += (double val)
+//!
+//! \brief The MSER class
+//!
+class CV_EXPORTS_W MSER : public cv::MSER
 {
-    printf ("+= %f\n", val);
-    cv::Mat *a = static_cast <cv::Mat *>(this);
+public:
+    CV_WRAP static cv::Ptr<cv::MSER> create( int _delta=5, int _min_area=60, int _max_area=14400,
+                                            double _max_variation=0.25, double _min_diversity=.2,
+                                            int _max_evolution=200, double _area_threshold=1.01,
+                                            double _min_margin=0.003, int _edge_blur_size=5,
+                                            int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+};
 
-    // a *= val;
-
-    return *this;
+//!
+//! \brief MSER::create
+//! \param _delta
+//! \param _min_area
+//! \param _max_area
+//! \param _max_variation
+//! \param _min_diversity
+//! \param _max_evolution
+//! \param _area_threshold
+//! \param _min_margin
+//! \param _edge_blur_size
+//! \param line_nr
+//! \param src_file
+//! \return
+//!
+CV_WRAP cv::Ptr<cv::MSER> MSER::create( int _delta, int _min_area, int _max_area,
+                                        double _max_variation, double _min_diversity,
+                                        int _max_evolution, double _area_threshold,
+                                        double _min_margin, int _edge_blur_size,
+                                        int line_nr, const char *src_file)
+{
+    cv::Ptr<cv::MSER> ms = cv::MSER::create(_delta, _min_area, _max_area, _max_variation, _min_diversity, _max_evolution, _area_threshold, _min_margin, _edge_blur_size);
+    return ms;
 }
-*/
+
 //!
 //! \brief Mat::operator *=
 //! \param val
@@ -420,10 +447,10 @@ void Mat::convertTo( cv::OutputArray m, int rtype, double alpha, double beta, in
         struct _enum_para_ dd = {rtype, "Sobel_filterdepth"};
         foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&dd, "ddepth" );
 
-        struct _double_para_ al = {alpha, -100000.0, 100000.0};
+        struct _double_para_ al = {alpha, -100000.0, 100000.0, 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&al, "alpha");
 
-        struct _double_para_ be = {beta, -100000.0, 100000.0};
+        struct _double_para_ be = {beta, -100000.0, 100000.0, 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&be, "beta");
     }
     foo->error_flag = 0;

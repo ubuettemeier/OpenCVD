@@ -51,6 +51,10 @@
 
 namespace cvd {
 
+CV_EXPORTS_W void fitLine( cv::InputArray points, cv::OutputArray line, int distType,
+                           double param, double reps, double aeps,
+                           BUILDIN) ;
+
 CV_EXPORTS_W void cornerHarris( cv::InputArray src, cv::OutputArray dst, int blockSize,
                                 int ksize, double k,
                                 int borderType = cv::BORDER_DEFAULT,
@@ -188,6 +192,69 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           int borderType = cv::BORDER_DEFAULT,
                           BUILDIN);
 
+//!
+//! \brief fitLine
+//! \param points
+//! \param line Output line parameters. In case of 2D fitting, it should be a vector of 4 elements
+//!         (like Vec4f) - (vx, vy, x0, y0), where (vx, vy) is a normalized vector collinear to the line and
+//!         (x0, y0) is a point on the line. In case of 3D fitting, it should be a vector of 6 elements (like
+//!         Vec6f) - (vx, vy, vz, x0, y0, z0), where (vx, vy, vz) is a normalized vector collinear to the line
+//!         and (x0, y0, z0) is a point on the line.
+//! \param distType Distance used by the M-estimator, see cv::DistanceTypes
+//! \param param Numerical parameter ( C ) for some types of distances. If it is 0, an optimal value
+//! \param reps Sufficient accuracy for the radius (distance between the coordinate origin and the line).
+//! \param aeps Sufficient accuracy for the angle. 0.01 would be a good default value for reps and aeps.
+//!
+CV_EXPORTS_W void fitLine( cv::InputArray points, cv::OutputArray line, int distType,
+                           double param, double reps, double aeps
+                           BUILDIN_FUNC )
+{
+    if (cvd_off) {
+        cv::fitLine( points, line, distType, param, reps, aeps );
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), FITLINE, "fitLine",
+                               PARAMETER | FUNC_OFF,    // Menu
+                               BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _enum_para_ bt = {distType, "DistanceTypes"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt, "distType" );
+
+        struct _double_para_ pa = {param, -100000.0, 100000.0, 2};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&pa, "param" );
+
+        struct _double_para_ re = {reps, -100000.0, 100000.0, 4};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&re, "reps" );
+
+        struct _double_para_ ae = {aeps, -100000.0, 100000.0, 4};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&ae, "aeps" );
+    }
+    foo->error_flag = 0;
+    // --------------------------------------------
+    // NO break
+    // --------------------------------------------
+    if (foo->state.flag.func_off) {
+        // do nothing
+    } else {
+        try {
+            cv::fitLine( points, line,
+                            *(int*)foo->para[0]->data,          // distType
+                            *(double*)foo->para[1]->data,       // param
+                            *(double*)foo->para[2]->data,       // reps
+                            *(int*)foo->para[3]->data);         // aeps
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
+        foo->control_func_run_time ();
+    }
+    // foo->control_imshow( line );  // NO show Image
+}
 
 //!
 //! \brief cornerHarris
@@ -223,7 +290,7 @@ CV_EXPORTS_W void cornerHarris( cv::InputArray src, cv::OutputArray dst, int blo
         struct _int_para_ ks = {blockSize, 1, 31};
         foo->new_para ( SLIDE_INT_TWO_STEP_PARA, sizeof(struct _int_para_), (uint8_t*)&ks, "ksize" );
 
-        struct _double_para_ kp = {k, -1000.0, 1000.0};
+        struct _double_para_ kp = {k, -1000.0, 1000.0, 2};
         foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&kp, "k" );
 
         struct _enum_para_ bt = {borderType, "BorderTypes"};
@@ -480,10 +547,10 @@ CV_EXPORTS_W void normalize( cv::InputArray src, cv::InputOutputArray dst,
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), NORMALIZE, "normalize", 0x0003, BUILIN_PARA);  // Achtung: Funktion hat kein ON/OFF, kein Break und kein show !!!
         func.push_back( foo );
 
-        struct _double_para_ al = {alpha, -1000.0, 1000.0};
+        struct _double_para_ al = {alpha, -1000.0, 1000.0, 2};
         foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&al, "alpha" );
 
-        struct _double_para_ be = {beta, -1000.0, 1000.0};
+        struct _double_para_ be = {beta, -1000.0, 1000.0, 2};
         foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&be, "beta" );
 
         struct _enum_para_ ep = {norm_type, "NormTypes"};
@@ -916,7 +983,7 @@ CV_EXPORTS_W void adaptiveThreshold( cv::InputArray src, cv::OutputArray dst,
         struct _int_para_ bs = {blockSize, 3, 31};
         foo->new_para ( SLIDE_INT_TWO_STEP_PARA, sizeof(struct _int_para_), (uint8_t*)&bs, "blockSize" );
 
-        struct _double_para_ cv = {C, -1000.0, 1000.0};
+        struct _double_para_ cv = {C, -1000.0, 1000.0, 2};
         foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&cv, "C" );
 
     }
@@ -1077,10 +1144,10 @@ CV_EXPORTS_W void Sobel( cv::InputArray src, cv::OutputArray dst, int ddepth,
         struct _int_para_ sp = {ksize, 1, 31};    // 1, 3, 5, 7, ...
         foo->new_para ( SLIDE_INT_TWO_STEP_PARA, sizeof(struct _int_para_), (uint8_t*)&sp, "ksize" );
 
-        struct _double_para_ sc = {scale, -100000.0, 100000.0};
+        struct _double_para_ sc = {scale, -100000.0, 100000.0, 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&sc, "scale");
 
-        struct _double_para_ dl = {delta, -100000.0, 100000.0};
+        struct _double_para_ dl = {delta, -100000.0, 100000.0, 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&dl, "delta");
 
         struct _enum_para_ bt = {borderType, "boolType"};
@@ -1321,10 +1388,10 @@ CV_EXPORTS_W void resize( cv::InputArray src, cv::OutputArray dst,
         struct _point_int_ ip = {dsize.width, 0, 0xFFFF, dsize.height, 0, 0xFFFF};
         foo->new_para (POINT_INT, sizeof(struct _point_int_), (uint8_t*)&ip, "dsize");
 
-        struct _double_para_ sx = {fx, 0.0, 1000.0};
+        struct _double_para_ sx = {fx, 0.0, 1000.0, 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&sx, "fx");
 
-        struct _double_para_ sy = {fy, 0.0, 1000.0};
+        struct _double_para_ sy = {fy, 0.0, 1000.0, 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&sy, "fy");
 
         struct _enum_para_ bt = {interpolation, "InterpolationFlags"};
@@ -1538,10 +1605,10 @@ CV_EXPORTS_W void GaussianBlur( cv::InputArray src, cv::OutputArray dst, cv::Siz
         struct _int_para_ sh = {ksize.height, 1, 31};
         foo->new_para (SLIDE_INT_TWO_STEP_PARA, sizeof(struct _int_para_), (uint8_t*)&sh, "ksize height");
 
-        struct _double_para_ sx = {sigmaX, 0.0, 1000.0};
+        struct _double_para_ sx = {sigmaX, 0.0, 1000.0, 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&sx, "sigmaX");
 
-        struct _double_para_ sy = {sigmaY, 0.0, 1000.0};
+        struct _double_para_ sy = {sigmaY, 0.0, 1000.0, 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&sy, "sigmaY");
 
         struct _enum_para_ bt = {borderType, "BorderTypes"};
@@ -1609,10 +1676,10 @@ CV_EXPORTS_W void convertScaleAbs(cv::InputArray src, cv::OutputArray dst,
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), CONVERTSCALEABS, "convertScaleAbs", 0x000F, BUILIN_PARA);
         func.push_back( foo );
 
-        struct _double_para_ al = {alpha, 0.0, std::numeric_limits<double>::max()};
+        struct _double_para_ al = {alpha, 0.0, std::numeric_limits<double>::max(), 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&al, "alpha");
 
-        struct _double_para_ be = {beta, 0.0, std::numeric_limits<double>::max()};
+        struct _double_para_ be = {beta, 0.0, std::numeric_limits<double>::max(), 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&be, "beta");
     }
     foo->error_flag = 0;
@@ -1777,10 +1844,10 @@ CV_EXPORTS_W void Laplacian( cv::InputArray src, cv::OutputArray dst, int ddepth
         struct _int_para_ sp = {ksize, 1, 31};
         foo->new_para (SLIDE_INT_TWO_STEP_PARA, sizeof(struct _int_para_), (uint8_t*)&sp, "ksize");
 
-        struct _double_para_ dv = {scale, 0.0, std::numeric_limits<double>::max()};
+        struct _double_para_ dv = {scale, 0.0, std::numeric_limits<double>::max(), 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&dv, "scale");
 
-        struct _double_para_ dd = {delta, 0.0, std::numeric_limits<double>::max()};
+        struct _double_para_ dd = {delta, 0.0, std::numeric_limits<double>::max(), 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&dd, "delta");
 
         struct _enum_para_ bt = {borderType, "BorderTypes"};
@@ -1948,10 +2015,10 @@ CV_EXPORTS_W void HoughCircles( cv::InputArray image, cv::OutputArray circles,
         struct _enum_para_ bt = {method, "HoughModes"};
         foo->new_para (ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt, "method");
 
-        struct _double_para_ al = {dp, 0.0, std::numeric_limits<double>::max()};
+        struct _double_para_ al = {dp, 0.0, std::numeric_limits<double>::max(), 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&al, "dp");
 
-        struct _double_para_ md = {minDist, 0.0, std::numeric_limits<double>::max()};
+        struct _double_para_ md = {minDist, 0.0, std::numeric_limits<double>::max(), 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&md, "minDist");
 
         struct _slide_double_para_ p1 = {param1, 1.0, 255.0, 1.0};            // threshold
@@ -2016,19 +2083,19 @@ CV_EXPORTS_W void HoughLinesP( cv::InputArray image, cv::OutputArray lines,
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), HOUGHLINESP, "HoughLinesP", 0x0003, BUILIN_PARA);
         func.push_back( foo );
 
-        struct _double_para_ ro = {rho, -100000.0, std::numeric_limits<double>::max()};
+        struct _double_para_ ro = {rho, -100000.0, std::numeric_limits<double>::max(), 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&ro, "rho");
 
-        struct _double_para_ ta = {theta, -100000.0, std::numeric_limits<double>::max()};
+        struct _double_para_ ta = {theta, -100000.0, std::numeric_limits<double>::max(), 4};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&ta, "theta");
 
         struct _int_para_ sw = {threshold, 0, 255};
         foo->new_para (SLIDE_INT_PARA, sizeof(struct _int_para_), (uint8_t*)&sw, "threshold");
 
-        struct _double_para_ mll = {minLineLength, -100000.0, std::numeric_limits<double>::max()};
+        struct _double_para_ mll = {minLineLength, -100000.0, std::numeric_limits<double>::max(), 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&mll, "minLineLength");
 
-        struct _double_para_ mlg = {maxLineGap, -100000.0, std::numeric_limits<double>::max()};
+        struct _double_para_ mlg = {maxLineGap, -100000.0, std::numeric_limits<double>::max(), 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&mlg, "maxLineGap");
     }
     foo->error_flag = 0;
@@ -2083,19 +2150,19 @@ CV_EXPORTS_W void HoughLines( cv::InputArray image, cv::OutputArray lines,
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), HOUGHLINES, "HoughLines", 0x0003, BUILIN_PARA);
         func.push_back( foo );
 
-        struct _double_para_ ro = {rho, -100000.0, std::numeric_limits<double>::max()};
+        struct _double_para_ ro = {rho, -100000.0, std::numeric_limits<double>::max(), 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&ro, "rho");
 
-        struct _double_para_ ta = {theta, -100000.0, std::numeric_limits<double>::max()};
+        struct _double_para_ ta = {theta, -100000.0, std::numeric_limits<double>::max(), 4};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&ta, "theta");
 
         struct _int_para_ sw = {threshold, 0, 255};
         foo->new_para (SLIDE_INT_PARA, sizeof(struct _int_para_), (uint8_t*)&sw, "threshold");
 
-        struct _double_para_ sr = {srn, 0.0, std::numeric_limits<double>::max()};
+        struct _double_para_ sr = {srn, 0.0, std::numeric_limits<double>::max(), 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&sr, "srn");
 
-        struct _double_para_ st = {stn, 0.0, std::numeric_limits<double>::max()};
+        struct _double_para_ st = {stn, 0.0, std::numeric_limits<double>::max(), 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&st, "srn");
 
         struct _slide_double_para_ mit = {min_theta, 0.0, CV_PI, 100.0};
@@ -2163,10 +2230,10 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
         struct _int_para_ sh = {dy, -10000, 10000};
         foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&sh, "sh");
 
-        struct _double_para_ sc = {scale, -100000.0, std::numeric_limits<double>::max()};
+        struct _double_para_ sc = {scale, -100000.0, std::numeric_limits<double>::max(), 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&sc, "scale");
 
-        struct _double_para_ dt = {delta, -100000.0, std::numeric_limits<double>::max()};
+        struct _double_para_ dt = {delta, -100000.0, std::numeric_limits<double>::max(), 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&dt, "delta");
 
         struct _enum_para_ bt = {borderType, "BorderTypes"};

@@ -55,6 +55,7 @@ enum _data_types_ {
     PYRDOWN = 0x1021,               // *
     PYRUP = 0x1022,                 // *
     CORNERHARRIS = 0x1023,          // *
+    FITLINE = 0x1024,               // *
 
     MAT_ROI = 0x1800,               // *
     MAT_CONVERTTO = 0x1801,         // *
@@ -153,6 +154,7 @@ struct _double_para_ {
     double value;
     double min;
     double max;
+    int decimals;   // Nachkommastellen
 };
 
 //!

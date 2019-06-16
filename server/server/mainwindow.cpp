@@ -7,6 +7,9 @@
 //!      export LC_NUMERIC="en_US.UTF-8"
 //!      locale
 //!
+//! \todo - Anzahl Nachkommastellen bei class DoubleEdit als Parameter festlegen
+//!       - close Parameter-Window, by Parameter-Node clicked.
+//!
 
 #define VERSION "v0.5"
 
@@ -802,7 +805,16 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
-    case CORNERHARRIS: {
+        case FITLINE: {
+            QString bt = grep_enum_text("DistanceTypes", *(int*)cf->first_para->data);   // distType
+            s = QString ("// CVD::fitLine(points, line, %1, %2, %3, %4);")
+                        .arg(bt)
+                        .arg(QString::number(*(double*)cf->first_para->next->data))     //
+                        .arg(QString::number(*(double*)cf->first_para->next->next->data))     //
+                        .arg(QString::number(*(double*)cf->first_para->next->next->next->data));     //
+            }
+            break;
+        case CORNERHARRIS: {
             QString bt = grep_enum_text("BorderTypes", *(int*)cf->first_para->next->next->next->data);   // borderType
             s = QString ("// CVD::cornerHarris(src, dst, %1, %2, %3, %4);")
                         .arg(QString::number(*(int*)cf->first_para->data))     // blockSize
@@ -811,7 +823,7 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
                         .arg(bt);
             }
             break;
-    case PYRUP: {
+        case PYRUP: {
             struct _point_int_ *ip = (struct _point_int_ *)cf->first_para->data;        // cv::Size
             QString bt = grep_enum_text("BorderTypes", *(int*)cf->first_para->next->data);   // borderType
             s = QString ("// CVD::pyrUp(src, dst, cv::size(%1, %2), %3);")
@@ -1313,6 +1325,7 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "PYRDOWN") == 0) return PYRDOWN;
     if (strcmp(enum_name, "PYRUP") == 0) return PYRUP;
     if (strcmp(enum_name, "CORNERHARRIS") == 0) return CORNERHARRIS;
+    if (strcmp(enum_name, "FITLINE") == 0) return FITLINE;
 
     if (strcmp(enum_name, "MAT_ROI") == 0) return MAT_ROI;
     if (strcmp(enum_name, "MAT_CONVERTTO") == 0) return MAT_CONVERTTO;
@@ -1395,6 +1408,7 @@ char *MainWindow::get_enum_text (int val)
     if (val == PYRDOWN) strcpy (buf, "PYRDOWN");
     if (val == PYRUP) strcpy (buf, "PYRUP");
     if (val == CORNERHARRIS) strcpy (buf, "CORNERHARRIS");
+    if (val == FITLINE) strcpy (buf, "FITLINE");
 
     if (val == MAT_ROI) strcpy (buf, "MAT_ROI");
     if (val == MAT_CONVERTTO) strcpy (buf, "MAT_CONVERTTO");

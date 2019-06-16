@@ -5,6 +5,7 @@ build*/
 latex*/
 html*/
 test_app*/
+test*/
 
 # Verzeichnis wiki ausschliessen
 wiki/

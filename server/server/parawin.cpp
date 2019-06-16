@@ -45,6 +45,13 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case FITLINE:
+        new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );                        // distType
+        new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );                // param
+        new DoubleEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );          // reps
+        new DoubleEdit (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );    // aeps
+        set_param_win( 4, 260 );
+        break;
     case CORNERHARRIS:
         new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );                     // blockSize
         new Slide (client, cf->first_para->next, LEFT_POS, 10+55*1, this );                 // ksize 3, 5, ...
@@ -753,6 +760,7 @@ DoubleEdit::DoubleEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWi
 
     dedit = new QDoubleSpinBox();
     dedit->setRange( val->min, val->max );
+    dedit->setDecimals ( val->decimals );
     dedit->setValue( val->value );
     dedit->setMinimum( val->min );
     dedit->setMaximum( val->max );
