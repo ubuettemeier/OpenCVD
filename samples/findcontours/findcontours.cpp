@@ -14,7 +14,9 @@ int main( int argc, char** argv )
     vector<vector<Point> > contours;
     vector<Vec4i> hierarchy;
     
-    cv::namedWindow("image_1");     // init a output window
+    cv::namedWindow("image_1");     // init a output window 1
+    cv::namedWindow("image_2");     // init a output window 2
+
     cv::VideoCapture cap(0);        // open the default camera
     if(!cap.isOpened()) {           // check if we succeeded
         printf ("NO CAMERA\n");
@@ -23,15 +25,25 @@ int main( int argc, char** argv )
     
     uint8_t ende = 0;
     while (!ende) {
-        CVD::Mat a;
-        cap >> a;                   // Bildeinzug
+        CVD::Mat src, a, b;
+        cap >> src;                   // Bildeinzug
         
-        CVD::cvtColor (a, a, cv::COLOR_BGR2GRAY);
+        CVD::cvtColor (src, a, cv::COLOR_BGR2GRAY);
         CVD::medianBlur(a, a, 7);
         CVD::Canny( a, a, thresh, thresh*2, 3 );  
         // CVD::findContours( a, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE, Point(0, 0) );
         CVD::findContours( a, contours, cv::RETR_TREE, cv::CHAIN_APPROX_NONE, Point(0, 0) );    // overload
-        
+        if (contours.size()) {
+            src.copyTo(b);
+            for (int i=0; i<(int)contours.size(); i++) {
+                std::vector<cv::Point> poly;
+                CVD::approxPolyDP( contours[i], poly, 5, true);
+                cv::polylines( b, poly, true, cv::Scalar(0, 0, 255), 2 );
+            }
+        }
+
+        if (!b.empty())
+            cv::imshow ("image_2", b);
         if (!a.empty())
             cv::imshow ("image_1", a);
 

@@ -59,12 +59,12 @@ see: samples/short_sample/short_sample.cpp
 
 **aktuell sind folgende OpenCV Funktionen implementiert / currently the following OpenCV functions are implemented**
 
-- adaptiveThreshold
+- adaptiveThreshold, approxPolyDP
 - blur
 - Canny, cvtColor, calcHist, convertScaleAbs, cornerHarris
 - dilate
 - erode
-- findContours
+- findContours, fitLine
 - GaussianBlur, getStructuringElement
 - HoughCircles, HoughLinesP, HoughLines
 - imread

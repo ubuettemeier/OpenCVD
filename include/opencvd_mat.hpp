@@ -61,8 +61,6 @@ public:
 //! \param _area_threshold
 //! \param _min_margin
 //! \param _edge_blur_size
-//! \param line_nr
-//! \param src_file
 //! \return
 //!
 CV_WRAP cv::Ptr<cv::MSER> MSER::create( int _delta, int _min_area, int _max_area,
@@ -71,6 +69,8 @@ CV_WRAP cv::Ptr<cv::MSER> MSER::create( int _delta, int _min_area, int _max_area
                                         double _min_margin, int _edge_blur_size,
                                         int line_nr, const char *src_file)
 {
+    if (line_nr) {}
+    if (src_file) {}
     cv::Ptr<cv::MSER> ms = cv::MSER::create(_delta, _min_area, _max_area, _max_variation, _min_diversity, _max_evolution, _area_threshold, _min_margin, _edge_blur_size);
     return ms;
 }

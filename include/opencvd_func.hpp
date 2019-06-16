@@ -152,6 +152,11 @@ CV_EXPORTS void findContours( cv::InputOutputArray image, cv::OutputArrayOfArray
                               int mode, int method, cv::Point offset = cv::Point(),
                               BUILDIN);
 
+CV_EXPORTS_W void approxPolyDP( cv::InputArray curve,
+                                cv::OutputArray approxCurve,
+                                double epsilon, bool closed,
+                                BUILDIN);
+
 CV_EXPORTS_W void Laplacian( cv::InputArray src, cv::OutputArray dst, int ddepth,
                              int ksize = 1, double scale = 1, double delta = 0,
                              int borderType = cv::BORDER_DEFAULT,
@@ -1726,9 +1731,9 @@ CV_EXPORTS_W void convertScaleAbs(cv::InputArray src, cv::OutputArray dst,
 //! \param method
 //! \param offset
 //!
-CV_EXPORTS_W void findContours( cv::InputOutputArray image,
-                                cv::OutputArrayOfArrays contours,
-                                cv::OutputArray hierarchy,
+CV_EXPORTS_W void findContours( cv::InputOutputArray image,         // CVD::Mat
+                                cv::OutputArrayOfArrays contours,   // vector< vector<Point> >
+                                cv::OutputArray hierarchy,          // vector< Vec4i >
                                 int mode,
                                 int method, cv::Point offset
                                 BUILDIN_FUNC)
@@ -1808,6 +1813,59 @@ CV_EXPORTS void findContours( cv::InputOutputArray image, cv::OutputArrayOfArray
     vector<cv::Vec4i> hierarchy;
 
     cvd::findContours (image, contours, hierarchy, mode, method, offset, line_nr, src_file);
+}
+
+//!
+//! \brief approxPolyDP
+//! \param curve
+//! \param approxCurve
+//! \param epsilon Parameter specifying the approximation accuracy. This is the maximum distance
+//!         between the original curve and its approximation.
+//! \param closed If true, the approximated curve is closed (its first and last vertices are
+//!         connected). Otherwise, it is not closed.
+//!
+CV_EXPORTS_W void approxPolyDP( cv::InputArray curve,           // vector < cv::Point >
+                                cv::OutputArray approxCurve,    // vector< cv::Point >
+                                double epsilon, bool closed
+                                BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::approxPolyDP( curve, approxCurve, epsilon, closed );
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), APPROXPOLYPD, "approxPolyDP",
+                               PARAMETER | FUNC_OFF,    // Menu
+                               BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _double_para_ ep = {epsilon, 0.0, 100000.0, 2};                                      // epsilon
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&ep, "epsilon" );
+
+        struct _enum_para_ bt = {closed, "boolType"};                                               // closed
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt, "closed" );
+    }
+    foo->error_flag = 0;
+    // --------------------------------------------
+    // NO break
+    // --------------------------------------------
+    if (foo->state.flag.func_off) {
+        // do nothing
+    } else {
+        try {
+            cv::approxPolyDP( curve, approxCurve,
+                            *(double*)foo->para[0]->data,       // epsilon
+                            *(int*)foo->para[1]->data);          // closed
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
+        foo->control_func_run_time ();
+    }
+    // foo->control_approxPolyDP_imshow( approxCurve );     // No show
 }
 
 //!

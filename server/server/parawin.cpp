@@ -45,6 +45,11 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case APPROXPOLYPD:
+        new DoubleEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );              // epsilon
+        new EnumDrop (client, cf->first_para->next, LEFT_POS, 10+55*1, this );          // closed
+        set_param_win( 2, 260 );
+        break;
     case FITLINE:
         new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );                        // distType
         new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );                // param

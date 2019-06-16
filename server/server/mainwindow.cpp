@@ -805,6 +805,13 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case APPROXPOLYPD: {
+            QString bt = grep_enum_text("boolType", *(int*)cf->first_para->next->data);   // closed
+            s = QString ("// CVD::approxPolyDP(curve, approxCurve, %1, %2);")
+                        .arg(QString::number(*(double*)cf->first_para->data))     // epsilon
+                        .arg(bt);
+            }
+            break;
         case FITLINE: {
             QString bt = grep_enum_text("DistanceTypes", *(int*)cf->first_para->data);   // distType
             s = QString ("// CVD::fitLine(points, line, %1, %2, %3, %4);")

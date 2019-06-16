@@ -56,6 +56,7 @@ enum _data_types_ {
     PYRUP = 0x1022,                 // *
     CORNERHARRIS = 0x1023,          // *
     FITLINE = 0x1024,               // *
+    APPROXPOLYPD = 0x1025,
 
     MAT_ROI = 0x1800,               // *
     MAT_CONVERTTO = 0x1801,         // *
