@@ -9,7 +9,6 @@
 //!
 //! \todo - Anzahl Nachkommastellen bei class DoubleEdit als Parameter festlegen
 //!       - close Parameter-Window, by Parameter-Node clicked.
-//!       - Main Menu => delete all Function ON delete. use all Funktione OFF with checkable
 //!
 
 #define VERSION "v0.5"
@@ -1180,7 +1179,7 @@ void MainWindow::write_header_bef (int befehl)
 
 //!
 //! \brief MainWindow::on_actionCVD_OFF_triggered
-//!        Extra / set CVD OFF
+//!        Extra / set CVD OFF/ON
 //!
 void MainWindow::on_actionCVD_OFF_triggered()
 {
@@ -1192,45 +1191,38 @@ void MainWindow::on_actionCVD_OFF_triggered()
 
 //!
 //! \brief MainWindow::on_actionset_all_Function_OFF_triggered
-//!        Extra / all Function OFF
+//!        Extra / all Function OFF/ON
 //!
 void MainWindow::on_actionset_all_Function_OFF_triggered()
 {
     struct _cvd_func_ *foo = first_func;
 
-    while (foo != NULL) {
-        if (foo->func_off != NULL) {
-            if (foo->state.flag.func_off == 0) {
-                foo->state.flag.func_off = 1;
-                QTreeWidgetItem *item = (QTreeWidgetItem *)foo->func_off;
-                item->setIcon(0, iconlist[OK_ICON]);
-                item->setTextColor(0, QColor("red"));
-                write_state( foo );     // client benachrichtigen !
+    if (ui->actionset_all_Function_OFF->isChecked()) {
+        while (foo != NULL) {
+            if (foo->func_off != NULL) {
+                if (foo->state.flag.func_off == 0) {
+                    foo->state.flag.func_off = 1;
+                    QTreeWidgetItem *item = (QTreeWidgetItem *)foo->func_off;
+                    item->setIcon(0, iconlist[OK_ICON]);
+                    item->setTextColor(0, QColor("red"));
+                    write_state ( foo );                    // client benachrichtigen !
+                }
             }
+            foo = foo->next;
         }
-        foo = foo->next;
-    }
-}
-
-//!
-//! \brief MainWindow::on_actionset_all_Function_ON_triggered
-//!        Extra / all Function ON
-//!
-void MainWindow::on_actionset_all_Function_ON_triggered()
-{
-    struct _cvd_func_ *foo = first_func;
-
-    while (foo != NULL) {
-        if (foo->func_off != NULL) {
-            if (foo->state.flag.func_off != 0) {
-                foo->state.flag.func_off = 0;
-                QTreeWidgetItem *item = (QTreeWidgetItem *)foo->func_off;
-                item->setIcon(0, QIcon());
-                item->setTextColor(0, QColor("black"));
-                write_state  ( foo );
+    } else {
+        while (foo != NULL) {
+            if (foo->func_off != NULL) {
+                if (foo->state.flag.func_off != 0) {
+                    foo->state.flag.func_off = 0;
+                    QTreeWidgetItem *item = (QTreeWidgetItem *)foo->func_off;
+                    item->setIcon(0, QIcon());
+                    item->setTextColor(0, QColor("black"));
+                    write_state  ( foo );                   // client benachrichtigen !
+                }
             }
+            foo = foo->next;
         }
-        foo = foo->next;
     }
 }
 

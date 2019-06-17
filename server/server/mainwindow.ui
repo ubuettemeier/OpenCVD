@@ -135,9 +135,7 @@
      <string>Ext&amp;ra</string>
     </property>
     <addaction name="actionCVD_OFF"/>
-    <addaction name="separator"/>
     <addaction name="actionset_all_Function_OFF"/>
-    <addaction name="actionset_all_Function_ON"/>
     <addaction name="separator"/>
     <addaction name="actionall_Breakpoint_s_OFF"/>
    </widget>
@@ -210,7 +208,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>&amp;set CVD OFF</string>
+    <string>&amp;set CVD OFF/ON</string>
    </property>
   </action>
   <action name="actionset_all_Function_OFF">
@@ -218,7 +216,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>&amp;all Function OFF</string>
+    <string>&amp;all Function OFF/ON</string>
    </property>
   </action>
   <action name="actionset_all_Function_ON">

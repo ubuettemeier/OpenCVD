@@ -102,9 +102,8 @@ private slots:
     void on_actionSource_Window_schlie_en_triggered();  // Ansicht / Source Window schließen
     void on_actionOpenCv_Version_triggered();           // Ansicht / OpenCV Version
 
-    void on_actionCVD_OFF_triggered();                  // Extra / set CVD OFF    
-    void on_actionset_all_Function_OFF_triggered();     // Extra / all Function OFF
-    void on_actionset_all_Function_ON_triggered();      // Extra / all Function ON
+    void on_actionCVD_OFF_triggered();                  // Extra / set CVD OFF/ON
+    void on_actionset_all_Function_OFF_triggered();     // Extra / all Function OFF/ON
     void on_actionall_Breakpoint_s_OFF_triggered();     // Extra / all Breakpoint's OFF
 
     void on_actionAbout_triggered();                    // Help / About
