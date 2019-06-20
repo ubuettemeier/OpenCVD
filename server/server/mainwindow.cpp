@@ -805,6 +805,10 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case SCALEADD:
+            s = QString ("// CVD::scaleADD (src1, %1, src2, dst);")
+                         .arg(QString::number(*(double*)cf->first_para->data));     // alpha
+            break;
         case MAT_ASSIGNTO:
             s = QString ("// src.assigTo (m,%1);")
                         .arg(QString::number(*(int*)cf->first_para->data));     // type
@@ -1331,6 +1335,7 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "CORNERHARRIS") == 0) return CORNERHARRIS;
     if (strcmp(enum_name, "FITLINE") == 0) return FITLINE;
     if (strcmp(enum_name, "APPROXPOLYPD") == 0) return APPROXPOLYPD;
+    if (strcmp(enum_name, "SCALEADD") == 0) return SCALEADD;
 
     if (strcmp(enum_name, "MAT_ROI") == 0) return MAT_ROI;
     if (strcmp(enum_name, "MAT_CONVERTTO") == 0) return MAT_CONVERTTO;
@@ -1416,6 +1421,8 @@ char *MainWindow::get_enum_text (int val)
     if (val == CORNERHARRIS) strcpy (buf, "CORNERHARRIS");
     if (val == FITLINE) strcpy (buf, "FITLINE");
     if (val == APPROXPOLYPD) strcpy (buf, "APPROXPOLYPD");
+    if (val == SCALEADD) strcpy (buf, "SCALEADD");
+
 
     if (val == MAT_ROI) strcpy (buf, "MAT_ROI");
     if (val == MAT_CONVERTTO) strcpy (buf, "MAT_CONVERTTO");

@@ -137,6 +137,9 @@ CV_EXPORTS_W void morphologyEx( cv::InputArray src, cv::OutputArray dst,
 CV_EXPORTS_W Mat getStructuringElement(int shape, cv::Size ksize, cv::Point anchor = cv::Point(-1,-1),
                                            BUILDIN);
 
+CV_EXPORTS_W void scaleAdd(cv::InputArray src1, double alpha, cv::InputArray src2, cv::OutputArray dst,
+                           BUILDIN);
+
 CV_EXPORTS_W void convertScaleAbs(cv::InputArray src, cv::OutputArray dst,
                                   double alpha = 1, double beta = 0,
                                   BUILDIN);
@@ -1658,6 +1661,67 @@ CV_EXPORTS_W void GaussianBlur( cv::InputArray src, cv::OutputArray dst, cv::Siz
 } // GaussianBlur
 
 //!
+//! \brief scaleAdd
+//! \param src1
+//! \param alpha scale factor for the first array (src1)
+//! \param src2
+//! \param dst
+//!
+CV_EXPORTS_W void scaleAdd(cv::InputArray src1, double alpha, cv::InputArray src2, cv::OutputArray dst
+                           BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::scaleAdd( src1, alpha, src2, dst );
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), SCALEADD, "scaleAdd",
+                               PARAMETER | FUNC_OFF | SHOW_IMAGE | BREAK,    // Menu 0x000F
+                               BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _double_para_ al = {alpha, 0.0, std::numeric_limits<double>::max(), 2};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&al, "alpha");
+    }
+    foo->error_flag = 0;
+    // -----------------------------------------------------------------
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::Mat out;
+            try {
+                cv::scaleAdd( src1,
+                              *(double*)foo->para[0]->data,      // alpha
+                              src2, out);
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
+            foo->control_imshow( out );                 // Ausgabe
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
+    // -----------------------------------------------------------------
+    if (foo->state.flag.func_off) {
+        src1.copyTo( dst );             // ???
+    } else {
+        try {
+            cv::scaleAdd( src1,
+                          *(double*)foo->para[0]->data,      // alpha
+                          src2, dst);
+        } catch( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( dst );
+} // scaleAdd
+
+//!
 //! \brief cvd::convertScaleAbs
 //!        Scales, calculates absolute values, and converts the result to 8-bit.
 //! \param src
@@ -1688,7 +1752,7 @@ CV_EXPORTS_W void convertScaleAbs(cv::InputArray src, cv::OutputArray dst,
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&be, "beta");
     }
     foo->error_flag = 0;
-
+    // -----------------------------------------------------------------
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
@@ -1705,7 +1769,7 @@ CV_EXPORTS_W void convertScaleAbs(cv::InputArray src, cv::OutputArray dst,
             foo->control_func_run_time ();
         }
     }
-
+    // -----------------------------------------------------------------
     if (foo->state.flag.func_off) {
         src.copyTo( dst );
     } else {

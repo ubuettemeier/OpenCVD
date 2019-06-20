@@ -73,7 +73,7 @@ see: samples/short_sample/short_sample.cpp
 - normalize
 - pyrDown, pyrUp
 - resized
-- Scharr, Sobel
+- Scharr, Sobel, scaleAdd
 - threshold
 
 **cv::Mat Funktionen / cv::Mat functions**
