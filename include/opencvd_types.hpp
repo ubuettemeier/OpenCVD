@@ -67,8 +67,10 @@ enum _data_types_ {
     MAT_SIZE_TYPE = 0x1805,         // *
     MAT_ASSIGNTO = 0x1806,          // *
     MAT_ONES = 0x1807,              // *
-    MAT_ONES_2 = 0x1808,
-    MAT_ONES_3 = 0x1809,
+    MAT_ONES_2 = 0x1808,            // *
+    MAT_ONES_3 = 0x1809,            // *
+    MAT_ZEROS = 0x180A,             // *
+    MAT_EYE = 0x180B,
 
     // ----- Parameter 0x2000...0x2FFF --------
     SLIDE_INT_TWO_STEP_PARA = 0x2000,       // z.B. 1, 3, 5, ... 21 (int)

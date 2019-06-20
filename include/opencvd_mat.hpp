@@ -1,8 +1,12 @@
+//!
+//! \author Ulrich Buettemeier
+//! \todo CVD::Mat zero = CVD::Mat::zeros(250, 300, CV_8U);  funktioniert nicht !!!
+//!
+
 #ifndef OPENCV_MAT_HPP
 #define OPENCV_MAT_HPP
 
 #include "opencv2/opencv.hpp"
-// #include "opencv2/features2d/features2d.hpp"
 
 namespace cvd {
 
@@ -21,9 +25,18 @@ public:
 
     Mat(const cv::Mat& m, const cv::Rect& roi, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
 
+    static cv::MatExpr zeros(int rows, int cols, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+
     static cv::MatExpr ones(int rows, int cols, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
     static cv::MatExpr ones(cv::Size size, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
     static cv::MatExpr ones(int ndims, const int* sz, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+
+    static cv::MatExpr eye(int rows, int cols, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+
+    static cv::MatExpr func_type_1(int rows, int cols, int type,
+                                 int line_nr, const char *src_file,
+                                 int cv_type, const char *func_name,
+                                 uint64_t builtin_retunr_adresse);
 
     void convertTo( cv::OutputArray m, int rtype, double alpha=1, double beta=0, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE() ) const;
     void assignTo( cv::Mat& m, int type=-1, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE() ) const;
@@ -516,26 +529,84 @@ cv::MatExpr Mat::ones(int ndims, const int* sz, int type, int line_nr, const cha
 }
 
 //!
-//! \brief Mat::ones Gibt ein Array aller Einsen der angegebenen Größe und des angegebenen Typs zurück.
+//! \brief Mat::ones    Gibt ein Array aller Einsen der angegebenen Größe und des angegebenen Typs zurück.
 //! \param rows Number of rows.
-//! \param cols
+//! \param cols Number of cols.
 //! \param type Created matrix type.
 //! \example Mat A = Mat::ones(100, 100, CV_8U)*3; // make 100x100 matrix filled with 3.
 //! \return
 //! type 1
 cv::MatExpr Mat::ones(int rows, int cols, int type, int line_nr, const char *src_file)
 {
+    uint64_t ret_addr = (uint64_t)__builtin_return_address(0);
+
+    cv::MatExpr ret = func_type_1 (rows, cols, type,
+                                   line_nr, src_file,
+                                   MAT_ONES, "Mat::ones",
+                                   ret_addr);
+    return ret;
+}
+
+//!
+//! \brief Mat::zero
+//! \param rows Number of rows.
+//! \param cols Number of cols.
+//! \param type Created matrix type.
+//! \return
+//!
+cv::MatExpr Mat::zeros(int rows, int cols, int type, int line_nr, const char *src_file)
+{
+    uint64_t ret_addr = (uint64_t)__builtin_return_address(0);
+
+    cv::MatExpr ret = func_type_1 (rows, cols, type,
+                                   line_nr, src_file,
+                                   MAT_ZEROS, "Mat::zero",
+                                   ret_addr);
+    return ret;
+}
+
+//!
+//! \brief Mat::eye
+//! \param rows
+//! \param cols
+//! \param type
+//! \example CVD::Mat A = CVD::Mat::eye(4, 4, CV_32F)*0.1;
+//! \return
+//!
+cv::MatExpr Mat::eye(int rows, int cols, int type, int line_nr, const char *src_file)
+{
+    uint64_t ret_addr = (uint64_t)__builtin_return_address(0);
+
+    cv::MatExpr ret = func_type_1 (rows, cols, type,
+                                   line_nr, src_file,
+                                   MAT_EYE, "Mat::eye",
+                                   ret_addr);
+    return ret;
+}
+
+//! --------------------------------------------------------------------------------------------------------
+cv::MatExpr Mat::func_type_1(int rows, int cols, int type,
+                             int line_nr, const char *src_file,
+                             int cv_type, const char *func_name,
+                             uint64_t builtin_retunr_adresse)
+{
     cv::MatExpr ret;
 
     if (cvd_off) {
-        return cv::Mat::ones( rows, cols, type );
+        if (cv_type == MAT_ONES)
+            return cv::Mat::ones( rows, cols, type );
+        if (cv_type == MAT_ZEROS)
+            return cv::Mat::zeros( rows, cols, type );
+        if (cv_type == MAT_EYE)
+            return cv::Mat::eye( rows, cols, type );
+
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
     opencvd_func *foo = NULL;
 
-    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
-        foo = new opencvd_func((uint64_t)__builtin_return_address(0), MAT_ONES, "Mat::ones",
+    if ((foo = opencvd_func::grep_func(func, builtin_retunr_adresse)) == NULL) {
+        foo = new opencvd_func(builtin_retunr_adresse, cv_type, func_name,
                                PARAMETER | FUNC_OFF | BREAK | SHOW_IMAGE,    // Menu
                                line_nr, src_file);
         func.push_back( foo );
@@ -556,9 +627,18 @@ cv::MatExpr Mat::ones(int rows, int cols, int type, int line_nr, const char *src
         while (foo->state.flag.func_break) {
             cv::MatExpr result;
             try {
-                result = cv::Mat::ones(*(int*)foo->para[0]->data,
-                                       *(int*)foo->para[1]->data,
-                                       *(int*)foo->para[2]->data);
+                if (cv_type == MAT_ONES)
+                    result = cv::Mat::ones(*(int*)foo->para[0]->data,
+                                           *(int*)foo->para[1]->data,
+                                           *(int*)foo->para[2]->data);
+                if (cv_type == MAT_ZEROS)
+                    result = cv::Mat::zeros(*(int*)foo->para[0]->data,
+                                            *(int*)foo->para[1]->data,
+                                            *(int*)foo->para[2]->data);
+                if (cv_type == MAT_EYE)
+                    result = cv::Mat::eye(*(int*)foo->para[0]->data,
+                                          *(int*)foo->para[1]->data,
+                                          *(int*)foo->para[2]->data);
             } catch( cv::Exception& e ) {
                 foo->error_flag |= FUNC_ERROR;
             }
@@ -572,9 +652,18 @@ cv::MatExpr Mat::ones(int rows, int cols, int type, int line_nr, const char *src
         return cv::MatExpr(cv::Mat());
     } else {
         try {
-            ret = cv::Mat::ones(*(int*)foo->para[0]->data,
-                                *(int*)foo->para[1]->data,
-                                *(int*)foo->para[2]->data);
+            if (cv_type == MAT_ONES)
+                ret = cv::Mat::ones(*(int*)foo->para[0]->data,
+                                    *(int*)foo->para[1]->data,
+                                    *(int*)foo->para[2]->data);
+            if (cv_type == MAT_ZEROS)
+                ret = cv::Mat::zeros(*(int*)foo->para[0]->data,
+                                     *(int*)foo->para[1]->data,
+                                     *(int*)foo->para[2]->data);
+            if (cv_type == MAT_EYE)
+                ret = cv::Mat::eye(*(int*)foo->para[0]->data,
+                                   *(int*)foo->para[1]->data,
+                                   *(int*)foo->para[2]->data);
         } catch( cv::Exception& e ) {
             foo->error_flag |= FUNC_ERROR;
         }
@@ -583,7 +672,7 @@ cv::MatExpr Mat::ones(int rows, int cols, int type, int line_nr, const char *src
     foo->control_imshow( static_cast<cv::Mat>(ret) );     // Bildausgabe
 
     return ret;
-}
+} // Mat::func_type_1(int rows, int cols, int type, int line_nr, const char *src_file)
 
 //!
 //! \brief Mat::Mat

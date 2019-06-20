@@ -823,12 +823,22 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
                         .arg(bt);
             }
             break;
+        case MAT_EYE:
+        case MAT_ZEROS:
         case MAT_ONES: {
+            QString func_name = "unbekannte Funktion";
+            if (cf->type == MAT_EYE)
+                func_name = "eye";
+            if (cf->type == MAT_ZEROS)
+                func_name = "zeros";
+            if (cf->type == MAT_ONES)
+                func_name = "ones";
             QString bt = grep_enum_text("ddepth", *(int*)cf->first_para->next->next->data);   // closed
-            s = QString ("// CVD::Mat::ones (%1, %2, %3);")
+            s = QString ("// CVD::Mat::%4 (%1, %2, %3);")
                         .arg(QString::number(*(int*)cf->first_para->data))
                         .arg(QString::number(*(int*)cf->first_para->next->data))
-                        .arg(bt);
+                        .arg(bt)
+                        .arg(func_name);
             }
             break;
         case SCALEADD:
