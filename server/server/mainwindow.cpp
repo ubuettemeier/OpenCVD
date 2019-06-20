@@ -805,6 +805,14 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case MAT_ONES: {
+            QString bt = grep_enum_text("ddepth", *(int*)cf->first_para->next->next->data);   // closed
+            s = QString ("// CVD::Mat::ones (%1, %2, %3);")
+                        .arg(QString::number(*(int*)cf->first_para->data))
+                        .arg(QString::number(*(int*)cf->first_para->next->data))
+                        .arg(bt);
+            }
+            break;
         case SCALEADD:
             s = QString ("// CVD::scaleADD (src1, %1, src2, dst);")
                          .arg(QString::number(*(double*)cf->first_para->data));     // alpha
@@ -1344,6 +1352,7 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "MAT_ROWS_COLS_TYPE") == 0) return MAT_ROWS_COLS_TYPE;
     if (strcmp(enum_name, "MAT_SIZE_TYPE") == 0) return MAT_SIZE_TYPE;
     if (strcmp(enum_name, "MAT_ASSIGNTO") == 0) return MAT_ASSIGNTO;
+    if (strcmp(enum_name, "MAT_ONES") == 0) return MAT_ONES;
 
     if (strcmp(enum_name, "SLIDE_INT_TWO_STEP_PARA") == 0) return SLIDE_INT_TWO_STEP_PARA;
     if (strcmp(enum_name, "SLIDE_INT_PARA") == 0) return SLIDE_INT_PARA;
@@ -1431,6 +1440,7 @@ char *MainWindow::get_enum_text (int val)
     if (val == MAT_ROWS_COLS_TYPE) strcpy (buf, "MAT_ROWS_COLS_TYPE");
     if (val == MAT_SIZE_TYPE) strcpy (buf, "MAT_SIZE_TYPE");
     if (val == MAT_ASSIGNTO) strcpy (buf, "MAT_ASSIGNTO");
+    if (val == MAT_ONES) strcpy (buf, "MAT_ONES");
 
     if (val == SLIDE_INT_TWO_STEP_PARA) strcpy (buf, "SLIDE_INT_TWO_STEP_PARA");
     if (val == SLIDE_INT_PARA) strcpy (buf, "SLIDE_INT_PARA");
