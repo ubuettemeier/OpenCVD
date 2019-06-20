@@ -22,6 +22,8 @@ public:
     Mat(const cv::Mat& m, const cv::Rect& roi, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
 
     static cv::MatExpr ones(int rows, int cols, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+    static cv::MatExpr ones(cv::Size size, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+    static cv::MatExpr ones(int ndims, const int* sz, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
 
     void convertTo( cv::OutputArray m, int rtype, double alpha=1, double beta=0, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE() ) const;
     void assignTo( cv::Mat& m, int type=-1, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE() ) const;
@@ -368,13 +370,159 @@ Mat::Mat(int rows, int cols, int type, const cv::Scalar& s, int line_nr, const c
 }
 
 //!
+//! \brief Mat::ones
+//! \param size
+//! \param type
+//! \return
+//! type 2
+cv::MatExpr Mat::ones(cv::Size size, int type, int line_nr, const char *src_file)
+{
+    cv::MatExpr ret;
+
+    if (cvd_off) {
+        return cv::Mat::ones( size, type );
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), MAT_ONES_2, "Mat::ones",
+                               PARAMETER | FUNC_OFF | BREAK | SHOW_IMAGE,    // Menu
+                               line_nr, src_file);
+        func.push_back( foo );
+
+        struct _point_int_ ip = {size.width, 0, 0xFFFF, size.height, 0, 0xFFFF};
+        foo->new_para (POINT_INT, sizeof(struct _point_int_), (uint8_t*)&ip, "size");
+
+        struct _enum_para_ tp = {type, "ddepth"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&tp, "type" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear FUNC_ERROR
+    // -------------------------------------
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::MatExpr result;
+            struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
+            try {
+                result = cv::Mat::ones(cv::Size(ip->x, ip->y),          // cv::Size
+                                       *(int*)foo->para[1]->data);      // type
+            } catch( cv::Exception& e ) {
+                foo->error_flag |= FUNC_ERROR;
+            }
+            foo->control_imshow( static_cast<cv::Mat>(result) );                 // Ausgabe
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
+    // -------------------------------------
+    if (foo->state.flag.func_off) {
+        return cv::MatExpr(cv::Mat());
+    } else {
+        struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
+        try {
+            ret = cv::Mat::ones(cv::Size(ip->x, ip->y),         // cv::Size
+                                *(int*)foo->para[1]->data);     // type
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( static_cast<cv::Mat>(ret) );     // Bildausgabe
+
+    return ret;
+}
+
+//!
+//! \brief Mat::ones
+//! \param ndims Array dimensionality. // max. 2 ???
+//! \param sz Array of integers specifying the array shape.
+//! \param type Created matrix type.
+//! \return
+//! type 3
+cv::MatExpr Mat::ones(int ndims, const int* sz, int type, int line_nr, const char *src_file)
+{
+    cv::MatExpr ret;
+    int this_size[2] = {0, 0};
+
+    if (cvd_off) {
+        return cv::Mat::ones( ndims, sz, type );
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), MAT_ONES_3, "Mat::ones",
+                               PARAMETER | FUNC_OFF | BREAK | SHOW_IMAGE,    // Menu
+                               line_nr, src_file);
+        func.push_back( foo );
+
+        struct _int_para_ nd = {ndims, 0, 2};
+        foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&nd, "ndims");
+
+        if (ndims >= 1)
+            this_size[0] = sz[0];
+        struct _int_para_ s0 = {this_size[0], 0, 1000000};
+        foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&s0, "sz[0]");
+
+        if (ndims >= 2)
+            this_size[1] = sz[1];
+        struct _int_para_ s1 = {this_size[1], 0, 1000000};
+        foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&s1, "sz[1]");
+
+        struct _enum_para_ tp = {type, "ddepth"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&tp, "type" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear FUNC_ERROR
+    // -------------------------------------
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::MatExpr result;
+            this_size[0] = *(int*)foo->para[1]->data;
+            this_size[1] = *(int*)foo->para[2]->data;
+            try {
+                result = cv::Mat::ones(*(int*)foo->para[0]->data,           // &dummy,
+                                       this_size,
+                                       *(int*)foo->para[3]->data);
+            } catch( cv::Exception& e ) {
+                foo->error_flag |= FUNC_ERROR;
+            }
+            foo->control_imshow( static_cast<cv::Mat>(result) );                 // Ausgabe
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
+    // -------------------------------------
+    if (foo->state.flag.func_off) {
+        return cv::MatExpr(cv::Mat());
+    } else {
+        this_size[0] = *(int*)foo->para[1]->data;
+        this_size[1] = *(int*)foo->para[2]->data;
+        try {
+            ret = cv::Mat::ones(*(int*)foo->para[0]->data,
+                                this_size,
+                                *(int*)foo->para[3]->data);
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( static_cast<cv::Mat>(ret) );     // Bildausgabe
+
+    return ret;
+}
+
+//!
 //! \brief Mat::ones Gibt ein Array aller Einsen der angegebenen Größe und des angegebenen Typs zurück.
 //! \param rows Number of rows.
 //! \param cols
 //! \param type Created matrix type.
 //! \example Mat A = Mat::ones(100, 100, CV_8U)*3; // make 100x100 matrix filled with 3.
 //! \return
-//!
+//! type 1
 cv::MatExpr Mat::ones(int rows, int cols, int type, int line_nr, const char *src_file)
 {
     cv::MatExpr ret;

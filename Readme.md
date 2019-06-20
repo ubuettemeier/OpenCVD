@@ -85,5 +85,8 @@ see: samples/short_sample/short_sample.cpp
 - Mat ( Mat &m, Rect &ROI );
 - Mat.convertTo ( OutputArray m, int rtype, double alpha, double beta );
 - Mat.assigTo ( Mat &m, int type );
+- Mat.ones ( int rows, int cols, int type );
+- Mat.ones ( Size size, int type );
+- Mat.ones ( int ndims, const int* sz, int type );
 
 
