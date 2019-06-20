@@ -78,11 +78,12 @@ see: samples/short_sample/short_sample.cpp
 
 **cv::Mat Funktionen / cv::Mat functions**
 
-- Mat(int rows, int cols, int type);
-- Mat(Size size, int type);
-- Mat(Size size, int type, const Scalar& s);
-- Mat(int rows, int cols, int type, const Scalar& s);
-- Mat(Mat &m, Rect &ROI);
-- Mat.convertTo();
+- Mat ( int rows, int cols, int type );
+- Mat ( Size size, int type );
+- Mat ( Size size, int type, const Scalar& s );
+- Mat ( int rows, int cols, int type, const Scalar& s );
+- Mat ( Mat &m, Rect &ROI );
+- Mat.convertTo ( OutputArray m, int rtype, double alpha, double beta );
+- Mat.assigTo ( Mat &m, int type );
 
 

@@ -22,6 +22,7 @@ public:
 
     Mat(const cv::Mat& m, const cv::Rect& roi, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
     void convertTo( cv::OutputArray m, int rtype, double alpha=1, double beta=0, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE() ) const;
+    void assignTo( cv::Mat& m, int type=-1, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE() ) const;
 
     using cv::Mat::operator =;     // Mat& operator = (const Mat& m);
 
@@ -423,6 +424,62 @@ Mat::Mat(const cv::Mat& m, const cv::Rect& roi, int line_nr, const char *src_fil
 }
 
 //!
+//! \brief Mat::assignTo
+//! \param m Destination array.
+//! \param type Desired destination array depth (or -1 if it should be the same as the source type).
+//!
+void Mat::assignTo( cv::Mat& m, int type, int line_nr, const char *src_file ) const
+{
+    if (cvd_off) {
+        this->cv::Mat::assignTo( m, type );
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), MAT_ASSIGNTO, "Mat::assignTo",
+                               PARAMETER | FUNC_OFF | BREAK | SHOW_IMAGE,    // Menu
+                               line_nr, src_file);
+        func.push_back( foo );
+
+        struct _int_para_ ty = {type, -1, 1000000};
+        foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&ty, "type");
+    }
+    foo->error_flag = 0;
+    // -------------------------------------------------------------------
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::Mat out;
+            try {
+                this->cv::Mat::assignTo(out,
+                                        *(int*)foo->para[0]->data);         // type,
+            } catch( cv::Exception& e ) {
+                foo->error_flag = 1;
+            }
+            foo->control_imshow( out );                 // Ausgabe
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
+    // -------------------------------------------------------------------
+    if (foo->state.flag.func_off) {
+        this->copyTo( m );
+    } else {
+        try {
+            this->cv::Mat::assignTo(m,
+                                    *(int*)foo->para[0]->data);         // type,
+        } catch ( cv::Exception& e ) {
+            foo->error_flag = 1;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( m );     // Bildausgabe
+} // Mat::assignTo
+
+//!
 //! \brief Mat::convertTo
 //! \param m
 //! \param rtype desired output matrix type or, rather, the depth since the number of channels are the
@@ -487,7 +544,7 @@ void Mat::convertTo( cv::OutputArray m, int rtype, double alpha, double beta, in
         foo->control_func_run_time ();
     }
     foo->control_imshow( m );     // Bildausgabe
-}
+} // Mat::convertTo
 
 } // namespace cvd
 

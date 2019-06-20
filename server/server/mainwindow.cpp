@@ -805,6 +805,10 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case MAT_ASSIGNTO:
+            s = QString ("// src.assigTo (m,%1);")
+                        .arg(QString::number(*(int*)cf->first_para->data));     // type
+            break;
         case APPROXPOLYPD: {
             QString bt = grep_enum_text("boolType", *(int*)cf->first_para->next->data);   // closed
             s = QString ("// CVD::approxPolyDP(curve, approxCurve, %1, %2);")
@@ -1334,6 +1338,7 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "MAT_SIZE_TYPE_SCALAR") == 0) return MAT_SIZE_TYPE_SCALAR;
     if (strcmp(enum_name, "MAT_ROWS_COLS_TYPE") == 0) return MAT_ROWS_COLS_TYPE;
     if (strcmp(enum_name, "MAT_SIZE_TYPE") == 0) return MAT_SIZE_TYPE;
+    if (strcmp(enum_name, "MAT_ASSIGNTO") == 0) return MAT_ASSIGNTO;
 
     if (strcmp(enum_name, "SLIDE_INT_TWO_STEP_PARA") == 0) return SLIDE_INT_TWO_STEP_PARA;
     if (strcmp(enum_name, "SLIDE_INT_PARA") == 0) return SLIDE_INT_PARA;
@@ -1418,6 +1423,7 @@ char *MainWindow::get_enum_text (int val)
     if (val == MAT_SIZE_TYPE_SCALAR) strcpy (buf, "MAT_SIZE_TYPE_SCALAR");
     if (val == MAT_ROWS_COLS_TYPE) strcpy (buf, "MAT_ROWS_COLS_TYPE");
     if (val == MAT_SIZE_TYPE) strcpy (buf, "MAT_SIZE_TYPE");
+    if (val == MAT_ASSIGNTO) strcpy (buf, "MAT_ASSIGNTO");
 
     if (val == SLIDE_INT_TWO_STEP_PARA) strcpy (buf, "SLIDE_INT_TWO_STEP_PARA");
     if (val == SLIDE_INT_PARA) strcpy (buf, "SLIDE_INT_PARA");
