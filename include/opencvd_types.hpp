@@ -66,6 +66,7 @@ enum _data_types_ {
     MAT_ROWS_COLS_TYPE = 0x1804,    // *
     MAT_SIZE_TYPE = 0x1805,         // *
     MAT_ASSIGNTO = 0x1806,          // *
+    MAT_ONES = 0x1807,
 
     // ----- Parameter 0x2000...0x2FFF --------
     SLIDE_INT_TWO_STEP_PARA = 0x2000,       // z.B. 1, 3, 5, ... 21 (int)
@@ -104,6 +105,11 @@ enum _menu_types_ {
     FUNC_OFF = 2,
     SHOW_IMAGE = 4,
     BREAK = 8,
+};
+
+enum _error_flags_ {        // used for opencvd_func::error_flag
+    FUNC_ERROR = 0x01,
+    IMSHOW_ERORR = 0x02,
 };
 
 #pragma pack(1)

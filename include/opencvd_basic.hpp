@@ -648,6 +648,8 @@ void opencvd_func::write_func ()
 //!
 void opencvd_func::control_imshow ( cv::OutputArray dst )
 {
+    error_flag &= ~IMSHOW_ERORR;    // clear IMSHOW_ERORR
+
     if (state.flag.show_image) {
         if (!dst.empty()) {
             if (window_is_create == 0) {
@@ -655,15 +657,21 @@ void opencvd_func::control_imshow ( cv::OutputArray dst )
                 window_is_create = 1;
             }
 
-            try {
-                cv::imshow( window_name, dst );
-            } catch( cv::Exception& e ) {
-                error_flag = 1;
+            if (dst.channels() != 2) {
+                try {
+                    cv::imshow( window_name, dst );
+                } catch( cv::Exception& e ) {
+                    error_flag |= IMSHOW_ERORR;
+                }
+            } else {
+                error_flag |= IMSHOW_ERORR;
             }
         }
-    } else
-        if (window_is_create != 0)
+    } else {
+        if (window_is_create != 0) {
             cv::destroyWindow ( window_name );
+        }
+    }
 }
 
 //!

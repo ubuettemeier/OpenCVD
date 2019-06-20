@@ -19,8 +19,10 @@ public:
     Mat(int rows, int cols, int type, const cv::Scalar& s, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
     Mat(cv::Size size, int type, const cv::Scalar& s, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
 
-
     Mat(const cv::Mat& m, const cv::Rect& roi, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+
+    static cv::MatExpr ones(int rows, int cols, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+
     void convertTo( cv::OutputArray m, int rtype, double alpha=1, double beta=0, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE() ) const;
     void assignTo( cv::Mat& m, int type=-1, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE() ) const;
 
@@ -363,6 +365,76 @@ Mat::Mat(int rows, int cols, int type, const cv::Scalar& s, int line_nr, const c
         foo->control_func_run_time ();
     }
     foo->control_imshow( *this );     // Bildausgabe
+}
+
+//!
+//! \brief Mat::ones Gibt ein Array aller Einsen der angegebenen Größe und des angegebenen Typs zurück.
+//! \param rows Number of rows.
+//! \param cols
+//! \param type Created matrix type.
+//! \example Mat A = Mat::ones(100, 100, CV_8U)*3; // make 100x100 matrix filled with 3.
+//! \return
+//!
+cv::MatExpr Mat::ones(int rows, int cols, int type, int line_nr, const char *src_file)
+{
+    cv::MatExpr ret;
+
+    if (cvd_off) {
+        return cv::Mat::ones( rows, cols, type );
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), MAT_ONES, "Mat::ones",
+                               PARAMETER | FUNC_OFF | BREAK | SHOW_IMAGE,    // Menu
+                               line_nr, src_file);
+        func.push_back( foo );
+
+        struct _int_para_ ro = {rows, 0, 1000000};
+        foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&ro, "rows");
+
+        struct _int_para_ co = {cols, 0, 1000000};
+        foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&co, "cols");
+
+        struct _enum_para_ tp = {type, "ddepth"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&tp, "type" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear FUNC_ERROR
+    // -------------------------------------
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::MatExpr result;
+            try {
+                result = cv::Mat::ones(*(int*)foo->para[0]->data,
+                                       *(int*)foo->para[1]->data,
+                                       *(int*)foo->para[2]->data);
+            } catch( cv::Exception& e ) {
+                foo->error_flag |= FUNC_ERROR;
+            }
+            foo->control_imshow( static_cast<cv::Mat>(result) );                 // Ausgabe
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
+    // -------------------------------------
+    if (foo->state.flag.func_off) {
+        return cv::MatExpr(cv::Mat());
+    } else {
+        try {
+            ret = cv::Mat::ones(*(int*)foo->para[0]->data,
+                                *(int*)foo->para[1]->data,
+                                *(int*)foo->para[2]->data);
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( static_cast<cv::Mat>(ret) );     // Bildausgabe
+
+    return ret;
 }
 
 //!
