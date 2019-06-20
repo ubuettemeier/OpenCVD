@@ -672,7 +672,7 @@ void opencvd_func::control_imshow ( cv::OutputArray dst )
             cv::destroyWindow ( window_name );
         }
     }
-}
+} // control_imshow
 
 //!
 //! \brief opencvd_func::control_contours_imshow
@@ -684,6 +684,8 @@ void opencvd_func::control_contours_imshow ( cv::InputOutputArray image,
                                              cv::OutputArrayOfArrays contours,
                                              cv::OutputArray hierarchy )
 {
+    error_flag &= ~IMSHOW_ERORR;    // clear IMSHOW_ERORR
+
     if (state.flag.show_image) {
         if (!image.empty()) {
             if (window_is_create == 0) {
@@ -698,12 +700,17 @@ void opencvd_func::control_contours_imshow ( cv::InputOutputArray image,
                 cv::Scalar color( std::rand()&255, std::rand()&255, std::rand()&255 );
                 cv::drawContours( dst, contours, i, color); // , CV_FILLED, 8, hierarchy );
             }
-            if (!dst.empty())
+            if (!dst.empty()) {
                 cv::imshow (window_name, dst);
+            } else {
+                error_flag |= IMSHOW_ERORR;    // set IMSHOW_ERORR ???
+            }
         }
-    } else
-        if (window_is_create != 0)
+    } else { // state.flag.show_image is false
+        if (window_is_create != 0) {
             cv::destroyWindow ( window_name );
+        }
+    }
 } // control_contours_imshow
 
 //!

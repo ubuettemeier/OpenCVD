@@ -124,7 +124,7 @@ Mat::Mat(cv::Size size, int type, int line_nr, const char *src_file)
         struct _enum_para_ dd = {type, "ddepth"};
         foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&dd, "type" );
     }
-    foo->error_flag = 0;
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
     // --------------------------------------------
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
@@ -136,7 +136,7 @@ Mat::Mat(cv::Size size, int type, int line_nr, const char *src_file)
                                *(int*)foo->para[1]->data);        // type,
 
             } catch( cv::Exception& e ) {
-                foo->error_flag = 1;
+                foo->error_flag |= FUNC_ERROR;
             }
             foo->control_imshow( out );                 // Ausgabe
             cv::waitKey(10);
@@ -152,7 +152,7 @@ Mat::Mat(cv::Size size, int type, int line_nr, const char *src_file)
             *this = cv::Mat (cv::Size(ip->x, ip->y),            // cv::Size
                              *(int*)foo->para[1]->data);        // type
         } catch( cv::Exception& e ) {
-            foo->error_flag = 1;
+            foo->error_flag |= FUNC_ERROR;
         }
         foo->control_func_run_time ();
     }
@@ -190,7 +190,7 @@ Mat::Mat(int rows, int cols, int type, int line_nr, const char *src_file)
         struct _enum_para_ dd = {type, "ddepth"};
         foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&dd, "type" );
     }
-    foo->error_flag = 0;
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
     // --------------------------------------------
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
@@ -202,7 +202,7 @@ Mat::Mat(int rows, int cols, int type, int line_nr, const char *src_file)
                                *(int*)foo->para[2]->data);        // type,
 
             } catch( cv::Exception& e ) {
-                foo->error_flag = 1;
+                foo->error_flag |= FUNC_ERROR;
             }
             foo->control_imshow( out );                 // Ausgabe
             cv::waitKey(10);
@@ -218,7 +218,7 @@ Mat::Mat(int rows, int cols, int type, int line_nr, const char *src_file)
                              *(int*)foo->para[1]->data,         // cols,
                              *(int*)foo->para[2]->data);        // type,
         } catch( cv::Exception& e ) {
-            foo->error_flag = 1;
+            foo->error_flag |= FUNC_ERROR;
         }
         foo->control_func_run_time ();
     }
@@ -256,7 +256,7 @@ Mat::Mat(cv::Size size, int type, const cv::Scalar& s, int line_nr, const char *
         struct _rect_double_ rd = {s.val[0], s.val[1], s.val[2], s.val[3], -100000.0, 100000.0};
         foo->new_para (RECT_DOUBLE_PARA, sizeof(struct _rect_double_), (uint8_t*)&rd, "Mat(.., Scalar&)");
     }
-    foo->error_flag = 0;
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
     // --------------------------------------------
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
@@ -270,7 +270,7 @@ Mat::Mat(cv::Size size, int type, const cv::Scalar& s, int line_nr, const char *
                                cv::Scalar(s_dat->x, s_dat->y, s_dat->w, s_dat->h));   // cv::Scalar
 
             } catch( cv::Exception& e ) {
-                foo->error_flag = 1;
+                foo->error_flag |= FUNC_ERROR;
             }
             foo->control_imshow( out );                 // Ausgabe
             cv::waitKey(10);
@@ -288,7 +288,7 @@ Mat::Mat(cv::Size size, int type, const cv::Scalar& s, int line_nr, const char *
                              *(int*)foo->para[1]->data,         // type,
                              cv::Scalar(s_dat->x, s_dat->y, s_dat->w, s_dat->h));   // cv::Scalar
         } catch( cv::Exception& e ) {
-            foo->error_flag = 1;
+            foo->error_flag |= FUNC_ERROR;
         }
         foo->control_func_run_time ();
     }
@@ -328,7 +328,7 @@ Mat::Mat(int rows, int cols, int type, const cv::Scalar& s, int line_nr, const c
         struct _rect_double_ rd = {s.val[0], s.val[1], s.val[2], s.val[3], -100000.0, 100000.0};
         foo->new_para (RECT_DOUBLE_PARA, sizeof(struct _rect_double_), (uint8_t*)&rd, "Mat(.., Scalar&)");
     }
-    foo->error_flag = 0;
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
     // --------------------------------------------
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
@@ -342,7 +342,7 @@ Mat::Mat(int rows, int cols, int type, const cv::Scalar& s, int line_nr, const c
                         cv::Scalar(s_dat->x, s_dat->y, s_dat->w, s_dat->h));
 
             } catch( cv::Exception& e ) {
-                foo->error_flag = 1;
+                foo->error_flag |= FUNC_ERROR;
             }
             foo->control_imshow( out );                 // Ausgabe
             cv::waitKey(10);
@@ -360,7 +360,7 @@ Mat::Mat(int rows, int cols, int type, const cv::Scalar& s, int line_nr, const c
                              *(int*)foo->para[2]->data,         // type,
                              cv::Scalar(s_dat->x, s_dat->y, s_dat->w, s_dat->h));
         } catch( cv::Exception& e ) {
-            foo->error_flag = 1;
+            foo->error_flag |= FUNC_ERROR;
         }
         foo->control_func_run_time ();
     }
@@ -461,7 +461,7 @@ Mat::Mat(const cv::Mat& m, const cv::Rect& roi, int line_nr, const char *src_fil
         struct _rect_int_ ri = {roi.x, roi.y, roi.width, roi.height, -10000, 10000};
         foo->new_para (RECT_INT_PARA, sizeof(struct _rect_int_), (uint8_t*)&ri, "Mat(Mat&, Rect&)");
     }
-    foo->error_flag = 0;
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
     // -------------------------------------
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
@@ -472,7 +472,7 @@ Mat::Mat(const cv::Mat& m, const cv::Rect& roi, int line_nr, const char *src_fil
                 cv::Rect r(rec_data->x, rec_data->y, rec_data->w, rec_data->h);
                 cv::Mat(m, r).copyTo( out );  // cv::Mat (Mat &m, Rect *roi)
             } catch( cv::Exception& e ) {
-                foo->error_flag = 1;
+                foo->error_flag |= FUNC_ERROR;
             }
             foo->control_imshow( out );                 // Ausgabe
             cv::waitKey(10);
@@ -488,7 +488,7 @@ Mat::Mat(const cv::Mat& m, const cv::Rect& roi, int line_nr, const char *src_fil
             cv::Rect r(rec_data->x, rec_data->y, rec_data->w, rec_data->h);
             cv::Mat(m, r).copyTo( *this);  // cv::Mat (Mat &m, Rect *roi)
         } catch( cv::Exception& e ) {
-            foo->error_flag = 1;
+            foo->error_flag |= FUNC_ERROR;
         }
         foo->control_func_run_time ();
     }
@@ -519,7 +519,7 @@ void Mat::assignTo( cv::Mat& m, int type, int line_nr, const char *src_file ) co
         struct _int_para_ ty = {type, -1, 1000000};
         foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&ty, "type");
     }
-    foo->error_flag = 0;
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
     // -------------------------------------------------------------------
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
@@ -529,7 +529,7 @@ void Mat::assignTo( cv::Mat& m, int type, int line_nr, const char *src_file ) co
                 this->cv::Mat::assignTo(out,
                                         *(int*)foo->para[0]->data);         // type,
             } catch( cv::Exception& e ) {
-                foo->error_flag = 1;
+                foo->error_flag |= FUNC_ERROR;
             }
             foo->control_imshow( out );                 // Ausgabe
             cv::waitKey(10);
@@ -544,7 +544,7 @@ void Mat::assignTo( cv::Mat& m, int type, int line_nr, const char *src_file ) co
             this->cv::Mat::assignTo(m,
                                     *(int*)foo->para[0]->data);         // type,
         } catch ( cv::Exception& e ) {
-            foo->error_flag = 1;
+            foo->error_flag |= FUNC_ERROR;
         }
         foo->control_func_run_time ();
     }
@@ -582,7 +582,7 @@ void Mat::convertTo( cv::OutputArray m, int rtype, double alpha, double beta, in
         struct _double_para_ be = {beta, -100000.0, 100000.0, 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&be, "beta");
     }
-    foo->error_flag = 0;
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
     // -------------------------------------------------------------------
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
@@ -594,7 +594,7 @@ void Mat::convertTo( cv::OutputArray m, int rtype, double alpha, double beta, in
                                          *(double*)foo->para[1]->data,      // alpha,
                                          *(double*)foo->para[2]->data);     // beta
             } catch( cv::Exception& e ) {
-                foo->error_flag = 1;
+                foo->error_flag |= FUNC_ERROR;
             }
             foo->control_imshow( out );                 // Ausgabe
             cv::waitKey(10);
@@ -611,7 +611,7 @@ void Mat::convertTo( cv::OutputArray m, int rtype, double alpha, double beta, in
                                      *(double*)foo->para[1]->data,      // alpha,
                                      *(double*)foo->para[2]->data);     // beta
         } catch ( cv::Exception& e ) {
-            foo->error_flag = 1;
+            foo->error_flag |= FUNC_ERROR;
         }
         foo->control_func_run_time ();
     }
