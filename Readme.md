@@ -86,9 +86,12 @@ see: samples/short_sample/short_sample.cpp
 - Mat.convertTo ( OutputArray m, int rtype, double alpha, double beta );
 - Mat.assigTo ( Mat &m, int type );
 - Mat.zeros ( int rows, int cols, int type );
+- Mat.zeros ( Size size, int type );
+- Mat.zeros ( int ndims, const int* sz, int type );
 - Mat.ones ( int rows, int cols, int type );
 - Mat.ones ( Size size, int type );
 - Mat.ones ( int ndims, const int* sz, int type );
 - Mat.eye ( int rows, int cols, int type );
+- Mat.eye ( Size size, int type );
 
 

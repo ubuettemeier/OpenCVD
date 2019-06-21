@@ -45,6 +45,7 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case MAT_ZEROS_3:
     case MAT_ONES_3:
         new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );
         new IntEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );
@@ -52,6 +53,8 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new EnumDrop (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );
         set_param_win( 4, 260 );
         break;
+    case MAT_EYE_2:
+    case MAT_ZEROS_2:
     case MAT_ONES_2:
         new PointInt ( client, cf->first_para, LEFT_POS, 10+55*0, this );               // size
         new EnumDrop (client, cf->first_para->next, LEFT_POS, 10+55*1, this );          // type

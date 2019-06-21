@@ -805,22 +805,41 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case MAT_ZEROS_3:
         case MAT_ONES_3: {
+            QString func_name = "unbekannte Funktion";
+            if (cf->type == MAT_ZEROS_2)
+                func_name = "zeros";
+            if (cf->type == MAT_ONES_2)
+                func_name = "ones";
+
             QString bt = grep_enum_text("ddepth", *(int*)cf->first_para->next->next->next->data);   // closed
-            s = QString ("// int sz[2] = {%1, %2};\n// CVD::Mat::ones (%3, sz, %4);")
+            s = QString ("// int sz[2] = {%1, %2};\n// CVD::Mat::%5 (%3, sz, %4);")
                         .arg(QString::number(*(int*)cf->first_para->next->data))
                         .arg(QString::number(*(int*)cf->first_para->next->next->data))
                         .arg(QString::number(*(int*)cf->first_para->data))
-                        .arg(bt);
+                        .arg(bt)
+                        .arg(func_name);
             }
             break;
+        case MAT_EYE_2:
+        case MAT_ZEROS_2:
         case MAT_ONES_2: {
+            QString func_name = "unbekannte Funktion";
+            if (cf->type == MAT_EYE_2)
+                func_name = "eye";
+            if (cf->type == MAT_ZEROS_2)
+                func_name = "zeros";
+            if (cf->type == MAT_ONES_2)
+                func_name = "ones";
+
             struct _point_int_ *ip = (struct _point_int_ *)cf->first_para->data;        // cv::Size
             QString bt = grep_enum_text("ddepth", *(int*)cf->first_para->next->data);   // closed
-            s = QString ("// CVD::Mat::ones (cv::Size(%1, %2), %3);")
+            s = QString ("// CVD::Mat::%4 (cv::Size(%1, %2), %3);")
                         .arg(QString::number(ip->x))
                         .arg(QString::number(ip->y))
-                        .arg(bt);
+                        .arg(bt)
+                        .arg(func_name);
             }
             break;
         case MAT_EYE:
