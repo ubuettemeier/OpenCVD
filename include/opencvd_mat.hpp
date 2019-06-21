@@ -36,33 +36,33 @@ public:
     Mat(cv::Size size, int type, const cv::Scalar& s, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
 
     Mat(const cv::Mat& m, const cv::Rect& roi, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+    // ---------------------------------------------------------------------------------------
+    static cv::MatExpr zeros(int rows, int cols, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+    static cv::MatExpr zeros(cv::Size size, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+    static cv::MatExpr zeros(int ndims, const int* sz, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
 
-    static MatExpr zeros(int rows, int cols, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
-    static MatExpr zeros(cv::Size size, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
-    static MatExpr zeros(int ndims, const int* sz, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+    static cv::MatExpr ones(int rows, int cols, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+    static cv::MatExpr ones(cv::Size size, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+    static cv::MatExpr ones(int ndims, const int* sz, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
 
-    static MatExpr ones(int rows, int cols, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
-    static MatExpr ones(cv::Size size, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
-    static MatExpr ones(int ndims, const int* sz, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+    static cv::MatExpr eye(int rows, int cols, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+    static cv::MatExpr eye(cv::Size size, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
 
-    static MatExpr eye(int rows, int cols, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
-    static MatExpr eye(cv::Size size, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
-
-    static MatExpr func_type_1(int rows, int cols, int type,
+    static cv::MatExpr func_type_1(int rows, int cols, int type,
                                  int line_nr, const char *src_file,
                                  int cv_type, const char *func_name,
                                  uint64_t builtin_retunr_adresse);
 
-    static MatExpr func_type_2(cv::Size size, int type,
+    static cv::MatExpr func_type_2(cv::Size size, int type,
                                  int line_nr, const char *src_file,
                                  int cv_type, const char *func_name,
                                  uint64_t builtin_retunr_adresse);
 
-    static MatExpr func_type_3(int ndims, const int* sz, int type,
+    static cv::MatExpr func_type_3(int ndims, const int* sz, int type,
                              int line_nr, const char *src_file,
                              int cv_type, const char *func_name,
                              uint64_t builtin_retunr_adresse);
-
+    // ---------------------------------------------------------------------------------------
     void convertTo( cv::OutputArray m, int rtype, double alpha=1, double beta=0, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE() ) const;
     void assignTo( cv::Mat& m, int type=-1, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE() ) const;
 
@@ -437,11 +437,11 @@ Mat::Mat(int rows, int cols, int type, const cv::Scalar& s, int line_nr, const c
 //! \param src_file
 //! \return
 //! type 2
-MatExpr Mat::zeros(cv::Size size, int type, int line_nr, const char *src_file)
+cv::MatExpr Mat::zeros(cv::Size size, int type, int line_nr, const char *src_file)
 {
     uint64_t ret_addr = (uint64_t)__builtin_return_address(0);
 
-    MatExpr ret = func_type_2 (size, type,
+    cv::MatExpr ret = func_type_2 (size, type,
                                line_nr, src_file,
                                MAT_ZEROS_2, "Mat::zeros [type 2]",
                                ret_addr);
@@ -453,11 +453,11 @@ MatExpr Mat::zeros(cv::Size size, int type, int line_nr, const char *src_file)
 //! \param type
 //! \return
 //! type 2
-MatExpr Mat::ones(cv::Size size, int type, int line_nr, const char *src_file)
+cv::MatExpr Mat::ones(cv::Size size, int type, int line_nr, const char *src_file)
 {
     uint64_t ret_addr = (uint64_t)__builtin_return_address(0);
 
-    MatExpr ret = func_type_2 (size, type,
+    cv::MatExpr ret = func_type_2 (size, type,
                                line_nr, src_file,
                                MAT_ONES_2, "Mat::ones [type 2]",
                                ret_addr);
@@ -469,11 +469,11 @@ MatExpr Mat::ones(cv::Size size, int type, int line_nr, const char *src_file)
 //! \param type
 //! \return
 //! type 2
-MatExpr Mat::eye(cv::Size size, int type, int line_nr, const char *src_file)
+cv::MatExpr Mat::eye(cv::Size size, int type, int line_nr, const char *src_file)
 {
     uint64_t ret_addr = (uint64_t)__builtin_return_address(0);
 
-    MatExpr ret = func_type_2 (size, type,
+    cv::MatExpr ret = func_type_2 (size, type,
                                line_nr, src_file,
                                MAT_EYE_2, "Mat::eye [type 2]",
                                ret_addr);
@@ -481,20 +481,20 @@ MatExpr Mat::eye(cv::Size size, int type, int line_nr, const char *src_file)
 }
 
 // ------------------------------------------------------------------------------------------
-MatExpr Mat::func_type_2(cv::Size size, int type,
-                         int line_nr, const char *src_file,
-                         int cv_type, const char *func_name,
-                         uint64_t builtin_retunr_adresse)
+cv::MatExpr Mat::func_type_2(cv::Size size, int type,
+                             int line_nr, const char *src_file,
+                             int cv_type, const char *func_name,
+                             uint64_t builtin_retunr_adresse)
 {
     cv::MatExpr ret;
 
     if (cvd_off) {
         if (cv_type == MAT_ONES_2)
-            return static_cast<MatExpr>(cv::Mat::ones( size, type ));
+            return cv::Mat::ones( size, type ); // return static_cast<MatExpr>(cv::Mat::ones( size, type ));
         if (cv_type == MAT_ZEROS_2)
-            return static_cast<MatExpr>(cv::Mat::zeros( size, type ));
+            return cv::Mat::zeros( size, type ); // return static_cast<MatExpr>(cv::Mat::zeros( size, type ));
         if (cv_type == MAT_EYE_2)
-            return static_cast<MatExpr>(cv::Mat::eye( size, type ));
+            return cv::Mat::eye( size, type ); // return static_cast<MatExpr>(cv::Mat::eye( size, type ));
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
@@ -543,7 +543,7 @@ MatExpr Mat::func_type_2(cv::Size size, int type,
     }
     // -------------------------------------
     if (foo->state.flag.func_off) {
-        return static_cast<MatExpr>(Mat());
+        return static_cast<cv::MatExpr>(cv::Mat());
     } else {
         struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
         try {
@@ -566,7 +566,7 @@ MatExpr Mat::func_type_2(cv::Size size, int type,
     }
     foo->control_imshow( static_cast<cv::Mat>(ret) );     // Bildausgabe
 
-    return static_cast<MatExpr>(ret);
+    return ret; // return static_cast<MatExpr>(ret);
 } // MatExpr Mat::func_type_2()
 
 //!
@@ -576,14 +576,14 @@ MatExpr Mat::func_type_2(cv::Size size, int type,
 //! \param type Created matrix type.
 //! \return
 //! type 3
-MatExpr Mat::ones(int ndims, const int* sz, int type, int line_nr, const char *src_file)
+cv::MatExpr Mat::ones(int ndims, const int* sz, int type, int line_nr, const char *src_file)
 {
     uint64_t ret_addr = (uint64_t)__builtin_return_address(0);
 
-    MatExpr ret = func_type_3 (ndims, sz, type,
-                               line_nr, src_file,
-                               MAT_ONES_3, "Mat::ones [type 3]",
-                               ret_addr);
+    cv::MatExpr ret = func_type_3 (ndims, sz, type,
+                                   line_nr, src_file,
+                                   MAT_ONES_3, "Mat::ones [type 3]",
+                                   ret_addr);
     return ret;
 }
 //!
@@ -593,31 +593,31 @@ MatExpr Mat::ones(int ndims, const int* sz, int type, int line_nr, const char *s
 //! \param type
 //! \return
 //! type 3
-MatExpr Mat::zeros(int ndims, const int* sz, int type, int line_nr, const char *src_file)
+cv::MatExpr Mat::zeros(int ndims, const int* sz, int type, int line_nr, const char *src_file)
 {
     uint64_t ret_addr = (uint64_t)__builtin_return_address(0);
 
-    MatExpr ret = func_type_3 (ndims, sz, type,
-                               line_nr, src_file,
-                               MAT_ZEROS_3, "Mat::zeros [type 3]",
-                               ret_addr);
+    cv::MatExpr ret = func_type_3 (ndims, sz, type,
+                                   line_nr, src_file,
+                                   MAT_ZEROS_3, "Mat::zeros [type 3]",
+                                   ret_addr);
     return ret;
 }
 
 // ------------------------------------------------------------------------------------------
-MatExpr Mat::func_type_3(int ndims, const int* sz, int type,
-                         int line_nr, const char *src_file,
-                         int cv_type, const char *func_name,
-                         uint64_t builtin_retunr_adresse)
+cv::MatExpr Mat::func_type_3(int ndims, const int* sz, int type,
+                             int line_nr, const char *src_file,
+                             int cv_type, const char *func_name,
+                             uint64_t builtin_retunr_adresse)
 {
     cv::MatExpr ret;
     int this_size[2] = {0, 0};
 
     if (cvd_off) {
         if (cv_type == MAT_ONES_3)
-            return static_cast<MatExpr>(cv::Mat::ones( ndims, sz, type ));
+            return cv::Mat::ones( ndims, sz, type );  // return static_cast<MatExpr>(cv::Mat::ones( ndims, sz, type ));
         if (cv_type == MAT_ZEROS_3)
-            return static_cast<MatExpr>(cv::Mat::zeros( ndims, sz, type ));
+            return cv::Mat::zeros( ndims, sz, type );  // return static_cast<MatExpr>(cv::Mat::zeros( ndims, sz, type ));
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
@@ -672,7 +672,7 @@ MatExpr Mat::func_type_3(int ndims, const int* sz, int type,
     }
     // -------------------------------------
     if (foo->state.flag.func_off) {
-        return static_cast<MatExpr>(Mat());
+        return static_cast<cv::MatExpr>(cv::Mat());
     } else {
         this_size[0] = *(int*)foo->para[1]->data;
         this_size[1] = *(int*)foo->para[2]->data;
@@ -692,7 +692,7 @@ MatExpr Mat::func_type_3(int ndims, const int* sz, int type,
     }
     foo->control_imshow( static_cast<cv::Mat>(ret) );     // Bildausgabe
 
-    return static_cast<MatExpr>(ret);
+    return ret; // static_cast<MatExpr>(ret);
 } // MatExpr Mat::func_type_3()
 
 //!
@@ -703,11 +703,11 @@ MatExpr Mat::func_type_3(int ndims, const int* sz, int type,
 //! \example Mat A = Mat::ones(100, 100, CV_8U)*3; // make 100x100 matrix filled with 3.
 //! \return
 //! type 1
-MatExpr Mat::ones(int rows, int cols, int type, int line_nr, const char *src_file)
+cv::MatExpr Mat::ones(int rows, int cols, int type, int line_nr, const char *src_file)
 {
     uint64_t ret_addr = (uint64_t)__builtin_return_address(0);
 
-    MatExpr ret = func_type_1 (rows, cols, type,
+    cv::MatExpr ret = func_type_1 (rows, cols, type,
                                line_nr, src_file,
                                MAT_ONES, "Mat::ones [type 1]",
                                ret_addr);
@@ -721,11 +721,11 @@ MatExpr Mat::ones(int rows, int cols, int type, int line_nr, const char *src_fil
 //! \param type Created matrix type.
 //! \return
 //! type 1
-MatExpr Mat::zeros(int rows, int cols, int type, int line_nr, const char *src_file)
+cv::MatExpr Mat::zeros(int rows, int cols, int type, int line_nr, const char *src_file)
 {
     uint64_t ret_addr = (uint64_t)__builtin_return_address(0);
 
-    MatExpr ret = func_type_1 (rows, cols, type,
+    cv::MatExpr ret = func_type_1 (rows, cols, type,
                                line_nr, src_file,
                                MAT_ZEROS, "Mat::zero [type 1]",
                                ret_addr);
@@ -740,32 +740,32 @@ MatExpr Mat::zeros(int rows, int cols, int type, int line_nr, const char *src_fi
 //! \example CVD::Mat A = CVD::Mat::eye(4, 4, CV_32F)*0.1;
 //! \return
 //! type 1
-MatExpr Mat::eye(int rows, int cols, int type, int line_nr, const char *src_file)
+cv::MatExpr Mat::eye(int rows, int cols, int type, int line_nr, const char *src_file)
 {
     uint64_t ret_addr = (uint64_t)__builtin_return_address(0);
 
-    MatExpr ret = func_type_1 (rows, cols, type,
+   cv::MatExpr ret = func_type_1 (rows, cols, type,
                                line_nr, src_file,
                                MAT_EYE, "Mat::eye [type 1]",
                                ret_addr);
     return ret;
 }
 
-//! --------------------------------------------------------------------------------------------------------
-MatExpr Mat::func_type_1(int rows, int cols, int type,
-                         int line_nr, const char *src_file,
-                         int cv_type, const char *func_name,
-                         uint64_t builtin_retunr_adresse)
+// --------------------------------------------------------------------------------------------------------
+cv::MatExpr Mat::func_type_1(int rows, int cols, int type,
+                             int line_nr, const char *src_file,
+                             int cv_type, const char *func_name,
+                             uint64_t builtin_retunr_adresse)
 {
     cv::MatExpr ret;
 
     if (cvd_off) {
         if (cv_type == MAT_ONES)
-            return static_cast<MatExpr>(cv::Mat::ones( rows, cols, type ));
+            return cv::Mat::ones( rows, cols, type ); // return static_cast<MatExpr>(cv::Mat::ones( rows, cols, type ));
         if (cv_type == MAT_ZEROS)
-            return static_cast<MatExpr>(cv::Mat::zeros( rows, cols, type ));
+            return cv::Mat::zeros( rows, cols, type ); // return static_cast<MatExpr>(cv::Mat::zeros( rows, cols, type ));
         if (cv_type == MAT_EYE)
-            return static_cast<MatExpr>(cv::Mat::eye( rows, cols, type ));
+            return cv::Mat::eye( rows, cols, type ); // return static_cast<MatExpr>(cv::Mat::eye( rows, cols, type ));
 
     }
 
@@ -816,7 +816,7 @@ MatExpr Mat::func_type_1(int rows, int cols, int type,
     }
     // -------------------------------------
     if (foo->state.flag.func_off) {
-        return static_cast<MatExpr>(Mat());
+        return static_cast<cv::MatExpr>(cv::Mat()); // return static_cast<MatExpr>(Mat());
     } else {
         try {
             if (cv_type == MAT_ONES)
@@ -838,8 +838,8 @@ MatExpr Mat::func_type_1(int rows, int cols, int type,
     }
     foo->control_imshow( static_cast<cv::Mat>(ret) );     // Bildausgabe
 
-    return static_cast<MatExpr>(ret);
-} // Mat::func_type_1(int rows, int cols, int type, int line_nr, const char *src_file)
+    return ret; // return static_cast<MatExpr>(ret);
+} // Mat::func_type_1
 
 //!
 //! \brief Mat::Mat
