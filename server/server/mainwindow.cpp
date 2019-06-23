@@ -805,6 +805,13 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case BUILDPYRAMID: {
+            QString bt = grep_enum_text("BorderTypes", *(int*)cf->first_para->next->data);   // borderType
+            s = QString ("// CVD::buildPyramid (src, dst, %1, %2);")
+                        .arg(QString::number(*(int*)cf->first_para->data))
+                        .arg(bt);
+            }
+            break;
         case MAT_ZEROS_3:
         case MAT_ONES_3: {
             QString func_name = "unbekannte Funktion";
@@ -1391,6 +1398,7 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "FITLINE") == 0) return FITLINE;
     if (strcmp(enum_name, "APPROXPOLYPD") == 0) return APPROXPOLYPD;
     if (strcmp(enum_name, "SCALEADD") == 0) return SCALEADD;
+    if (strcmp(enum_name, "BUILDPYRAMID") == 0) return BUILDPYRAMID;
 
     if (strcmp(enum_name, "MAT_ROI") == 0) return MAT_ROI;
     if (strcmp(enum_name, "MAT_CONVERTTO") == 0) return MAT_CONVERTTO;
@@ -1402,6 +1410,11 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "MAT_ONES") == 0) return MAT_ONES;
     if (strcmp(enum_name, "MAT_ONES_2") == 0) return MAT_ONES_2;
     if (strcmp(enum_name, "MAT_ONES_3") == 0) return MAT_ONES_3;
+    if (strcmp(enum_name, "MAT_ZEROS") == 0) return MAT_ZEROS;
+    if (strcmp(enum_name, "MAT_ZEROS_2") == 0) return MAT_ZEROS_2;
+    if (strcmp(enum_name, "MAT_ZEROS_3") == 0) return MAT_ZEROS_3;
+    if (strcmp(enum_name, "MAT_EYE") == 0) return MAT_EYE;
+    if (strcmp(enum_name, "MAT_EYE_2") == 0) return MAT_EYE_2;
 
     if (strcmp(enum_name, "SLIDE_INT_TWO_STEP_PARA") == 0) return SLIDE_INT_TWO_STEP_PARA;
     if (strcmp(enum_name, "SLIDE_INT_PARA") == 0) return SLIDE_INT_PARA;
@@ -1480,7 +1493,7 @@ char *MainWindow::get_enum_text (int val)
     if (val == FITLINE) strcpy (buf, "FITLINE");
     if (val == APPROXPOLYPD) strcpy (buf, "APPROXPOLYPD");
     if (val == SCALEADD) strcpy (buf, "SCALEADD");
-
+    if (val == BUILDPYRAMID) strcpy (buf, "BUILDPYRAMID");
 
     if (val == MAT_ROI) strcpy (buf, "MAT_ROI");
     if (val == MAT_CONVERTTO) strcpy (buf, "MAT_CONVERTTO");
@@ -1492,6 +1505,11 @@ char *MainWindow::get_enum_text (int val)
     if (val == MAT_ONES) strcpy (buf, "MAT_ONES");
     if (val == MAT_ONES_2) strcpy (buf, "MAT_ONES_2");
     if (val == MAT_ONES_3) strcpy (buf, "MAT_ONES_3");
+    if (val == MAT_ZEROS) strcpy (buf, "MAT_ZEROS");
+    if (val == MAT_ZEROS_2) strcpy (buf, "MAT_ZEROS_2");
+    if (val == MAT_ZEROS_3) strcpy (buf, "MAT_ZEROS_3");
+    if (val == MAT_EYE) strcpy (buf, "MAT_EYE");
+    if (val == MAT_EYE_2) strcpy (buf, "MAT_EYE_2");
 
     if (val == SLIDE_INT_TWO_STEP_PARA) strcpy (buf, "SLIDE_INT_TWO_STEP_PARA");
     if (val == SLIDE_INT_PARA) strcpy (buf, "SLIDE_INT_PARA");

@@ -58,6 +58,7 @@ enum _data_types_ {
     FITLINE = 0x1024,               // *
     APPROXPOLYPD = 0x1025,          // *
     SCALEADD = 0x1026,              // *
+    BUILDPYRAMID = 0x1027,
 
     MAT_ROI = 0x1800,               // *
     MAT_CONVERTTO = 0x1801,         // *
@@ -70,10 +71,10 @@ enum _data_types_ {
     MAT_ONES_2 = 0x1808,            // *
     MAT_ONES_3 = 0x1809,            // *
     MAT_ZEROS = 0x180A,             // *
-    MAT_ZEROS_2 = 0x180B,
-    MAT_ZEROS_3 = 0x180C,
-    MAT_EYE = 0x180D,
-    MAT_EYE_2 = 0x180E,
+    MAT_ZEROS_2 = 0x180B,           // *
+    MAT_ZEROS_3 = 0x180C,           // *
+    MAT_EYE = 0x180D,               // *
+    MAT_EYE_2 = 0x180E,             // *
 
     // ----- Parameter 0x2000...0x2FFF --------
     SLIDE_INT_TWO_STEP_PARA = 0x2000,       // z.B. 1, 3, 5, ... 21 (int)

@@ -32,4 +32,5 @@ edge
 demhist
 HoughCircles
 HoughLines
+buildPyramid
 

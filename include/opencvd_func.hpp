@@ -68,6 +68,10 @@ CV_EXPORTS_W void pyrDown( cv::InputArray src, cv::OutputArray dst,
                            const cv::Size& dstsize = cv::Size(), int borderType = cv::BORDER_DEFAULT,
                            BUILDIN );
 
+CV_EXPORTS void buildPyramid( cv::InputArray src, cv::OutputArrayOfArrays dst,
+                              int maxlevel, int borderType = cv::BORDER_DEFAULT,
+                              BUILDIN );
+
 CV_EXPORTS_W void resize( cv::InputArray src, cv::OutputArray dst,
                           cv::Size dsize, double fx = 0, double fy = 0,
                           int interpolation = cv::INTER_LINEAR,
@@ -392,6 +396,78 @@ CV_EXPORTS_W void pyrUp( cv::InputArray src, cv::OutputArray dst,
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );
+}
+
+//!
+//! \brief buildPyramid
+//! \param src
+//! \param dst
+//! \param maxlevel
+//! \param borderType
+//!
+CV_EXPORTS void buildPyramid( cv::InputArray src, cv::OutputArrayOfArrays dst,
+                              int maxlevel, int borderType
+                              BUILDIN_FUNC )
+{
+    if (cvd_off) {
+        cv::buildPyramid (src, dst, maxlevel, borderType);
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for pyrDown
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), BUILDPYRAMID, "buildPyramid",
+                               PARAMETER | SHOW_IMAGE | FUNC_OFF | BREAK,    // Menu 0x000F
+                               BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _int_para_ ml = {maxlevel, 0, 255};
+        foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&ml, "maxlevel");
+
+        struct _enum_para_ bt = {borderType, "BorderTypes"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt, "borderType" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // --------------------------------------------
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            std::vector<cv::Mat> out;
+            try {
+                cv::buildPyramid( src, out,
+                                  *(int*)foo->para[0]->data,        // maxlevel
+                                  *(int*)foo->para[1]->data);       // borderType
+            } catch( cv::Exception& e ) {
+                foo->error_flag |= FUNC_ERROR;
+            }
+            foo->control_imshow( out[ *(int*)foo->para[0]->data] );     // show maxlevel image
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
+    // --------------------------------------------
+    if (foo->state.flag.func_off) {
+        dst.create( *(int*)foo->para[0]->data + 1, 1, 0 );      // ist das korrekt ???
+        /*
+        for (int i=0; i <= *(int*)foo->para[0]->data; i++) {
+            cv::Mat a = dst.getMat(i);
+            src.copyTo(a);                                      // hat keine Wirkung
+        }
+        */
+    } else {
+        try {
+            cv::buildPyramid( src, dst,
+                              *(int*)foo->para[0]->data,        // maxlevel
+                              *(int*)foo->para[1]->data);       // borderType
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+    cv::Mat a = dst.getMat( *(int*)foo->para[0]->data );    // get maxlevel image
+    foo->control_imshow( a );
 }
 
 //!

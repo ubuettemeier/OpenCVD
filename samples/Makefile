@@ -9,7 +9,8 @@ SAMPLE_PATH = 	basic/ \
 		short_sample/ \
 		demhist/ \
 		HoughCircles/ \
-		HoughLines/
+		HoughLines/ \
+		buildPyramid/
 
 all:	
 	for dir in $(SAMPLE_PATH); do \
