@@ -2480,6 +2480,7 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
     foo->control_imshow( dst );
 } // Scharr
 
+
 } // namespace cvd
 
 #endif // OPENCVD_FUNC_HPP

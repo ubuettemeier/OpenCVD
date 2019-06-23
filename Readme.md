@@ -93,3 +93,7 @@ see: samples/short_sample/short_sample.cpp
 - static MatExpr ones(int ndims, const int* sz, int type);
 - static MatExpr eye(int rows, int cols, int type);
 - static MatExpr eye(Size size, int type);
+
+**spezielle Funktionen / specific functions**
+
+- set_val

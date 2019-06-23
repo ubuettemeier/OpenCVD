@@ -805,6 +805,17 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case SET_VAL: {
+            QString val;
+            if (cf->first_para->type == INT_PARA)
+                val = QString("static_cast<int>(%1)").arg(QString::number(*(int*)cf->first_para->data));
+            if (cf->first_para->type == DOUBLE_PARA)
+                val = QString("static_cast<double>(%1)").arg(QString::number(*(double*)cf->first_para->data));
+
+            s = QString ("// set_val (%1);")
+                        .arg(val);
+            }
+            break;
         case BUILDPYRAMID: {
             QString bt = grep_enum_text("BorderTypes", *(int*)cf->first_para->next->data);   // borderType
             s = QString ("// CVD::buildPyramid (src, dst, %1, %2);")

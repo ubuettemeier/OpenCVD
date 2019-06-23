@@ -6,7 +6,7 @@ using namespace std;
 
 #define USE_CVD         // using namespace cvd
 #include "opencvd.hpp"
-
+#include "specdef.hpp"
 
 int main( int argc, const char** argv )
 {
@@ -27,7 +27,7 @@ int main( int argc, const char** argv )
         vector<Mat> dstVect;
         CVD::buildPyramid(src, dstVect, maxVal);
 
-        int show_vec = 2;		// 0..4
+        int show_vec = set_val(2);		// 0..4
         if (!dstVect[show_vec].empty())
             cv::imshow ("buildPyramid", dstVect[show_vec] );
 

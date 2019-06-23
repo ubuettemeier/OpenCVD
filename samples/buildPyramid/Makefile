@@ -8,6 +8,7 @@ OPENCVD += ../../include/opencvd_basic.hpp
 OPENCVD += ../../include/opencvd_func.hpp
 OPENCVD += ../../include/opencvd_mat.hpp
 OPENCVD += ../../include/opencvd_types.hpp
+OPENCVD += ../../include/specdef.hpp
 
 # ---- get pkg-config files -----
 ifeq ($(shell pkg-config --list-all | grep -ow opencv4), opencv4)

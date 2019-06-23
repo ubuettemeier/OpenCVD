@@ -58,7 +58,9 @@ enum _data_types_ {
     FITLINE = 0x1024,               // *
     APPROXPOLYPD = 0x1025,          // *
     SCALEADD = 0x1026,              // *
-    BUILDPYRAMID = 0x1027,
+    BUILDPYRAMID = 0x1027,          // *
+
+    SET_VAL = 0x1700,
 
     MAT_ROI = 0x1800,               // *
     MAT_CONVERTTO = 0x1801,         // *
