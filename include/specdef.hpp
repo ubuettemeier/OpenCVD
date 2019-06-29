@@ -25,7 +25,8 @@ T set_numval (T a, const char *val_name,
 {    
     if (!(std::is_same<T, int>::value |
           std::is_same<T, double>::value |
-          std::is_same<T, float>::value)) {
+          std::is_same<T, float>::value |
+          std::is_same<T, bool>::value)) {
         printf ("unbekannter type\n");
         return a;
     }
@@ -54,6 +55,11 @@ T set_numval (T a, const char *val_name,
             foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&ro, "val<int>");
         }
 
+        if (std::is_same<T, bool>::value) {
+            struct _enum_para_ un = {static_cast<bool>(a), "boolType"};
+            foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&un, "val<bool>" );
+        }
+
         if (std::is_same<T, double>::value |
             std::is_same<T, float>::value) {
             struct _double_para_ sc = {static_cast<double>(a), std::numeric_limits<double>::min(), std::numeric_limits<double>::max(), 4};
@@ -66,6 +72,8 @@ T set_numval (T a, const char *val_name,
 
     if (foo->para[0]->para_type == INT_PARA)
         ret = *(int*)foo->para[0]->data;
+    if (foo->para[0]->para_type == ENUM_DROP_DOWN)
+        ret = *(bool*)foo->para[0]->data;
     if (foo->para[0]->para_type == DOUBLE_PARA)
         ret = *(double*)foo->para[0]->data;
 

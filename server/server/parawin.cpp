@@ -48,6 +48,8 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     case SET_VAL:
         if (cf->first_para->type == INT_PARA)
             new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );     // val
+        if (cf->first_para->type == ENUM_DROP_DOWN)
+            new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );    // boolType
         if (cf->first_para->type == DOUBLE_PARA)
             new DoubleEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );  // val
         set_param_win( 1, 260 );

@@ -96,4 +96,4 @@ see: samples/short_sample/short_sample.cpp
 
 **spezielle Funktionen / specific functions**
 
-- set_val
+- set_numval
