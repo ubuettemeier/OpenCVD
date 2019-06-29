@@ -1411,6 +1411,8 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "SCALEADD") == 0) return SCALEADD;
     if (strcmp(enum_name, "BUILDPYRAMID") == 0) return BUILDPYRAMID;
 
+    if (strcmp(enum_name, "SET_VAL") == 0) return SET_VAL;
+
     if (strcmp(enum_name, "MAT_ROI") == 0) return MAT_ROI;
     if (strcmp(enum_name, "MAT_CONVERTTO") == 0) return MAT_CONVERTTO;
     if (strcmp(enum_name, "MAT_ROWS_COLS_TYPE_SCALAR") == 0) return MAT_ROWS_COLS_TYPE_SCALAR;
@@ -1505,6 +1507,8 @@ char *MainWindow::get_enum_text (int val)
     if (val == APPROXPOLYPD) strcpy (buf, "APPROXPOLYPD");
     if (val == SCALEADD) strcpy (buf, "SCALEADD");
     if (val == BUILDPYRAMID) strcpy (buf, "BUILDPYRAMID");
+
+    if (val == SET_VAL) strcpy (buf, "SET_VAL");
 
     if (val == MAT_ROI) strcpy (buf, "MAT_ROI");
     if (val == MAT_CONVERTTO) strcpy (buf, "MAT_CONVERTTO");

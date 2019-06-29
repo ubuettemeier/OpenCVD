@@ -8,20 +8,20 @@
 
 
 template<typename T>
-T set_val (T a, const char *val_name = "",
-           int line_nr = __builtin_LINE(),
-           const char *src_file = __builtin_FILE());
+T set_numval (T a, const char *val_name = "",
+              int line_nr = __builtin_LINE(),
+              const char *src_file = __builtin_FILE());
 
 
 //!
-//! \brief set_val
-//! \param a
-//! \return
+//! \brief set_numval offers the possibility to manipulate a numeric value with the OpenCVD server.
+//! \param a from type <int, double, float>
+//! \return return nummeric value
 //!
 template<typename T>
-T set_val (T a, const char *val_name,
-           int line_nr,
-           const char *src_file)
+T set_numval (T a, const char *val_name,
+              int line_nr,
+              const char *src_file)
 {    
     if (!(std::is_same<T, int>::value |
           std::is_same<T, double>::value |
@@ -29,6 +29,10 @@ T set_val (T a, const char *val_name,
         printf ("unbekannter type\n");
         return a;
     }
+
+#ifndef USE_CVD
+    return a;
+#endif
 
     T ret;
 
