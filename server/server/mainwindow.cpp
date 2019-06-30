@@ -807,6 +807,8 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     switch (cf->type) {
         case SET_VAL: {
             QString val;
+            if (cf->first_para->type == ENUM_DROP_DOWN)
+                val = QString("static_cast<bool>(%1)").arg(QString::number(*(int*)cf->first_para->data));
             if (cf->first_para->type == INT_PARA)
                 val = QString("static_cast<int>(%1)").arg(QString::number(*(int*)cf->first_para->data));
             if (cf->first_para->type == DOUBLE_PARA)
