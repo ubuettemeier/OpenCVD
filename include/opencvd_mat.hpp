@@ -7,8 +7,67 @@
 #define OPENCV_MAT_HPP
 
 #include "opencv2/opencv.hpp"
+#include <memory>
 
 namespace cvd {
+
+class CV_EXPORTS String : public cv::String
+{
+public:
+    using cv::String::String;
+
+    String(const char* s);                  // Beispiel: CVD::String str = "text";
+    String(const String& str);              // CVD::String basic_str = "basic_str"; CVD::String k(basic_str);
+
+    String(const std::string& str);
+
+    String& operator=(const char* str);     // Beispiel: CVD::String str; str = "text";
+    String& operator+=(const char* str);    // Beispiel: CVD::String str = "test+"; str += "text";
+
+    String toLowerCase() const;
+};
+
+String String::toLowerCase() const
+{
+    // printf ("String String::toLowerCase() const\n");
+    cv::String s = *this;
+    return static_cast<String>(s.toLowerCase());
+}
+
+String::String(const std::string& str) : cv::String(str)
+{
+    // printf ("String::String(const std::string& str)\n");
+    // *this = "kann das sein ?";
+}
+
+String::String(const String& str) : cv::String (str)
+{
+    // printf ("String::String(const String& str)\n");
+    // *this = "neuer text. Das schei zu klappen";
+}
+
+String::String(const char* str)
+{
+    // printf ("String::String(const char* str)\n");
+    cv::String *s = this;
+    *s = str;
+}
+
+String& String::operator+=(const char* str)
+{
+    // printf ("String::operator+=\n");
+    cv::String *s = this;
+    *s += str;
+    return *this;
+}
+
+String& String::operator =(const char *str)
+{
+    // printf ("String::operator =\n");
+    cv::String *s = this;   // s is pointer to this
+    *s = str;
+    return *this;
+}
 
 //!
 //! \brief The MatExpr class
@@ -20,7 +79,6 @@ public:
     using cv::MatExpr::MatExpr;
 
 };
-
 
 //!
 //! \brief The Mat class

@@ -805,7 +805,7 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
-        case SET_VAL: {
+        case SET_NUMVAL: {
             QString val;
             if (cf->first_para->type == ENUM_DROP_DOWN)
                 val = QString("static_cast<bool>(%1)").arg(QString::number(*(int*)cf->first_para->data));
@@ -1413,7 +1413,8 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "SCALEADD") == 0) return SCALEADD;
     if (strcmp(enum_name, "BUILDPYRAMID") == 0) return BUILDPYRAMID;
 
-    if (strcmp(enum_name, "SET_VAL") == 0) return SET_VAL;
+    if (strcmp(enum_name, "SET_NUMVAL") == 0) return SET_NUMVAL;
+    if (strcmp(enum_name, "SET_STRVAL") == 0) return SET_STRVAL;
 
     if (strcmp(enum_name, "MAT_ROI") == 0) return MAT_ROI;
     if (strcmp(enum_name, "MAT_CONVERTTO") == 0) return MAT_CONVERTTO;
@@ -1510,7 +1511,8 @@ char *MainWindow::get_enum_text (int val)
     if (val == SCALEADD) strcpy (buf, "SCALEADD");
     if (val == BUILDPYRAMID) strcpy (buf, "BUILDPYRAMID");
 
-    if (val == SET_VAL) strcpy (buf, "SET_VAL");
+    if (val == SET_NUMVAL) strcpy (buf, "SET_NUMVAL");
+    if (val == SET_STRVAL) strcpy (buf, "SET_STRVAL");
 
     if (val == MAT_ROI) strcpy (buf, "MAT_ROI");
     if (val == MAT_CONVERTTO) strcpy (buf, "MAT_CONVERTTO");

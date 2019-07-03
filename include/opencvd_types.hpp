@@ -5,7 +5,7 @@
 #define SERVER_ADDR     "127.0.0.1"
 #define BUFFERSIZE      8192
 
-#define MAX_STRING_VAL_LEN 256
+#define MAX_STRING_VAL_LEN 256*2
 #define MAX_FUNC_NAME_LEN 64
 #define MAX_PARA_NAME_LEN 64
 #define MAX_PARA_DATA 256
@@ -60,7 +60,8 @@ enum _data_types_ {
     SCALEADD = 0x1026,              // *
     BUILDPYRAMID = 0x1027,          // *
 
-    SET_VAL = 0x1700,               // *
+    SET_NUMVAL = 0x1700,            // *
+    SET_STRVAL = 0x1701,
 
     MAT_ROI = 0x1800,               // *
     MAT_CONVERTTO = 0x1801,         // *

@@ -2124,7 +2124,7 @@ CV_EXPORTS_W Mat imread( const cv::String& filename, int flags
     }
     foo->error_flag &= ~FUNC_ERROR;     // clear func_error
 
-
+    // ------------------------------------------------------------
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
@@ -2147,7 +2147,7 @@ CV_EXPORTS_W Mat imread( const cv::String& filename, int flags
             foo->control_func_run_time ();
         }
     }
-
+    // ------------------------------------------------------------
     if (foo->state.flag.func_off) {     // imread ist ausgeschaltet.
         return ret;                     // return ist empty !!!
     } else {

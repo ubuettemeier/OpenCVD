@@ -16,7 +16,6 @@
     T set_numval (T a, const char *val_name = "");
 #endif
 
-//!
 //! \brief set_numval offers the possibility to manipulate a numeric value with the OpenCVD server.
 //! \param a from type <int, double, float>
 //! \return return nummeric value
@@ -48,11 +47,11 @@ T set_numval (T a, const char *val_name,
     opencvd_func *foo = NULL;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
-        std::string str = "set_val(";
+        std::string str = "set_numval(";
         str += val_name;
         str += ")";
 
-        foo = new opencvd_func((uint64_t)__builtin_return_address(0), SET_VAL, str.c_str(),
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), SET_NUMVAL, str.c_str(),
                                PARAMETER,    // Menu 0x000F
                                line_nr, src_file);
         func.push_back( foo );
