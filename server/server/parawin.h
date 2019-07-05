@@ -58,12 +58,12 @@ private:
 extern ParaWin *parawin;
 
 //!
-//! \brief The StringEdit class
+//! \brief The FileNameEdit class
 //!
-class StringEdit : public QWidget {
+class FileNameEdit : public QWidget {
     Q_OBJECT
 public:
-    StringEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *parent);
+    FileNameEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *parent);
 
     struct _cvd_para_ *cp;
     QTcpSocket *client;

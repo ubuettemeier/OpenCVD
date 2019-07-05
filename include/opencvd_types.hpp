@@ -63,7 +63,6 @@ enum _data_types_ {
     BUILDPYRAMID = 0x1027,          // *
 
     SET_NUMVAL = 0x1700,            // *
-    SET_STRVAL = 0x1701,
 
     MAT_ROI = 0x1800,               // *
     MAT_CONVERTTO = 0x1801,         // *

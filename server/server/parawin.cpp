@@ -46,11 +46,7 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
 
     switch (cf->type) {
     case STRING_FUNC:
-        new StringEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );
-        set_param_win( 1, 260 );
-        break;
-    case SET_STRVAL:
-        new StringEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );
+        new FileNameEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );
         set_param_win( 1, 260 );
         break;
     case SET_NUMVAL:
@@ -250,7 +246,7 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 320, 10+55*2+20);
         break;
     case IMREAD:
-        new StringEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );
+        new FileNameEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );
         new EnumDrop (client, cf->first_para->next, LEFT_POS, 10+55*1, this );   // DropDown enum ImreadModes
 
         set_param_win( 2, 330 );
@@ -486,14 +482,14 @@ void ParaWin::keyPressEvent(QKeyEvent *event)
 }
 
 //!
-//! \brief StringEdit::StringEdit
+//! \brief FileNameEdit::FileNameEdit
 //! \param c
 //! \param foo
 //! \param x
 //! \param y
 //! \param parent
 //!
-StringEdit::StringEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *parent)
+FileNameEdit::FileNameEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *parent)
 {
     cp = foo;
     client = c;
@@ -525,19 +521,19 @@ StringEdit::StringEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWi
 }
 
 //!
-//! \brief StringEdit::refresh_out_str
+//! \brief FileNameEdit::refresh_out_str
 //! \param s
 //!
-void StringEdit::refresh_out_str (QString s)
+void FileNameEdit::refresh_out_str (QString s)
 {
     QFileInfo f( s );
     out_str->setText ( QString("imread Dateiname=%1").arg(f.fileName()) );
 }
 
 //!
-//! \brief StringEdit::ledit_finish
+//! \brief FileNameEdit::ledit_finish
 //!
-void StringEdit::ledit_finish()
+void FileNameEdit::ledit_finish()
 {
     if (text_changed) {
         // printf ("edit finished\n");
@@ -551,19 +547,19 @@ void StringEdit::ledit_finish()
 }
 
 //!
-//! \brief StringEdit::ledit_text_changed
+//! \brief FileNameEdit::ledit_text_changed
 //! \param s
 //!
-void StringEdit::ledit_text_changed( const QString & s)
+void FileNameEdit::ledit_text_changed( const QString & s)
 {
     Q_UNUSED (s);
     text_changed = true;
 }
 
 //!
-//! \brief StringEdit::pb_pushed
+//! \brief FileNameEdit::pb_pushed
 //!
-void StringEdit::pb_pushed()
+void FileNameEdit::pb_pushed()
 {
     QString file = QFileDialog::getOpenFileName( this,
                                                  "Select File",
