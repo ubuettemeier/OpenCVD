@@ -9,24 +9,82 @@
 #include "opencv2/opencv.hpp"
 #include <memory>
 
+
+#define BUILD_IN_PROTO_PARA int line_nr = __builtin_LINE(), \
+                            const char *src_file = __builtin_FILE()
+
 namespace cvd {
 
+// -----------------------------------------------------------------------------------------------------------------------
 class CV_EXPORTS String : public cv::String
 {
 public:
     using cv::String::String;
 
-    String(const char* s);                  // Beispiel: CVD::String str = "text";
-    String(const String& str);              // CVD::String basic_str = "basic_str"; CVD::String k(basic_str);
+    String(const char* s);                              // example: CVD::String str = "text";
+    String(const String& str, BUILD_IN_PROTO_PARA);     // example: CVD::String basic_str = "basic_str"; CVD::String k(basic_str);
 
     String(const std::string& str);
 
-    String& operator=(const char* str);     // Beispiel: CVD::String str; str = "text";
-    String& operator+=(const char* str);    // Beispiel: CVD::String str = "test+"; str += "text";
+    String& operator=(const char* str);     // example: CVD::String str; str = "text";
+    String& operator+=(const char* str);    // example: CVD::String str = "test+"; str += "text";
 
     String toLowerCase() const;
 };
 
+// ---------------------------------------------------------------------------------
+char *string_func (const char *s,
+                          uint64_t addr, uint16_t type, const char *f_name,
+                          int line_nr, const char *src_file);
+
+// ---------------------------------------------------------------------------------
+char *string_func (const char *s,
+                                  uint64_t addr, uint16_t type, const char *f_name,
+                                  int line_nr, const char *src_file)
+{
+    static char str[512] = "";
+    static std::vector<opencvd_func *> func{};  // reg vector
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, addr)) == NULL) {
+        foo = new opencvd_func(addr, type, f_name,
+                               PARAMETER,    // Menu
+                               line_nr, src_file);
+        func.push_back( foo );
+
+        struct _string_para_ al;
+        strcpy (al.val, s);
+        foo->new_para ( STRING_PARA, sizeof(struct _string_para_), (uint8_t*)&al, "cvd::String" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+
+    if (foo->state.flag.func_off) {     // imread ist ausgeschaltet.
+        // return ret;                     // return ist empty !!!
+    } else {
+        try {
+            struct _string_para_ *al = (struct _string_para_ *)foo->para[0]->data;
+            strcpy (str, al->val);
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+    return str;
+}
+// ---------------------------------------------------------------------------------
+String::String(const String& str, int line_nr, const char *src_file ) : cv::String (str)
+{
+    char *ret = NULL;
+    ret = string_func (str.c_str(),
+                 (uint64_t)__builtin_return_address(0),
+                 STRING_FUNC,
+                 "String(String&)",
+                 line_nr,
+                 src_file);
+
+    *this = ret;
+}
+// ---------------------------------------------------------------------------------
 String String::toLowerCase() const
 {
     // printf ("String String::toLowerCase() const\n");
@@ -38,12 +96,6 @@ String::String(const std::string& str) : cv::String(str)
 {
     // printf ("String::String(const std::string& str)\n");
     // *this = "kann das sein ?";
-}
-
-String::String(const String& str) : cv::String (str)
-{
-    // printf ("String::String(const String& str)\n");
-    // *this = "neuer text. Das schei zu klappen";
 }
 
 String::String(const char* str)
@@ -68,6 +120,7 @@ String& String::operator =(const char *str)
     *s = str;
     return *this;
 }
+// -----------------------------------------------------------------------------------------------------------------------
 
 //!
 //! \brief The MatExpr class
@@ -88,23 +141,23 @@ class CV_EXPORTS Mat : public cv::Mat
 public:
     Mat() : cv::Mat() {}
 
-    Mat(int rows, int cols, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
-    Mat(cv::Size size, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
-    Mat(int rows, int cols, int type, const cv::Scalar& s, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
-    Mat(cv::Size size, int type, const cv::Scalar& s, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+    Mat(int rows, int cols, int type, BUILD_IN_PROTO_PARA );
+    Mat(cv::Size size, int type, BUILD_IN_PROTO_PARA);
+    Mat(int rows, int cols, int type, const cv::Scalar& s, BUILD_IN_PROTO_PARA);
+    Mat(cv::Size size, int type, const cv::Scalar& s, BUILD_IN_PROTO_PARA);
 
-    Mat(const cv::Mat& m, const cv::Rect& roi, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+    Mat(const cv::Mat& m, const cv::Rect& roi, BUILD_IN_PROTO_PARA);
     // ---------------------------------------------------------------------------------------
-    static cv::MatExpr zeros(int rows, int cols, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
-    static cv::MatExpr zeros(cv::Size size, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
-    static cv::MatExpr zeros(int ndims, const int* sz, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+    static cv::MatExpr zeros(int rows, int cols, int type, BUILD_IN_PROTO_PARA);
+    static cv::MatExpr zeros(cv::Size size, int type, BUILD_IN_PROTO_PARA);
+    static cv::MatExpr zeros(int ndims, const int* sz, int type, BUILD_IN_PROTO_PARA);
 
-    static cv::MatExpr ones(int rows, int cols, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
-    static cv::MatExpr ones(cv::Size size, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
-    static cv::MatExpr ones(int ndims, const int* sz, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+    static cv::MatExpr ones(int rows, int cols, int type, BUILD_IN_PROTO_PARA);
+    static cv::MatExpr ones(cv::Size size, int type, BUILD_IN_PROTO_PARA);
+    static cv::MatExpr ones(int ndims, const int* sz, int type, BUILD_IN_PROTO_PARA);
 
-    static cv::MatExpr eye(int rows, int cols, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
-    static cv::MatExpr eye(cv::Size size, int type, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE());
+    static cv::MatExpr eye(int rows, int cols, int type, BUILD_IN_PROTO_PARA);
+    static cv::MatExpr eye(cv::Size size, int type, BUILD_IN_PROTO_PARA);
 
     static cv::MatExpr func_type_1(int rows, int cols, int type,
                                  int line_nr, const char *src_file,
@@ -121,8 +174,8 @@ public:
                              int cv_type, const char *func_name,
                              uint64_t builtin_retunr_adresse);
     // ---------------------------------------------------------------------------------------
-    void convertTo( cv::OutputArray m, int rtype, double alpha=1, double beta=0, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE() ) const;
-    void assignTo( cv::Mat& m, int type=-1, int line_nr = __builtin_LINE(), const char *src_file = __builtin_FILE() ) const;
+    void convertTo( cv::OutputArray m, int rtype, double alpha=1, double beta=0, BUILD_IN_PROTO_PARA ) const;
+    void assignTo( cv::Mat& m, int type=-1, BUILD_IN_PROTO_PARA ) const;
 
     using cv::Mat::operator =;     // Mat& operator = (const Mat& m);    
 

@@ -5,11 +5,13 @@
 #define SERVER_ADDR     "127.0.0.1"
 #define BUFFERSIZE      8192
 
-#define MAX_STRING_VAL_LEN 256*2
+
 #define MAX_FUNC_NAME_LEN 64
 #define MAX_PARA_NAME_LEN 64
 #define MAX_PARA_DATA 256
-#define MAX_FILENAME_LEN 256
+#define MAX_FILENAME_LEN 256        // used for c-source filename
+
+#define MAX_STRING_VAL_LEN 256      // used for cvd::imread, cvd::String
 
 //!
 //! \brief The _data_types_ enum
@@ -78,6 +80,8 @@ enum _data_types_ {
     MAT_ZEROS_3 = 0x180C,           // *
     MAT_EYE = 0x180D,               // *
     MAT_EYE_2 = 0x180E,             // *
+
+    STRING_FUNC = 0x1900,
 
     // ----- Parameter 0x2000...0x2FFF --------
     SLIDE_INT_TWO_STEP_PARA = 0x2000,       // z.B. 1, 3, 5, ... 21 (int)
@@ -198,7 +202,7 @@ struct _enum_para_ {
 //! \brief The _string_para_ struct
 //!
 struct _string_para_ {              // wird z.B. für Filename verwendet ( s. imread() ).
-    char val[MAX_STRING_VAL_LEN ];
+    char val[ MAX_STRING_VAL_LEN ];
 };
 
 //!
