@@ -58,6 +58,26 @@ private:
 extern ParaWin *parawin;
 
 //!
+//! \brief The StringEdit class
+//!
+class StringEdit : public QWidget {
+    Q_OBJECT
+public:
+    StringEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *parent);
+
+    struct _cvd_para_ *cp;
+    QTcpSocket *client;
+    QLabel *out_str;
+    QLineEdit *ledit;
+private slots:
+    void ledit_finish();
+    void ledit_text_changed( const QString & );
+private:
+    void refresh_out_str (QString s);
+    bool text_changed = false;
+};
+
+//!
 //! \brief The FileNameEdit class
 //!
 class FileNameEdit : public QWidget {

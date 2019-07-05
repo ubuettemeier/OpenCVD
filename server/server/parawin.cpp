@@ -46,8 +46,8 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
 
     switch (cf->type) {
     case STRING_FUNC:
-        new FileNameEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );
-        set_param_win( 1, 260 );
+        new StringEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );
+        set_param_win( 1, 320 );
         break;
     case SET_NUMVAL:
         if (cf->first_para->type == INT_PARA)
@@ -479,6 +479,73 @@ void ParaWin::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Escape)
         close();
+}
+
+//!
+//! \brief StringEdit::StringEdit
+//! \param c
+//! \param foo
+//! \param x
+//! \param y
+//! \param parent
+//!
+StringEdit::StringEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *parent)
+{
+    cp = foo;
+    client = c;
+
+    struct _string_para_ *val = (struct _string_para_ *)cp->data;
+
+    out_str = new QLabel;
+    out_str->setGeometry(x, y, 200, 20);
+    out_str->setParent( parent );
+
+    ledit = new QLineEdit();
+    ledit->setText(val->val);
+
+    ledit->setGeometry(x, y+20, 250, 30);
+    ledit->setParent( parent );
+
+    refresh_out_str (ledit->text());
+
+    connect (ledit, SIGNAL(editingFinished()), this, SLOT(ledit_finish()));
+    connect (ledit, SIGNAL(textChanged(QString)), this, SLOT(ledit_text_changed(QString)));
+}
+
+//!
+//! \brief StringEdit::refresh_out_str
+//! \param s
+//!
+void StringEdit::refresh_out_str (QString s)
+{
+    QFileInfo f( s );
+    out_str->setText ( QString("imread Dateiname=%1").arg(f.fileName()) );
+}
+
+//!
+//! \brief StringEdit::ledit_finish
+//!
+void StringEdit::ledit_finish()
+{
+    if (text_changed) {
+        // printf ("edit finished\n");
+        struct _string_para_ *sp = (struct _string_para_ *)cp->data;
+        strcpy (sp->val, ledit->text().toStdString().c_str());
+
+        parawin->rewrite_para_data( cp );
+        refresh_out_str (ledit->text());
+    }
+    text_changed = false;
+}
+
+//!
+//! \brief StringEdit::ledit_text_changed
+//! \param s
+//!
+void StringEdit::ledit_text_changed( const QString & s)
+{
+    Q_UNUSED (s);
+    text_changed = true;
 }
 
 //!
