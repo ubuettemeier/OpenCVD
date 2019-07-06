@@ -41,7 +41,7 @@ enum _data_types_ {
     CONVERTSCALEABS = 0x1011,       // *
     SCALAR_ALL = 0x1012,
     SCHARR = 0x1013,
-    IMREAD = 0x1014,
+    IMREAD = 0x1014,                // *
     GRABCUT = 0x1015,
     GETSTRUCTURINGELEMENT = 0x1016,    
     MORPHOLOGYEX = 0x1017,
@@ -80,7 +80,7 @@ enum _data_types_ {
     MAT_EYE = 0x180D,               // *
     MAT_EYE_2 = 0x180E,             // *
 
-    STRING_FUNC = 0x1900,
+    STRING_FUNC = 0x1900,           // *
 
     // ----- Parameter 0x2000...0x2FFF --------
     SLIDE_INT_TWO_STEP_PARA = 0x2000,       // z.B. 1, 3, 5, ... 21 (int)

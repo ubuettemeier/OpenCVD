@@ -94,6 +94,12 @@ see: samples/short_sample/short_sample.cpp
 - static MatExpr eye(int rows, int cols, int type);
 - static MatExpr eye(Size size, int type);
 
+**cv::String Funktionen / cv::String functions**
+
+- String(const char* s);
+- String(const String& str);
+- String(const std::string& str);
+
 **spezielle Funktionen / specific functions**
 
 - set_numval
