@@ -519,7 +519,7 @@ StringEdit::StringEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWi
 void StringEdit::refresh_out_str (QString s)
 {
     QFileInfo f( s );
-    out_str->setText ( QString("imread Dateiname=%1").arg(f.fileName()) );
+    out_str->setText ( QString("String=%1").arg(f.fileName()) );
 }
 
 //!

@@ -21,10 +21,10 @@ class CV_EXPORTS String : public cv::String
 public:
     using cv::String::String;
 
-    String(const char* s);                              // example: CVD::String str = "text";
+    String(const char* s, BUILD_IN_PROTO_PARA);         // example: CVD::String str = "text";
     String(const String& str, BUILD_IN_PROTO_PARA);     // example: CVD::String basic_str = "basic_str"; CVD::String k(basic_str);
 
-    String(const std::string& str);
+    String(const std::string& str, BUILD_IN_PROTO_PARA);
 
     String& operator=(const char* str);     // example: CVD::String str; str = "text";
     String& operator+=(const char* str);    // example: CVD::String str = "test+"; str += "text";
@@ -72,8 +72,16 @@ char *string_func (const char *s,
     return str;
 }
 // ---------------------------------------------------------------------------------
+//!
+//! \brief String::String
+//! \param str
+//!
 String::String(const String& str, int line_nr, const char *src_file ) : cv::String (str)
 {
+    if (cvd_off) {
+        *this = str.c_str();
+        return;
+    }
     char *ret = NULL;
     ret = string_func (str.c_str(),
                  (uint64_t)__builtin_return_address(0),
@@ -92,17 +100,46 @@ String String::toLowerCase() const
     return static_cast<String>(s.toLowerCase());
 }
 
-String::String(const std::string& str) : cv::String(str)
+//!
+//! \brief String::String
+//! \param str
+//!
+String::String(const std::string& str, int line_nr, const char *src_file ) : cv::String(str)
 {
-    // printf ("String::String(const std::string& str)\n");
-    // *this = "kann das sein ?";
+    if (cvd_off) {
+        *this = str.c_str();
+        return;
+    }
+
+    char *ret = NULL;
+    ret = string_func (str.c_str(),
+                 (uint64_t)__builtin_return_address(0),
+                 STRING_FUNC,
+                 "String(std::string&)",
+                 line_nr,
+                 src_file);
+
+    *this = ret;
 }
 
-String::String(const char* str)
+String::String(const char* str, int line_nr, const char *src_file)
 {
     // printf ("String::String(const char* str)\n");
-    cv::String *s = this;
-    *s = str;
+    if (cvd_off) {
+        *this = str;
+        return;
+    }
+
+    char *ret = NULL;
+    ret = string_func (str,
+                 (uint64_t)__builtin_return_address(0),
+                 STRING_FUNC,
+                 "String(char *)",
+                 line_nr,
+                 src_file);
+    // cv::String *s = this;
+    // *s = ret;
+    *this = ret;
 }
 
 String& String::operator+=(const char* str)

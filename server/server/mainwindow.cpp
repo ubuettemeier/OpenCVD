@@ -805,6 +805,20 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case STRING_FUNC: {
+            s = QString ("// (%1%2%3);  new String")
+                        .arg(QChar('"'))
+                        .arg(QString((char *)cf->first_para->data))
+                        .arg(QChar('"'));
+            break;
+            }
+        case IMREAD: {
+            s = QString ("// CVD::imread(%1%2%3);")
+                         .arg(QChar('"'))
+                         .arg(QString((char *)cf->first_para->data))
+                         .arg(QChar('"'));
+            break;
+            }
         case SET_NUMVAL: {
             QString val;
             if (cf->first_para->type == ENUM_DROP_DOWN)
