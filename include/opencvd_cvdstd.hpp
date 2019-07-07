@@ -25,9 +25,9 @@ public:
     String(const std::string& str, BUILD_IN_PROTO );
 
     String& operator=(const char* str);     // example: CVD::String str; str = "text";
-    String& operator+=(const char* str);    // example: CVD::String str = "test+"; str += "text";
+    // String& operator+=(const char* str);    // example: CVD::String str = "test+"; str += "text";
 
-    String toLowerCase() const;
+    // String toLowerCase() const;
 
 private:
     char *string_func (const char *s,
@@ -39,9 +39,8 @@ private:
 //! \brief String::String
 //! \param str
 //!
-String::String(const char* str, int line_nr, const char *src_file)
+String::String(const char* str, int line_nr, const char *src_file) : cv::String( str )
 {
-    // printf ("String::String(const char* str)\n");
     if (cvd_off) {
         *this = str;
         return;
@@ -101,10 +100,18 @@ String::String(const std::string& str, int line_nr, const char *src_file ) : cv:
 }
 
 //!
-//! \brief String::operator +=
+//! \brief String::operator =
 //! \param str
 //! \return
 //!
+String& String::operator =(const char *str)
+{
+    cv::String *s = this;   // s is pointer to this
+    *s = str;
+    return *this;
+}
+
+/*
 String& String::operator+=(const char* str)
 {
     // printf ("String::operator+=\n");
@@ -113,51 +120,45 @@ String& String::operator+=(const char* str)
     return *this;
 }
 
-//!
-//! \brief String::operator =
-//! \param str
-//! \return
-//!
-String& String::operator =(const char *str)
-{
-    // printf ("String::operator =\n");
-    cv::String *s = this;   // s is pointer to this
-    *s = str;
-    return *this;
-}
 
-//!
-//! \brief String::toLowerCase
-//! \return
-//!
+
 String String::toLowerCase() const
 {
+    cv::String *s = static_cast<cv::String*>(this);
+    if (!s->cstr_)
+        return String();
     // printf ("String String::toLowerCase() const\n");
-    cv::String s = *this;
-    return static_cast<String>(s.toLowerCase());
+    // printf ("this = %s\n", this->c_str());
+
+    s = s.toLowerCase();
+    printf ("s = %s\n", s.c_str());
+    // *this = s.c_str();
+    // return static_cast<String>(s.toLowerCase());
+    return *this;
 }
+*/
 
 //!
 //! \brief String::string_func
-//! \param s
+//! \param s Basic String
 //! \param addr
-//! \param type
+//! \param type see: enum _data_types_
 //! \param f_name
-//! \param line_nr
-//! \param src_file
 //! \return
 //!
 char *String::string_func (const char *s,
                                   uint64_t addr, uint16_t type, const char *f_name,
                                   int line_nr, const char *src_file)
 {
-    static char str[512] = "";
+    assert (strlen(s) < MAX_STRING_VAL_LEN-1);  // length is limited
+
+    static char str[MAX_STRING_VAL_LEN] = "";
     static std::vector<opencvd_func *> func{};  // reg vector
     opencvd_func *foo = NULL;
 
     if ((foo = opencvd_func::grep_func(func, addr)) == NULL) {
         foo = new opencvd_func(addr, type, f_name,
-                               PARAMETER,    // Menu
+                               PARAMETER | FUNC_OFF,    // Menu
                                line_nr, src_file);
         func.push_back( foo );
 
@@ -166,11 +167,14 @@ char *String::string_func (const char *s,
         foo->new_para ( STRING_PARA, sizeof(struct _string_para_), (uint8_t*)&al, "cvd::String" );
     }
     foo->error_flag &= ~FUNC_ERROR;     // clear func_error
-
+    // ----------------------------------------------------------------------------------------------
+    // no break-function
+    // ----------------------------------------------------------------------------------------------
     if (foo->state.flag.func_off) {     // imread ist ausgeschaltet.
-        // return ret;                     // return ist empty !!!
+        strcpy (str, s);
     } else {
         try {
+            assert (strlen((char *)foo->para[0]->data) < MAX_STRING_VAL_LEN-1);
             struct _string_para_ *al = (struct _string_para_ *)foo->para[0]->data;
             strcpy (str, al->val);
         } catch( cv::Exception& e ) {
@@ -179,7 +183,7 @@ char *String::string_func (const char *s,
         foo->control_func_run_time ();
     }
     return str;
-}
+} // string_func
 
 } // namespace cvd
 

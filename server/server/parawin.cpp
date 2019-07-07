@@ -529,6 +529,7 @@ void StringEdit::ledit_finish()
 {
     if (text_changed) {
         // printf ("edit finished\n");
+        Q_ASSERT (ledit->text().toStdString().length() < MAX_STRING_VAL_LEN-1);
         struct _string_para_ *sp = (struct _string_para_ *)cp->data;
         strcpy (sp->val, ledit->text().toStdString().c_str());
 
@@ -604,6 +605,7 @@ void FileNameEdit::ledit_finish()
 {
     if (text_changed) {
         // printf ("edit finished\n");
+        Q_ASSERT (ledit->text().toStdString().length() < MAX_STRING_VAL_LEN-1);
         struct _string_para_ *sp = (struct _string_para_ *)cp->data;
         strcpy (sp->val, ledit->text().toStdString().c_str());
 

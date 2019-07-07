@@ -2115,6 +2115,7 @@ CV_EXPORTS_W Mat imread( const cv::String& filename, int flags
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), IMREAD, "imread", 0x000F, BUILIN_PARA);
         func.push_back( foo );
 
+        assert (filename.length() < MAX_STRING_VAL_LEN-1);
         struct _string_para_ al;
         strcpy (al.val, filename.c_str());
         foo->new_para (STRING_PARA, sizeof(struct _string_para_), (uint8_t*)&al, "filename");
@@ -2129,6 +2130,7 @@ CV_EXPORTS_W Mat imread( const cv::String& filename, int flags
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
             cv::Mat buf_image;
+            assert (strlen((char *)foo->para[0]->data) < MAX_STRING_VAL_LEN-1);
             struct _string_para_ *al = (struct _string_para_ *)foo->para[0]->data;
             try {
                 buf_image = cv::imread( al->val,
@@ -2152,6 +2154,7 @@ CV_EXPORTS_W Mat imread( const cv::String& filename, int flags
         return ret;                     // return ist empty !!!
     } else {
         try {
+            assert (strlen((char *)foo->para[0]->data) < MAX_STRING_VAL_LEN-1);
             struct _string_para_ *al = (struct _string_para_ *)foo->para[0]->data;
             ret = cv::imread( al->val,
                               *(int*)foo->para[1]->data );

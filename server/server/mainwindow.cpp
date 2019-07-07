@@ -9,6 +9,7 @@
 //!
 //! \todo - Anzahl Nachkommastellen bei class DoubleEdit als Parameter festlegen
 //!       - close Parameter-Window, by Parameter-Node clicked.
+//!       - bei client close Menue: all Functio ON/OFF auf ON setzen !!!
 //!
 
 #define VERSION "v0.5"
