@@ -94,6 +94,10 @@ see: samples/short_sample/short_sample.cpp
 - static MatExpr eye(int rows, int cols, int type);
 - static MatExpr eye(Size size, int type);
 
+**cv::Rect Funktionen / cv::Rect functions**
+
+- Rect (x, y, width, height);
+
 **cv::String Funktionen / cv::String functions**
 
 - String(const char* s);

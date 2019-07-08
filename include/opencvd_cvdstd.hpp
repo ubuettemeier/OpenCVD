@@ -8,6 +8,7 @@
 #define OPENCV_CVDSTD_HPP
 
 #include "opencv2/opencv.hpp"
+#include <type_traits>
 #include <memory>
 
 #define BUILD_IN_PROTO  int line_nr = __builtin_LINE(), \
@@ -15,6 +16,100 @@
 
 namespace cvd {
 
+//!
+//! \brief The Rect_ class
+//!
+template<typename _Tp>
+class Rect_ : public cv::Rect_<_Tp>
+{
+public:
+    using cv::Rect_<_Tp>::Rect_;
+
+    Rect_(_Tp _x, _Tp _y, _Tp _width, _Tp _height, BUILD_IN_PROTO);
+};
+
+typedef Rect_<int> Rect2i;
+typedef Rect_<float> Rect2f;
+typedef Rect_<double> Rect2d;
+typedef Rect2i Rect;
+
+//!
+//! \brief Rect_<_Tp>::Rect_
+//! \param _x
+//! \param _y
+//! \param _width
+//! \param _height
+//!
+template<typename _Tp>
+Rect_<_Tp>::Rect_(_Tp _x, _Tp _y, _Tp _width, _Tp _height, int line_nr, const char *src_file) : cv::Rect_<_Tp>::Rect_(_x, _y, _width, _height)
+{
+    if (cvd_off) {
+        return;
+    }
+
+    int type = CVD_RECT_TYPE_1_INT;
+    char func_name[128] = "Rect<int>";
+
+    if (std::is_same<_Tp, float>::value) {
+        type = CVD_RECT_TYPE_1_FLOAT;
+        strcpy (func_name, "Rect<float>");
+    }
+    if (std::is_same<_Tp, double>::value) {
+        type = CVD_RECT_TYPE_1_DOUBLE;
+        strcpy (func_name, "Rect<double>");
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), type, "cvd::Rect",
+                               PARAMETER | FUNC_OFF,    // Menu
+                               line_nr, src_file);
+        func.push_back( foo );
+
+        if (type == CVD_RECT_TYPE_1_INT) {
+            struct _rect_int_ ri = {(int)_x, (int)_y, (int)_width, (int)_height, -100000, 100000};
+            foo->new_para (RECT_INT_PARA, sizeof(struct _rect_int_), (uint8_t*)&ri, func_name );
+        }
+
+        if ((type == CVD_RECT_TYPE_1_FLOAT) || (type == CVD_RECT_TYPE_1_DOUBLE)){
+            struct _rect_double_ rd = {(double)_x, (double)_y, (double)_width, (double)_height, -100000.0, 100000.0};
+            foo->new_para (RECT_DOUBLE_PARA, sizeof(struct _rect_double_), (uint8_t*)&rd, func_name );
+        }
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // ----------------------------------------------------------------------------------------------
+    // no break-function
+    // ----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_off) {     // imread ist ausgeschaltet.
+        // strcpy (str, s);
+    } else {
+        try {
+            if ((type == CVD_RECT_TYPE_1_FLOAT) || (type == CVD_RECT_TYPE_1_DOUBLE)){
+                struct _rect_double_ *s_dat = (struct _rect_double_ *)foo->para[0]->data;
+                this->x = s_dat->x;
+                this->y = s_dat->y;
+                this->width = s_dat->w;
+                this->height = s_dat->h;
+            }
+            if (type == CVD_RECT_TYPE_1_INT) {
+                struct _rect_int_ *s_dat = (struct _rect_int_ *)foo->para[0]->data;
+                this->x = s_dat->x;
+                this->y = s_dat->y;
+                this->width = s_dat->w;
+                this->height = s_dat->h;
+            }
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+}
+
+//!
+//! \brief The String class
+//!
 class CV_EXPORTS String : public cv::String
 {
 public:

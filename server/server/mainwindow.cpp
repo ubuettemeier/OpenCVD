@@ -806,6 +806,28 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case CVD_RECT_TYPE_1_INT: {
+            struct _rect_int_ *r = (struct _rect_int_ *)cf->first_para->data;
+            s = QString ("// CVD::Rect (%1, %2, %3, %4);")
+                        .arg(QString::number(r->x))
+                        .arg(QString::number(r->y))
+                        .arg(QString::number(r->w))
+                        .arg(QString::number(r->h));
+            }
+            break;
+        case CVD_RECT_TYPE_1_FLOAT:
+        case CVD_RECT_TYPE_1_DOUBLE: {
+            QString func_name;
+            func_name = (cf->type == CVD_RECT_TYPE_1_FLOAT) ? "Rect2f" : "Rect2d";
+            struct _rect_double_ *r = (struct _rect_double_ *)cf->first_para->data;
+            s = QString ("// CVD::%5 (%1, %2, %3, %4);")
+                        .arg(QString::number(r->x))
+                        .arg(QString::number(r->y))
+                        .arg(QString::number(r->w))
+                        .arg(QString::number(r->h))
+                        .arg(func_name);
+            }
+            break;
         case STRING_FUNC: {
             s = QString ("// (%1%2%3);  new String")
                         .arg(QChar('"'))

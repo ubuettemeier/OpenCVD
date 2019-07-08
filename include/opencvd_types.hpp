@@ -62,6 +62,10 @@ enum _data_types_ {
     SCALEADD = 0x1026,              // *
     BUILDPYRAMID = 0x1027,          // *
 
+    CVD_RECT_TYPE_1_INT = 0x1500,       // *
+    CVD_RECT_TYPE_1_FLOAT = 0x1501,     // *
+    CVD_RECT_TYPE_1_DOUBLE = 0x1502,    // *
+
     SET_NUMVAL = 0x1700,            // *
 
     MAT_ROI = 0x1800,               // *

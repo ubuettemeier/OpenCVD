@@ -45,6 +45,15 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case CVD_RECT_TYPE_1_DOUBLE:
+    case CVD_RECT_TYPE_1_FLOAT:
+        new RectDoubleEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );       // Rect
+        set_param_win( 1, 360 );
+        break;
+    case CVD_RECT_TYPE_1_INT:
+        new RectIntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );          // Rect
+        set_param_win( 1, 320 );
+        break;
     case STRING_FUNC:
         new StringEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );
         set_param_win( 1, 320 );
