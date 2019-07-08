@@ -67,6 +67,9 @@ enum _data_types_ {
     CVD_RECT_TYPE_1_FLOAT = 0x1501,     // *
     CVD_RECT_TYPE_1_DOUBLE = 0x1502,    // *
 
+    CVD_SCALAR_1 = 0x1540,          // *
+    CVD_SCALAR_2 = 0x1541,          // *
+
     SET_NUMVAL = 0x1700,            // *
 
     MAT_ROI = 0x1800,               // *

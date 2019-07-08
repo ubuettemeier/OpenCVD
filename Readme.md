@@ -94,15 +94,20 @@ see: samples/short_sample/short_sample.cpp
 - static MatExpr eye(int rows, int cols, int type);
 - static MatExpr eye(Size size, int type);
 
+**cv::Scalar Funktionen / cv::Scalar functions**
+
+- Scalar ( v0, v1, v2, v4 );
+- Scalar ( v0 );
+
 **cv::Rect Funktionen / cv::Rect functions**
 
 - Rect (x, y, width, height);
 
 **cv::String Funktionen / cv::String functions**
 
-- String(const char* s);
-- String(const String& str);
-- String(const std::string& str);
+- String (const char* s);
+- String (const String& str);
+- String (const std::string& str);
 
 **spezielle Funktionen / specific functions**
 

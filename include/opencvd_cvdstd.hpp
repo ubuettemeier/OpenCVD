@@ -17,6 +17,108 @@
 namespace cvd {
 
 //!
+//! \brief The Scalar_ class
+//!
+template<typename _Tp>
+class Scalar_ : public cv::Scalar_<_Tp>
+{
+public:
+    using cv::Scalar_<_Tp>::Scalar_;
+
+    Scalar_(_Tp v0, _Tp v1, _Tp v2=0, _Tp v3=0, BUILD_IN_PROTO);
+    Scalar_(_Tp v0, BUILD_IN_PROTO);
+};
+
+typedef Scalar_<double> Scalar;
+
+//!
+//! \brief Scalar_<_Tp>::Scalar_
+//! \param v0
+//!
+template<typename _Tp>
+Scalar_<_Tp>::Scalar_(_Tp v0, int line_nr, const char *src_file) : cv::Scalar_<_Tp>::Scalar_(v0)
+{
+    if (cvd_off) {
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), CVD_SCALAR_2, "cvd::Scalar",
+                               PARAMETER | FUNC_OFF,    // Menu
+                               line_nr, src_file);
+        func.push_back( foo );
+
+        struct _double_para_ dv = {(double)v0, -1000000.0, 1000000.0, 3};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&dv, "v0" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // ----------------------------------------------------------------------------------------------
+    // no break-function
+    // ----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_off) {
+        // nothing to do
+    } else {
+        try {
+            this->val[0] = *(double *)foo->para[0]->data;
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+
+}
+
+//!
+//! \brief Scalar_<_Tp>::Scalar_
+//! \param v0
+//! \param v1
+//! \param v2
+//! \param v3
+//!
+template<typename _Tp>
+Scalar_<_Tp>::Scalar_(_Tp v0, _Tp v1, _Tp v2, _Tp v3, int line_nr, const char *src_file) : cv::Scalar_<_Tp>::Scalar_(v0, v1, v2, v3)
+{
+    if (cvd_off) {
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), CVD_SCALAR_1, "cvd::Scalar",
+                               PARAMETER | FUNC_OFF,    // Menu
+                               line_nr, src_file);
+        func.push_back( foo );
+
+        struct _rect_double_ rd = {(double)v0, (double)v1, (double)v2, (double)v3, -1000000.0, 1000000.0};
+        foo->new_para (RECT_DOUBLE_PARA, sizeof(struct _rect_double_), (uint8_t*)&rd, "Scalar<double>" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // ----------------------------------------------------------------------------------------------
+    // no break-function
+    // ----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_off) {
+        // nothing to do
+    } else {
+        try {
+            struct _rect_double_ *s_dat = (struct _rect_double_ *)foo->para[0]->data;
+            this->val[0] = s_dat->x;
+            this->val[1] = s_dat->y;
+            this->val[2] = s_dat->w;
+            this->val[3] = s_dat->h;
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+}
+// --------------------------------------------------------------------------------------------------------------
+
+//!
 //! \brief The Rect_ class
 //!
 template<typename _Tp>
@@ -82,8 +184,8 @@ Rect_<_Tp>::Rect_(_Tp _x, _Tp _y, _Tp _width, _Tp _height, int line_nr, const ch
     // ----------------------------------------------------------------------------------------------
     // no break-function
     // ----------------------------------------------------------------------------------------------
-    if (foo->state.flag.func_off) {     // imread ist ausgeschaltet.
-        // strcpy (str, s);
+    if (foo->state.flag.func_off) {
+        // nothing to do
     } else {
         try {
             if ((type == CVD_RECT_TYPE_1_FLOAT) || (type == CVD_RECT_TYPE_1_DOUBLE)){
@@ -106,7 +208,7 @@ Rect_<_Tp>::Rect_(_Tp _x, _Tp _y, _Tp _width, _Tp _height, int line_nr, const ch
         foo->control_func_run_time ();
     }
 }
-
+// --------------------------------------------------------------------------------------------------------------
 //!
 //! \brief The String class
 //!

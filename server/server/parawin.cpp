@@ -45,6 +45,14 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case CVD_SCALAR_2:
+        new DoubleEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );          // Scalar
+        set_param_win( 1, 260 );
+        break;
+    case CVD_SCALAR_1:
+        new RectDoubleEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );      // Scalar
+        set_param_win( 1, 360 );
+        break;
     case RECTANGLE_1:
         new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );     // thickness
         new EnumDrop (client, cf->first_para->next, LEFT_POS, 10+55*1, this );  // lineType

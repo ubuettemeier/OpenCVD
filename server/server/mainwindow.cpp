@@ -806,6 +806,20 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case CVD_SCALAR_2: {
+            s = QString ("// CVD::Scalar(%1);")
+                        .arg(QString::number(*(double*)cf->first_para->data));
+            }
+            break;
+        case CVD_SCALAR_1: {
+            struct _rect_double_ *r = (struct _rect_double_ *)cf->first_para->data;
+            s = QString ("// CVD::Scalar(%1, %2, %3, %4);")
+                        .arg(QString::number(r->x))
+                        .arg(QString::number(r->y))
+                        .arg(QString::number(r->w))
+                        .arg(QString::number(r->h));
+            }
+            break;
         case RECTANGLE_1: {
             QString bt = grep_enum_text("LineTypes", *(int*)cf->first_para->next->data);   // closed
             s = QString ("// CVD::rectangle ( img, rec, color, %1, %2, %3);")
