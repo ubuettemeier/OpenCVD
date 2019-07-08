@@ -72,7 +72,7 @@ see: samples/short_sample/short_sample.cpp
 - medianBlur, morphologyEx
 - normalize
 - pyrDown, pyrUp
-- resize
+- resize, rectangle
 - Scharr, Sobel, scaleAdd
 - threshold
 

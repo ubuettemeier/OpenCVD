@@ -806,6 +806,14 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case RECTANGLE_1: {
+            QString bt = grep_enum_text("LineTypes", *(int*)cf->first_para->next->data);   // closed
+            s = QString ("// CVD::rectangle ( img, rec, color, %1, %2, %3);")
+                         .arg(QString::number(*(int*)cf->first_para->data))
+                         .arg(bt)
+                         .arg(QString::number(*(int*)cf->first_para->next->next->data));
+            }
+            break;
         case CVD_RECT_TYPE_1_INT: {
             struct _rect_int_ *r = (struct _rect_int_ *)cf->first_para->data;
             s = QString ("// CVD::Rect (%1, %2, %3, %4);")

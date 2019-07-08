@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
     <enum>
+        <LineTypes>
+            <FILLED> -1 </FILLED>
+            <LINE_4> 4 </LINE_4>
+            <LINE_8> 8 </LINE_8>
+            <LINE_AA> 16 </LINE_AA>
+        </LineTypes>
         <DistanceTypes>
             <DIST_USER> -1 </DIST_USER>
             <DIST_L1> 1 </DIST_L1>

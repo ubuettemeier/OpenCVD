@@ -61,6 +61,7 @@ enum _data_types_ {
     APPROXPOLYPD = 0x1025,          // *
     SCALEADD = 0x1026,              // *
     BUILDPYRAMID = 0x1027,          // *
+    RECTANGLE_1 = 0x1028,
 
     CVD_RECT_TYPE_1_INT = 0x1500,       // *
     CVD_RECT_TYPE_1_FLOAT = 0x1501,     // *

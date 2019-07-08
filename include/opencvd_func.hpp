@@ -1,6 +1,7 @@
 //!
 //! @author Ulrich Buettemeier
 //! @todo create function HoughLines(...). See: HoughLinesP(...)
+//!       create void rectangle(InputOutputArray img, Point pt1, Point pt2, ...
 //!
 
 #ifndef OPENCVD_FUNC_HPP
@@ -50,6 +51,12 @@
 */
 
 namespace cvd {
+
+
+CV_EXPORTS void rectangle(CV_IN_OUT cv::Mat& img, cv::Rect rec,
+                          const cv::Scalar& color, int thickness = 1,
+                          int lineType = cv::LINE_8, int shift = 0,
+                          BUILDIN);
 
 CV_EXPORTS_W void fitLine( cv::InputArray points, cv::OutputArray line, int distType,
                            double param, double reps, double aeps,
@@ -203,6 +210,80 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           int dx, int dy, double scale = 1, double delta = 0,
                           int borderType = cv::BORDER_DEFAULT,
                           BUILDIN);
+
+//!
+//! \brief rectangle
+//! \param img
+//! \param rec
+//! \param color
+//! \param thickness Thickness of lines that make up the rectangle. Negative values, like CV_FILLED ,
+//!        mean that the function has to draw a filled rectangle.
+//! \param lineType Type of the line. See the line description.
+//! \param shift Number of fractional bits in the point coordinates.
+//!
+CV_EXPORTS void rectangle(CV_IN_OUT cv::Mat& img, cv::Rect rec,
+                          const cv::Scalar& color, int thickness,
+                          int lineType, int shift
+                          BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::rectangle( img, rec, color, thickness, lineType, shift );
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), RECTANGLE_1, "rectangle",
+                               PARAMETER | FUNC_OFF | SHOW_IMAGE | BREAK,    // Menu
+                               BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _int_para_ tn = {thickness, -1, 10000};     // -1 = fill rec;  0 = thickness 1
+        foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&tn, "thickness" );
+
+        struct _enum_para_ lt = {lineType, "LineTypes"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&lt, "lineType" );
+
+        struct _int_para_ sh = {shift, 0, 16};      // ab 17 gibt es ein error
+        foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&sh, "shift" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // -----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::Mat out = img;
+            try {
+                cv::rectangle( out, rec, color,
+                                *(int*)foo->para[0]->data,      // thickness
+                                *(int*)foo->para[1]->data,      // lineType
+                                *(int*)foo->para[2]->data);     // shift
+            } catch( cv::Exception& e ) {
+                foo->error_flag |= FUNC_ERROR;
+            }
+            foo->control_imshow( out );                 // Ausgabe
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
+    // -----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_off) {
+        // do nothing
+    } else {
+        try {
+            cv::rectangle( img, rec, color,
+                            *(int*)foo->para[0]->data,      // thickness
+                            *(int*)foo->para[1]->data,      // lineType
+                            *(int*)foo->para[2]->data);     // shift
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( img );  // show Image
+}
 
 //!
 //! \brief fitLine
