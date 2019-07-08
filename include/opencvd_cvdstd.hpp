@@ -16,6 +16,101 @@
 
 namespace cvd {
 
+template<typename _Tp>
+class Point_ : public cv::Point_<_Tp>
+{
+public:
+    Point_(_Tp _x, _Tp _y, BUILD_IN_PROTO);
+};
+
+typedef Point_<int> Point2i;
+typedef Point_<int64> Point2l;
+typedef Point_<float> Point2f;
+typedef Point_<double> Point2d;
+typedef Point2i Point;
+
+template<typename _Tp>
+Point_<_Tp>::Point_(_Tp _x, _Tp _y, int line_nr, const char *src_file) : cv::Point_<_Tp>::Point_(_x, _y)
+{
+    if (cvd_off) {
+        return;
+    }
+
+    int type = CVD_POINT_TYPE_1_INT;
+    char fname[64] = "cvd::Point<int>";
+
+    if (std::is_same<_Tp, int64>::value) {
+        type = CVD_POINT_TYPE_1_INT64;
+        strcpy (fname, "cvd::Point<int64>");
+    }
+
+    if (std::is_same<_Tp, float>::value) {
+        type = CVD_POINT_TYPE_1_FLOAT;
+        strcpy (fname, "cvd::Point<float>");
+    }
+
+    if (std::is_same<_Tp, double>::value) {
+        type = CVD_POINT_TYPE_1_DOUBLE;
+        strcpy (fname, "cvd::Point<double>");
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), type, fname,
+                               PARAMETER | FUNC_OFF,    // Menu
+                               line_nr, src_file);
+        func.push_back( foo );
+
+        switch (type) {
+        case CVD_POINT_TYPE_1_INT64:
+        case CVD_POINT_TYPE_1_INT: {
+            struct _point_int_ ip = {(int)_x, -20000, 20000, (int)_y, -20000, 20000};
+            foo->new_para (POINT_INT_XY, sizeof(struct _point_int_), (uint8_t*)&ip, "Point(x, y)");
+            }
+            break;
+        case CVD_POINT_TYPE_1_FLOAT:
+        case CVD_POINT_TYPE_1_DOUBLE: {
+            struct _point_double_ dp = {(double)_x, -1000000.0, 1000000.0, 3, (double)_y, -1000000.0, 1000000.0, 3};
+            foo->new_para (POINT_DOUBLE_XY, sizeof(struct _point_double_), (uint8_t*)&dp, "Point(x, y)");
+            }
+            break;
+        }
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // ----------------------------------------------------------------------------------------------
+    // no break-function
+    // ----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_off) {
+        // nothing to do
+    } else {
+        try {
+            switch (type) {
+            case CVD_POINT_TYPE_1_INT64:
+            case CVD_POINT_TYPE_1_INT: {
+                struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
+                this->x = ip->x;
+                this->y = ip->y;
+                }
+                break;
+            case CVD_POINT_TYPE_1_FLOAT:
+            case CVD_POINT_TYPE_1_DOUBLE: {
+                struct _point_double_ *dp = (struct _point_double_ *) foo->para[0]->data;
+                this->x = dp->x;
+                this->y = dp->y;
+                }
+                break;
+            }
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+}
+
+
+
 //!
 //! \brief The Scalar_ class
 //!

@@ -806,6 +806,22 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case CVD_POINT_TYPE_1_FLOAT:
+        case CVD_POINT_TYPE_1_DOUBLE: {
+            struct _point_double_ *ip = (struct _point_double_ *)cf->first_para->data;
+            s = QString ("// CVD::Point(%1, %2);")
+                         .arg(QString::number(ip->x))
+                         .arg(QString::number(ip->y));
+            }
+            break;
+        case CVD_POINT_TYPE_1_INT64:
+        case CVD_POINT_TYPE_1_INT: {
+            struct _point_int_ *ip = (struct _point_int_ *)cf->first_para->data;
+            s = QString ("// CVD::Point(%1, %2);")
+                         .arg(QString::number(ip->x))
+                         .arg(QString::number(ip->y));
+            }
+            break;
         case CVD_SCALAR_2: {
             s = QString ("// CVD::Scalar(%1);")
                         .arg(QString::number(*(double*)cf->first_para->data));

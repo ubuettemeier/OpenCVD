@@ -45,6 +45,16 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case CVD_POINT_TYPE_1_FLOAT:
+    case CVD_POINT_TYPE_1_DOUBLE:
+        new PointDouble ( client, cf->first_para, LEFT_POS, 10+55*0, this );       // x, y
+        set_param_win( 1, 260 );
+        break;
+    case CVD_POINT_TYPE_1_INT64:
+    case CVD_POINT_TYPE_1_INT:
+        new PointInt ( client, cf->first_para, LEFT_POS, 10+55*0, this );       // x, y
+        set_param_win( 1, 260 );
+        break;
     case CVD_SCALAR_2:
         new DoubleEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );          // Scalar
         set_param_win( 1, 260 );
@@ -1166,6 +1176,73 @@ void Slide::slide_para_button_pushed ()
 {
     printf ("Treffer\n");
 }
+
+
+
+
+PointDouble::PointDouble(QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *parent)
+{
+    cp = foo;
+    client = c;
+
+    struct _point_double_ *val = (struct _point_double_ *)cp->data;
+
+    l = new QLabel();
+    set_Text( val->x, val->y );
+
+    l->setGeometry(x, y, 200, 20);
+    l->setParent( parent );
+
+    x_koor = new QDoubleSpinBox();
+    x_koor->setDecimals ( val->decimals_x);
+    x_koor->setMinimum( val->min_x );
+    x_koor->setMaximum( val->max_x );
+    x_koor->setValue( val->x );
+    x_koor->setGeometry(x, y+20, 100, 30);
+    x_koor->setParent( parent );
+
+    y_koor = new QDoubleSpinBox();
+    y_koor->setDecimals ( val->decimals_y);
+    y_koor->setMinimum( val->min_y );
+    y_koor->setMaximum( val->max_y );
+    y_koor->setValue( val->y );
+    y_koor->setGeometry(x+120, y+20, 100, 30);
+    y_koor->setParent( parent );
+
+    connect (x_koor, SIGNAL(editingFinished()), this, SLOT(X_edit_finish()));
+    connect (y_koor, SIGNAL(editingFinished()), this, SLOT(Y_edit_finish()));
+}
+
+void PointDouble::set_Text( double x, double y )
+{
+    l->setText (QString("%1 ( w=%2, h=%3 )").arg(QString(cp->para_name))
+                                            .arg(QString::number(x))
+                                            .arg(QString::number(y)));
+}
+
+void PointDouble::X_edit_finish ()
+{
+    struct _point_double_ *val = (struct _point_double_ *)cp->data;
+
+    val->x = x_koor->value();
+    set_Text (val->x, val->y);
+
+    parawin->rewrite_para_data( cp );
+}
+
+//!
+//! \brief PointInt::Y_edit_finish
+//!
+void PointDouble::Y_edit_finish ()
+{
+    struct _point_double_ *val = (struct _point_double_ *)cp->data;
+
+    val->y = y_koor->value();
+    set_Text (val->x, val->y);
+
+    parawin->rewrite_para_data( cp );
+}
+
 
 //!
 //! \brief PointInt::PointInt

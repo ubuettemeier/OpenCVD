@@ -70,6 +70,11 @@ enum _data_types_ {
     CVD_SCALAR_1 = 0x1540,          // *
     CVD_SCALAR_2 = 0x1541,          // *
 
+    CVD_POINT_TYPE_1_INT = 0x1580,
+    CVD_POINT_TYPE_1_INT64 = 0x1581,
+    CVD_POINT_TYPE_1_FLOAT = 0x1582,
+    CVD_POINT_TYPE_1_DOUBLE = 0x1583,
+
     SET_NUMVAL = 0x1700,            // *
 
     MAT_ROI = 0x1800,               // *
@@ -104,6 +109,7 @@ enum _data_types_ {
     POINT_INT_XY = 0x200A,                  // {X int value, min, max, Y int value, min, max} Anzeige erfolgt in X=..., Y=....  Parameter ohne Grenzwerte
     RECT_INT_PARA = 0x200B,                 // sx, sy, ex, ey
     RECT_DOUBLE_PARA = 0x200C,
+    POINT_DOUBLE_XY = 0x200D,               // X, min, max, decimal_x, Y, min, max, decimal_y
     // ----- Special -----------
     FUNC_FLAGS = 0x3000,                    // s.auch struct _cvd_flags_
     TIME_TRIGGER = 0x3001,                  // s.auch struct _time_trigger_
@@ -145,6 +151,16 @@ struct _point_int_ {
     int y;
     int min_y;
     int max_y;
+};
+
+struct _point_double_ {
+    double x;
+    double min_x, max_x;
+    int decimals_x;         // Nachkommastellen
+
+    double y;
+    double min_y, max_y;
+    int decimals_y;         // Nachkommastellen
 };
 //!
 //! \brief The _rect_int_ struct

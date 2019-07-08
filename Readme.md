@@ -103,6 +103,10 @@ see: samples/short_sample/short_sample.cpp
 
 - Rect (x, y, width, height);
 
+**cv::Point Funktionen / cv::Point functions**
+
+- Point (x, y);
+
 **cv::String Funktionen / cv::String functions**
 
 - String (const char* s);

@@ -239,6 +239,26 @@ private:
     QLabel *l;
 };
 
+// --------------------------------------------------------------------------------------------
+class PointDouble : public QWidget {
+    Q_OBJECT
+public:
+    PointDouble(QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *parent = 0);
+
+    struct _cvd_para_ *cp;
+    QDoubleSpinBox *x_koor;
+    QDoubleSpinBox *y_koor;
+    QTcpSocket *client;
+private slots:
+    void X_edit_finish();
+    void Y_edit_finish();
+private:
+    void set_Text( double x, double y );
+private:
+    QLabel *l;
+};
+// --------------------------------------------------------------------------------------------
+
 //!
 //! \brief The ScalarDouble class
 //!
