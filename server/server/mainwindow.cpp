@@ -836,6 +836,14 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
                         .arg(QString::number(r->h));
             }
             break;
+        case RECTANGLE_2: {
+            QString bt = grep_enum_text("LineTypes", *(int*)cf->first_para->next->data);   // closed
+            s = QString ("// CVD::rectangle ( img, pt1, pt2, color, %1, %2, %3);")
+                         .arg(QString::number(*(int*)cf->first_para->data))
+                         .arg(bt)
+                         .arg(QString::number(*(int*)cf->first_para->next->next->data));
+            }
+            break;
         case RECTANGLE_1: {
             QString bt = grep_enum_text("LineTypes", *(int*)cf->first_para->next->data);   // closed
             s = QString ("// CVD::rectangle ( img, rec, color, %1, %2, %3);")
@@ -1487,6 +1495,20 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "APPROXPOLYPD") == 0) return APPROXPOLYPD;
     if (strcmp(enum_name, "SCALEADD") == 0) return SCALEADD;
     if (strcmp(enum_name, "BUILDPYRAMID") == 0) return BUILDPYRAMID;
+    if (strcmp(enum_name, "RECTANGLE_1") == 0) return RECTANGLE_1;
+
+    if (strcmp(enum_name, "CVD_RECT_TYPE_1_INT") == 0) return CVD_RECT_TYPE_1_INT;
+    if (strcmp(enum_name, "CVD_RECT_TYPE_1_FLOAT") == 0) return CVD_RECT_TYPE_1_FLOAT;
+    if (strcmp(enum_name, "CVD_RECT_TYPE_1_DOUBLE") == 0) return CVD_RECT_TYPE_1_DOUBLE;
+
+
+    if (strcmp(enum_name, "CVD_SCALAR_1") == 0) return CVD_SCALAR_1;
+    if (strcmp(enum_name, "CVD_SCALAR_2") == 0) return CVD_SCALAR_2;
+
+    if (strcmp(enum_name, "CVD_POINT_TYPE_1_INT") == 0) return CVD_POINT_TYPE_1_INT;
+    if (strcmp(enum_name, "CVD_POINT_TYPE_1_INT64") == 0) return CVD_POINT_TYPE_1_INT64;
+    if (strcmp(enum_name, "CVD_POINT_TYPE_1_FLOAT") == 0) return CVD_POINT_TYPE_1_FLOAT;
+    if (strcmp(enum_name, "CVD_POINT_TYPE_1_DOUBLE") == 0) return CVD_POINT_TYPE_1_DOUBLE;
 
     if (strcmp(enum_name, "SET_NUMVAL") == 0) return SET_NUMVAL;
 
@@ -1584,6 +1606,19 @@ char *MainWindow::get_enum_text (int val)
     if (val == APPROXPOLYPD) strcpy (buf, "APPROXPOLYPD");
     if (val == SCALEADD) strcpy (buf, "SCALEADD");
     if (val == BUILDPYRAMID) strcpy (buf, "BUILDPYRAMID");
+    if (val == RECTANGLE_1) strcpy (buf, "RECTANGLE_1");
+
+    if (val == CVD_RECT_TYPE_1_INT) strcpy (buf, "CVD_RECT_TYPE_1_INT");
+    if (val == CVD_RECT_TYPE_1_FLOAT) strcpy (buf, "CVD_RECT_TYPE_1_FLOAT");
+    if (val == CVD_RECT_TYPE_1_DOUBLE) strcpy (buf, "CVD_RECT_TYPE_1_DOUBLE");
+
+    if (val == CVD_SCALAR_1) strcpy (buf, "CVD_SCALAR_1");
+    if (val == CVD_SCALAR_2) strcpy (buf, "CVD_SCALAR_2");
+
+    if (val == CVD_POINT_TYPE_1_INT) strcpy (buf, "CVD_POINT_TYPE_1_INT");
+    if (val == CVD_POINT_TYPE_1_INT64) strcpy (buf, "CVD_POINT_TYPE_1_INT64");
+    if (val == CVD_POINT_TYPE_1_FLOAT) strcpy (buf, "CVD_POINT_TYPE_1_FLOAT");
+    if (val == CVD_POINT_TYPE_1_DOUBLE) strcpy (buf, "CVD_POINT_TYPE_1_DOUBLE");
 
     if (val == SET_NUMVAL) strcpy (buf, "SET_NUMVAL");
 

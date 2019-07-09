@@ -7,6 +7,7 @@ OPENCVD = ../../include/opencvd.hpp
 OPENCVD += ../../include/opencvd_basic.hpp
 OPENCVD += ../../include/opencvd_func.hpp
 OPENCVD += ../../include/opencvd_mat.hpp
+OPENCVD += ../../include/opencvd_cvdstd.hpp
 OPENCVD += ../../include/opencvd_types.hpp
 
 # ---- get pkg-config files -----

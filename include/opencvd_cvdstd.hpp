@@ -16,10 +16,16 @@
 
 namespace cvd {
 
+//////////////////////////////// Point_ ////////////////////////////////
+//!
+//! \brief The Point_ class
+//!
 template<typename _Tp>
 class Point_ : public cv::Point_<_Tp>
 {
 public:
+    using cv::Point_<_Tp>::Point_;
+
     Point_(_Tp _x, _Tp _y, BUILD_IN_PROTO);
 };
 
@@ -29,6 +35,11 @@ typedef Point_<float> Point2f;
 typedef Point_<double> Point2d;
 typedef Point2i Point;
 
+//!
+//! \brief Point_<_Tp>::Point_
+//! \param _x
+//! \param _y
+//!
 template<typename _Tp>
 Point_<_Tp>::Point_(_Tp _x, _Tp _y, int line_nr, const char *src_file) : cv::Point_<_Tp>::Point_(_x, _y)
 {
@@ -109,8 +120,7 @@ Point_<_Tp>::Point_(_Tp _x, _Tp _y, int line_nr, const char *src_file) : cv::Poi
     }
 }
 
-
-
+//////////////////////////////// Scalar_ ////////////////////////////////
 //!
 //! \brief The Scalar_ class
 //!
@@ -211,8 +221,8 @@ Scalar_<_Tp>::Scalar_(_Tp v0, _Tp v1, _Tp v2, _Tp v3, int line_nr, const char *s
         foo->control_func_run_time ();
     }
 }
-// --------------------------------------------------------------------------------------------------------------
 
+//////////////////////////////// Rect_ ////////////////////////////////
 //!
 //! \brief The Rect_ class
 //!
@@ -303,7 +313,8 @@ Rect_<_Tp>::Rect_(_Tp _x, _Tp _y, _Tp _width, _Tp _height, int line_nr, const ch
         foo->control_func_run_time ();
     }
 }
-// --------------------------------------------------------------------------------------------------------------
+
+//////////////////////////////// String_ ////////////////////////////////
 //!
 //! \brief The String class
 //!
