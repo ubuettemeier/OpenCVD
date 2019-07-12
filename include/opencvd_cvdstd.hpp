@@ -118,7 +118,7 @@ Point_<_Tp>::Point_(_Tp _x, _Tp _y, int line_nr, const char *src_file) : cv::Poi
         }
         foo->control_func_run_time ();
     }
-}
+} // Point_<_Tp>::Point_(_Tp _x, _Tp _y, int line_nr, const char *src_file)
 
 //////////////////////////////// Scalar_ ////////////////////////////////
 //!
@@ -174,7 +174,7 @@ Scalar_<_Tp>::Scalar_(_Tp v0, int line_nr, const char *src_file) : cv::Scalar_<_
         foo->control_func_run_time ();
     }
 
-}
+} // Scalar_<_Tp>::Scalar_(_Tp v0, int line_nr, const char *src_file)
 
 //!
 //! \brief Scalar_<_Tp>::Scalar_
@@ -220,7 +220,7 @@ Scalar_<_Tp>::Scalar_(_Tp v0, _Tp v1, _Tp v2, _Tp v3, int line_nr, const char *s
         }
         foo->control_func_run_time ();
     }
-}
+} // Scalar_<_Tp>::Scalar_(_Tp v0, _Tp v1, _Tp v2, _Tp v3, int line_nr, const char *src_file)
 
 //////////////////////////////// Rect_ ////////////////////////////////
 //!
@@ -312,7 +312,7 @@ Rect_<_Tp>::Rect_(_Tp _x, _Tp _y, _Tp _width, _Tp _height, int line_nr, const ch
         }
         foo->control_func_run_time ();
     }
-}
+} // Rect_<_Tp>::Rect_(_Tp _x, _Tp _y, _Tp _width, _Tp _height, int line_nr, const char *src_file)
 
 //////////////////////////////// String_ ////////////////////////////////
 //!
@@ -357,7 +357,7 @@ String::String(const char* str, int line_nr, const char *src_file) : cv::String(
                  line_nr,
                  src_file);
     *this = ret;
-}
+} // String::String(const char* str, int line_nr, const char *src_file)
 
 //!
 //! \brief String::String
@@ -378,7 +378,7 @@ String::String(const String& str, int line_nr, const char *src_file ) : cv::Stri
                  src_file);
 
     *this = ret;
-}
+} // String::String(const String& str, int line_nr, const char *src_file )
 
 //!
 //! \brief String::String
@@ -400,7 +400,7 @@ String::String(const std::string& str, int line_nr, const char *src_file ) : cv:
                  src_file);
 
     *this = ret;
-}
+} // String::String(const std::string& str, int line_nr, const char *src_file )
 
 //!
 //! \brief String::operator =

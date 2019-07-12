@@ -23,7 +23,13 @@ int main( int argc, char** argv )
         printf ("NO CAMERA\n");
         return -1;
     }
-    
+
+    /*
+    cap.set(CAP_PROP_MODE, cv::CAP_MODE_GRAY);  // does not work on raspberry pi.
+    cap.set(CAP_PROP_FRAME_WIDTH, 320);
+    cap.set(CAP_PROP_FRAME_HEIGHT, 240);
+    */
+
     while (!ende) {
         CVD::Mat a;
         cap >> a;                   // Bildeinzug
