@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
     <enum>
+        <LineSegmentDetectorModes>
+            <LSD_REFINE_NONE> 0 </LSD_REFINE_NONE>
+            <LSD_REFINE_STD> 1 </LSD_REFINE_STD>
+            <LSD_REFINE_ADV> 2 </LSD_REFINE_ADV>
+        </LineSegmentDetectorModes>
         <LineTypes>
             <FILLED> -1 </FILLED>
             <LINE_4> 4 </LINE_4>

@@ -806,6 +806,19 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case CREATELINESEGMENTDETECTOR: {
+            QString bt = grep_enum_text("LineSegmentDetectorModes", *(int*)cf->first_para->data);   // _refine
+            s = QString ("// CVD::createLineSegmentDetector(%1, %2, %3, %4, %5, %6, %7, %8);")
+                         .arg(bt)                                                                                       // _refine
+                         .arg(QString::number(*(double*)cf->first_para->next->data))                                    // _scale
+                         .arg(QString::number(*(double*)cf->first_para->next->next->data))                              // _sigma_scale
+                         .arg(QString::number(*(double*)cf->first_para->next->next->next->data))                        // _quant
+                         .arg(QString::number(*(double*)cf->first_para->next->next->next->next->data))                  // _ang_th
+                         .arg(QString::number(*(double*)cf->first_para->next->next->next->next->next->data))            // _log_eps
+                         .arg(QString::number(*(double*)cf->first_para->next->next->next->next->next->next->data))      // _density_th
+                         .arg(QString::number(*(int*)cf->first_para->next->next->next->next->next->next->next->data));  // _n_bins
+            }
+            break;
         case CVD_POINT_TYPE_1_FLOAT:
         case CVD_POINT_TYPE_1_DOUBLE: {
             struct _point_double_ *ip = (struct _point_double_ *)cf->first_para->data;

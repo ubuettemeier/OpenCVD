@@ -45,6 +45,17 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case CREATELINESEGMENTDETECTOR:
+        new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );  // _refine
+        new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );  // _scale
+        new DoubleEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );  // _sigma_scale
+        new DoubleEdit (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );  // _quant
+        new DoubleEdit (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );  // _ang_th
+        new DoubleEdit (client, cf->first_para->next->next->next->next->next, LEFT_POS, 10+55*5, this );  // _log_eps
+        new DoubleEdit (client, cf->first_para->next->next->next->next->next->next, LEFT_POS, 10+55*6, this );  // _density_th
+        new IntEdit (client, cf->first_para->next->next->next->next->next->next->next, LEFT_POS, 10+55*7, this );     // _n_bins
+        set_param_win( 8, 260 );
+        break;
     case CVD_POINT_TYPE_1_FLOAT:
     case CVD_POINT_TYPE_1_DOUBLE:
         new PointDouble ( client, cf->first_para, LEFT_POS, 10+55*0, this );       // x, y

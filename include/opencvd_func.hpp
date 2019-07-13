@@ -51,6 +51,12 @@
 
 namespace cvd {
 
+CV_EXPORTS_W cv::Ptr<cv::LineSegmentDetector> createLineSegmentDetector(
+                        int _refine = cv::LSD_REFINE_STD, double _scale = 0.8,
+                        double _sigma_scale = 0.6, double _quant = 2.0, double _ang_th = 22.5,
+                        double _log_eps = 0, double _density_th = 0.7, int _n_bins = 1024,
+                        BUILDIN);
+
 CV_EXPORTS_W void rectangle(cv::InputOutputArray img, cv::Point pt1, cv::Point pt2,
                           const cv::Scalar& color, int thickness = 1,
                           int lineType = cv::LINE_8, int shift = 0,
@@ -213,6 +219,95 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           int dx, int dy, double scale = 1, double delta = 0,
                           int borderType = cv::BORDER_DEFAULT,
                           BUILDIN);
+
+
+//!
+//! \brief createLineSegmentDetector
+//! \param _refine
+//! \param _scale
+//! \param _sigma_scale
+//! \param _quant
+//! \param _ang_th
+//! \param _log_eps
+//! \param _density_th
+//! \param _n_bins
+//! \return
+//!
+CV_EXPORTS_W cv::Ptr<cv::LineSegmentDetector> createLineSegmentDetector(
+                        int _refine, double _scale,
+                        double _sigma_scale, double _quant, double _ang_th ,
+                        double _log_eps, double _density_th, int _n_bins
+                        BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        return cv::createLineSegmentDetector( _refine, _scale,
+                                              _sigma_scale, _quant, _ang_th,
+                                              _log_eps, _density_th, _n_bins );
+    }
+
+    cv::Ptr<cv::LineSegmentDetector> ret; //  = nullptr;
+
+    static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), CREATELINESEGMENTDETECTOR, "createLineSegmentDetector()",
+                               PARAMETER | FUNC_OFF | BREAK,    // Menu
+                               BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _enum_para_ rf = {_refine, "LineSegmentDetectorModes"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&rf, "_refine" );
+
+        struct _double_para_ sc = {_scale, -100000.0, 100000.0, 3};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&sc, "_scale" );
+
+        struct _double_para_ sic = {_sigma_scale, -100000.0, 100000.0, 3};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&sic, "_sigma_scale" );
+
+        struct _double_para_ qa = {_quant, -100000.0, 100000.0, 3};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&qa, "_quant" );
+
+        struct _double_para_ at = {_ang_th, -100000.0, 100000.0, 3};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&at, "_ang_th" );
+
+        struct _double_para_ le = {_log_eps, -100000.0, 100000.0, 3};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&le, "_log_eps" );
+
+        struct _double_para_ dth = {_density_th, -100000.0, 100000.0, 3};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&dth, "_density_th" );
+
+        struct _int_para_ nb = {_n_bins, 0, 65536};
+        foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&nb, "_n_bins" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // -----------------------------------------------------------------------------------------------
+
+
+    // -----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_off) {
+        return cv::createLineSegmentDetector( _refine, _scale,
+                                              _sigma_scale, _quant, _ang_th,
+                                              _log_eps, _density_th, _n_bins );
+    } else {
+        try {
+            ret = cv::createLineSegmentDetector( *(int*)foo->para[0]->data,      // _refine,
+                                                 *(double*)foo->para[1]->data,      // _scale,
+                                                 *(double*)foo->para[2]->data,      // _sigma_scale,
+                                                 *(double*)foo->para[3]->data,      // _quant,
+                                                 *(double*)foo->para[4]->data,      // _ang_th,
+                                                 *(double*)foo->para[5]->data,      // _log_eps,
+                                                 *(double*)foo->para[6]->data,      // _density_th,
+                                                 *(int*)foo->para[7]->data);      // _n_bins
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+    // foo->control_imshow( img );  // show Image
+
+    return ret;
+}
 
 
 //!

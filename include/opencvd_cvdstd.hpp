@@ -2,6 +2,8 @@
 //! \author Ulrich Buettemeier
 //! \todo CVD::Mat zero = CVD::Mat::zeros(250, 300, CV_8U);  funktioniert nicht !!!
 //! \date 07-06-2019
+//! \brief the following functions are partially implemented:
+//!         cv::Point_, cv::Scalar_, cv::Rect_, cv::String_
 //!
 
 #ifndef OPENCV_CVDSTD_HPP
