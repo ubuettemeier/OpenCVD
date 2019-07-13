@@ -26,10 +26,12 @@ int main(int argc, char** argv)
             cout << "no image\n";
             return -1;
         }
+        CVD::resize(src, src, cv::Size(480, 320));
 
         my_morphologyEx (src, mor, cv::MORPH_OPEN);
         CVD::Canny( mor, dst, 50, 200, 3 );
         CVD::cvtColor( dst, color_dst, COLOR_GRAY2BGR );
+
 
     #if 1
         vector<Vec2f> lines;
