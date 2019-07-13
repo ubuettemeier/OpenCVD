@@ -24,6 +24,7 @@ config_doxygen
 # Hilfsdateien
 set_group.sh
 Readme.odt
+todo.txt
 
 basic_test
 short_sample
@@ -35,4 +36,5 @@ demhist
 HoughCircles
 HoughLines
 buildPyramid
+lsd
 

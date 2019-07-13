@@ -61,7 +61,7 @@ see: samples/short_sample/short_sample.cpp
 
 - adaptiveThreshold, approxPolyDP
 - blur, buildPyramid
-- Canny, cvtColor, calcHist, convertScaleAbs, cornerHarris
+- Canny, cvtColor, calcHist, convertScaleAbs, cornerHarris, createLineSegmentDetector
 - dilate
 - erode
 - findContours, fitLine
