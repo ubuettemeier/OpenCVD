@@ -1,6 +1,7 @@
 //!
 //! @author Ulrich Buettemeier
 //! @todo create void rectangle(InputOutputArray img, Point pt1, Point pt2, ...
+//!       pyrMeanShiftFiltering: Paramter cv::TermCriteria einbinden.
 //!
 
 #ifndef OPENCVD_FUNC_HPP
@@ -50,6 +51,11 @@
 */
 
 namespace cvd {
+
+CV_EXPORTS_W void pyrMeanShiftFiltering( cv::InputArray src, cv::OutputArray dst,
+                                         double sp, double sr, int maxLevel = 1,
+                                         cv::TermCriteria termcrit=cv::TermCriteria(cv::TermCriteria::MAX_ITER + cv::TermCriteria::EPS,5,1),
+                                         BUILDIN );
 
 CV_EXPORTS_W cv::Ptr<cv::LineSegmentDetector> createLineSegmentDetector(
                         int _refine = cv::LSD_REFINE_STD, double _scale = 0.8,
@@ -224,6 +230,81 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           int dx, int dy, double scale = 1, double delta = 0,
                           int borderType = cv::BORDER_DEFAULT,
                           BUILDIN);
+
+//!
+//! \brief pyrMeanShiftFiltering
+//! \param src The source 8-bit, 3-channel image. CV_8UC3
+//! \param dst The destination image of the same format and the same size as the source.
+//! \param sp The spatial window radius.
+//! \param sr The color window radius.
+//! \param maxLevel Maximum level of the pyramid for the segmentation.
+//! \param termcrit Termination criteria: when to stop meanshift iterations (Durchlaufe).
+//!
+CV_EXPORTS_W void pyrMeanShiftFiltering( cv::InputArray src, cv::OutputArray dst,
+                                         double sp, double sr, int maxLevel,
+                                         cv::TermCriteria termcrit
+                                         BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::pyrMeanShiftFiltering (src, dst, sp, sr, maxLevel, termcrit );
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), PYRMEANSHIFTFILTERING, "pyrMeanShiftFiltering()",
+                               PARAMETER | FUNC_OFF | SHOW_IMAGE | BREAK,    // Menu
+                               BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _double_para_ psp = {sp, -100000.0, 100000.0, 3};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&psp, "sp" );
+
+        struct _double_para_ psr = {sr, -100000.0, 100000.0, 3};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&psr, "sr" );
+
+        struct _int_para_ ml = {maxLevel, 0, 65536};
+        foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&ml, "maxLevel" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // -----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::Mat out;
+            try {
+                cv::pyrMeanShiftFiltering (src, out,
+                                           *(double*)foo->para[0]->data,        // sp,
+                                           *(double*)foo->para[1]->data,        // sr,
+                                           *(int*)foo->para[2]->data,           // maxLevel,
+                                           termcrit );
+            } catch( cv::Exception& e ) {
+                foo->error_flag |= FUNC_ERROR;
+            }
+            foo->control_imshow( out );                 // Ausgabe
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
+    // -----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_off) {
+        src.copyTo( dst );
+    } else {
+        try {
+            cv::pyrMeanShiftFiltering (src, dst,
+                                       *(double*)foo->para[0]->data,        // sp,
+                                       *(double*)foo->para[1]->data,        // sr,
+                                       *(int*)foo->para[2]->data,           // maxLevel,
+                                       termcrit );
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( dst );  // show Image
+}
+
 
 
 //!

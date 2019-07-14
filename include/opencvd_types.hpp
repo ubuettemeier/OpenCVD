@@ -64,7 +64,8 @@ enum _data_types_ {
     RECTANGLE_1 = 0x1028,
     RECTANGLE_2 = 0x1029,
     CREATELINESEGMENTDETECTOR = 0x102A,     // *
-    BILATERALFILTER = 0x102B,
+    BILATERALFILTER = 0x102B,       // *
+    PYRMEANSHIFTFILTERING = 0x102C, // *
 
     CVD_RECT_TYPE_1_INT = 0x1500,       // *
     CVD_RECT_TYPE_1_FLOAT = 0x1501,     // *

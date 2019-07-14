@@ -12,7 +12,7 @@
 //!       - bei client close Menue: all Functio ON/OFF auf ON setzen !!!
 //!
 
-#define VERSION "v0.5"
+#define VERSION "v0.6-0002"
 
 #include <cstring>
 #include <iostream>
@@ -806,6 +806,13 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case PYRMEANSHIFTFILTERING: {
+            s = QString ("// CVD::pyrMeanShiftFiltering(src, dst, %1, %2, %3, termcrit);")
+                        .arg(QString::number(*(double*)cf->first_para->data))
+                        .arg(QString::number(*(double*)cf->first_para->next->data))
+                        .arg(QString::number(*(int*)cf->first_para->next->next->data));
+            }
+            break;
         case BILATERALFILTER: {
             QString bt = grep_enum_text("BorderTypes", *(int*)cf->first_para->next->next->next->data);   //
             s = QString ("// CVD::bilateralFilter(src, dst, %1, %2, %3, %4);")
@@ -1455,7 +1462,8 @@ void MainWindow::on_actionAbout_triggered()
 
     sprintf (buf, "OpenCVD Server\n" \
                   "Version %s\n" \
-                  "Date: %s, %s",
+                  "Date: %s, %s\n\n" \
+                  "Autor: Ulrich Buettemeier\n",
                   VERSION, __DATE__, __TIME__);
 
     QMessageBox::information ( this, "About", buf, QMessageBox::Ok );
@@ -1518,7 +1526,10 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "SCALEADD") == 0) return SCALEADD;
     if (strcmp(enum_name, "BUILDPYRAMID") == 0) return BUILDPYRAMID;
     if (strcmp(enum_name, "RECTANGLE_1") == 0) return RECTANGLE_1;
+    if (strcmp(enum_name, "RECTANGLE_2") == 0) return RECTANGLE_2;
+    if (strcmp(enum_name, "CREATELINESEGMENTDETECTOR") == 0) return CREATELINESEGMENTDETECTOR;
     if (strcmp(enum_name, "BILATERALFILTER") == 0) return BILATERALFILTER;
+    if (strcmp(enum_name, "PYRMEANSHIFTFILTERING") == 0) return PYRMEANSHIFTFILTERING;
 
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_INT") == 0) return CVD_RECT_TYPE_1_INT;
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_FLOAT") == 0) return CVD_RECT_TYPE_1_FLOAT;
@@ -1629,7 +1640,10 @@ char *MainWindow::get_enum_text (int val)
     if (val == SCALEADD) strcpy (buf, "SCALEADD");
     if (val == BUILDPYRAMID) strcpy (buf, "BUILDPYRAMID");
     if (val == RECTANGLE_1) strcpy (buf, "RECTANGLE_1");
+    if (val == RECTANGLE_2) strcpy (buf, "RECTANGLE_2");
+    if (val == CREATELINESEGMENTDETECTOR) strcpy (buf, "CREATELINESEGMENTDETECTOR");
     if (val == BILATERALFILTER) strcpy (buf, "BILATERALFILTER");
+    if (val == PYRMEANSHIFTFILTERING) strcpy (buf, "PYRMEANSHIFTFILTERING");
 
     if (val == CVD_RECT_TYPE_1_INT) strcpy (buf, "CVD_RECT_TYPE_1_INT");
     if (val == CVD_RECT_TYPE_1_FLOAT) strcpy (buf, "CVD_RECT_TYPE_1_FLOAT");
