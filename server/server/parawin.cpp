@@ -45,6 +45,13 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case BILATERALFILTER:
+        new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );     // _n_bins
+        new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );  // _scale
+        new DoubleEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );  // _scale
+        new EnumDrop (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );  // _refine
+        set_param_win( 4, 260 );
+        break;
     case CREATELINESEGMENTDETECTOR:
         new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );  // _refine
         new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );  // _scale

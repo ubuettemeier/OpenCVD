@@ -806,6 +806,15 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case BILATERALFILTER: {
+            QString bt = grep_enum_text("BorderTypes", *(int*)cf->first_para->next->next->next->data);   //
+            s = QString ("// CVD::bilateralFilter(src, dst, %1, %2, %3, %4);")
+                        .arg(QString::number(*(int*)cf->first_para->data))
+                        .arg(QString::number(*(double*)cf->first_para->next->data))
+                        .arg(QString::number(*(double*)cf->first_para->next->next->data))
+                        .arg(bt);
+            }
+            break;
         case CREATELINESEGMENTDETECTOR: {
             QString bt = grep_enum_text("LineSegmentDetectorModes", *(int*)cf->first_para->data);   // _refine
             s = QString ("// CVD::createLineSegmentDetector(%1, %2, %3, %4, %5, %6, %7, %8);")
@@ -1509,11 +1518,11 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "SCALEADD") == 0) return SCALEADD;
     if (strcmp(enum_name, "BUILDPYRAMID") == 0) return BUILDPYRAMID;
     if (strcmp(enum_name, "RECTANGLE_1") == 0) return RECTANGLE_1;
+    if (strcmp(enum_name, "BILATERALFILTER") == 0) return BILATERALFILTER;
 
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_INT") == 0) return CVD_RECT_TYPE_1_INT;
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_FLOAT") == 0) return CVD_RECT_TYPE_1_FLOAT;
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_DOUBLE") == 0) return CVD_RECT_TYPE_1_DOUBLE;
-
 
     if (strcmp(enum_name, "CVD_SCALAR_1") == 0) return CVD_SCALAR_1;
     if (strcmp(enum_name, "CVD_SCALAR_2") == 0) return CVD_SCALAR_2;
@@ -1620,6 +1629,7 @@ char *MainWindow::get_enum_text (int val)
     if (val == SCALEADD) strcpy (buf, "SCALEADD");
     if (val == BUILDPYRAMID) strcpy (buf, "BUILDPYRAMID");
     if (val == RECTANGLE_1) strcpy (buf, "RECTANGLE_1");
+    if (val == BILATERALFILTER) strcpy (buf, "BILATERALFILTER");
 
     if (val == CVD_RECT_TYPE_1_INT) strcpy (buf, "CVD_RECT_TYPE_1_INT");
     if (val == CVD_RECT_TYPE_1_FLOAT) strcpy (buf, "CVD_RECT_TYPE_1_FLOAT");

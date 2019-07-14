@@ -106,6 +106,11 @@ CV_EXPORTS_W void GaussianBlur( cv::InputArray src, cv::OutputArray dst, cv::Siz
                                 int borderType = cv::BORDER_DEFAULT,
                                 BUILDIN);
 
+CV_EXPORTS_W void bilateralFilter( cv::InputArray src, cv::OutputArray dst, int d,
+                                   double sigmaColor, double sigmaSpace,
+                                   int borderType = cv::BORDER_DEFAULT,
+                                   BUILDIN);
+
 CV_EXPORTS_W void Sobel( cv::InputArray src, cv::OutputArray dst, int ddepth,
                          int dx, int dy, int ksize = 3,
                          double scale = 1, double delta = 0,
@@ -1910,6 +1915,93 @@ CV_EXPORTS_W void blur( cv::InputArray src, cv::OutputArray dst,
     }
     foo->control_imshow( dst );    
 } // blur
+
+//!
+//! \brief bilateralFilter
+//! \param src Source 8-bit or floating-point, 1-channel or 3-channel image.
+//! \param dst is the same size as src, but it ist an other.
+//! \param d Diameter of each pixel neighborhood that is used during filtering. If it is non-positive,
+//!          it is computed from sigmaSpace.
+//! \param sigmaColor Filter sigma in the color space. A larger value of the parameter means that
+//!                   farther colors within the pixel neighborhood (see sigmaSpace) will be mixed together, resulting
+//!                   in larger areas of semi-equal color.
+//! \param sigmaSpace Filter sigma in the coordinate space. A larger value of the parameter means that
+//!                   farther pixels will influence each other as long as their colors are close enough (see sigmaColor
+//!                   ). When d\>0, it specifies the neighborhood size regardless of sigmaSpace. Otherwise, d is
+//!                   proportional to sigmaSpace.
+//! \param borderType border mode used to extrapolate pixels outside of the image, see cv::BorderTypes
+//! \example CVD::Mat bf;
+//!          CVD::bilateralFilter (src, bf, 15, 75, 75);
+//!
+CV_EXPORTS_W void bilateralFilter( cv::InputArray src, cv::OutputArray dst, int d,
+                                   double sigmaColor, double sigmaSpace,
+                                   int borderType
+                                   BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::bilateralFilter (src, dst, d, sigmaColor, sigmaSpace, borderType);
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), BILATERALFILTER, "bilateralFilter()",
+                               PARAMETER | FUNC_OFF | SHOW_IMAGE | BREAK,    // Menu
+                               BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _int_para_ vd = {d, -100000, 100000};
+        foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&vd, "d");
+
+        struct _double_para_ sc = {sigmaColor, -1000.0, 1000.0, 2};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&sc, "sigmaColor");
+
+        struct _double_para_ ss = {sigmaSpace, -1000.0, 1000.0, 2};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&ss, "sigmaSpace");
+
+        struct _enum_para_ bt = {borderType, "BorderTypes"};
+        foo->new_para (ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt, "borderType");
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // -------------------------------------------------------------------------------
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::Mat out;
+            try {
+                cv::bilateralFilter( src, out,
+                                  *(int*)foo->para[0]->data,        // d
+                                  *(double*)foo->para[1]->data,     // sigmaColor
+                                  *(double*)foo->para[2]->data,     // sigmaSpace
+                                  *(int*)foo->para[3]->data );      // borderType
+            } catch( cv::Exception& e ) {
+                foo->error_flag |= FUNC_ERROR;
+            }
+            foo->control_imshow( out );                 // Ausgabe
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
+    // -------------------------------------------------------------------------------
+    if (foo->state.flag.func_off) {
+        src.copyTo( dst );
+    } else {
+        try {
+            cv::bilateralFilter( src, dst,
+                              *(int*)foo->para[0]->data,        // d
+                              *(double*)foo->para[1]->data,     // sigmaColor
+                              *(double*)foo->para[2]->data,     // sigmaSpace
+                              *(int*)foo->para[3]->data );      // borderType
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( dst );  // show Image
+}
+
 
 //!
 //! \brief GaussianBlur
