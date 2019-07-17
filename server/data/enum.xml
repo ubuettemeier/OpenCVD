@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
     <enum>
+        <DistanceTypes>
+            <DIST_USER> -1 </DIST_USER>
+            <DIST_L1> 1 </DIST_L1>
+            <DIST_L2> 2 </DIST_L2>
+            <DIST_C> 3 </DIST_C>
+            <DIST_L12> 4 </DIST_L12>
+            <DIST_FAIR> 5 </DIST_FAIR>
+            <DIST_WELSCH> 6 </DIST_WELSCH>
+            <DIST_HUBER> 7 </DIST_HUBER>
+        </DistanceTypes>
         <LineSegmentDetectorModes>
             <LSD_REFINE_NONE> 0 </LSD_REFINE_NONE>
             <LSD_REFINE_STD> 1 </LSD_REFINE_STD>
@@ -101,6 +111,11 @@
             <CV_32F> 5 </CV_32F>
             <CV_64F> 6 </CV_64F>
         </Sobel_filterdepth>
+
+        <depth_for_distanceTransform>
+            <CV_8U> 0 </CV_8U>
+            <CV_32F> 5 </CV_32F>
+        </depth_for_distanceTransform>
 
         <filterdepth_CV_8U>
             <IMREAD_UNCHANGED> -1 </IMREAD_UNCHANGED>

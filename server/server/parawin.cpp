@@ -45,6 +45,13 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case DISTANCETRANSFORM:
+        new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );    //
+        // new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );                 //
+        new IntEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );           //
+        new EnumDrop (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );    //
+        set_param_win( 3, 260 );
+        break;
     case PYRMEANSHIFTFILTERING:
         new DoubleEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );              //
         new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );        //

@@ -62,7 +62,7 @@ see: samples/short_sample/short_sample.cpp
 - adaptiveThreshold, approxPolyDP
 - blur, buildPyramid, bilateralFilter
 - Canny, cvtColor, calcHist, convertScaleAbs, cornerHarris, createLineSegmentDetector
-- dilate
+- dilate, distanceTransform
 - erode
 - findContours, fitLine
 - GaussianBlur, getStructuringElement

@@ -66,6 +66,7 @@ enum _data_types_ {
     CREATELINESEGMENTDETECTOR = 0x102A,     // *
     BILATERALFILTER = 0x102B,       // *
     PYRMEANSHIFTFILTERING = 0x102C, // *
+    DISTANCETRANSFORM = 0x102D,     // *
 
     CVD_RECT_TYPE_1_INT = 0x1500,       // *
     CVD_RECT_TYPE_1_FLOAT = 0x1501,     // *

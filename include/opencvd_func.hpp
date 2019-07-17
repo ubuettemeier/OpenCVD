@@ -52,6 +52,10 @@
 
 namespace cvd {
 
+CV_EXPORTS_W void distanceTransform( cv::InputArray src, cv::OutputArray dst,
+                                     int distanceType, int maskSize, int dstType = CV_32F,
+                                     BUILDIN);
+
 CV_EXPORTS_W void pyrMeanShiftFiltering( cv::InputArray src, cv::OutputArray dst,
                                          double sp, double sr, int maxLevel = 1,
                                          cv::TermCriteria termcrit=cv::TermCriteria(cv::TermCriteria::MAX_ITER + cv::TermCriteria::EPS,5,1),
@@ -230,6 +234,67 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           int dx, int dy, double scale = 1, double delta = 0,
                           int borderType = cv::BORDER_DEFAULT,
                           BUILDIN);
+
+
+//!
+//! \brief distanceTransform
+//! \param src
+//! \param dst
+//! \param distanceType Type of distance, see cv::DistanceTypes
+//! \param maskSize Size of the distance transform mask, see cv::DistanceTransformMasks. In case of the
+//!                 DIST_L1 or DIST_C distance type, the parameter is forced to 3 because a \f$3\times 3\f$ mask gives
+//!                 the same result as \f$5\times 5\f$ or any larger aperture.
+//! \param dstType Type of output image. It can be CV_8U or CV_32F. Type CV_8U can be used only for
+//!                 the first variant of the function and distanceType == DIST_L1.
+//!
+CV_EXPORTS_W void distanceTransform( cv::InputArray src, cv::OutputArray dst,
+                                     int distanceType, int maskSize, int dstType
+                                     BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::distanceTransform( src, dst, distanceType, maskSize, dstType );
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), DISTANCETRANSFORM, "distanceTransform()",
+                               PARAMETER | FUNC_OFF | SHOW_IMAGE | BREAK,    // Menu
+                               BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _enum_para_ dt = {distanceType, "DistanceTypes"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&dt, "distanceType" );
+
+        // struct _int_para_ dt = {distanceType, -65536, 65536};
+        // foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&dt, "distanceType" );
+
+        struct _int_para_ ms = {maskSize, -65536, 65536};
+        foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&ms, "maskSize" );
+
+        struct _enum_para_ dst = {dstType, "depth_for_distanceTransform"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&dst, "dstType" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // -----------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_off) {
+        src.copyTo( dst );
+    } else {
+        try {
+            cv::distanceTransform (src, dst,
+                                       *(int*)foo->para[0]->data,        //
+                                       *(int*)foo->para[1]->data,        //
+                                       *(int*)foo->para[2]->data);       //
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( dst );  // show Image
+}
 
 //!
 //! \brief pyrMeanShiftFiltering
