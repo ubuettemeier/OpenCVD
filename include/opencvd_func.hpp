@@ -1519,8 +1519,8 @@ CV_EXPORTS_W void adaptiveThreshold( cv::InputArray src, cv::OutputArray dst,
 
 //!
 //! \brief threshold Applies a fixed-level threshold to each array element.
-//! \param src
-//! \param dst
+//! \param src input array (multiple-channel, 8-bit or 32-bit floating point).
+//! \param dst output array of the same size  and type and the same number of channels as src.
 //! \param thresh
 //! \param maxval
 //! \param type
@@ -1543,7 +1543,14 @@ CV_EXPORTS_W double threshold( cv::InputArray src, cv::OutputArray dst,
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), THRESHOLD, "threshold", 0x000F, BUILIN_PARA);
         func.push_back( foo );
-
+        /*
+        double min, max;
+        cv::minMaxLoc (src, &min, &max);
+        printf ("min=%f, max=%f\n", min, max);
+        printf ("type=%i\n", src.type());
+        printf ("depth=%i\n", src.depth());
+        printf ("channels=%i\n", src.channels());
+        */
         struct _slide_double_para_ dp = {thresh, 0.0, 255.0, 1.0};
         foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&dp, "thresh" );
 

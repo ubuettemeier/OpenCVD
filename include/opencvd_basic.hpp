@@ -68,13 +68,14 @@ opencvd_start cvd_start;    // Autostart
 //!
 class opencvd_para {
 public:
-    opencvd_para(uint16_t type, uint64_t addr, void *p, const char *p_name, uint8_t *dat, int len);
+    opencvd_para(uint16_t type, uint64_t addr, void *p, const char *p_name, uint8_t *dat, int len, uint16_t extra_parameter = 0);
     ~opencvd_para();
     void write_para( void );
 public:
     uint16_t para_type;                 // See: enum _data_types_ 0x2000 ... 0x2FFFF
     uint64_t func_addr;
     uint32_t para_id = 0x00000000;
+    uint16_t extra_para = 0;
     char para_name[MAX_PARA_NAME_LEN];
     void *func_pointer;                 // zeigt auf class cvd_func
     uint8_t data[MAX_PARA_DATA];        // buffer für Parameter-Wert
@@ -765,12 +766,13 @@ int opencvd_func::control_func_run_time ()
 //! \param dat
 //! \param len
 //!
-opencvd_para::opencvd_para(uint16_t type, uint64_t addr, void *p, const char *p_name, uint8_t *dat, int len)
+opencvd_para::opencvd_para(uint16_t type, uint64_t addr, void *p, const char *p_name, uint8_t *dat, int len, uint16_t extra_parameter)
 {
     para_type = type;
     func_addr = addr;
     func_pointer = p;               // pointer to class opencvd_func
     para_id = para_id_counter;
+    extra_para = extra_parameter;
     para_id_counter++;
     if (strlen(p_name) < MAX_PARA_NAME_LEN)
         strcpy (para_name, p_name);
@@ -802,6 +804,7 @@ void opencvd_para::write_para()
     pd.type = para_type;
     pd.func_addr = func_addr;
     pd.para_id = para_id;
+    pd.extra_para = extra_para;
     strcpy (pd.para_name, para_name);
     memcpy (pd.data, data, MAX_PARA_DATA);
 

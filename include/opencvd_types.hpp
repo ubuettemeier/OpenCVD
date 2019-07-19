@@ -285,6 +285,7 @@ struct _para_data_transfer_ {    // Parameter-Daten
     uint16_t type;      // See: enum _data_types_
     uint64_t func_addr;
     uint32_t para_id;
+    uint16_t extra_para;
     char para_name[MAX_PARA_NAME_LEN];
     uint8_t data[MAX_PARA_DATA];
 };
