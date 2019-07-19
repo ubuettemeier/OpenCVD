@@ -90,7 +90,7 @@ class opencvd_func {
 public:
     opencvd_func (uint64_t addr, uint16_t type, const char *f_name, uint8_t start_flags=0x0007, int line_no=0, const char *src_file=NULL);
     ~opencvd_func ();
-    void new_para (uint16_t type, int len, uint8_t *data, const char *p_name);
+    void new_para (uint16_t type, int len, uint8_t *data, const char *p_name, uint16_t extra_parameter = 0);
     void write_func ( void );
     void control_imshow ( cv::OutputArray dst );
     void control_contours_imshow ( cv::InputOutputArray image,
@@ -731,9 +731,9 @@ void opencvd_func::control_contours_imshow ( cv::InputOutputArray image,
 //! \param data
 //! \param p_name
 //!
-void opencvd_func::new_para (uint16_t type, int len, uint8_t *data, const char *p_name)
+void opencvd_func::new_para (uint16_t type, int len, uint8_t *data, const char *p_name, uint16_t extra_paramter)
 {
-    opencvd_para *cp = new opencvd_para( type, func_addr, (void*)this, p_name, data, len );
+    opencvd_para *cp = new opencvd_para( type, func_addr, (void*)this, p_name, data, len, extra_paramter );
     para.push_back( cp );
 }
 

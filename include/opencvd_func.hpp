@@ -1551,8 +1551,12 @@ CV_EXPORTS_W double threshold( cv::InputArray src, cv::OutputArray dst,
         printf ("depth=%i\n", src.depth());
         printf ("channels=%i\n", src.channels());
         */
+        uint16_t extra_para = 0;
+        if (src.depth() == CV_32F)
+            extra_para = 1;
+
         struct _slide_double_para_ dp = {thresh, 0.0, 255.0, 1.0};
-        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&dp, "thresh" );
+        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&dp, "thresh", extra_para );
 
         struct _slide_double_para_ dp2 = {maxval, 0.0, 255, 1.0};
         foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&dp2, "maxval" );

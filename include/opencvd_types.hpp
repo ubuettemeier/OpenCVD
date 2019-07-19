@@ -302,6 +302,7 @@ struct _cvd_para_ {
     uint64_t func_addr;             // Funktions Adresse
     uint32_t para_id;
     uint16_t flags;
+    uint16_t extra_para;
     char para_name[64];
     void *tree_pointer;             // wird auf Server-Seite benötigt !
     struct _cvd_para_ *next, *prev;

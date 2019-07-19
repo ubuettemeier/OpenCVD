@@ -12,7 +12,7 @@
 //!       - bei client close Menue: all Functio ON/OFF auf ON setzen !!!
 //!
 
-#define VERSION "v0.6-0004"
+#define VERSION "v0.6-0005"
 
 #include <cstring>
 #include <iostream>
@@ -485,6 +485,7 @@ struct _cvd_para_ *MainWindow::new_para (struct _cvd_func_ *cf, struct _para_dat
     foo->type = cp->type;
     foo->func_addr = cp->func_addr;
     foo->para_id = cp->para_id;
+    foo->extra_para = cp->extra_para;
     foo->flags = 0; // cp->flags;
     strcpy (foo->para_name, cp->para_name);
     memcpy (foo->data, cp->data, MAX_PARA_DATA);
