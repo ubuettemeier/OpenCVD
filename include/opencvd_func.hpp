@@ -1458,7 +1458,9 @@ CV_EXPORTS_W void adaptiveThreshold( cv::InputArray src, cv::OutputArray dst,
     opencvd_func *foo = NULL;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
-        foo = new opencvd_func((uint64_t)__builtin_return_address(0), ADAPTIVETHRESHOLD, "adaptiveThreshold", 0x000F, BUILIN_PARA);
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), ADAPTIVETHRESHOLD, "adaptiveThreshold",
+                               PARAMETER | FUNC_OFF | SHOW_IMAGE | BREAK,    // Menu
+                               BUILIN_PARA);
         func.push_back( foo );
 
         struct _slide_double_para_ mv = {maxValue, 0.0, 255.0, 1.0};
@@ -1524,8 +1526,6 @@ CV_EXPORTS_W void adaptiveThreshold( cv::InputArray src, cv::OutputArray dst,
 //! \param thresh
 //! \param maxval
 //! \param type
-//! \param line_nr
-//! \param src_file
 //! \return
 //!
 CV_EXPORTS_W double threshold( cv::InputArray src, cv::OutputArray dst,
@@ -1541,31 +1541,38 @@ CV_EXPORTS_W double threshold( cv::InputArray src, cv::OutputArray dst,
     double ret = 0.0;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
-        foo = new opencvd_func((uint64_t)__builtin_return_address(0), THRESHOLD, "threshold", 0x000F, BUILIN_PARA);
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), THRESHOLD, "threshold",
+                               PARAMETER | FUNC_OFF | SHOW_IMAGE | BREAK,    // Menu
+                               BUILIN_PARA);
         func.push_back( foo );
-        /*
+
         double min, max;
         cv::minMaxLoc (src, &min, &max);
-        printf ("min=%f, max=%f\n", min, max);
-        printf ("type=%i\n", src.type());
-        printf ("depth=%i\n", src.depth());
-        printf ("channels=%i\n", src.channels());
-        */
-        uint16_t extra_para = 0;
-        if (src.depth() == CV_32F)
-            extra_para = 1;
 
-        struct _slide_double_para_ dp = {thresh, 0.0, 255.0, 1.0};
-        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&dp, "thresh", extra_para );
+        // ------------ init thresh ---------------------
+        struct _slide_double_para_ dp;
+        if ((src.depth() == CV_32F) && (min >= 0.0) && (max <= 1.0))
+            dp = {thresh, 0.0, 1.0, 100.0};     // 32-bit floating point => 0.0 ... 1.0  divisor 100.0
+        else
+            dp = {thresh, 0.0, 255.0, 1.0};     // 8-bit
 
-        struct _slide_double_para_ dp2 = {maxval, 0.0, 255, 1.0};
+        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&dp, "thresh" );
+
+        // ------------ init maxval ---------------------
+        struct _slide_double_para_ dp2;
+        if ((src.depth() == CV_32F) && (min >= 0.0) && (max <= 1.0))
+            dp2 = {maxval, 0.0, 1.0, 100.0};    // 32-bit floating point => 0.0 ... 1.0  divisor 100.0
+        else
+            dp2 = {maxval, 0.0, 255.0, 1.0};    // 8-bit
+
         foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&dp2, "maxval" );
 
+        // ------------ init type ----------------------------
         struct _enum_para_ ep = {type, "ThresholdTypes"};
         foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&ep, "type" );
     }
     foo->error_flag &= ~FUNC_ERROR;     // clear func_error
-
+    // --------------------------------------------------------------------------------------------------
     if (foo->state.flag.func_break) {                   // Break
         foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
         while (foo->state.flag.func_break) {
@@ -1583,7 +1590,7 @@ CV_EXPORTS_W double threshold( cv::InputArray src, cv::OutputArray dst,
             foo->control_func_run_time ();
         }
     }
-
+    // --------------------------------------------------------------------------------------------------
     if (foo->state.flag.func_off) {
         src.copyTo ( dst );
     } else {

@@ -25,7 +25,7 @@ struct _m_button_ {
     int width;
 } const m_button[2] = {{"Close", 60},
                        {"Reset", 60}};
-
+///////////////////////////////////////////// ParaWin //////////////////////////////////////////
 //!
 //! \brief The ParaWin class
 //!
@@ -57,6 +57,7 @@ private:
 
 extern ParaWin *parawin;
 
+///////////////////////////////////////////// StringEdit //////////////////////////////////////////
 //!
 //! \brief The StringEdit class
 //!
@@ -77,6 +78,7 @@ private:
     bool text_changed = false;
 };
 
+///////////////////////////////////////////// FileNameEdit //////////////////////////////////////////
 //!
 //! \brief The FileNameEdit class
 //!
@@ -98,6 +100,8 @@ private:
     void refresh_out_str (QString s);
     bool text_changed = false;
 };
+
+///////////////////////////////////////////// RectIntEdit //////////////////////////////////////////
 //!
 //! \brief The RectIntEdit class
 //!
@@ -112,6 +116,8 @@ public:
 private slots:
     void int_rect_finish();
 };
+
+///////////////////////////////////////////// RectDoubleEdit //////////////////////////////////////////
 //!
 //! \brief The RectDoubleEdit class
 //!
@@ -126,6 +132,8 @@ public:
 private slots:
     void double_rect_finish();
 };
+
+///////////////////////////////////////////// IntEdit //////////////////////////////////////////
 //!
 //! \brief The IntEdit class
 //!
@@ -144,6 +152,8 @@ private slots:
     void int_edit_finish();
     void int_edit_para_button_pushed ();    // Eigenschaft
 };
+
+///////////////////////////////////////////// FloatEdit //////////////////////////////////////////
 //!
 //! \brief The FloatEdit class
 //!
@@ -160,6 +170,7 @@ private slots:
     void float_edit_finish();
 };
 
+///////////////////////////////////////////// DoubleEdit //////////////////////////////////////////
 //!
 //! \brief The DoubleEdit class
 //!
@@ -179,6 +190,7 @@ private slots:
     // void new_double_val (double val);
 };
 
+///////////////////////////////////////////// EnumDrop //////////////////////////////////////////
 //!
 //! \brief The EnumDrop class
 //!
@@ -195,6 +207,7 @@ private slots:
     void new_enum_select(const QString &s);
 };
 
+///////////////////////////////////////////// Slide //////////////////////////////////////////
 //!
 //! \brief The Slide class
 //!        foo->data ist nach "struct _step_para_" organisiert.
@@ -217,6 +230,7 @@ private:
     uint8_t stepwidth = 1;
 };
 
+///////////////////////////////////////////// PointInt //////////////////////////////////////////
 //!
 //! \brief The PointInt class
 //!        foo->data ist nach "struct _size_int_" organisiert.
@@ -239,7 +253,10 @@ private:
     QLabel *l;
 };
 
-// --------------------------------------------------------------------------------------------
+///////////////////////////////////////////// PointDouble //////////////////////////////////////////
+//!
+//! \brief The PointDouble class
+//!
 class PointDouble : public QWidget {
     Q_OBJECT
 public:
@@ -257,8 +274,8 @@ private:
 private:
     QLabel *l;
 };
-// --------------------------------------------------------------------------------------------
 
+///////////////////////////////////////////// ScalarDouble //////////////////////////////////////////
 //!
 //! \brief The ScalarDouble class
 //!
@@ -283,6 +300,7 @@ private:
     QLabel *l;
 };
 
+///////////////////////////////////////////// mButton //////////////////////////////////////////
 //!
 //! \brief The mButton class
 //!

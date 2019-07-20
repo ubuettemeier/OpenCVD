@@ -216,7 +216,7 @@ struct _slide_double_para_ {
     double value;
     double min;
     double max;
-    double divisor;
+    double divisor;     // z.B  min=0.0 max=3.14 ====> divisor = 100.0
 };
 
 //!
