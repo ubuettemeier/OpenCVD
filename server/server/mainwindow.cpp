@@ -12,7 +12,7 @@
 //!       - bei client close Menue: all Functio ON/OFF auf ON setzen !!!
 //!
 
-#define VERSION "v0.6-0006"
+#define VERSION "v0.6-0007"
 
 #include <cstring>
 #include <iostream>
@@ -927,6 +927,11 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
                          .arg(QChar('"'));
             break;
             }
+        case SET_TRACKBAR: {
+            s = QString ("// set_trackbar (%1);")
+                         .arg (QString::number(*(double*)cf->first_para->data));
+            }
+            break;
         case SET_NUMVAL: {
             QString val;
             if (cf->first_para->type == ENUM_DROP_DOWN)
@@ -1555,6 +1560,7 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "CVD_POINT_TYPE_1_DOUBLE") == 0) return CVD_POINT_TYPE_1_DOUBLE;
 
     if (strcmp(enum_name, "SET_NUMVAL") == 0) return SET_NUMVAL;
+    if (strcmp(enum_name, "SET_TRACKBAR") == 0) return SET_TRACKBAR;
 
     if (strcmp(enum_name, "MAT_ROI") == 0) return MAT_ROI;
     if (strcmp(enum_name, "MAT_CONVERTTO") == 0) return MAT_CONVERTTO;
@@ -1670,6 +1676,7 @@ char *MainWindow::get_enum_text (int val)
     if (val == CVD_POINT_TYPE_1_DOUBLE) strcpy (buf, "CVD_POINT_TYPE_1_DOUBLE");
 
     if (val == SET_NUMVAL) strcpy (buf, "SET_NUMVAL");
+    if (val == SET_TRACKBAR) strcpy (buf, "SET_TRACKBAR");
 
     if (val == MAT_ROI) strcpy (buf, "MAT_ROI");
     if (val == MAT_CONVERTTO) strcpy (buf, "MAT_CONVERTTO");

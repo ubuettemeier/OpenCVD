@@ -1,15 +1,13 @@
-#include "opencv2/core/utility.hpp"
-#include "opencv2/imgproc.hpp"
-#include "opencv2/imgcodecs.hpp"
-#include "opencv2/highgui.hpp"
-
 #include <iostream>
+
+#define USE_CVD             // using namespace cvd
+
+#include "opencvd.hpp"
+#include "specdef.hpp"
 
 using namespace cv;
 using namespace std;
 
-#define USE_CVD             // using namespace cvd
-#include "opencvd.hpp"
 
 int _brightness = 100;
 int _contrast = 100;
@@ -87,6 +85,9 @@ int main( int argc, const char** argv )
         {                    
             namedWindow("image", 0);
             namedWindow("histogram", 0);
+
+            _brightness = set_trackbar<int>(_brightness, "_brightness", 0, 255, 1 );
+            _contrast = set_trackbar<int>(_contrast, "_contrast", 0, 255, 1 );
 
             updateBrightnessContrast (0, 0);
         }

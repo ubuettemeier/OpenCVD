@@ -81,6 +81,7 @@ enum _data_types_ {
     CVD_POINT_TYPE_1_DOUBLE = 0x1583,
 
     SET_NUMVAL = 0x1700,            // *
+    SET_TRACKBAR = 0x1701,          // *
 
     MAT_ROI = 0x1800,               // *
     MAT_CONVERTTO = 0x1801,         // *

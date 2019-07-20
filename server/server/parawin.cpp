@@ -114,6 +114,10 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new StringEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );
         set_param_win( 1, 320 );
         break;
+    case SET_TRACKBAR:
+        new Slide ( client, cf->first_para, LEFT_POS, 10+55*0, this );         // Slider
+        set_param_win( 1, 260 );
+        break;
     case SET_NUMVAL:
         if (cf->first_para->type == INT_PARA)
             new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );     // val
