@@ -11,7 +11,7 @@
 #define MAX_PARA_DATA 256
 #define MAX_FILENAME_LEN 256        // used for c-source filename
 
-#define MAX_STRING_VAL_LEN 256      // used for cvd::imread, cvd::String
+#define MAX_STRING_VAL_LEN 256      // used for cvd::imread, cvd::String, cvd::get_filename
 
 //!
 //! \brief The _data_types_ enum
@@ -82,6 +82,7 @@ enum _data_types_ {
 
     SET_NUMVAL = 0x1700,            // *
     SET_TRACKBAR = 0x1701,          // *
+    GET_FILENAME = 0x1702,          // *
 
     MAT_ROI = 0x1800,               // *
     MAT_CONVERTTO = 0x1801,         // *

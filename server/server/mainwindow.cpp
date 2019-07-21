@@ -12,7 +12,7 @@
 //!       - bei client close Menue: all Functio ON/OFF auf ON setzen !!!
 //!
 
-#define VERSION "v0.6-0007"
+#define VERSION "v0.6-0008"
 
 #include <cstring>
 #include <iostream>
@@ -920,6 +920,7 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
                         .arg(QChar('"'));
             break;
             }
+        case GET_FILENAME:
         case IMREAD: {
             s = QString ("// CVD::imread(%1%2%3);")
                          .arg(QChar('"'))
@@ -1561,6 +1562,7 @@ int MainWindow::grep_enum (const char *enum_name)
 
     if (strcmp(enum_name, "SET_NUMVAL") == 0) return SET_NUMVAL;
     if (strcmp(enum_name, "SET_TRACKBAR") == 0) return SET_TRACKBAR;
+    if (strcmp(enum_name, "GET_FILENAME") == 0) return GET_FILENAME;
 
     if (strcmp(enum_name, "MAT_ROI") == 0) return MAT_ROI;
     if (strcmp(enum_name, "MAT_CONVERTTO") == 0) return MAT_CONVERTTO;
@@ -1677,6 +1679,7 @@ char *MainWindow::get_enum_text (int val)
 
     if (val == SET_NUMVAL) strcpy (buf, "SET_NUMVAL");
     if (val == SET_TRACKBAR) strcpy (buf, "SET_TRACKBAR");
+    if (val == GET_FILENAME) strcpy (buf, "GET_FILENAME");
 
     if (val == MAT_ROI) strcpy (buf, "MAT_ROI");
     if (val == MAT_CONVERTTO) strcpy (buf, "MAT_CONVERTTO");

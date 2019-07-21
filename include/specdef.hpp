@@ -20,6 +20,11 @@
                     T min=0, T max=255, T div=1,
                     int line_nr = __builtin_LINE(),
                     const char *src_file = __builtin_FILE());
+
+    template<typename T>
+    void get_filename (T *fname, const char *val_name = "noname",
+                       int line_nr = __builtin_LINE(),
+                       const char *src_file = __builtin_FILE());
 #else
     template<typename T>
     T set_numval (T a, const char *val_name = "");
@@ -27,6 +32,54 @@
     template<typename T>
     T set_trackbar (T a, const char *val_name = "",
                     T min=0, T max=255, T div=1 );
+
+    template<typename T>
+    void get_filename (T *fname, const char *val_name = "noname");
+
+#endif
+
+#ifdef USE_CVD
+///////////////////////////////////////// get_filename ///////////////////////////////////////////////
+//!
+//! \brief get_filename
+//! \param fname types: std:string; cv::String
+//! \param val_name
+//!
+template<typename T>
+void get_filename (T *fname, const char *val_name,
+                   int line_nr,
+                   const char *src_file)
+{
+    static std::vector<opencvd_func *> func{};  // reg vector
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        assert ((std::is_same<T, cv::String>::value |
+                 std::is_same<T, std::string>::value));
+
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), GET_FILENAME, val_name,
+                               PARAMETER,    // Menu 0x000F
+                               line_nr, src_file);
+        func.push_back( foo );
+
+
+        assert (fname->length() < MAX_STRING_VAL_LEN-1);
+        struct _string_para_ al;
+        strcpy (al.val, fname->c_str());
+        foo->new_para (STRING_PARA, sizeof(struct _string_para_), (uint8_t*)&al, "filename", 1);    // extra_para = 1; see also imread()
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    foo->control_func_run_time ();      // triggert alle 400ms den server
+
+    struct _string_para_ *al = (struct _string_para_ *)foo->para[0]->data;
+    *fname = al->val;
+}
+#else
+template<typename T>
+void get_filename (T *fname, const char *val_name) {
+    std::ignore = fname;
+    std::ignore = val_name;
+}
 #endif
 
 
@@ -83,12 +136,13 @@ T set_trackbar (T a, const char *val_name,
 #else
 
 template<typename T>
-T set_trackbar (T a, T min, T max, T div,
-                const char *val_name) {
+T set_trackbar (T a, const char *val_name,
+                T min, T max, T div) {
     std::ignore = min;
     std::ignore = max;
     std::ignore = div;
     std::ignore = val_name;
+
     return a;
 }
 #endif

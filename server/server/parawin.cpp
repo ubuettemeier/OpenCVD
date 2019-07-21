@@ -114,6 +114,10 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new StringEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );
         set_param_win( 1, 320 );
         break;
+    case GET_FILENAME:
+        new FileNameEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );
+        set_param_win( 1, 320 );
+        break;
     case SET_TRACKBAR:
         new Slide ( client, cf->first_para, LEFT_POS, 10+55*0, this );         // Slider
         set_param_win( 1, 260 );
@@ -665,7 +669,10 @@ FileNameEdit::FileNameEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y,
 void FileNameEdit::refresh_out_str (QString s)
 {
     QFileInfo f( s );
-    out_str->setText ( QString("imread Dateiname=%1").arg(f.fileName()) );
+    if (cp->extra_para == 1)
+        out_str->setText ( QString("File-Name=%1").arg(f.fileName()) );         // get_filename
+    else
+        out_str->setText ( QString("imread Dateiname=%1").arg(f.fileName()) );  // imread
 }
 
 //!
