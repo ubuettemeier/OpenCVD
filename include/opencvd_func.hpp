@@ -52,6 +52,10 @@
 
 namespace cvd {
 
+CV_EXPORTS_W void matchTemplate( cv::InputArray image, cv::InputArray templ,
+                                 cv::OutputArray result, int method, cv::InputArray mask = cv::noArray(),
+                                 BUILDIN);
+
 CV_EXPORTS_W void distanceTransform( cv::InputArray src, cv::OutputArray dst,
                                      int distanceType, int maskSize, int dstType = CV_32F,
                                      BUILDIN);
@@ -234,6 +238,53 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           int dx, int dy, double scale = 1, double delta = 0,
                           int borderType = cv::BORDER_DEFAULT,
                           BUILDIN);
+
+//!
+//! \brief matchTemplate
+//! \param image
+//! \param templ
+//! \param result
+//! \param method
+//! \param mask
+//!
+CV_EXPORTS_W void matchTemplate( cv::InputArray image, cv::InputArray templ,
+                                 cv::OutputArray result, int method, cv::InputArray mask
+                                 BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::matchTemplate( image, templ, result, method, mask);
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), MATCHTEMPLATE, "matchTemplate()",
+                               PARAMETER | FUNC_OFF | SHOW_IMAGE | BREAK,    // Menu
+                               BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _enum_para_ mt = {method, "TemplateMatchModes"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&mt, "method" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // -----------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_off) {
+        // result
+    } else {
+        try {
+            cv::matchTemplate( image, templ, result,
+                               *(int*)foo->para[0]->data,        //
+                               mask);
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( result );  // show Image
+}
 
 
 //!

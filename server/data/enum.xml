@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
     <enum>
+        <TemplateMatchModes>
+            <TM_SQDIFF> 0 </TM_SQDIFF>
+            <TM_SQDIFF_NORMED> 1 </TM_SQDIFF_NORMED>
+            <TM_CCORR> 2 </TM_CCORR>
+            <TM_CCORR_NORMED> 3 </TM_CCORR_NORMED>
+            <TM_CCOEFF> 4 </TM_CCOEFF>
+            <TM_CCOEFF_NORMED> 5 </TM_CCOEFF_NORMED>
+        </TemplateMatchModes>
         <DistanceTypes>
             <DIST_USER> -1 </DIST_USER>
             <DIST_L1> 1 </DIST_L1>
