@@ -336,9 +336,6 @@ CV_EXPORTS_W void distanceTransform( cv::InputArray src, cv::OutputArray dst,
         struct _enum_para_ dt = {distanceType, "DistanceTypes"};
         foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&dt, "distanceType" );
 
-        // struct _int_para_ dt = {distanceType, -65536, 65536};
-        // foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&dt, "distanceType" );
-
         struct _int_para_ ms = {maskSize, -65536, 65536};
         foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&ms, "maskSize" );
 
@@ -347,7 +344,24 @@ CV_EXPORTS_W void distanceTransform( cv::InputArray src, cv::OutputArray dst,
     }
     foo->error_flag &= ~FUNC_ERROR;     // clear func_error
     // -----------------------------------------------------------------------------------------------
-
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::Mat out;
+            try {
+                cv::distanceTransform (src, out,
+                                       *(int*)foo->para[0]->data,
+                                       *(int*)foo->para[1]->data,
+                                       *(int*)foo->para[2]->data);
+                // cv::normalize(out, out, 0, 1.0, cv::NORM_MINMAX);       // A normalized image better represents the result.
+            } catch( cv::Exception& e ) {
+                foo->error_flag |= FUNC_ERROR;
+            }
+            foo->control_imshow( out );                 // Ausgabe
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
     // -----------------------------------------------------------------------------------------------
     if (foo->state.flag.func_off) {
         src.copyTo( dst );
@@ -1103,7 +1117,10 @@ CV_EXPORTS_W void normalize( cv::InputArray src, cv::InputOutputArray dst,
     opencvd_func *foo = NULL;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
-        foo = new opencvd_func((uint64_t)__builtin_return_address(0), NORMALIZE, "normalize", 0x0003, BUILIN_PARA);  // Achtung: Funktion hat kein ON/OFF, kein Break und kein show !!!
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), NORMALIZE, "normalize",
+                               // 0x0003,
+                               PARAMETER | FUNC_OFF | SHOW_IMAGE,    // Menu
+                               BUILIN_PARA);  // Achtung: Funktion hat kein ON/OFF, kein Break und kein show !!!
         func.push_back( foo );
 
         struct _double_para_ al = {alpha, -1000.0, 1000.0, 2};
@@ -1122,6 +1139,7 @@ CV_EXPORTS_W void normalize( cv::InputArray src, cv::InputOutputArray dst,
 
     if (foo->state.flag.func_off) {
         src.copyTo ( dst );
+        dst.setTo(cv::Scalar::all(0));      // set result to zero
     } else {
         try {
             cv::normalize (src, dst,
@@ -1135,7 +1153,7 @@ CV_EXPORTS_W void normalize( cv::InputArray src, cv::InputOutputArray dst,
         }
         foo->control_func_run_time ();
     }
-    // foo->control_imshow( dst );
+    foo->control_imshow( dst );
 } // normalize
 
 //! @brief  getStructuringElement
