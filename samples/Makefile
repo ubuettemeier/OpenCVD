@@ -11,7 +11,9 @@ SAMPLE_PATH = 	basic/ \
 		HoughCircles/ \
 		HoughLines/ \
                 buildPyramid/ \
-                LSD/
+                LSD/ \
+		matchTemplate/
+
 
 all:	
 	for dir in $(SAMPLE_PATH); do \
