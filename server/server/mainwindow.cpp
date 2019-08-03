@@ -12,7 +12,7 @@
 //!       - bei client close Menue: all Functio ON/OFF auf ON setzen !!!
 //!
 
-#define VERSION "v0.6-0008"
+#define VERSION "v0.6-0009"
 
 #include <cstring>
 #include <iostream>
@@ -807,6 +807,12 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+    case MATCHTEMPLATE: {
+            QString dt = grep_enum_text("TemplateMatchModes", *(int*)cf->first_para->data);
+            s = QString ("// CVD::matchTemplate(image, templ, result, %1, mask);")
+                        .arg(dt);
+            }
+            break;
         case DISTANCETRANSFORM: {
             QString dt = grep_enum_text("DistanceTypes", *(int*)cf->first_para->data);   //
             QString bt = grep_enum_text("depth_for_distanceTransform", *(int*)cf->first_para->next->next->data);   //
@@ -1547,6 +1553,7 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "BILATERALFILTER") == 0) return BILATERALFILTER;
     if (strcmp(enum_name, "PYRMEANSHIFTFILTERING") == 0) return PYRMEANSHIFTFILTERING;
     if (strcmp(enum_name, "DISTANCETRANSFORM") == 0) return DISTANCETRANSFORM;
+    if (strcmp(enum_name, "MATCHTEMPLATE") == 0) return MATCHTEMPLATE;
 
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_INT") == 0) return CVD_RECT_TYPE_1_INT;
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_FLOAT") == 0) return CVD_RECT_TYPE_1_FLOAT;
@@ -1664,6 +1671,7 @@ char *MainWindow::get_enum_text (int val)
     if (val == BILATERALFILTER) strcpy (buf, "BILATERALFILTER");
     if (val == PYRMEANSHIFTFILTERING) strcpy (buf, "PYRMEANSHIFTFILTERING");
     if (val == DISTANCETRANSFORM) strcpy (buf, "DISTANCETRANSFORM");
+    if (val == MATCHTEMPLATE) strcpy (buf, "MATCHTEMPLATE");
 
     if (val == CVD_RECT_TYPE_1_INT) strcpy (buf, "CVD_RECT_TYPE_1_INT");
     if (val == CVD_RECT_TYPE_1_FLOAT) strcpy (buf, "CVD_RECT_TYPE_1_FLOAT");

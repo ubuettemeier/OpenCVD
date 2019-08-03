@@ -269,14 +269,32 @@ CV_EXPORTS_W void matchTemplate( cv::InputArray image, cv::InputArray templ,
     }
     foo->error_flag &= ~FUNC_ERROR;     // clear func_error
     // -----------------------------------------------------------------------------------------------
-
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::Mat out;
+            try {
+                cv::matchTemplate( image, templ, out,
+                                   *(int*)foo->para[0]->data,
+                                   mask);
+            } catch( cv::Exception& e ) {
+                foo->error_flag |= FUNC_ERROR;
+            }
+            foo->control_imshow( out );                 // Ausgabe
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
     // -----------------------------------------------------------------------------------------------
     if (foo->state.flag.func_off) {
-        // result
+        result.create(cv::Size(image.cols()-templ.cols()+1,
+                               image.rows()-templ.rows()+1),
+                      CV_32FC1);
+        result.setTo(cv::Scalar::all(0));           // fill the result with zero
     } else {
         try {
             cv::matchTemplate( image, templ, result,
-                               *(int*)foo->para[0]->data,        //
+                               *(int*)foo->para[0]->data,
                                mask);
         } catch( cv::Exception& e ) {
             foo->error_flag |= FUNC_ERROR;
