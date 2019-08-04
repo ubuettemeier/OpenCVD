@@ -1139,7 +1139,7 @@ CV_EXPORTS_W void normalize( cv::InputArray src, cv::InputOutputArray dst,
 
     if (foo->state.flag.func_off) {
         src.copyTo ( dst );
-        dst.setTo(cv::Scalar::all(0));      // set result to zero
+        // dst.setTo(cv::Scalar::all(0));      // set result to zero
     } else {
         try {
             cv::normalize (src, dst,

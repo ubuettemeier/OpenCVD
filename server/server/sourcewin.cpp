@@ -36,7 +36,10 @@ Sourcewin::Sourcewin (struct _cvd_func_ *func, MainWindow *main_win, QWidget *pa
     font.setFixedPitch(true);
     font.setPointSize(12);
 
-    mod_source = new QPushButton ("insert parameter comment");
+    mod_source = new QPushButton ("insert parameter comment");    
+    //! @todo the button width is not usefull
+    // mod_source->setMaximumWidth( 150 );
+    // mod_source->setMinimumWidth( 150 );
     mod_source->setParent( this );
     connect (mod_source, SIGNAL(clicked(bool)), this, SLOT(source_mod()));
 
