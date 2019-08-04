@@ -7,7 +7,7 @@
 #include <type_traits>
 
 // ---------------------- Achtung: #define löschen -------------------------------------------------
-// #define USE_CVD
+#define USE_CVD
 
 #ifdef USE_CVD
     //!  @brief enumlist_name are def in "enum.xml"
@@ -16,7 +16,7 @@
                      const char *src_file = __builtin_FILE());
 
     template<typename T>
-    T set_numval (T a, const char *val_name = "",
+    T get_numval (T a, const char *val_name = "",
                   int line_nr = __builtin_LINE(),
                   const char *src_file = __builtin_FILE());
 
@@ -34,7 +34,7 @@
     int get_enumval (const char *enumlist_name, int val, const char *val_name = "");
 
     template<typename T>
-    T set_numval (T a, const char *val_name = "");
+    T get_numval (T a, const char *val_name = "");
 
     template<typename T>
     T set_trackbar (T a, const char *val_name = "",
@@ -155,14 +155,14 @@ T set_trackbar (T a, const char *val_name,
 #endif
 
 #ifdef USE_CVD
-///////////////////////////////////////// set_numval ///////////////////////////////////////////////
-//! \brief set_numval offers the possibility to manipulate a numeric value with the OpenCVD server.
+///////////////////////////////////////// get_numval ///////////////////////////////////////////////
+//! \brief get_numval offers the possibility to manipulate a numeric value with the OpenCVD server.
 //! \param a from type <int, double, float>
 //! \return return nummeric value
-//! \example int a = set_numval<int>(34, "value a");
+//! \example int a = get_numval<int>(34, "value a");
 //!
 template<typename T>
-T set_numval (T a, const char *val_name,
+T get_numval (T a, const char *val_name,
               int line_nr,
               const char *src_file)
 {
@@ -185,11 +185,11 @@ T set_numval (T a, const char *val_name,
     opencvd_func *foo = NULL;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
-        std::string str = "set_numval(";
+        std::string str = "get_numval(";
         str += val_name;
         str += ")";
 
-        foo = new opencvd_func((uint64_t)__builtin_return_address(0), SET_NUMVAL, str.c_str(),
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), GET_NUMVAL, str.c_str(),
                                PARAMETER,    // Menu 0x000F
                                line_nr, src_file);
         func.push_back( foo );
@@ -230,7 +230,7 @@ T set_numval (T a, const char *val_name,
 
 #else
 template<typename T>
-T set_numval (T a, const char *val_name) {
+T get_numval (T a, const char *val_name) {
     std::ignore = val_name;
     return a;
 }

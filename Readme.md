@@ -115,6 +115,7 @@ see: samples/short_sample/short_sample.cpp
 
 **spezielle Funktionen / specific functions**
 
-- set_numval
+- get_numval
 - set_trackbar
 - get_filename
+- get_enumval

@@ -27,7 +27,7 @@ int main(int argc, const char** argv) {
         vector<Mat> dstVect;
         CVD::buildPyramid(src, dstVect, maxVal);
 
-        int show_vec = set_numval(2, "show_vec");   // 0..4
+        int show_vec = get_numval(2, "show_vec");   // 0..4
         if (!dstVect[show_vec].empty())
             cv::imshow("buildPyramid", dstVect[show_vec]);
 

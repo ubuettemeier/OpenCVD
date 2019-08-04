@@ -12,7 +12,7 @@
 //!       - bei client close Menue: all Functio ON/OFF auf ON setzen !!!
 //!
 
-#define VERSION "v0.6-0010"
+#define VERSION "v0.6-0011"
 
 #include <cstring>
 #include <iostream>
@@ -944,7 +944,7 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
                          .arg(QString::number(*(int*)cf->first_para->data));
             }
             break;
-        case SET_NUMVAL: {
+        case GET_NUMVAL: {
             QString val;
             if (cf->first_para->type == ENUM_DROP_DOWN)
                 val = QString("static_cast<bool>(%1)").arg(QString::number(*(int*)cf->first_para->data));
@@ -1572,7 +1572,7 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "CVD_POINT_TYPE_1_FLOAT") == 0) return CVD_POINT_TYPE_1_FLOAT;
     if (strcmp(enum_name, "CVD_POINT_TYPE_1_DOUBLE") == 0) return CVD_POINT_TYPE_1_DOUBLE;
 
-    if (strcmp(enum_name, "SET_NUMVAL") == 0) return SET_NUMVAL;
+    if (strcmp(enum_name, "GET_NUMVAL") == 0) return GET_NUMVAL;
     if (strcmp(enum_name, "SET_TRACKBAR") == 0) return SET_TRACKBAR;
     if (strcmp(enum_name, "GET_FILENAME") == 0) return GET_FILENAME;
     if (strcmp(enum_name, "GET_ENUMVAL") == 0) return GET_ENUMVAL;
@@ -1691,7 +1691,7 @@ char *MainWindow::get_enum_text (int val)
     if (val == CVD_POINT_TYPE_1_FLOAT) strcpy (buf, "CVD_POINT_TYPE_1_FLOAT");
     if (val == CVD_POINT_TYPE_1_DOUBLE) strcpy (buf, "CVD_POINT_TYPE_1_DOUBLE");
 
-    if (val == SET_NUMVAL) strcpy (buf, "SET_NUMVAL");
+    if (val == GET_NUMVAL) strcpy (buf, "GET_NUMVAL");
     if (val == SET_TRACKBAR) strcpy (buf, "SET_TRACKBAR");
     if (val == GET_FILENAME) strcpy (buf, "GET_FILENAME");
     if (val == GET_ENUMVAL) strcpy (buf, "GET_ENUMVAL");

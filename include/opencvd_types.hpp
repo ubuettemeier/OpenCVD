@@ -81,7 +81,7 @@ enum _data_types_ {
     CVD_POINT_TYPE_1_FLOAT = 0x1582,
     CVD_POINT_TYPE_1_DOUBLE = 0x1583,
 
-    SET_NUMVAL = 0x1700,            // *
+    GET_NUMVAL = 0x1700,            // *
     SET_TRACKBAR = 0x1701,          // *
     GET_FILENAME = 0x1702,          // *
     GET_ENUMVAL = 0x1703,           // *
