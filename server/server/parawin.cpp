@@ -135,6 +135,10 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
             new DoubleEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );  // val
         set_param_win( 1, 260 );
         break;
+    case GET_ENUMVAL:
+        new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );
+        set_param_win( 1, 260 );
+        break;
     case BUILDPYRAMID:
         new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );     // maslevel
         new EnumDrop (client, cf->first_para->next, LEFT_POS, 10+55*1, this );  // BorderType

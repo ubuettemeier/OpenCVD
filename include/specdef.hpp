@@ -10,6 +10,11 @@
 // #define USE_CVD
 
 #ifdef USE_CVD
+    //!  @brief enumlist_name are def in "enum.xml"
+    int get_enumval (const char *enumlist_name, int val, const char *val_name = "",
+                     int line_nr  = __builtin_LINE(),
+                     const char *src_file = __builtin_FILE());
+
     template<typename T>
     T set_numval (T a, const char *val_name = "",
                   int line_nr = __builtin_LINE(),
@@ -26,6 +31,8 @@
                        int line_nr = __builtin_LINE(),
                        const char *src_file = __builtin_FILE());
 #else
+    int get_enumval (const char *enumlist_name, int val, const char *val_name = "");
+
     template<typename T>
     T set_numval (T a, const char *val_name = "");
 
@@ -152,6 +159,7 @@ T set_trackbar (T a, const char *val_name,
 //! \brief set_numval offers the possibility to manipulate a numeric value with the OpenCVD server.
 //! \param a from type <int, double, float>
 //! \return return nummeric value
+//! \example int a = set_numval<int>(34, "value a");
 //!
 template<typename T>
 T set_numval (T a, const char *val_name,
@@ -161,7 +169,6 @@ T set_numval (T a, const char *val_name,
     #ifndef USE_CVD
         return a;
     #endif
-
 
     if (!(std::is_same<T, int>::value |
           std::is_same<T, unsigned int>::value |
@@ -222,11 +229,63 @@ T set_numval (T a, const char *val_name,
 } // T set_val()
 
 #else
-
 template<typename T>
 T set_numval (T a, const char *val_name) {
     std::ignore = val_name;
     return a;
 }
+#endif
 
+#ifdef USE_CVD
+//!
+//! \brief get_enumval
+//! \param enumlist_name are define in "enum.xml"
+//! \param val
+//! \param val_name
+//! \return
+//! \example int match_method = get_enumval("TemplateMatchMode", 3, "match_methode" );
+//!
+int get_enumval (const char *enumlist_name, int val, const char *val_name,
+                 int line_nr,
+                 const char *src_file)
+{
+    #ifndef USE_CVD
+        return val;
+    #endif
+
+    static std::vector<opencvd_func *> func{};  // reg vector
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        std::string str = "get_enumval(";
+        str += val_name;
+        str += ")";
+
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), GET_ENUMVAL, str.c_str(),
+                               PARAMETER,               // Menu
+                               line_nr, src_file);
+
+        func.push_back( foo );
+
+        struct _enum_para_ mt;
+        mt.value = val;
+        strcpy (mt.enum_name, enumlist_name);
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&mt, val_name );
+
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+
+    foo->control_func_run_time ();      // triggert alle 400ms den server
+
+    return *(int*)foo->para[0]->data;
+}
+#else
+
+int get_enumval (const char *enumlist_name, int val, const char *val_name)
+{
+    std::ignore = enumlist_name;
+    enumlist_name = val_name;
+
+    return val;
+}
 #endif // #ifdef USE_CVD

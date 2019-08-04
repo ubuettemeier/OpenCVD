@@ -84,6 +84,7 @@ enum _data_types_ {
     SET_NUMVAL = 0x1700,            // *
     SET_TRACKBAR = 0x1701,          // *
     GET_FILENAME = 0x1702,          // *
+    GET_ENUMVAL = 0x1703,           // *
 
     MAT_ROI = 0x1800,               // *
     MAT_CONVERTTO = 0x1801,         // *

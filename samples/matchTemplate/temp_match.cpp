@@ -1,8 +1,11 @@
 #define USE_CVD             // using namespace cvd
 #include "opencvd.hpp"
+#include "specdef.hpp"
 
 using namespace cv;
 using namespace std;
+
+#define USE_CVD_MATCHTEMPLATE_
 
 int main(int argc, char* argv[])
 {
@@ -30,8 +33,14 @@ int main(int argc, char* argv[])
                 CVD::cvtColor(src_img, debug_img, COLOR_GRAY2BGR);
 
                 // method: TM_SQDIFF, TM_SQDIFF_NORMED, TM _CCORR, TM_CCORR_NORMED, TM_CCOEFF, TM_CCOEFF_NORMED
-                int match_method = TM_CCORR_NORMED;
-                CVD::matchTemplate(src_img, template_img, result_mat, match_method);
+                #ifdef USE_CVD_MATCHTEMPLATE
+                    int match_method = TM_CCORR_NORMED;
+                    CVD::matchTemplate(src_img, template_img, result_mat, match_method);
+                #else
+                    int match_method = get_enumval("TemplateMatchModes", TM_CCORR_NORMED, "match_methode" );
+                    cv::matchTemplate(src_img, template_img, result_mat, match_method);
+                #endif
+
                 CVD::normalize(result_mat, result_mat,
                                0.0, 1.0,
                                cv::NORM_MINMAX, -1, cv::Mat());
@@ -39,7 +48,7 @@ int main(int argc, char* argv[])
                 double minVal; double maxVal;
                 cv::Point minLoc, maxLoc, matchLoc;
                 cv::minMaxLoc(result_mat, &minVal, &maxVal, &minLoc, &maxLoc, cv::Mat() );
-                if( match_method  == TM_SQDIFF || match_method == TM_SQDIFF_NORMED )
+                if( match_method  == TM_SQDIFF || match_method == TM_SQDIFF_NORMED)
                     matchLoc = minLoc;
                 else
                     matchLoc = maxLoc;
