@@ -322,9 +322,11 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         set_param_win( 3, 260 );
         break;
     case GRABCUT:
-        new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );     // Iteration
-        new EnumDrop (client, cf->first_para->next, LEFT_POS, 10+55*1, this );   // DropDown enum ImreadModes
-        setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 320, 10+55*2+20);
+        new RectIntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );
+        new IntEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );     // Iteration
+        new EnumDrop (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );   // DropDown enum ImreadModes
+
+        set_param_win( 3, 320 );
         break;
     case IMREAD:
         new FileNameEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );

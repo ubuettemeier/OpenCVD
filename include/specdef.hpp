@@ -7,7 +7,7 @@
 #include <type_traits>
 
 // ---------------------- Achtung: #define löschen -------------------------------------------------
-#define USE_CVD
+// #define USE_CVD
 
 #ifdef USE_CVD
     //!  @brief enumlist_name are def in "enum.xml"

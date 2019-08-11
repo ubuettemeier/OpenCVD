@@ -12,7 +12,8 @@ SAMPLE_PATH = 	basic/ \
 		HoughLines/ \
                 buildPyramid/ \
                 LSD/ \
-		matchTemplate/
+                matchTemplate/ \
+                grabCut/
 
 
 all:	

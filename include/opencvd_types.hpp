@@ -42,7 +42,7 @@ enum _data_types_ {
     SCALAR_ALL = 0x1012,
     SCHARR = 0x1013,
     IMREAD = 0x1014,                // *
-    GRABCUT = 0x1015,
+    GRABCUT = 0x1015,               // *
     GETSTRUCTURINGELEMENT = 0x1016,    
     MORPHOLOGYEX = 0x1017,
     NORMALIZE = 0x1018,

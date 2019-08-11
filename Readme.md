@@ -65,7 +65,7 @@ see: samples/short_sample/short_sample.cpp
 - dilate, distanceTransform
 - erode
 - findContours, fitLine
-- GaussianBlur, getStructuringElement
+- GaussianBlur, getStructuringElement, grabCut
 - HoughCircles, HoughLinesP, HoughLines
 - imread
 - Laplacian

@@ -52,6 +52,11 @@
 
 namespace cvd {
 
+CV_EXPORTS_W void grabCut( cv::InputArray img, cv::InputOutputArray mask, cv::Rect rect,
+                           cv::InputOutputArray bgdModel, cv::InputOutputArray fgdModel,
+                           int iterCount, int mode = cv::GC_EVAL,
+                           BUILDIN);
+
 CV_EXPORTS_W void matchTemplate( cv::InputArray image, cv::InputArray templ,
                                  cv::OutputArray result, int method, cv::InputArray mask = cv::noArray(),
                                  BUILDIN);
@@ -239,7 +244,114 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           int borderType = cv::BORDER_DEFAULT,
                           BUILDIN);
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//! \brief show_grabcut_result
+//! \param img
+//! \param mask
 //!
+void show_grabcut_result (opencvd_func *foo, cv::InputArray img, cv::InputOutputArray mask, cv::Rect r)
+{
+    cv::Mat result_mask;
+    cv::compare( mask, cv::Scalar(cv::GC_PR_FGD), result_mask, cv::CMP_EQ );
+    cv::Mat result;
+    img.copyTo( result, result_mask );                            // result herausfiltern.
+    cv::addWeighted(img, 0.4, result, 1.0, 1.0, result);
+    cv::rectangle(result, r, cv::Scalar(255, 255, 255), 1);
+    foo->control_imshow( result );  // show Image
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//! \brief grabCut
+//! \param img Input 8-bit 3-channel image.
+//! \param mask Input/output 8-bit single-channel mask. The mask is initialized by the function when
+//!             mode is set to GC_INIT_WITH_RECT. Its elements may have one of the cv::GrabCutClasses.
+//! \param rect
+//! \param bgdModel Temporary array for the background model. Do not modify it while you are
+//!                 processing the same image.
+//! \param fgdModel Temporary arrays for the foreground model. Do not modify it while you are
+//!                 processing the same image.
+//! \param iterCount iterCount Number of iterations the algorithm should make before returning the result. Note
+//!                  that the result can be refined with further calls with mode==GC_INIT_WITH_MASK or
+//!                  mode==GC_EVAL .
+//! \param mode Operation mode that could be one of the cv::GrabCutModes
+//!
+CV_EXPORTS_W void grabCut( cv::InputArray img, cv::InputOutputArray mask, cv::Rect rect,
+                           cv::InputOutputArray bgdModel, cv::InputOutputArray fgdModel,
+                           int iterCount, int mode
+                           BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::grabCut(img, mask, rect, bgdModel, fgdModel, iterCount, mode);
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), GRABCUT, "grabCut()",
+                               PARAMETER | FUNC_OFF | SHOW_IMAGE | BREAK,    // Menu
+                               BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _rect_int_ ri = {(int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height, -100000, 100000};
+        foo->new_para (RECT_INT_PARA, sizeof(struct _rect_int_), (uint8_t*)&ri, "Rect(x,y,w,h)" );
+
+        struct _int_para_ ms = {iterCount, -65536, 65536};
+        foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&ms, "iterCount" );
+
+        struct _enum_para_ mt = {mode, "GrabCutModes"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&mt, "mode" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // -----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            struct _rect_int_ *rec_data = (struct _rect_int_ *)foo->para[0]->data;
+            cv::Rect r(rec_data->x, rec_data->y, rec_data->w, rec_data->h);
+
+            cv::Mat out_mask;
+            try {
+                cv::grabCut(img, out_mask,
+                            r,                              // Rect
+                            bgdModel, fgdModel,
+                            *(int *)foo->para[1]->data,     // iterCount
+                            *(int *)foo->para[2]->data);    // mode
+
+            } catch( cv::Exception& e ) {
+                foo->error_flag |= FUNC_ERROR;
+            }
+            // ------------- show image ----------------
+            show_grabcut_result (foo, img, out_mask, r);
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
+    // -----------------------------------------------------------------------------------------------
+    struct _rect_int_ *rec_data = (struct _rect_int_ *)foo->para[0]->data;
+    cv::Rect r(rec_data->x, rec_data->y, rec_data->w, rec_data->h);
+
+    if (foo->state.flag.func_off) {
+        // do nothing
+    } else {
+        try {
+            cv::grabCut(img, mask,
+                        r,                              // rect
+                        bgdModel, fgdModel,
+                        *(int *)foo->para[1]->data,     // iterCount
+                        *(int *)foo->para[2]->data);    // mode
+
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+    // ------------- show image ----------------
+    show_grabcut_result (foo, img, mask, r);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief matchTemplate
 //! \param image
 //! \param templ
@@ -253,6 +365,7 @@ CV_EXPORTS_W void matchTemplate( cv::InputArray image, cv::InputArray templ,
 {
     if (cvd_off) {
         cv::matchTemplate( image, templ, result, method, mask);
+        return;
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
@@ -305,7 +418,7 @@ CV_EXPORTS_W void matchTemplate( cv::InputArray image, cv::InputArray templ,
 }
 
 
-//!
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief distanceTransform
 //! \param src
 //! \param dst
@@ -322,6 +435,7 @@ CV_EXPORTS_W void distanceTransform( cv::InputArray src, cv::OutputArray dst,
 {
     if (cvd_off) {
         cv::distanceTransform( src, dst, distanceType, maskSize, dstType );
+        return;
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
@@ -379,7 +493,7 @@ CV_EXPORTS_W void distanceTransform( cv::InputArray src, cv::OutputArray dst,
     foo->control_imshow( dst );  // show Image
 }
 
-//!
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief pyrMeanShiftFiltering
 //! \param src The source 8-bit, 3-channel image. CV_8UC3
 //! \param dst The destination image of the same format and the same size as the source.
@@ -395,6 +509,7 @@ CV_EXPORTS_W void pyrMeanShiftFiltering( cv::InputArray src, cv::OutputArray dst
 {
     if (cvd_off) {
         cv::pyrMeanShiftFiltering (src, dst, sp, sr, maxLevel, termcrit );
+        return;
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
@@ -453,9 +568,7 @@ CV_EXPORTS_W void pyrMeanShiftFiltering( cv::InputArray src, cv::OutputArray dst
     foo->control_imshow( dst );  // show Image
 }
 
-
-
-//!
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief createLineSegmentDetector
 //! \param _refine
 //! \param _scale
@@ -476,7 +589,7 @@ CV_EXPORTS_W cv::Ptr<cv::LineSegmentDetector> createLineSegmentDetector(
     if (cvd_off) {
         return cv::createLineSegmentDetector( _refine, _scale,
                                               _sigma_scale, _quant, _ang_th,
-                                              _log_eps, _density_th, _n_bins );
+                                              _log_eps, _density_th, _n_bins );        
     }
 
     cv::Ptr<cv::LineSegmentDetector> ret; //  = nullptr;
@@ -543,8 +656,7 @@ CV_EXPORTS_W cv::Ptr<cv::LineSegmentDetector> createLineSegmentDetector(
     return ret;
 }
 
-
-//!
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief rectangle
 //! \param img
 //! \param pt1
@@ -619,7 +731,7 @@ CV_EXPORTS_W void rectangle(cv::InputOutputArray img, cv::Point pt1, cv::Point p
     foo->control_imshow( img );  // show Image
 }
 
-//!
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief rectangle
 //! \param img
 //! \param rec
@@ -693,7 +805,7 @@ CV_EXPORTS void rectangle(CV_IN_OUT cv::Mat& img, cv::Rect rec,
     foo->control_imshow( img );  // show Image
 }
 
-//!
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief fitLine
 //! \param points
 //! \param line Output line parameters. In case of 2D fitting, it should be a vector of 4 elements
@@ -757,7 +869,7 @@ CV_EXPORTS_W void fitLine( cv::InputArray points, cv::OutputArray line, int dist
     // foo->control_imshow( line );  // NO show Image
 }
 
-//!
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief cornerHarris
 //! \param src
 //! \param dst
@@ -818,7 +930,7 @@ CV_EXPORTS_W void cornerHarris( cv::InputArray src, cv::OutputArray dst, int blo
     // foo->control_imshow( dst ); // NO show Image
 }
 
-//!
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief pyrUp
 //! \param src
 //! \param dst
@@ -887,7 +999,7 @@ CV_EXPORTS_W void pyrUp( cv::InputArray src, cv::OutputArray dst,
     foo->control_imshow( dst );
 }
 
-//!
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief buildPyramid
 //! \param src
 //! \param dst
@@ -959,7 +1071,7 @@ CV_EXPORTS void buildPyramid( cv::InputArray src, cv::OutputArrayOfArrays dst,
     foo->control_imshow( a );
 }
 
-//!
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief pyrDown
 //! \param src
 //! \param dst
@@ -1028,7 +1140,7 @@ CV_EXPORTS_W void pyrDown( cv::InputArray src, cv::OutputArray dst,
     foo->control_imshow( dst );
 }
 
-//!
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief calcHist
 //!        Calculates a histogram of a set of arrays.
 //! \param images

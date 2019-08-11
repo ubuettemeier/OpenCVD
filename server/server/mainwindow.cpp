@@ -12,7 +12,7 @@
 //!       - bei client close Menue: all Functio ON/OFF auf ON setzen !!!
 //!
 
-#define VERSION "v0.6-0011"
+#define VERSION "v0.6-0012"
 
 #include <cstring>
 #include <iostream>
@@ -807,15 +807,27 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
-    case MATCHTEMPLATE: {
+        case GRABCUT: {
+            struct _rect_int_ *val = (struct _rect_int_ *) cf->first_para->data;
+            QString dt = grep_enum_text("GrabCutModes", *(int*)cf->first_para->next->next->data);
+            s = QString ("// CVD::grabCut(img, mask, cv::Rect(%1, %2, %3, %4), bgdModel, fgdModel, %5, %6);")
+                        .arg(QString::number(val->x))                               // cv::Rect
+                        .arg(QString::number(val->y))
+                        .arg(QString::number(val->w))
+                        .arg(QString::number(val->h))
+                        .arg(QString::number(*(int*)cf->first_para->next->data))    // iterCount
+                        .arg(dt);                                                   // mode
+            }
+            break;
+        case MATCHTEMPLATE: {
             QString dt = grep_enum_text("TemplateMatchModes", *(int*)cf->first_para->data);
             s = QString ("// CVD::matchTemplate(image, templ, result, %1, mask);")
                         .arg(dt);
             }
             break;
         case DISTANCETRANSFORM: {
-            QString dt = grep_enum_text("DistanceTypes", *(int*)cf->first_para->data);   //
-            QString bt = grep_enum_text("depth_for_distanceTransform", *(int*)cf->first_para->next->next->data);   //
+            QString dt = grep_enum_text("DistanceTypes", *(int*)cf->first_para->data);
+            QString bt = grep_enum_text("depth_for_distanceTransform", *(int*)cf->first_para->next->next->data);
             s = QString ("// CVD::distanceTransform(src, dst, %1, %2, %3);")
                         .arg(dt)
                         .arg(QString::number(*(int*)cf->first_para->next->data))
