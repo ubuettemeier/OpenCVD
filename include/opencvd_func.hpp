@@ -52,6 +52,10 @@
 
 namespace cvd {
 
+CV_EXPORTS_W double matchShapes( cv::InputArray contour1, cv::InputArray contour2,
+                                 int method, double parameter,
+                                 BUILDIN);
+
 CV_EXPORTS_W void grabCut( cv::InputArray img, cv::InputOutputArray mask, cv::Rect rect,
                            cv::InputOutputArray bgdModel, cv::InputOutputArray fgdModel,
                            int iterCount, int mode = cv::GC_EVAL,
@@ -244,10 +248,63 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           int borderType = cv::BORDER_DEFAULT,
                           BUILDIN);
 
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//! \brief show_grabcut_result
+//! \brief matchShapes
+//! \param contour1
+//! \param contour2
+//! \param method
+//! \param parameter
+//! \return
+//!
+CV_EXPORTS_W double matchShapes( cv::InputArray contour1, cv::InputArray contour2,
+                                 int method, double parameter
+                                 BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        return cv::matchShapes(contour1, contour2, method, parameter);
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
+    opencvd_func *foo = NULL;
+    double ret = 1.0;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), MATCHSHAPES, "matchShapes()",
+                               PARAMETER | FUNC_OFF,    // Menu
+                               BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _enum_para_ mt = {method, "ShapeMatchModes"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&mt, "method" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // -----------------------------------------------------------------------------------------------
+    // no break func
+    // -----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_off) {
+        // do nothing
+    } else {
+        try {
+            ret = cv::matchShapes(contour1, contour2,
+                                  *(int *)foo->para[0]->data,      // method
+                                  parameter);
+
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+
+    return ret;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//! \brief show_grabcut_result function used by grabCut()
+//! \param foo
 //! \param img
 //! \param mask
+//! \param r = cv::Rect
 //!
 void show_grabcut_result (opencvd_func *foo, cv::InputArray img, cv::InputOutputArray mask, cv::Rect r)
 {
@@ -255,7 +312,7 @@ void show_grabcut_result (opencvd_func *foo, cv::InputArray img, cv::InputOutput
     cv::compare( mask, cv::Scalar(cv::GC_PR_FGD), result_mask, cv::CMP_EQ );
     cv::Mat result;
     img.copyTo( result, result_mask );                            // result herausfiltern.
-    cv::addWeighted(img, 0.4, result, 1.0, 1.0, result);
+    cv::addWeighted(img, 0.5, result, 1.0, 1.0, result);
     cv::rectangle(result, r, cv::Scalar(255, 255, 255), 1);
     foo->control_imshow( result );  // show Image
 }

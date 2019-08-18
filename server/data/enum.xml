@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
     <enum>
+        <ShapeMatchModes>
+             <CV_CONTOURS_MATCH_I1> 1 </CV_CONTOURS_MATCH_I1>
+             <CV_CONTOURS_MATCH_I2> 2 </CV_CONTOURS_MATCH_I2>
+             <CV_CONTOURS_MATCH_I3> 3 </CV_CONTOURS_MATCH_I3>
+        </ShapeMatchModes>
         <TemplateMatchModes>
             <TM_SQDIFF> 0 </TM_SQDIFF>
             <TM_SQDIFF_NORMED> 1 </TM_SQDIFF_NORMED>

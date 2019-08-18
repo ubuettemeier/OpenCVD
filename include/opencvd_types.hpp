@@ -68,6 +68,7 @@ enum _data_types_ {
     PYRMEANSHIFTFILTERING = 0x102C, // *
     DISTANCETRANSFORM = 0x102D,     // *
     MATCHTEMPLATE = 0x102E,
+    MATCHSHAPES = 0x102F,
 
     CVD_RECT_TYPE_1_INT = 0x1500,       // *
     CVD_RECT_TYPE_1_FLOAT = 0x1501,     // *

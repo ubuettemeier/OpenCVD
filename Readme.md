@@ -69,7 +69,7 @@ see: samples/short_sample/short_sample.cpp
 - HoughCircles, HoughLinesP, HoughLines
 - imread
 - Laplacian
-- medianBlur, morphologyEx, matchTemplate
+- medianBlur, morphologyEx, matchTemplate, matchShapes
 - normalize
 - pyrDown, pyrUp, pyrMeanShiftFiltering
 - resize, rectangle

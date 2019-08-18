@@ -13,7 +13,8 @@ SAMPLE_PATH = 	basic/ \
                 buildPyramid/ \
                 LSD/ \
                 matchTemplate/ \
-                grabCut/
+                grabCut/ \
+		matchShapes/
 
 
 all:	
