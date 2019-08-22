@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define USE_CVD
 
@@ -15,8 +16,11 @@ using namespace std;
 //! \param image1
 //! \param mode
 //!
-void build_image_1 (cv::Mat &image1, uint8_t mode)
+void draw_image_1 (cv::Mat &image1, uint8_t &mode)
 {
+    static cv::Point sp[10];
+    static cv::Point ep[10];
+
     if (mode == 0)                                                                      // Circle
         cv::circle(image1, cv::Point(200, 200), 80, cv::Scalar( 0 ), 2 );
     if (mode == 1)                                                                      // Rectangle
@@ -37,12 +41,25 @@ void build_image_1 (cv::Mat &image1, uint8_t mode)
         cv::line (image1, cv::Point(100, 150), cv::Point(300, 150), cv::Scalar( 0 ), 2);
         cv::line (image1, cv::Point(100, 250), cv::Point(300, 250), cv::Scalar( 0 ), 2);
     }
+    if (mode == 5) {
+        for (int i=0; i<10; i++) {
+            sp[i].x = rand() % 400 + 1;
+            sp[i].y = rand() % 400 + 1;
+            ep[i].x = rand() % 400 + 1;
+            ep[i].y = rand() % 400 + 1;
+        }
+        mode = 6;
+    }
+    if (mode == 6) {
+        for (int i=0; i<10; i++)
+            cv::line (image1, sp[i], ep[i], cv::Scalar( 0 ), 2);
+    }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief build_image_2
 //! \param image2
 //!
-void build_image_2 (cv::Mat &image2)
+void draw_image_2 (cv::Mat &image2)
 {
     static double angle = 45.0;
     static int delta_axis_size = 0;
@@ -73,6 +90,8 @@ int main()
     uint8_t mode = 0;
     int64 t0 = cv::getTickCount();                              // get start time
 
+    srand(time(NULL));
+
     cv::namedWindow("image_1");
     cv::namedWindow("image_2");
 
@@ -82,14 +101,14 @@ int main()
         double runtime = (t1-t0)/cv::getTickFrequency();        // control time
         if (runtime > 2.0) {                                    // 2 seconds
             t0 = cv::getTickCount();
-            mode = (mode < 4) ? mode+1 : 0;
+            mode = (mode < 5) ? mode+1 : 0;
         }
 
-        cv::Mat image1 = cv::Mat(400, 400, CV_8UC1, 255);
-        cv::Mat image2 = cv::Mat(400, 400, CV_8UC1, 255);
+        cv::Mat image1 = cv::Mat(400, 400, CV_8UC1, 168);
+        cv::Mat image2 = cv::Mat(400, 400, CV_8UC1, 168);
 
-        build_image_1 (image1, mode);
-        build_image_2 (image2);
+        draw_image_1 (image1, mode);
+        draw_image_2 (image2);
 
         double result = CVD::matchShapes(image1, image2, cv::CONTOURS_MATCH_I1, 0);          // match the images
         sprintf (buf, "%1.8f", result);

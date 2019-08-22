@@ -67,8 +67,9 @@ enum _data_types_ {
     BILATERALFILTER = 0x102B,       // *
     PYRMEANSHIFTFILTERING = 0x102C, // *
     DISTANCETRANSFORM = 0x102D,     // *
-    MATCHTEMPLATE = 0x102E,
-    MATCHSHAPES = 0x102F,
+    MATCHTEMPLATE = 0x102E,         // *
+    MATCHSHAPES = 0x102F,           // *
+    BOXFILTER = 0x1030,             // *
 
     CVD_RECT_TYPE_1_INT = 0x1500,       // *
     CVD_RECT_TYPE_1_FLOAT = 0x1501,     // *

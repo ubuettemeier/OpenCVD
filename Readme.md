@@ -60,7 +60,7 @@ see: samples/short_sample/short_sample.cpp
 **aktuell sind folgende OpenCV Funktionen implementiert / currently the following OpenCV functions are implemented**
 
 - adaptiveThreshold, approxPolyDP
-- blur, buildPyramid, bilateralFilter
+- blur, buildPyramid, bilateralFilter, boxFilter
 - Canny, cvtColor, calcHist, convertScaleAbs, cornerHarris, createLineSegmentDetector
 - dilate, distanceTransform
 - erode
