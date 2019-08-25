@@ -323,7 +323,7 @@ Rect_<_Tp>::Rect_(_Tp _x, _Tp _y, _Tp _width, _Tp _height, int line_nr, const ch
 class CV_EXPORTS String : public cv::String
 {
 public:
-    using cv::String::String;
+    // using cv::String::String;
 
     String(const char* s, BUILD_IN_PROTO );         // example: CVD::String str = "text";
     String(const String& str, BUILD_IN_PROTO );     // example: CVD::String basic_str = "basic_str"; CVD::String k(basic_str);
