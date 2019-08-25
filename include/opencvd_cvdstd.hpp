@@ -463,7 +463,7 @@ char *String::string_func (const char *s,
 
     if ((foo = opencvd_func::grep_func(func, addr)) == NULL) {
         foo = new opencvd_func(addr, type, f_name,
-                               PARAMETER | FUNC_OFF,    // Menu
+                               PARAMETER,    // Menu
                                line_nr, src_file);
         func.push_back( foo );
 
