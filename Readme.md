@@ -73,7 +73,7 @@ see: samples/short_sample/short_sample.cpp
 - normalize
 - pyrDown, pyrUp, pyrMeanShiftFiltering
 - resize, rectangle
-- Scharr, Sobel, scaleAdd
+- Scharr, Sobel, scaleAdd, sqrBoxFilter
 - threshold
 
 **cv::Mat Funktionen / cv::Mat functions**

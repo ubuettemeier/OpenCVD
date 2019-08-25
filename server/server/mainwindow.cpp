@@ -12,7 +12,7 @@
 //!       - bei client close Menue: all Functio ON/OFF auf ON setzen !!!
 //!
 
-#define VERSION "v0.6-0014"
+#define VERSION "v0.6-0015"
 
 #include <cstring>
 #include <iostream>
@@ -807,6 +807,7 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case SQRBOXFILTER:
         case BOXFILTER: {
             QString dt = grep_enum_text("Sobel_filterdepth", *(int*)cf->first_para->data);      // ddepth
             struct _point_int_ *ks = (struct _point_int_ *)cf->first_para->next->data;          // cv::Size ksize
@@ -814,14 +815,15 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
             QString nm = grep_enum_text("boolType", *(int*)cf->first_para->next->next->next->data);      // normalize
             QString bt = grep_enum_text("BorderTypes", *(int*)cf->first_para->next->next->next->next->data);      // borderType
 
-            s = QString ("// CVD::boxFilter(src, dst, %1, cv::Size(%2, %3), cv::Point(%4, %5), %6, %7);")
+            s = QString ("// CVD::%8(src, dst, %1, cv::Size(%2, %3), cv::Point(%4, %5), %6, %7);")
                          .arg(dt)
                          .arg(QString::number(ks->x))
                          .arg(QString::number(ks->y))
                          .arg(QString::number(ac->x))
                          .arg(QString::number(ac->y))
                          .arg(nm)
-                         .arg(bt);
+                         .arg(bt)
+                         .arg(QString((cf->type == BOXFILTER) ? "boxFilter" : "sqrBoxFilter"));
             }
             break;
         case MATCHSHAPES: {
@@ -1596,6 +1598,7 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "MATCHTEMPLATE") == 0) return MATCHTEMPLATE;
     if (strcmp(enum_name, "MATCHSHAPES") == 0) return MATCHSHAPES;
     if (strcmp(enum_name, "BOXFILTER") == 0) return BOXFILTER;
+    if (strcmp(enum_name, "SQRBOXFILTER") == 0) return SQRBOXFILTER;
 
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_INT") == 0) return CVD_RECT_TYPE_1_INT;
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_FLOAT") == 0) return CVD_RECT_TYPE_1_FLOAT;
@@ -1717,6 +1720,7 @@ char *MainWindow::get_enum_text (int val)
     if (val == MATCHTEMPLATE) strcpy (buf, "MATCHTEMPLATE");
     if (val == MATCHSHAPES) strcpy (buf, "MATCHSHAPES");
     if (val == BOXFILTER) strcpy (buf, "BOXFILTER");
+    if (val == SQRBOXFILTER) strcpy (buf, "SQRBOXFILTER");
 
     if (val == CVD_RECT_TYPE_1_INT) strcpy (buf, "CVD_RECT_TYPE_1_INT");
     if (val == CVD_RECT_TYPE_1_FLOAT) strcpy (buf, "CVD_RECT_TYPE_1_FLOAT");

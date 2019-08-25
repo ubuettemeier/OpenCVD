@@ -70,6 +70,7 @@ enum _data_types_ {
     MATCHTEMPLATE = 0x102E,         // *
     MATCHSHAPES = 0x102F,           // *
     BOXFILTER = 0x1030,             // *
+    SQRBOXFILTER = 0x1031,          // *
 
     CVD_RECT_TYPE_1_INT = 0x1500,       // *
     CVD_RECT_TYPE_1_FLOAT = 0x1501,     // *

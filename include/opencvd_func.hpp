@@ -52,6 +52,12 @@
 
 namespace cvd {
 
+CV_EXPORTS_W void sqrBoxFilter( cv::InputArray _src, cv::OutputArray _dst, int ddepth,
+                                cv::Size ksize, cv::Point anchor = cv::Point(-1, -1),
+                                bool normalize = true,
+                                int borderType = cv::BORDER_DEFAULT,
+                                BUILDIN);
+
 CV_EXPORTS_W void boxFilter( cv::InputArray src, cv::OutputArray dst, int ddepth,
                              cv::Size ksize, cv::Point anchor = cv::Point(-1,-1),
                              bool normalize = true,
@@ -254,6 +260,156 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           int borderType = cv::BORDER_DEFAULT,
                           BUILDIN);
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+void box_Filter( cv::InputArray src, cv::OutputArray dst, int ddepth,
+                 cv::Size ksize, cv::Point anchor,
+                 bool normalize,
+                 int borderType,
+                 int para_type,     // BOXFILTER or SQRBOXFILTER
+                 int line_nr,
+                 const char *src_file)
+{
+    if (cvd_off) {
+        if (para_type == BOXFILTER)
+            cv::boxFilter( src, dst, ddepth, ksize, anchor, normalize, borderType );
+        if (para_type == SQRBOXFILTER)
+            cv::sqrBoxFilter( src, dst, ddepth, ksize, anchor, normalize, borderType );
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for boxFilter
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0),
+                               para_type,
+                               (para_type == BOXFILTER) ? "boxFilter()" : "sqrboxFilter()",
+                               PARAMETER | FUNC_OFF | SHOW_IMAGE | BREAK,    // Menu
+                               line_nr, src_file);
+        func.push_back( foo );
+
+        struct _enum_para_ dd = {ddepth, "Sobel_filterdepth"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&dd, "ddepth" );
+
+        struct _point_int_ ks = {ksize.width, 1, 20000, ksize.height, 1, 20000};
+        foo->new_para (POINT_INT, sizeof(struct _point_int_), (uint8_t*)&ks, "ksize");      // Matrix w, h
+
+        struct _point_int_ ip = {anchor.x, -1, 20000, anchor.y, -1, 20000};
+        foo->new_para (POINT_INT_XY, sizeof(struct _point_int_), (uint8_t*)&ip, "anchor");
+
+        struct _enum_para_ un = {normalize, "boolType"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&un, "normalize" );
+
+        struct _enum_para_ bt = {borderType, "BorderTypes"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt, "borderType" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // -----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::Mat out;
+            try {
+                struct _point_int_ *ks = (struct _point_int_ *)foo->para[1]->data;
+                struct _point_int_ *ip = (struct _point_int_ *)foo->para[2]->data;
+                if (para_type == BOXFILTER)
+                    cv::boxFilter( src, out,
+                                   *(int *)foo->para[0]->data,      // ddepth
+                                   cv::Size(ks->x, ks->y),          // ksize
+                                   cv::Point(ip->x, ip->y),         // anchor
+                                   *(int*)foo->para[3]->data,       // normalize
+                                   *(int*)foo->para[4]->data);      // borderType
+
+                if (para_type == SQRBOXFILTER)
+                    cv::sqrBoxFilter( src, out,
+                                   *(int *)foo->para[0]->data,      // ddepth
+                                   cv::Size(ks->x, ks->y),          // ksize
+                                   cv::Point(ip->x, ip->y),         // anchor
+                                   *(int*)foo->para[3]->data,       // normalize
+                                   *(int*)foo->para[4]->data);      // borderType
+
+            } catch( cv::Exception& e ) {
+                foo->error_flag |= FUNC_ERROR;
+            }
+            // ------------- show image ----------------
+            foo->control_imshow( out );                 // Ausgabe
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
+    // -----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_off) {
+        src.copyTo( dst );
+    } else {
+        try {
+            struct _point_int_ *ks = (struct _point_int_ *)foo->para[1]->data;
+            struct _point_int_ *ip = (struct _point_int_ *)foo->para[2]->data;
+            if (para_type == BOXFILTER)
+                cv::boxFilter( src, dst,
+                               *(int *)foo->para[0]->data,      // ddepth
+                               cv::Size(ks->x, ks->y),          // ksize
+                               cv::Point(ip->x, ip->y),         // anchor
+                               *(int*)foo->para[3]->data,       // normalize
+                               *(int*)foo->para[4]->data);      // borderType
+            if (para_type == SQRBOXFILTER)
+                cv::sqrBoxFilter( src, dst,
+                                  *(int *)foo->para[0]->data,      // ddepth
+                                  cv::Size(ks->x, ks->y),          // ksize
+                                  cv::Point(ip->x, ip->y),         // anchor
+                                  *(int*)foo->para[3]->data,       // normalize
+                                  *(int*)foo->para[4]->data);      // borderType
+
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( dst );  // show Image
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//! \brief boxFilter
+//! \param src input image
+//! \param dst output image of the same size and type as src.
+//! \param ddepth the output image depth (-1 to use src.depth()).
+//! \param ksize kernel size
+//! \param anchor kernel anchor point. The default value of Point(-1, -1) denotes that the anchor is at the kernel
+//!        center.
+//! \param normalize flag, specifying whether the kernel is to be normalized by it's area or not.
+//! \param borderType border mode used to extrapolate pixels outside of the image, see cv::BorderTypes
+//! \sa sqrBoxFilter
+//!
+CV_EXPORTS_W void boxFilter( cv::InputArray src, cv::OutputArray dst, int ddepth,
+                             cv::Size ksize, cv::Point anchor,
+                             bool normalize,
+                             int borderType
+                             BUILDIN_FUNC)
+{
+    box_Filter (src, dst, ddepth, ksize, anchor, normalize, borderType, BOXFILTER, line_nr, src_file);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//! \brief sqrBoxFilter
+//! \param _src
+//! \param _dst output image of the same size and type as _src
+//! \param ddepth the output image depth (-1 to use src.depth())
+//! \param ksize kernel size
+//! \param anchor kernel anchor point. The default value of Point(-1, -1) denotes that the anchor is at the kernel
+//!        center.
+//! \param normalize flag, specifying whether the kernel is to be normalized by it's area or not.
+//! \param borderType border mode used to extrapolate pixels outside of the image, see cv::BorderTypes
+//! \sa boxFilter
+//!
+CV_EXPORTS_W void sqrBoxFilter( cv::InputArray _src, cv::OutputArray _dst, int ddepth,
+                                cv::Size ksize, cv::Point anchor,
+                                bool normalize,
+                                int borderType
+                                BUILDIN_FUNC)
+{
+    box_Filter (_src, _dst, ddepth, ksize, anchor, normalize, borderType, SQRBOXFILTER, line_nr, src_file);
+}
+
+/*
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief boxFilter
 //! \param src input image
@@ -346,7 +502,7 @@ CV_EXPORTS_W void boxFilter( cv::InputArray src, cv::OutputArray dst, int ddepth
     }
     foo->control_imshow( dst );  // show Image
 }
-
+*/
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief matchShapes
