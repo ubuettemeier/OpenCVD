@@ -83,7 +83,7 @@ void get_filename (T *fname, const char *val_name,
 }
 #else
 template<typename T>
-void get_filename (T *fname, const char *val_name) {
+void get_filename (T *fname, const char *val_name) {    // do nothing
     std::ignore = fname;
     std::ignore = val_name;
 }
@@ -143,7 +143,7 @@ T set_trackbar (T a, const char *val_name,
 #else
 
 template<typename T>
-T set_trackbar (T a, const char *val_name,
+T set_trackbar (T a, const char *val_name,      // do nothing
                 T min, T max, T div) {
     std::ignore = min;
     std::ignore = max;
@@ -230,7 +230,7 @@ T get_numval (T a, const char *val_name,
 
 #else
 template<typename T>
-T get_numval (T a, const char *val_name) {
+T get_numval (T a, const char *val_name) {      // do nothing
     std::ignore = val_name;
     return a;
 }

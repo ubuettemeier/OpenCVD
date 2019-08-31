@@ -71,7 +71,7 @@ see: samples/short_sample/short_sample.cpp
 - Laplacian
 - medianBlur, morphologyEx, matchTemplate, matchShapes
 - normalize
-- pyrDown, pyrUp, pyrMeanShiftFiltering
+- pyrDown, pyrUp, pyrMeanShiftFiltering, putText
 - resize, rectangle
 - Scharr, Sobel, scaleAdd, sqrBoxFilter
 - threshold

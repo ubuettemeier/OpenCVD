@@ -12,7 +12,7 @@
 //!       - bei client close Menue: all Functio ON/OFF auf ON setzen !!!
 //!
 
-#define VERSION "v0.6-0015"
+#define VERSION "v0.6-0016"
 
 #include <cstring>
 #include <iostream>
@@ -1599,6 +1599,7 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "MATCHSHAPES") == 0) return MATCHSHAPES;
     if (strcmp(enum_name, "BOXFILTER") == 0) return BOXFILTER;
     if (strcmp(enum_name, "SQRBOXFILTER") == 0) return SQRBOXFILTER;
+    if (strcmp(enum_name, "PUTTEXT") == 0) return PUTTEXT;
 
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_INT") == 0) return CVD_RECT_TYPE_1_INT;
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_FLOAT") == 0) return CVD_RECT_TYPE_1_FLOAT;
@@ -1721,6 +1722,7 @@ char *MainWindow::get_enum_text (int val)
     if (val == MATCHSHAPES) strcpy (buf, "MATCHSHAPES");
     if (val == BOXFILTER) strcpy (buf, "BOXFILTER");
     if (val == SQRBOXFILTER) strcpy (buf, "SQRBOXFILTER");
+    if (val == PUTTEXT) strcpy (buf, "PUTTEXT");
 
     if (val == CVD_RECT_TYPE_1_INT) strcpy (buf, "CVD_RECT_TYPE_1_INT");
     if (val == CVD_RECT_TYPE_1_FLOAT) strcpy (buf, "CVD_RECT_TYPE_1_FLOAT");

@@ -52,6 +52,12 @@
 
 namespace cvd {
 
+CV_EXPORTS_W void putText( cv::InputOutputArray img, const cv::String& text, cv::Point org,
+                         int fontFace, double fontScale, cv::Scalar color,
+                         int thickness = 1, int lineType = cv::LINE_8,
+                         bool bottomLeftOrigin = false,
+                         BUILDIN);
+
 CV_EXPORTS_W void sqrBoxFilter( cv::InputArray _src, cv::OutputArray _dst, int ddepth,
                                 cv::Size ksize, cv::Point anchor = cv::Point(-1, -1),
                                 bool normalize = true,
@@ -259,6 +265,77 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           int dx, int dy, double scale = 1, double delta = 0,
                           int borderType = cv::BORDER_DEFAULT,
                           BUILDIN);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+CV_EXPORTS_W void putText( cv::InputOutputArray img, const cv::String& text, cv::Point org,
+                         int fontFace, double fontScale, cv::Scalar color,
+                         int thickness, int lineType,
+                         bool bottomLeftOrigin
+                         BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::putText( img, text, org, fontFace, fontScale, color, thickness, lineType, bottomLeftOrigin );
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for boxFilter
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), PUTTEXT, "putText()",
+                                PARAMETER | FUNC_OFF | SHOW_IMAGE | BREAK,    // Menu
+                                BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _point_int_ ip = {org.x, -1, 20000, org.y, -1, 20000};
+        foo->new_para (POINT_INT_XY, sizeof(struct _point_int_), (uint8_t*)&ip, "Point");
+
+        struct _enum_para_ un = {fontFace, "HersheyFonts"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&un, "fontFace" );
+
+        struct _double_para_ psp = {fontScale, -100000.0, 100000.0, 3};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&psp, "fontScale" );
+
+        struct _scalar_double_ sc = {color.val[0], color.val[1], color.val[2], color.val[3]};
+        foo->new_para ( SCALAR_PARA, sizeof(struct _scalar_double_), (uint8_t*)&sc, "color" );
+
+        struct _int_para_ tn = {thickness, 1, 255};
+        foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&tn, "thickness" );
+
+        struct _enum_para_ lt = {lineType, "LineTypes"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&lt, "lineType" );
+
+        struct _enum_para_ bo = {bottomLeftOrigin, "boolType"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bo, "bottomLeftOrigin" );
+
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // -----------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_off) {
+        // nothing to do, no text
+    } else {
+        try {
+            struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
+            struct _scalar_double_ *sc = (struct _scalar_double_*) foo->para[3]->data;
+
+            cv::putText( img, text,
+                         cv::Point(ip->x, ip->y),           // Point,
+                         *(int*)foo->para[1]->data,         // fontFace,
+                         *(double*)foo->para[2]->data,      // fontScale
+                         cv::Scalar(sc->val[0], sc->val[1], sc->val[2], sc->val[3] ),    // color
+                         *(int*)foo->para[4]->data,         // thickness,
+                         *(int*)foo->para[5]->data,         // lineType,
+                         *(int*)foo->para[6]->data);        // bottomLeftOrigin
+
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( img );  // show Image
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief box_Filter
