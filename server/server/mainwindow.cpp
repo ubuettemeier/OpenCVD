@@ -12,7 +12,7 @@
 //!       - bei client close Menue: all Functio ON/OFF auf ON setzen !!!
 //!
 
-#define VERSION "v0.6-0016"
+#define VERSION "v0.6-0017"
 
 #include <cstring>
 #include <iostream>
@@ -807,6 +807,29 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case PUTTEXT: {
+            struct _point_int_ *op = (struct _point_int_ *)cf->first_para->data;          // cv::Point
+            QString ff = grep_enum_text("HersheyFonts", *(int*)cf->first_para->next->data);      // fontFace
+            struct _scalar_double_ *sc = (struct _scalar_double_*) cf->first_para->next->next->next->data;
+            QString lt = grep_enum_text("LineTypes", *(int*)cf->first_para->next->next->next->next->next->data);      // lineType
+            QString bo = grep_enum_text("boolType", *(int*)cf->first_para->next->next->next->next->next->next->data);      // bottomLeftOrigin
+
+            s = QString ("// CVD::putText (img, %12text%13, cv::Point(%1, %2), %3, %4, cv::Scalar(%5, %6, %7, %8), %9, %10, %11);")
+                        .arg(QString::number(op->x))                                        // Point
+                        .arg(QString::number(op->y))
+                        .arg(ff)                                                            // fontFace
+                        .arg(QString::number(*(double*)cf->first_para->next->next->data))   // fontScale
+                        .arg(QString::number(sc->val[0]))                                   // color
+                        .arg(QString::number(sc->val[1]))
+                        .arg(QString::number(sc->val[2]))
+                        .arg(QString::number(sc->val[3]))
+                        .arg(QString::number(*(int*)cf->first_para->next->next->next->next->data))   // thickness
+                        .arg(lt)
+                        .arg(bo)
+                        .arg(QChar('"'))
+                        .arg(QChar('"'));
+            }
+            break;
         case SQRBOXFILTER:
         case BOXFILTER: {
             QString dt = grep_enum_text("Sobel_filterdepth", *(int*)cf->first_para->data);      // ddepth

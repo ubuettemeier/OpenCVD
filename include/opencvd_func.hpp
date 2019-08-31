@@ -267,7 +267,19 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           BUILDIN);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//! \brief putText
+//! \param img
+//! \param text
+//! \param org
+//! \param fontFace Font type, see cv::HersheyFonts.
+//! \param fontScale Font scale factor that is multiplied by the font-specific base size.
+//! \param color
+//! \param thickness
+//! \param lineType
+//! \param bottomLeftOrigin When true, the image data origin is at the bottom-left corner. Otherwise,
+//!                         it is at the top-left corner.
+//! \example CVD::putText (a, "text output", cv::Point (20, 20), cv::FONT_HERSHEY_PLAIN, 1.3, cv::Scalar(255, 0, 0), 2);
+//!
 CV_EXPORTS_W void putText( cv::InputOutputArray img, const cv::String& text, cv::Point org,
                          int fontFace, double fontScale, cv::Scalar color,
                          int thickness, int lineType,
@@ -311,7 +323,32 @@ CV_EXPORTS_W void putText( cv::InputOutputArray img, const cv::String& text, cv:
     }
     foo->error_flag &= ~FUNC_ERROR;     // clear func_error
     // -----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::Mat out (img.rows(), img.cols(), img.type(), cv::Scalar(255, 255, 255));
+            try {
+                struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
+                struct _scalar_double_ *sc = (struct _scalar_double_*) foo->para[3]->data;
 
+                cv::putText( out, text,
+                             cv::Point(ip->x, ip->y),           // Point,
+                             *(int*)foo->para[1]->data,         // fontFace,
+                             *(double*)foo->para[2]->data,      // fontScale
+                             cv::Scalar(sc->val[0], sc->val[1], sc->val[2], sc->val[3] ),    // color
+                             *(int*)foo->para[4]->data,         // thickness,
+                             *(int*)foo->para[5]->data,         // lineType,
+                             *(int*)foo->para[6]->data);        // bottomLeftOrigin
+
+            } catch( cv::Exception& e ) {
+                foo->error_flag |= FUNC_ERROR;
+            }
+            // ------------- show break image ----------------
+            foo->control_imshow( out );                 // output
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
     // -----------------------------------------------------------------------------------------------
     if (foo->state.flag.func_off) {
         // nothing to do, no text
