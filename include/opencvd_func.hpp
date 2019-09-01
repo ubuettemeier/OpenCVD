@@ -325,10 +325,32 @@ CV_EXPORTS_W void sepFilter2D( cv::InputArray src, cv::OutputArray dst, int ddep
     }
     foo->error_flag &= ~FUNC_ERROR;     // clear func_error
     // -----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::Mat out;
+            try {
+                struct _point_int_ *ac = (struct _point_int_ *)foo->para[1]->data;      // anchor
 
+                cv::sepFilter2D( src, out,
+                              *(int *)foo->para[0]->data,       // ddepth,
+                              kernelX, kernelY,
+                              cv::Point(ac->x, ac->y),          // anchor,
+                              *(double*)foo->para[2]->data,     // delta,
+                              *(int *)foo->para[3]->data);      // borderType
+
+            } catch( cv::Exception& e ) {
+                foo->error_flag |= FUNC_ERROR;
+            }
+            // ------------- show break image ----------------
+            foo->control_imshow( out );                 // output
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
     // -----------------------------------------------------------------------------------------------
     if (foo->state.flag.func_off) {
-        // nothing to do
+        src.copyTo( dst );
     } else {
         try {
             struct _point_int_ *ac = (struct _point_int_ *)foo->para[1]->data;      // anchor
@@ -394,10 +416,32 @@ CV_EXPORTS_W void filter2D( cv::InputArray src, cv::OutputArray dst, int ddepth,
     }
     foo->error_flag &= ~FUNC_ERROR;     // clear func_error
     // -----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::Mat out;
+            try {
+                struct _point_int_ *ac = (struct _point_int_ *)foo->para[1]->data;      // anchor
 
+                cv::filter2D( src, out,
+                              *(int *)foo->para[0]->data,       // ddepth,
+                              kernel,
+                              cv::Point(ac->x, ac->y),          // anchor,
+                              *(double*)foo->para[2]->data,     // delta,
+                              *(int *)foo->para[3]->data);      // borderType
+
+            } catch( cv::Exception& e ) {
+                foo->error_flag |= FUNC_ERROR;
+            }
+            // ------------- show break image ----------------
+            foo->control_imshow( out );                 // output
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
     // -----------------------------------------------------------------------------------------------
     if (foo->state.flag.func_off) {
-        // nothing to do
+        src.copyTo( dst );
     } else {
         try {
             struct _point_int_ *ac = (struct _point_int_ *)foo->para[1]->data;      // anchor

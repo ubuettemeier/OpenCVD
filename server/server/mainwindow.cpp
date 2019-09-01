@@ -12,7 +12,7 @@
 //!       - bei client close Menue: all Functio ON/OFF auf ON setzen !!!
 //!
 
-#define VERSION "v0.6-0018"
+#define VERSION "v0.6-0019"
 
 #include <cstring>
 #include <iostream>
@@ -807,6 +807,22 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case FILTER2D:
+        case SEQFILTER2D: {
+                QString dt = grep_enum_text("Sobel_filterdepth", *(int*)cf->first_para->data);      // ddepth
+                struct _point_int_ *op = (struct _point_int_ *)cf->first_para->next->data;          // cv::Point
+                QString bt = grep_enum_text("BorderTypes", *(int*)cf->first_para->next->next->next->data);      // borderType
+
+                s = QString ("// CVD::%1( src, dst, %2, %3, cv::Point(%4, %5), %6, cv::%7);")
+                            .arg(QString((cf->type == FILTER2D) ? "filter2D" : "sepFilter2D"))
+                            .arg(dt)                                                                // ddepth
+                            .arg(QString((cf->type == FILTER2D) ? "kernel" : "kernelX, kernelY"))
+                            .arg(QString::number(op->x))                                            // Point
+                            .arg(QString::number(op->y))
+                            .arg(QString::number(*(double*)cf->first_para->next->next->data))       // delta
+                            .arg(bt);                                                               // borderType
+            }
+            break;
         case PUTTEXT: {
             struct _point_int_ *op = (struct _point_int_ *)cf->first_para->data;          // cv::Point
             QString ff = grep_enum_text("HersheyFonts", *(int*)cf->first_para->next->data);      // fontFace
@@ -1623,6 +1639,8 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "BOXFILTER") == 0) return BOXFILTER;
     if (strcmp(enum_name, "SQRBOXFILTER") == 0) return SQRBOXFILTER;
     if (strcmp(enum_name, "PUTTEXT") == 0) return PUTTEXT;
+    if (strcmp(enum_name, "SEQFILTER2D") == 0) return SEQFILTER2D;
+    if (strcmp(enum_name, "FILTER2D") == 0) return FILTER2D;
 
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_INT") == 0) return CVD_RECT_TYPE_1_INT;
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_FLOAT") == 0) return CVD_RECT_TYPE_1_FLOAT;
@@ -1746,6 +1764,8 @@ char *MainWindow::get_enum_text (int val)
     if (val == BOXFILTER) strcpy (buf, "BOXFILTER");
     if (val == SQRBOXFILTER) strcpy (buf, "SQRBOXFILTER");
     if (val == PUTTEXT) strcpy (buf, "PUTTEXT");
+    if (val == SEQFILTER2D) strcpy (buf, "SEQFILTER2D");
+    if (val == FILTER2D) strcpy (buf, "FILTER2D");
 
     if (val == CVD_RECT_TYPE_1_INT) strcpy (buf, "CVD_RECT_TYPE_1_INT");
     if (val == CVD_RECT_TYPE_1_FLOAT) strcpy (buf, "CVD_RECT_TYPE_1_FLOAT");
