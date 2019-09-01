@@ -14,8 +14,8 @@ SAMPLE_PATH = 	basic/ \
                 LSD/ \
                 matchTemplate/ \
                 grabCut/ \
-		matchShapes/
-
+		matchShapes/ \
+		sepFilter2D/
 
 all:	
 	for dir in $(SAMPLE_PATH); do \

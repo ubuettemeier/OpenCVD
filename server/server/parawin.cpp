@@ -45,6 +45,14 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case FILTER2D:
+    case SEQFILTER2D:
+        new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );                // ddepth
+        new PointInt ( client, cf->first_para->next, LEFT_POS, 10+55*1, this );         // annchor
+        new DoubleEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );  // delta
+        new EnumDrop (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );  // borderType
+        set_param_win( 4, 260 );
+        break;
     case PUTTEXT:
         new PointInt ( client, cf->first_para, LEFT_POS, 10+55*0, this );           // Point
         new EnumDrop (client, cf->first_para->next, LEFT_POS, 10+55*1, this );      // fontFace
@@ -53,7 +61,6 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new IntEdit (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );         // thickness
         new EnumDrop (client, cf->first_para->next->next->next->next->next, LEFT_POS, 10+55*5, this );  // lineType
         new EnumDrop (client, cf->first_para->next->next->next->next->next->next, LEFT_POS, 10+55*6, this );    // bottomLeftOrigin
-
         set_param_win( 7, 360 );
         break;
     case SQRBOXFILTER:

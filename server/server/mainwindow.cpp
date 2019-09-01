@@ -12,7 +12,7 @@
 //!       - bei client close Menue: all Functio ON/OFF auf ON setzen !!!
 //!
 
-#define VERSION "v0.6-0017"
+#define VERSION "v0.6-0018"
 
 #include <cstring>
 #include <iostream>

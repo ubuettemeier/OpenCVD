@@ -52,6 +52,19 @@
 
 namespace cvd {
 
+//! \todo
+CV_EXPORTS_W void sepFilter2D( cv::InputArray src, cv::OutputArray dst, int ddepth,
+                               cv::InputArray kernelX, cv::InputArray kernelY,
+                               cv::Point anchor = cv::Point(-1,-1),
+                               double delta = 0, int borderType = cv::BORDER_DEFAULT,
+                               BUILDIN);
+
+//! \todo
+CV_EXPORTS_W void filter2D( cv::InputArray src, cv::OutputArray dst, int ddepth,
+                            cv::InputArray kernel, cv::Point anchor = cv::Point(-1,-1),
+                            double delta = 0, int borderType = cv::BORDER_DEFAULT,
+                            BUILDIN);
+
 CV_EXPORTS_W void putText( cv::InputOutputArray img, const cv::String& text, cv::Point org,
                          int fontFace, double fontScale, cv::Scalar color,
                          int thickness = 1, int lineType = cv::LINE_8,
@@ -266,6 +279,144 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           int borderType = cv::BORDER_DEFAULT,
                           BUILDIN);
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//! \brief sepFilter2D
+//! \param src
+//! \param dst Destination image of the same size and the same number of channels as src .
+//! \param ddepth Destination image depth, see @ref filter_depths "combinations"
+//! \param kernelX Coefficients for filtering each row.
+//! \param kernelY Coefficients for filtering each column.
+//! \param anchor Anchor position within the kernel. The default value \f$(-1,-1)\f$ means that the anchor
+//!               is at the kernel center.
+//! \param delta Value added to the filtered results before storing them.
+//! \param borderType Pixel extrapolation method, see cv::BorderTypes
+//! \sa  filter2D, Sobel, GaussianBlur, boxFilter, blur
+CV_EXPORTS_W void sepFilter2D( cv::InputArray src, cv::OutputArray dst, int ddepth,
+                               cv::InputArray kernelX, cv::InputArray kernelY,
+                               cv::Point anchor,
+                               double delta , int borderType
+                               BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::sepFilter2D( src, dst, ddepth, kernelX, kernelY, anchor, delta, borderType);
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for boxFilter
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), SEQFILTER2D, "sepFilter2D()",
+                                PARAMETER | FUNC_OFF | SHOW_IMAGE | BREAK,    // Menu
+                                BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _enum_para_ dd = {ddepth, "Sobel_filterdepth"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&dd, "ddepth" );
+
+        struct _point_int_ ip = {anchor.x, -1, 20000, anchor.y, -1, 20000};
+        foo->new_para (POINT_INT_XY, sizeof(struct _point_int_), (uint8_t*)&ip, "anchor");
+
+        struct _double_para_ psp = {delta, -100000.0, 100000.0, 3};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&psp, "delta" );
+
+        struct _enum_para_ bt = {borderType, "BorderTypes"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt, "borderType" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // -----------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_off) {
+        // nothing to do
+    } else {
+        try {
+            struct _point_int_ *ac = (struct _point_int_ *)foo->para[1]->data;      // anchor
+
+            cv::sepFilter2D( src, dst,
+                          *(int *)foo->para[0]->data,       // ddepth,
+                          kernelX, kernelY,
+                          cv::Point(ac->x, ac->y),          // anchor,
+                          *(double*)foo->para[2]->data,     // delta,
+                          *(int *)foo->para[3]->data);      // borderType
+
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( dst );  // show Image
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//! \brief filter2D
+//! \param src input image.
+//! \param dst output image of the same size and the same number of channels as src.
+//! \param ddepth desired depth of the destination image, see @ref filter_depths "combinations"
+//! \param kernel convolution kernel (or rather a correlation kernel), a single-channel floating point
+//!        matrix; if you want to apply different kernels to different channels, split the image into
+//!        separate color planes using split and process them individually.
+//! \param anchor of the kernel that indicates the relative position of a filtered point within
+//!        the kernel; the anchor should lie within the kernel; default value (-1,-1) means that the anchor
+//!        is at the kernel center.
+//! \param delta optional value added to the filtered pixels before storing them in dst.
+//! \param borderType pixel extrapolation method, see cv::BorderTypes
+//!
+CV_EXPORTS_W void filter2D( cv::InputArray src, cv::OutputArray dst, int ddepth,
+                            cv::InputArray kernel, cv::Point anchor,
+                            double delta, int borderType
+                            BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::filter2D( src, dst, ddepth, kernel, anchor, delta, borderType);
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for boxFilter
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), FILTER2D, "filter2D()",
+                                PARAMETER | FUNC_OFF | SHOW_IMAGE | BREAK,    // Menu
+                                BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _enum_para_ dd = {ddepth, "Sobel_filterdepth"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&dd, "ddepth" );
+
+        struct _point_int_ ip = {anchor.x, -1, 20000, anchor.y, -1, 20000};
+        foo->new_para (POINT_INT_XY, sizeof(struct _point_int_), (uint8_t*)&ip, "anchor");
+
+        struct _double_para_ psp = {delta, -100000.0, 100000.0, 3};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&psp, "delta" );
+
+        struct _enum_para_ bt = {borderType, "BorderTypes"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt, "borderType" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // -----------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_off) {
+        // nothing to do
+    } else {
+        try {
+            struct _point_int_ *ac = (struct _point_int_ *)foo->para[1]->data;      // anchor
+
+            cv::filter2D( src, dst,
+                          *(int *)foo->para[0]->data,       // ddepth,
+                          kernel,
+                          cv::Point(ac->x, ac->y),          // anchor,
+                          *(double*)foo->para[2]->data,     // delta,
+                          *(int *)foo->para[3]->data);      // borderType
+
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( dst );  // show Image
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief putText
 //! \param img
@@ -372,7 +523,7 @@ CV_EXPORTS_W void putText( cv::InputOutputArray img, const cv::String& text, cv:
         foo->control_func_run_time ();
     }
     foo->control_imshow( img );  // show Image
-}
+} // putText
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief box_Filter
@@ -490,7 +641,7 @@ void box_Filter( cv::InputArray src, cv::OutputArray dst,
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );  // show Image
-}
+} // box_Filter
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief boxFilter
@@ -582,7 +733,7 @@ CV_EXPORTS_W double matchShapes( cv::InputArray contour1, cv::InputArray contour
     }
 
     return ret;
-}
+} // matchShapes
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief show_grabcut_result function used by grabCut()
@@ -691,7 +842,7 @@ CV_EXPORTS_W void grabCut( cv::InputArray img, cv::InputOutputArray mask, cv::Re
     }
     // ------------- show image ----------------
     show_grabcut_result (foo, img, mask, r);
-}
+} // grabCut
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief matchTemplate
@@ -757,8 +908,7 @@ CV_EXPORTS_W void matchTemplate( cv::InputArray image, cv::InputArray templ,
         foo->control_func_run_time ();
     }
     foo->control_imshow( result );  // show Image
-}
-
+} // matchTemplate
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief distanceTransform
@@ -833,7 +983,7 @@ CV_EXPORTS_W void distanceTransform( cv::InputArray src, cv::OutputArray dst,
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );  // show Image
-}
+} // distanceTransform
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief pyrMeanShiftFiltering
@@ -908,7 +1058,7 @@ CV_EXPORTS_W void pyrMeanShiftFiltering( cv::InputArray src, cv::OutputArray dst
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );  // show Image
-}
+} // pyrMeanShiftFiltering
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief createLineSegmentDetector
@@ -996,7 +1146,7 @@ CV_EXPORTS_W cv::Ptr<cv::LineSegmentDetector> createLineSegmentDetector(
     // foo->control_imshow( img );  // show Image
 
     return ret;
-}
+} // createLineSegmentDetector
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief rectangle
@@ -1071,7 +1221,7 @@ CV_EXPORTS_W void rectangle(cv::InputOutputArray img, cv::Point pt1, cv::Point p
         foo->control_func_run_time ();
     }
     foo->control_imshow( img );  // show Image
-}
+} // rectangle
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief rectangle
@@ -1145,7 +1295,7 @@ CV_EXPORTS void rectangle(CV_IN_OUT cv::Mat& img, cv::Rect rec,
         foo->control_func_run_time ();
     }
     foo->control_imshow( img );  // show Image
-}
+} // rectangle
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief fitLine
@@ -1209,7 +1359,7 @@ CV_EXPORTS_W void fitLine( cv::InputArray points, cv::OutputArray line, int dist
         foo->control_func_run_time ();
     }
     // foo->control_imshow( line );  // NO show Image
-}
+} // fitLine
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief cornerHarris
@@ -1270,7 +1420,7 @@ CV_EXPORTS_W void cornerHarris( cv::InputArray src, cv::OutputArray dst, int blo
         foo->control_func_run_time ();
     }
     // foo->control_imshow( dst ); // NO show Image
-}
+} // cornerHarris
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief pyrUp
@@ -1467,7 +1617,7 @@ CV_EXPORTS_W void pyrDown( cv::InputArray src, cv::OutputArray dst,
     }
     // --------------------------------------------
     if (foo->state.flag.func_off) {
-        src.copyTo( dst );
+        src.copyTo( dst );              // dst = src
     } else {
         struct _point_int_ *ip = (struct _point_int_ *)foo->para[0]->data;
         try {
@@ -1515,7 +1665,9 @@ CV_EXPORTS void calcHist( const cv::Mat* images, int nimages,
     opencvd_func *foo = NULL;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
-        foo = new opencvd_func((uint64_t)__builtin_return_address(0), CALCHIST, "calcHist", 0x0001, BUILIN_PARA);  // Achtung: Funktion hat kein ON/OFF, kein Break und kein show !!!
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), CALCHIST, "calcHist",
+                               0x0001,              // Achtung: Funktion hat kein ON/OFF, kein Break und kein show !!!
+                               BUILIN_PARA);
         func.push_back( foo );
 
         struct _int_para_ ni = {nimages, 0, 255};
@@ -1572,7 +1724,6 @@ CV_EXPORTS_W void normalize( cv::InputArray src, cv::InputOutputArray dst,
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), NORMALIZE, "normalize",
-                               // 0x0003,
                                PARAMETER | FUNC_OFF | SHOW_IMAGE,    // Menu
                                BUILIN_PARA);  // Achtung: Funktion hat kein ON/OFF, kein Break und kein show !!!
         func.push_back( foo );
@@ -1592,8 +1743,8 @@ CV_EXPORTS_W void normalize( cv::InputArray src, cv::InputOutputArray dst,
     foo->error_flag &= ~FUNC_ERROR;     // clear func_error
 
     if (foo->state.flag.func_off) {
-        src.copyTo ( dst );
-        // dst.setTo(cv::Scalar::all(0));      // set result to zero
+        src.copyTo ( dst );                     // dst = src
+        // dst.setTo(cv::Scalar::all(0));      // set result to zero ?
     } else {
         try {
             cv::normalize (src, dst,
@@ -1637,7 +1788,9 @@ CV_EXPORTS_W Mat getStructuringElement(int shape, cv::Size ksize, cv::Point anch
     opencvd_func *foo = NULL;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
-        foo = new opencvd_func((uint64_t)__builtin_return_address(0), GETSTRUCTURINGELEMENT, "getStructuringElement", 0x0001, BUILIN_PARA);  // Achtung: Funktion hat kein ON/OFF, kein Break und kein show !!!
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), GETSTRUCTURINGELEMENT, "getStructuringElement",
+                               0x0001,          // Achtung: Funktion hat kein ON/OFF, kein Break und kein show !!!
+                               BUILIN_PARA);
         func.push_back( foo );
 
         struct _enum_para_ ep = {shape, "MorphShapes"};
@@ -3416,7 +3569,7 @@ CV_EXPORTS_W void HoughLines( cv::InputArray image, cv::OutputArray lines,
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&sr, "srn");
 
         struct _double_para_ st = {stn, 0.0, std::numeric_limits<double>::max(), 2};
-        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&st, "srn");
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&st, "stn");
 
         struct _slide_double_para_ mit = {min_theta, 0.0, CV_PI, 100.0};
         foo->new_para (SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&mit, "min_theta");

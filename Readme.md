@@ -64,7 +64,7 @@ see: samples/short_sample/short_sample.cpp
 - Canny, cvtColor, calcHist, convertScaleAbs, cornerHarris, createLineSegmentDetector
 - dilate, distanceTransform
 - erode
-- findContours, fitLine
+- findContours, fitLine, filter2D
 - GaussianBlur, getStructuringElement, grabCut
 - HoughCircles, HoughLinesP, HoughLines
 - imread
@@ -73,7 +73,7 @@ see: samples/short_sample/short_sample.cpp
 - normalize
 - pyrDown, pyrUp, pyrMeanShiftFiltering, putText
 - resize, rectangle
-- Scharr, Sobel, scaleAdd, sqrBoxFilter
+- Scharr, Sobel, scaleAdd, sqrBoxFilter, sepFilter2D
 - threshold
 
 **cv::Mat Funktionen / cv::Mat functions**
