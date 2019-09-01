@@ -148,13 +148,18 @@
             <CV_64F> 6 </CV_64F>
         </filterdepth_CV_8U>
 
+        <filterdepth_CV_32F_CV_64F>
+            <CV_32F> 5 </CV_32F>
+            <CV_64F> 6 </CV_64F>
+        </filterdepth_CV_32F_CV_64F>
+
         <filterdepth_CV_16U_CV_16S>
             <IMREAD_UNCHANGED> -1 </IMREAD_UNCHANGED>
             <CV_32F> 5 </CV_32F>
             <CV_64F> 6 </CV_64F>
         </filterdepth_CV_16U_CV_16S>
 
-        <filterdepth_CV_32F>
+        <filterdepth_CV_32F>        
             <IMREAD_UNCHANGED> -1 </IMREAD_UNCHANGED>
             <CV_32F> 5 </CV_32F>
             <CV_64F> 6 </CV_64F>

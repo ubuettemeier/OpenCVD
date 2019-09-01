@@ -45,6 +45,12 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case GETGAUSSIANKERNEL:
+        new Slide (client, cf->first_para, LEFT_POS, 10+55*0, this );                   // ksize
+        new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );        // sigma
+        new EnumDrop (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );    // ktype
+        set_param_win( 3, 260 );
+        break;
     case FILTER2D:
     case SEQFILTER2D:
         new EnumDrop (client, cf->first_para, LEFT_POS, 10+55*0, this );                // ddepth

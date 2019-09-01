@@ -52,14 +52,15 @@
 
 namespace cvd {
 
-//! \todo
+CV_EXPORTS_W Mat getGaussianKernel( int ksize, double sigma, int ktype = CV_64F,
+                                    BUILDIN);
+
 CV_EXPORTS_W void sepFilter2D( cv::InputArray src, cv::OutputArray dst, int ddepth,
                                cv::InputArray kernelX, cv::InputArray kernelY,
                                cv::Point anchor = cv::Point(-1,-1),
                                double delta = 0, int borderType = cv::BORDER_DEFAULT,
                                BUILDIN);
 
-//! \todo
 CV_EXPORTS_W void filter2D( cv::InputArray src, cv::OutputArray dst, int ddepth,
                             cv::InputArray kernel, cv::Point anchor = cv::Point(-1,-1),
                             double delta = 0, int borderType = cv::BORDER_DEFAULT,
@@ -279,6 +280,57 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           int borderType = cv::BORDER_DEFAULT,
                           BUILDIN);
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//! \brief getGaussianKernel
+//! \param ksize Aperture size. It should be odd ( \f$\texttt{ksize} \mod 2 = 1\f$ ) and positive.
+//! \param sigma Gaussian standard deviation. If it is non-positive, it is computed from ksize as
+//!              `sigma = 0.3*((ksize-1)*0.5 - 1) + 0.8`.
+//! \param ktype Type of filter coefficients. It can be CV_32F or CV_64F .
+//! \return filter Mat
+//! \example Mat foo = CVD::getGaussianKernel( 5, 3.5 );
+CV_EXPORTS_W Mat getGaussianKernel( int ksize, double sigma, int ktype
+                                    BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        Mat ret;
+        ret = cv::getGaussianKernel( ksize, sigma, ktype );
+        return ret;
+    }
+
+    Mat ret;
+    static std::vector<opencvd_func *> func{};  // reg vector for boxFilter
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), GETGAUSSIANKERNEL, "getGaussianKernel()",
+                                PARAMETER,              // Menu
+                                BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _int_para_ sp = {ksize, 1, 31};    // 1, 3, 5, 7, ...
+        foo->new_para ( SLIDE_INT_TWO_STEP_PARA, sizeof(struct _int_para_), (uint8_t*)&sp, "ksize" );
+
+        struct _double_para_ psp = {sigma, -100000.0, 100000.0, 3};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&psp, "sigma" );
+
+        struct _enum_para_ dd = {ktype, "filterdepth_CV_32F_CV_64F"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&dd, "ktype" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // -----------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------
+    try {
+        ret = cv::getGaussianKernel( *(int *)foo->para[0]->data,        // ksize,
+                                     *(double *)foo->para[1]->data,     // sigma,
+                                     *(int *)foo->para[2]->data);       // ktype
+    } catch( cv::Exception& e ) {
+        foo->error_flag |= FUNC_ERROR;
+    }
+    foo->control_func_run_time ();
+    return ret;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief sepFilter2D
@@ -1805,6 +1857,7 @@ CV_EXPORTS_W void normalize( cv::InputArray src, cv::InputOutputArray dst,
     foo->control_imshow( dst );
 } // normalize
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! @brief  getStructuringElement
 //!         Returns a structuring element of the specified size and shape for morphological operations.
 //!         Es wird die Masken Matrix für die Elemente MORPH_ELLIPSE, MORPH_CROSS oder MORPH_RECT erstellt.
@@ -1862,6 +1915,7 @@ CV_EXPORTS_W Mat getStructuringElement(int shape, cv::Size ksize, cv::Point anch
     return ret;
 } // getStructuringElement
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! @brief  Erodes an image by using a specific structuring element.
 //! @param  kernel = Mat (anchor.x, anchor.y)
 //! @param  default borderValue = __MAX_DBL__ = std::numeric_limits<double>::max()

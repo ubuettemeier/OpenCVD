@@ -12,7 +12,7 @@
 //!       - bei client close Menue: all Functio ON/OFF auf ON setzen !!!
 //!
 
-#define VERSION "v0.6-0019"
+#define VERSION "v0.6-0020"
 
 #include <cstring>
 #include <iostream>
@@ -807,6 +807,15 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case GETGAUSSIANKERNEL: {
+            QString kt = grep_enum_text("filterdepth_CV_32F_CV_64F", *(int*)cf->first_para->next->next->data);  // ktype
+
+            s = QString ("// CVD::getGaussianKernel (%1, %2, %3);")
+                        .arg(QString::number(*(int*)cf->first_para->data))       // ksize
+                        .arg(QString::number(*(double*)cf->first_para->next->data))       // sigma
+                        .arg(kt);
+            }
+            break;
         case FILTER2D:
         case SEQFILTER2D: {
                 QString dt = grep_enum_text("Sobel_filterdepth", *(int*)cf->first_para->data);      // ddepth
@@ -1641,6 +1650,7 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "PUTTEXT") == 0) return PUTTEXT;
     if (strcmp(enum_name, "SEQFILTER2D") == 0) return SEQFILTER2D;
     if (strcmp(enum_name, "FILTER2D") == 0) return FILTER2D;
+    if (strcmp(enum_name, "GETGAUSSIANKERNEL") == 0) return GETGAUSSIANKERNEL;
 
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_INT") == 0) return CVD_RECT_TYPE_1_INT;
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_FLOAT") == 0) return CVD_RECT_TYPE_1_FLOAT;
@@ -1766,6 +1776,8 @@ char *MainWindow::get_enum_text (int val)
     if (val == PUTTEXT) strcpy (buf, "PUTTEXT");
     if (val == SEQFILTER2D) strcpy (buf, "SEQFILTER2D");
     if (val == FILTER2D) strcpy (buf, "FILTER2D");
+    if (val == GETGAUSSIANKERNEL) strcpy (buf, "GETGAUSSIANKERNEL");
+
 
     if (val == CVD_RECT_TYPE_1_INT) strcpy (buf, "CVD_RECT_TYPE_1_INT");
     if (val == CVD_RECT_TYPE_1_FLOAT) strcpy (buf, "CVD_RECT_TYPE_1_FLOAT");
