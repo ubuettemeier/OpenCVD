@@ -48,7 +48,6 @@ see: samples/short_sample/short_sample.cpp
 - Qt 5.9.5
 
 **Samples:**
-**include:**
 
 - gcc version 7.3.0
 - g++ --std=c++11
@@ -65,7 +64,7 @@ see: samples/short_sample/short_sample.cpp
 - dilate, distanceTransform
 - erode
 - findContours, fitLine, filter2D
-- GaussianBlur, getStructuringElement, grabCut, getGaussianKernel, getGaborKernel
+- GaussianBlur, getStructuringElement, grabCut, getGaussianKernel, getGaborKernel, getDerivKernels
 - HoughCircles, HoughLinesP, HoughLines
 - imread
 - Laplacian

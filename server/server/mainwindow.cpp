@@ -7,12 +7,13 @@
 //!      export LC_NUMERIC="en_US.UTF-8"
 //!      locale
 //!
-//! \todo - Anzahl Nachkommastellen bei class DoubleEdit als Parameter festlegen
+//! \todo - Anzahl Nachkommastellen bei class DoubleEdit als Parameter festlegen    erl.
 //!       - close Parameter-Window, by Parameter-Node clicked.
 //!       - bei client close Menue: all Functio ON/OFF auf ON setzen !!!
 //!
+//! \bug - class Slide, min max werden nicht korrekt berchnet. 09.09.19
 
-#define VERSION "v0.6-0021"
+#define VERSION "v0.6-0022"
 
 #include <cstring>
 #include <iostream>
@@ -807,6 +808,17 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case GETDERIVKERNELS: {
+            QString bo = grep_enum_text("boolType", *(int*)cf->first_para->next->next->next->data);      // normalize
+            QString kt = grep_enum_text("filterdepth_CV_32F_CV_64F", *(int*)cf->first_para->next->next->next->next->data);  // ktype
+            s = QString ("// CVD::getDerivKernels (kx, ky, %1, %2, %3, %4, %5);")
+                        .arg(QString::number(*(int*)cf->first_para->data))       // dx
+                        .arg(QString::number(*(int*)cf->first_para->next->data))       // dy
+                        .arg(QString::number(*(int*)cf->first_para->next->next->data))       // hsize
+                        .arg(bo)
+                        .arg(kt);
+            }
+            break;
         case GETGABORKERNEL: {
             struct _point_int_ *ks = (struct _point_int_ *)cf->first_para->data;          // cv::Size ksize
             QString kt = grep_enum_text("filterdepth_CV_32F_CV_64F", *(int*)cf->first_para->next->next->next->next->next->next->data);  // ktype
@@ -1668,6 +1680,7 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "FILTER2D") == 0) return FILTER2D;
     if (strcmp(enum_name, "GETGAUSSIANKERNEL") == 0) return GETGAUSSIANKERNEL;
     if (strcmp(enum_name, "GETGABORKERNEL") == 0) return GETGABORKERNEL;
+    if (strcmp(enum_name, "GETDERIVKERNELS") == 0) return GETDERIVKERNELS;
 
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_INT") == 0) return CVD_RECT_TYPE_1_INT;
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_FLOAT") == 0) return CVD_RECT_TYPE_1_FLOAT;
@@ -1795,7 +1808,7 @@ char *MainWindow::get_enum_text (int val)
     if (val == FILTER2D) strcpy (buf, "FILTER2D");
     if (val == GETGAUSSIANKERNEL) strcpy (buf, "GETGAUSSIANKERNEL");
     if (val == GETGABORKERNEL) strcpy (buf, "GETGABORKERNEL");
-
+    if (val == GETDERIVKERNELS) strcpy (buf, "GETDERIVKERNELS");
 
     if (val == CVD_RECT_TYPE_1_INT) strcpy (buf, "CVD_RECT_TYPE_1_INT");
     if (val == CVD_RECT_TYPE_1_FLOAT) strcpy (buf, "CVD_RECT_TYPE_1_FLOAT");

@@ -1,3 +1,7 @@
+//!
+//! \author Ulrich Buettemeier
+//!
+
 #ifndef OPENCVD_BASIC_HPP
 #define OPENCVD_BASIC_HPP
 

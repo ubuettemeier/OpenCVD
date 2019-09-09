@@ -45,6 +45,14 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case GETDERIVKERNELS:
+        new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );     // dx
+        new IntEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );     // dy
+        new Slide (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );           // ksize
+        new EnumDrop (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );        // normalize
+        new EnumDrop (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );        // ktype
+        set_param_win( 5, 260 );
+        break;
     case GETGABORKERNEL:
         new PointInt ( client, cf->first_para, LEFT_POS, 10+55*0, this );   // ksize
         new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );        // sigma
@@ -1017,7 +1025,7 @@ DoubleEdit::DoubleEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWi
 
     dedit = new QDoubleSpinBox();
     dedit->setRange( val->min, val->max );
-    dedit->setDecimals ( val->decimals );
+    dedit->setDecimals ( val->decimals );   // Nachkommastellen
     dedit->setValue( val->value );
     dedit->setMinimum( val->min );
     dedit->setMaximum( val->max );
@@ -1158,6 +1166,7 @@ Slide::Slide(QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *paren
         s->setTickInterval( 1 );
         s->setGeometry(x, y+20, 200, 30);
 
+        delta = (sp->max - sp->min) / 2;
         s->setMinimum( sp->min / stepwidth);
         s->setMaximum( sp->max / stepwidth);
         s->setSliderPosition( sp->value / stepwidth);
@@ -1177,10 +1186,7 @@ Slide::Slide(QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *paren
 
         s->setParent( parent );
 
-
-
         connect (s, SIGNAL(valueChanged(int)), this, SLOT(slide_value_changed(int)));        
-
         }
         break;
 

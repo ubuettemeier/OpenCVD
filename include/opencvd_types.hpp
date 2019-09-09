@@ -1,3 +1,7 @@
+//!
+//! \author Ulrich Buettemeier
+//!
+
 #ifndef OPENCVD_TYPES_HPP
 #define OPENCVD_TYPES_HPP
 
@@ -75,7 +79,8 @@ enum _data_types_ {
     FILTER2D = 0x1033,              // *
     SEQFILTER2D = 0x1034,           // *
     GETGAUSSIANKERNEL = 0x1035,     // *
-    GETGABORKERNEL = 0x1036,
+    GETGABORKERNEL = 0x1036,        // *
+    GETDERIVKERNELS = 0x1037,       // *
 
     CVD_RECT_TYPE_1_INT = 0x1500,       // *
     CVD_RECT_TYPE_1_FLOAT = 0x1501,     // *

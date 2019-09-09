@@ -1,7 +1,5 @@
 //!
 //! @author Ulrich Buettemeier
-//! @todo create void rectangle(InputOutputArray img, Point pt1, Point pt2, ...
-//!       pyrMeanShiftFiltering: Paramter cv::TermCriteria einbinden.
 //!
 
 #ifndef OPENCVD_FUNC_HPP
@@ -59,7 +57,6 @@ CV_EXPORTS_W void getDerivKernels( cv::OutputArray kx, cv::OutputArray ky,
                                    bool normalize = false, int ktype = CV_32F,
                                    BUILDIN);
 
-//! \todo
 CV_EXPORTS_W Mat getGaborKernel( cv::Size ksize, double sigma, double theta, double lambd,
                                  double gamma, double psi = CV_PI*0.5, int ktype = CV_64F ,
                                  BUILDIN);
@@ -292,6 +289,72 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           int borderType = cv::BORDER_DEFAULT,
                           BUILDIN);
 
+//!
+//! \brief getDerivKernels
+//! \param kx
+//! \param ky
+//! \param dx Derivative order in respect of x.
+//! \param dy Derivative order in respect of y.
+//! \param ksize Aperture size. It can be CV_SCHARR=-1, 1, 3, 5, or 7.
+//! \param normalize normalize Flag indicating whether to normalize (scale down) the filter coefficients or not.
+//!        Theoretically, the coefficients should have the denominator \f$=2^{ksize*2-dx-dy-2}\f$. If you are
+//!        going to filter floating-point images, you are likely to use the normalized kernels. But if you
+//!        compute derivatives of an 8-bit image, store the results in a 16-bit image, and wish to preserve
+//!        all the fractional bits, you may want to set normalize=false .
+//! \param ktype Type of filter coefficients. It can be CV_32f or CV_64F .
+//!
+CV_EXPORTS_W void getDerivKernels( cv::OutputArray kx, cv::OutputArray ky,
+                                   int dx, int dy, int ksize,
+                                   bool normalize, int ktype
+                                   BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::getDerivKernels( kx, ky, dx, dy, ksize, normalize, ktype);
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for getGaborKernel
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), GETDERIVKERNELS, "getDerivKernels()",
+                                PARAMETER,              // Menu
+                                BUILIN_PARA);
+
+        func.push_back( foo );
+
+        struct _int_para_ d_x = {dx, -40000, 40000};
+        foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&d_x, "dx" );
+
+        struct _int_para_ d_y = {dy, -40000, 40000};
+        foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&d_y, "dy" );
+
+        struct _int_para_ sp = {ksize, -1, 7};    // -1, 1, 3, 5, 7 // eventuell ein enum bauen !!!
+        foo->new_para ( SLIDE_INT_TWO_STEP_PARA, sizeof(struct _int_para_), (uint8_t*)&sp, "ksize" );
+
+        struct _enum_para_ un = {normalize, "boolType"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&un, "normalize" );
+
+        struct _enum_para_ dd = {ktype, "filterdepth_CV_32F_CV_64F"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&dd, "ktype" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // -----------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------
+    try {
+        cv::getDerivKernels(kx, ky,
+                            *(int *)foo->para[0]->data,       // dx
+                            *(int *)foo->para[1]->data,       // dy
+                            *(int *)foo->para[2]->data,       // ksize
+                            *(int *)foo->para[3]->data,       // normalize
+                            *(int *)foo->para[4]->data);      // ktype
+    } catch( cv::Exception& e ) {
+        foo->error_flag |= FUNC_ERROR;
+    }
+    foo->control_func_run_time ();
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief getGaborKernel
 //! \param ksize Size of the filter returned.
@@ -437,6 +500,7 @@ CV_EXPORTS_W void sepFilter2D( cv::InputArray src, cv::OutputArray dst, int ddep
 {
     if (cvd_off) {
         cv::sepFilter2D( src, dst, ddepth, kernelX, kernelY, anchor, delta, borderType);
+        return;
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for boxFilter
@@ -528,6 +592,7 @@ CV_EXPORTS_W void filter2D( cv::InputArray src, cv::OutputArray dst, int ddepth,
 {
     if (cvd_off) {
         cv::filter2D( src, dst, ddepth, kernel, anchor, delta, borderType);
+        return;
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for boxFilter
@@ -620,6 +685,7 @@ CV_EXPORTS_W void putText( cv::InputOutputArray img, const cv::String& text, cv:
 {
     if (cvd_off) {
         cv::putText( img, text, org, fontFace, fontScale, color, thickness, lineType, bottomLeftOrigin );
+        return;
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for boxFilter
