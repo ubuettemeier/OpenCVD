@@ -1166,10 +1166,11 @@ Slide::Slide(QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *paren
         s->setTickInterval( 1 );
         s->setGeometry(x, y+20, 200, 30);
 
-        delta = (sp->max - sp->min) / 2;
-        s->setMinimum( sp->min / stepwidth);
-        s->setMaximum( sp->max / stepwidth);
-        s->setSliderPosition( sp->value / stepwidth);
+        delta = (sp->max - sp->min) / stepwidth;
+        s->setMinimum( 0 );
+        s->setMaximum( delta );
+        s->setSliderPosition( (sp->value - sp->min) / stepwidth );    // sp->value = sp->min + (position * stepwidth);
+
 
         s->setStyleSheet("QSlider::groove:horizontal { "            // Slider Aussehen veraendern.
                               "border: 1px solid #999999; "
@@ -1251,12 +1252,7 @@ void Slide::slide_value_changed (int val)
     case SLIDE_INT_TWO_STEP_PARA:
     case SLIDE_INT_PARA: {
         struct _int_para_ *sp = (struct _int_para_ *)cp->data;
-
-        if (cp->type == SLIDE_INT_PARA)
-            sp->value = val;
-        else
-            sp->value = val * stepwidth + 1;
-
+        sp->value = sp->min + (val * stepwidth);
         l->setText(QString("%1=%2  min=%3  max=%4").arg(QString(cp->para_name))
                                                     .arg(QString::number(sp->value))
                                                     .arg(QString::number(sp->min))
@@ -1282,11 +1278,8 @@ void Slide::slide_value_changed (int val)
 //!
 void Slide::slide_para_button_pushed ()
 {
-    printf ("Treffer\n");
+    // printf ("Treffer\n");
 }
-
-
-
 
 PointDouble::PointDouble(QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *parent)
 {

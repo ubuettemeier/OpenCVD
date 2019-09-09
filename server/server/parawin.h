@@ -228,7 +228,7 @@ private slots:
 private:
     QLabel *l;
     uint8_t stepwidth = 1;
-    int delta;
+    int delta = 0;              // delta = (max - min) / stepwidth;
 };
 
 ///////////////////////////////////////////// PointInt //////////////////////////////////////////

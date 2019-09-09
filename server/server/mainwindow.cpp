@@ -11,9 +11,9 @@
 //!       - close Parameter-Window, by Parameter-Node clicked.
 //!       - bei client close Menue: all Functio ON/OFF auf ON setzen !!!
 //!
-//! \bug - class Slide, min max werden nicht korrekt berchnet. 09.09.19
+//! \bug - class Slide, min max werden nicht korrekt berchnet. 09.09.19 erl.
 
-#define VERSION "v0.6-0022"
+#define VERSION "v0.6-0023"
 
 #include <cstring>
 #include <iostream>
