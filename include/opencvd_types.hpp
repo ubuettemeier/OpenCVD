@@ -74,7 +74,8 @@ enum _data_types_ {
     PUTTEXT = 0x1032,               // *
     FILTER2D = 0x1033,              // *
     SEQFILTER2D = 0x1034,           // *
-    GETGAUSSIANKERNEL = 0x1035,
+    GETGAUSSIANKERNEL = 0x1035,     // *
+    GETGABORKERNEL = 0x1036,
 
     CVD_RECT_TYPE_1_INT = 0x1500,       // *
     CVD_RECT_TYPE_1_FLOAT = 0x1501,     // *

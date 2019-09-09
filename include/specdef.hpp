@@ -10,7 +10,7 @@
 // #define USE_CVD
 
 #ifdef USE_CVD
-    //!  @brief enumlist_name are def in "enum.xml"
+    //!  \brief enumlist_name are defined in "enum.xml"
     int get_enumval (const char *enumlist_name, int val, const char *val_name = "",
                      int line_nr  = __builtin_LINE(),
                      const char *src_file = __builtin_FILE());

@@ -52,6 +52,18 @@
 
 namespace cvd {
 
+
+//! \todo
+CV_EXPORTS_W void getDerivKernels( cv::OutputArray kx, cv::OutputArray ky,
+                                   int dx, int dy, int ksize,
+                                   bool normalize = false, int ktype = CV_32F,
+                                   BUILDIN);
+
+//! \todo
+CV_EXPORTS_W Mat getGaborKernel( cv::Size ksize, double sigma, double theta, double lambd,
+                                 double gamma, double psi = CV_PI*0.5, int ktype = CV_64F ,
+                                 BUILDIN);
+
 CV_EXPORTS_W Mat getGaussianKernel( int ksize, double sigma, int ktype = CV_64F,
                                     BUILDIN);
 
@@ -280,6 +292,79 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           int borderType = cv::BORDER_DEFAULT,
                           BUILDIN);
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//! \brief getGaborKernel
+//! \param ksize Size of the filter returned.
+//! \param sigma Standard deviation of the gaussian envelope.
+//! \param theta Orientation of the normal to the parallel stripes of a Gabor function.
+//! \param lambd Wavelength of the sinusoidal factor.
+//! \param gamma Spatial aspect ratio.
+//! \param psi Phase offset.
+//! \param ktype Type of filter coefficients. It can be CV_32F or CV_64F .
+//! \return
+//!
+CV_EXPORTS_W Mat getGaborKernel( cv::Size ksize, double sigma, double theta, double lambd,
+                                 double gamma, double psi, int ktype
+                                 BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        Mat ret;
+        ret = cv::getGaborKernel( ksize, sigma, theta, lambd, gamma, psi, ktype );
+        return ret;
+    }
+
+    Mat ret;
+    static std::vector<opencvd_func *> func{};  // reg vector for getGaborKernel
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), GETGABORKERNEL, "getGaborKernel()",
+                                PARAMETER,              // Menu
+                                BUILIN_PARA);
+
+        func.push_back( foo );
+
+        struct _point_int_ ks = {ksize.width, 1, 20000, ksize.height, 1, 20000};
+        foo->new_para (POINT_INT, sizeof(struct _point_int_), (uint8_t*)&ks, "ksize");      // Matrix w, h
+
+        struct _double_para_ psp = {sigma, -100000.0, 100000.0, 3};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&psp, "sigma" );
+
+        struct _double_para_ th = {theta, -100000.0, 100000.0, 3};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&th, "theta" );
+
+        struct _double_para_ lm = {lambd, -100000.0, 100000.0, 3};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&lm, "lambd" );
+
+        struct _double_para_ gm = {gamma, -100000.0, 100000.0, 3};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&gm, "gamma" );
+
+        struct _double_para_ ps = {psi, -100000.0, 100000.0, 3};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&ps, "psi" );
+
+        struct _enum_para_ dd = {ktype, "filterdepth_CV_32F_CV_64F"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&dd, "ktype" );
+
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // -----------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------
+    try {
+        struct _point_int_ *ks = (struct _point_int_ *)foo->para[0]->data;
+        ret = cv::getGaborKernel( cv::Size(ks->x, ks->y),           // ksize
+                                 *(double *)foo->para[1]->data,     // sigma
+                                 *(double *)foo->para[2]->data,     // theta
+                                 *(double *)foo->para[3]->data,     // lambd
+                                 *(double *)foo->para[4]->data,     // gamma
+                                 *(double *)foo->para[5]->data,     // psi
+                                 *(int *)foo->para[6]->data);       // ktype
+    } catch( cv::Exception& e ) {
+        foo->error_flag |= FUNC_ERROR;
+    }
+    foo->control_func_run_time ();
+    return ret;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief getGaussianKernel

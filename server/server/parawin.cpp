@@ -45,6 +45,16 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case GETGABORKERNEL:
+        new PointInt ( client, cf->first_para, LEFT_POS, 10+55*0, this );   // ksize
+        new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );        // sigma
+        new DoubleEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );        // theta
+        new DoubleEdit (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );        // lambd
+        new DoubleEdit (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );        // gamma
+        new DoubleEdit (client, cf->first_para->next->next->next->next->next, LEFT_POS, 10+55*5, this );        // psi
+        new EnumDrop (client, cf->first_para->next->next->next->next->next->next, LEFT_POS, 10+55*6, this );        // ktype
+        set_param_win( 7, 260 );
+        break;
     case GETGAUSSIANKERNEL:
         new Slide (client, cf->first_para, LEFT_POS, 10+55*0, this );                   // ksize
         new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );        // sigma
