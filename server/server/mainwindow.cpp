@@ -13,7 +13,7 @@
 //!
 //! \bug - class Slide, min max werden nicht korrekt berchnet. 09.09.19 erl.
 
-#define VERSION "v0.6-0023"
+#define VERSION "v0.6-0024"
 
 #include <cstring>
 #include <iostream>
@@ -1151,9 +1151,20 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
             QString bt = grep_enum_text("DistanceTypes", *(int*)cf->first_para->data);   // distType
             s = QString ("// CVD::fitLine(points, line, %1, %2, %3, %4);")
                         .arg(bt)
-                        .arg(QString::number(*(double*)cf->first_para->next->data))     //
-                        .arg(QString::number(*(double*)cf->first_para->next->next->data))     //
-                        .arg(QString::number(*(double*)cf->first_para->next->next->next->data));     //
+                        .arg(QString::number(*(double*)cf->first_para->next->data))
+                        .arg(QString::number(*(double*)cf->first_para->next->next->data))
+                        .arg(QString::number(*(double*)cf->first_para->next->next->next->data));
+            }
+            break;
+        case CORNERMINEIGENVAL:
+        case COREREIGENVALANDVECS: {
+            QString bt = grep_enum_text("BorderTypes", *(int*)cf->first_para->next->next->data);                // borderType
+            QString foo = (cf->type == CORNERMINEIGENVAL) ? "cornerMinEigenVal" : "cornerEigenValsAndVecs";     // Func-Name
+            s = QString ("// CVD::%1( src, dst, %2, %3, %4 );")
+                        .arg(foo)                                                   // Func-Name
+                        .arg(QString::number(*(int*)cf->first_para->data))          // blockSize
+                        .arg(QString::number(*(int*)cf->first_para->next->data))    // ksize
+                        .arg(bt);                                                   // borderType
             }
             break;
         case CORNERHARRIS: {
@@ -1681,6 +1692,8 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "GETGAUSSIANKERNEL") == 0) return GETGAUSSIANKERNEL;
     if (strcmp(enum_name, "GETGABORKERNEL") == 0) return GETGABORKERNEL;
     if (strcmp(enum_name, "GETDERIVKERNELS") == 0) return GETDERIVKERNELS;
+    if (strcmp(enum_name, "CORNERMINEIGENVAL") == 0) return CORNERMINEIGENVAL;
+    if (strcmp(enum_name, "COREREIGENVALANDVECS") == 0) return COREREIGENVALANDVECS;
 
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_INT") == 0) return CVD_RECT_TYPE_1_INT;
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_FLOAT") == 0) return CVD_RECT_TYPE_1_FLOAT;
@@ -1809,6 +1822,8 @@ char *MainWindow::get_enum_text (int val)
     if (val == GETGAUSSIANKERNEL) strcpy (buf, "GETGAUSSIANKERNEL");
     if (val == GETGABORKERNEL) strcpy (buf, "GETGABORKERNEL");
     if (val == GETDERIVKERNELS) strcpy (buf, "GETDERIVKERNELS");
+    if (val == CORNERMINEIGENVAL) strcpy (buf, "CORNERMINEIGENVAL");
+    if (val == COREREIGENVALANDVECS) strcpy (buf, "COREREIGENVALANDVECS");
 
     if (val == CVD_RECT_TYPE_1_INT) strcpy (buf, "CVD_RECT_TYPE_1_INT");
     if (val == CVD_RECT_TYPE_1_FLOAT) strcpy (buf, "CVD_RECT_TYPE_1_FLOAT");

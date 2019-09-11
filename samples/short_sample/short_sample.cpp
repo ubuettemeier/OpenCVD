@@ -1,4 +1,4 @@
-#define USE_CVD             // using namespace cvd
+#define USE_CVD            // using namespace cvd
 #include "opencvd.hpp"
 
 using namespace cv;

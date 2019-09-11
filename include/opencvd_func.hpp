@@ -135,6 +135,18 @@ CV_EXPORTS_W void fitLine( cv::InputArray points, cv::OutputArray line, int dist
                            double param, double reps, double aeps,
                            BUILDIN) ;
 
+//! \todo
+CV_EXPORTS_W void cornerMinEigenVal( cv::InputArray src, cv::OutputArray dst,
+                                     int blockSize, int ksize = 3,
+                                     int borderType = cv::BORDER_DEFAULT,
+                                     BUILDIN );
+
+//! \todo
+CV_EXPORTS_W void cornerEigenValsAndVecs( cv::InputArray src, cv::OutputArray dst,
+                                          int blockSize, int ksize,
+                                          int borderType = cv::BORDER_DEFAULT,
+                                          BUILDIN );
+
 CV_EXPORTS_W void cornerHarris( cv::InputArray src, cv::OutputArray dst, int blockSize,
                                 int ksize, double k,
                                 int borderType = cv::BORDER_DEFAULT,
@@ -353,7 +365,7 @@ CV_EXPORTS_W void getDerivKernels( cv::OutputArray kx, cv::OutputArray ky,
         foo->error_flag |= FUNC_ERROR;
     }
     foo->control_func_run_time ();
-}
+} // getDerivKernels
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief getGaborKernel
@@ -427,7 +439,7 @@ CV_EXPORTS_W Mat getGaborKernel( cv::Size ksize, double sigma, double theta, dou
     }
     foo->control_func_run_time ();
     return ret;
-}
+} // getGaborKernel
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief getGaussianKernel
@@ -478,7 +490,7 @@ CV_EXPORTS_W Mat getGaussianKernel( int ksize, double sigma, int ktype
     }
     foo->control_func_run_time ();
     return ret;
-}
+} // getGaussianKernel
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief sepFilter2D
@@ -569,7 +581,7 @@ CV_EXPORTS_W void sepFilter2D( cv::InputArray src, cv::OutputArray dst, int ddep
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );  // show Image
-}
+} // sepFilter2D
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief filter2D
@@ -661,7 +673,7 @@ CV_EXPORTS_W void filter2D( cv::InputArray src, cv::OutputArray dst, int ddepth,
         foo->control_func_run_time ();
     }
     foo->control_imshow( dst );  // show Image
-}
+} // filter2D
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief putText
@@ -1608,10 +1620,106 @@ CV_EXPORTS_W void fitLine( cv::InputArray points, cv::OutputArray line, int dist
     // foo->control_imshow( line );  // NO show Image
 } // fitLine
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void cornerEigenVal (cv::InputArray src, cv::OutputArray dst,
+                     int blockSize, int ksize,
+                     int borderType,
+                     int para_type,          // CORNERMINEIGENVAL | COREREIGENVALANDVECS
+                     int line_nr,
+                     const char *src_file)
+{
+    if (cvd_off) {
+        if (para_type == CORNERMINEIGENVAL)
+            cv::cornerMinEigenVal(src, dst, blockSize, ksize, borderType);
+        if (para_type == COREREIGENVALANDVECS)
+            cv::cornerEigenValsAndVecs(src, dst, blockSize, ksize, borderType);
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for boxFilter
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0),
+                               para_type,
+                               (para_type == CORNERMINEIGENVAL) ? "cornerMinEigenVal()" : "cornerEigenValsAndVecs()",
+                               PARAMETER | FUNC_OFF,    // Menu
+                               line_nr, src_file);
+        func.push_back( foo );
+
+        struct _int_para_ bs = {blockSize, 0, 255};
+        foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&bs, "blockSize");
+
+        struct _int_para_ ks = {ksize, 1, 31};
+        foo->new_para ( SLIDE_INT_TWO_STEP_PARA, sizeof(struct _int_para_), (uint8_t*)&ks, "ksize" );
+
+        struct _enum_para_ bt = {borderType, "BorderTypes"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt, "borderType" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // --------------------------------------------
+    // NO break
+    // --------------------------------------------
+    if (foo->state.flag.func_off) {
+        src.copyTo( dst );
+    } else {
+        try {
+            if (para_type == CORNERMINEIGENVAL) {
+                cv::cornerMinEigenVal( src, dst,
+                                       *(int*)foo->para[0]->data,          // blockSize
+                                       *(int*)foo->para[1]->data,          // ksize
+                                       *(int*)foo->para[2]->data);         // borderType
+            }
+            if (para_type == COREREIGENVALANDVECS) {
+                cv::cornerEigenValsAndVecs( src, dst,
+                                            *(int*)foo->para[0]->data,          // blockSize
+                                            *(int*)foo->para[1]->data,          // ksize
+                                            *(int*)foo->para[2]->data);         // borderType
+            }
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+} // cornerEigenVal
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+//! \brief cornerMinEigenVal
+//! @param src Input single-channel 8-bit or floating-point image.
+//! @param dst Image to store the minimal eigenvalues. It has the type CV_32FC1 and the same size as
+//!        src .
+//! @param blockSize Neighborhood size (see the details on cornerEigenValsAndVecs ).
+//! @param ksize Aperture parameter for the Sobel operator.
+//! @param borderType Pixel extrapolation method. See cv::BorderTypes.
+//!
+CV_EXPORTS_W void cornerMinEigenVal( cv::InputArray src, cv::OutputArray dst,
+                                     int blockSize, int ksize,
+                                     int borderType
+                                     BUILDIN_FUNC )
+{
+    cornerEigenVal (src, dst, blockSize, ksize, borderType, CORNERMINEIGENVAL, line_nr, src_file);
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+//! \brief cornerEigenValsAndVecs
+//! @param src Input single-channel 8-bit or floating-point image.
+//! @param dst Image to store the results. It has the same size as src and the type CV_32FC(6) .
+//! @param blockSize Neighborhood size (see details below).
+//! @param ksize Aperture parameter for the Sobel operator.
+//! @param borderType Pixel extrapolation method. See cv::BorderTypes.
+//! \see https://docs.opencv.org/2.4/modules/imgproc/doc/feature_detection.html#cornereigenvalsandvecs
+//!
+CV_EXPORTS_W void cornerEigenValsAndVecs( cv::InputArray src, cv::OutputArray dst,
+                                          int blockSize, int ksize,
+                                          int borderType
+                                          BUILDIN_FUNC )
+{
+    cornerEigenVal (src, dst, blockSize, ksize, borderType, COREREIGENVALANDVECS, line_nr, src_file);
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief cornerHarris
-//! \param src
-//! \param dst
+//! \param src Input single-channel 8-bit or floating-point image.
+//! \param dst Image to store the Harris detector responses. It has the type CV_32FC1 and the same
+//!        size as src .
 //! \param blockSize Neighborhood size (see the details on cornerEigenValsAndVecs ).
 //! \param ksize Aperture parameter for the Sobel operator.
 //! \param k Harris detector free parameter. See the formula below.
@@ -2893,9 +3001,11 @@ CV_EXPORTS_W void resize( cv::InputArray src, cv::OutputArray dst,
 //!
 //! \brief medianBlur
 //!        Blurs an image using the median filter.
-//! \param src
-//! \param dst
-//! \param ksize
+//! \param src input 1-, 3-, or 4-channel image; when ksize is 3 or 5, the image depth should be
+//!            CV_8U, CV_16U, or CV_32F, for larger aperture sizes, it can only be CV_8U.
+//! \param dst destination array of the same size and type as src.
+//! \param ksize aperture linear size; it must be odd and greater than 1, for example: 3, 5, 7 ...
+//! \sa  bilateralFilter, blur, boxFilter, GaussianBlur
 //!
 CV_EXPORTS_W void medianBlur( cv::InputArray src, cv::OutputArray dst, int ksize
                               BUILDIN_FUNC)

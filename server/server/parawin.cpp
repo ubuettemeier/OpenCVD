@@ -242,6 +242,13 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new DoubleEdit (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );    // aeps
         set_param_win( 4, 260 );
         break;
+    case CORNERMINEIGENVAL:
+    case COREREIGENVALANDVECS:
+        new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );                     // blockSize
+        new Slide (client, cf->first_para->next, LEFT_POS, 10+55*1, this );                 // ksize 3, 5, ...
+        new EnumDrop (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );        // borderType
+        set_param_win( 3, 260 );
+        break;
     case CORNERHARRIS:
         new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );                     // blockSize
         new Slide (client, cf->first_para->next, LEFT_POS, 10+55*1, this );                 // ksize 3, 5, ...

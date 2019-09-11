@@ -1,5 +1,11 @@
 //!
 //! \brief Special function for working with Opencv
+//!        the following functions are partially implemented:
+//!        - int get_enumval
+//!        - template<typename T> get_numval
+//!        - template<typename T> set_trackbar
+//!        - void get_filename
+//!
 //! \author Ulrich Büttemeier
 //!
 
@@ -288,4 +294,6 @@ int get_enumval (const char *enumlist_name, int val, const char *val_name)
 
     return val;
 }
+
+
 #endif // #ifdef USE_CVD

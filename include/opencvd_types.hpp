@@ -81,6 +81,8 @@ enum _data_types_ {
     GETGAUSSIANKERNEL = 0x1035,     // *
     GETGABORKERNEL = 0x1036,        // *
     GETDERIVKERNELS = 0x1037,       // *
+    CORNERMINEIGENVAL = 0x1038,
+    COREREIGENVALANDVECS = 0x1039,
 
     CVD_RECT_TYPE_1_INT = 0x1500,       // *
     CVD_RECT_TYPE_1_FLOAT = 0x1501,     // *
