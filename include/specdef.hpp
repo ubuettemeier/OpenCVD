@@ -16,7 +16,7 @@
 // #define USE_CVD
 
 #ifdef USE_CVD
-    //!  \brief enumlist_name are defined in "enum.xml"
+    //! \brief enumlist_name are defined in "enum.xml"
     int get_enumval (const char *enumlist_name, int val, const char *val_name = "",
                      int line_nr  = __builtin_LINE(),
                      const char *src_file = __builtin_FILE());
@@ -26,6 +26,7 @@
                   int line_nr = __builtin_LINE(),
                   const char *src_file = __builtin_FILE());
 
+    //! \example int d = set_trackbar <int> (12, "resolution", 4, 20, 1);
     template<typename T>
     T set_trackbar (T a, const char *val_name = "noname",
                     T min=0, T max=255, T div=1,
@@ -98,6 +99,7 @@ void get_filename (T *fname, const char *val_name) {    // do nothing
 
 #ifdef USE_CVD
 ///////////////////////////////////////// set_trackbar ///////////////////////////////////////////////
+//! \example int d = set_trackbar<int>(12, "resolution", 4, 20, 1);
 template<typename T>
 T set_trackbar (T a, const char *val_name,
                 T min, T max, T div,
