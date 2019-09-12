@@ -26,7 +26,7 @@ int main ()
             tm.reset(); tm.start();
 
             cv::Mat gray = cv::Mat();
-            cv::cvtColor(img, gray, CV_BGR2GRAY);
+            CVD::cvtColor(img, gray, cv::COLOR_BGR2GRAY);
 
             cv::Mat eigen = cv::Mat(img.rows, img.cols, CV_32FC(6));
             CVD::cornerEigenValsAndVecs(gray, eigen, 15, 3);
