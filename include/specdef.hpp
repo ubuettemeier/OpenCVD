@@ -23,6 +23,8 @@
 
     template<typename T>
     T get_numval (T a, const char *val_name = "",
+                  T min=std::numeric_limits<T>::min(),
+                  T max=std::numeric_limits<T>::max(),
                   int line_nr = __builtin_LINE(),
                   const char *src_file = __builtin_FILE());
 
@@ -171,6 +173,7 @@ T set_trackbar (T a, const char *val_name,      // do nothing
 //!
 template<typename T>
 T get_numval (T a, const char *val_name,
+              T min, T max,
               int line_nr,
               const char *src_file)
 {
@@ -208,17 +211,17 @@ T get_numval (T a, const char *val_name,
         }
 
         if (std::is_same<T, int>::value) {                                                                      // int
-            struct _int_para_ ro = {static_cast<int>(a), std::numeric_limits<int>::min(), std::numeric_limits<int>::max()};
+            struct _int_para_ ro = {static_cast<int>(a), static_cast<int>(min), static_cast<int>(max)};
             foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&ro, "val<int>");
         }
         if (std::is_same<T, unsigned int>::value) {                                                             // unsigned int
-            struct _int_para_ uni = {static_cast<int>(a), 0, std::numeric_limits<int>::max()};
+            struct _int_para_ uni = {static_cast<int>(a), static_cast<int>(min), static_cast<int>(max)};
             foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&uni, "val<unsigned int>");
         }
 
         if (std::is_same<T, double>::value |                                                                    // double
             std::is_same<T, float>::value) {                                                                    // float
-            struct _double_para_ sc = {static_cast<double>(a), std::numeric_limits<double>::min(), std::numeric_limits<double>::max(), 4};
+            struct _double_para_ sc = {static_cast<double>(a), static_cast<double>(min), static_cast<double>(max), 4};
             foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&sc, "val<double / float>");
         }
     }

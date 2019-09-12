@@ -916,7 +916,12 @@ IntEdit::IntEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *
 
     struct _int_para_ *val = (struct _int_para_ *)cp->data;
 
-    out_str = new QLabel (QString("%1=%2").arg(QString(cp->para_name)).arg(QString::number(val->value)));
+    // out_str = new QLabel (QString("%1=%2").arg(QString(cp->para_name)).arg(QString::number(val->value)));
+    out_str = new QLabel (QString("%1=%2 min=%3 max=%4")
+                          .arg(QString(cp->para_name))
+                          .arg(QString::number(val->value))
+                          .arg(QString::number(val->min))
+                          .arg(QString::number(val->max)));
     out_str->setGeometry(x, y, 200, 20);
     out_str->setParent( parent );
 
@@ -951,7 +956,12 @@ void IntEdit::int_edit_finish()
     struct _int_para_ *val = (struct _int_para_ *)cp->data;
 
     val->value = iedit->value();
-    out_str->setText(QString("%1=%2").arg(QString(cp->para_name)).arg(QString::number(val->value)));
+    // out_str->setText(QString("%1=%2").arg(QString(cp->para_name)).arg(QString::number(val->value)));
+    out_str->setText(QString("%1=%2 min=%3 max=%4")
+                      .arg(QString(cp->para_name))
+                      .arg(QString::number(val->value))
+                      .arg(QString::number(val->min))
+                      .arg(QString::number(val->max)));
 
     parawin->rewrite_para_data( cp );
 }

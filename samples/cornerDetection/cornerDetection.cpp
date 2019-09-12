@@ -18,7 +18,7 @@ int main ()
     char buf[256];
 
     while (!ende) {
-        int SHOW_FIELD = get_numval<int>(3, "SHOW_FIELD");
+        int SHOW_FIELD = get_numval<int>(3, "SHOW_FIELD", 0, 3);
 
         cv::Mat img = CVD::imread("../../images/box_in_scene.png", cv::IMREAD_COLOR);
 

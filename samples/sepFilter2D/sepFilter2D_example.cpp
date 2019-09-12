@@ -34,13 +34,13 @@ int main()
             CVD::resize(src, src, cv::Size(), 0.5, 0.5);
 
 #ifdef USE_FILTER2D
-            kernel_size = get_numval<int>(3, "kernel_size");
+            kernel_size = get_numval<int>(3, "kernel_size", 1, 31);
             kernel = Mat::ones( kernel_size, kernel_size, CV_32F )/ (float)(kernel_size*kernel_size);
 
             CVD::filter2D(src, dst, -1 , kernel, cv::Point(-1, -1), 0., cv::BORDER_REFLECT_101 );
 #else
-            x_kernel_size = get_numval<int>(3, "x_kernel_size");
-            y_kernel_size = get_numval<int>(3, "y_kernel_size");
+            x_kernel_size = get_numval<int>(3, "x_kernel_size", 1, 31);
+            y_kernel_size = get_numval<int>(3, "y_kernel_size", 1, 31);
 
             kernelX = Mat::ones( 1, x_kernel_size, CV_32F ) / (float)(x_kernel_size * x_kernel_size);   // default 1/9
             kernelY = Mat::ones( y_kernel_size, 1, CV_32F ) / (float)(y_kernel_size * y_kernel_size);   // default 1/9
