@@ -813,6 +813,7 @@ RectDoubleEdit::RectDoubleEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, in
                           .arg(QString::number(val->y))
                           .arg(QString::number(val->w))
                           .arg(QString::number(val->h)));
+
     out_str->setGeometry(x, y, 300, 20);
     out_str->setParent( parent );
 
@@ -916,13 +917,12 @@ IntEdit::IntEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *
 
     struct _int_para_ *val = (struct _int_para_ *)cp->data;
 
-    // out_str = new QLabel (QString("%1=%2").arg(QString(cp->para_name)).arg(QString::number(val->value)));
-    out_str = new QLabel (QString("%1=%2 min=%3 max=%4")
+    out_str = new QLabel (QString("%1=%2  min=%3  max=%4")
                           .arg(QString(cp->para_name))
                           .arg(QString::number(val->value))
                           .arg(QString::number(val->min))
                           .arg(QString::number(val->max)));
-    out_str->setGeometry(x, y, 200, 20);
+    out_str->setGeometry(x, y, 400, 20);
     out_str->setParent( parent );
 
     iedit = new QSpinBox();
@@ -938,15 +938,6 @@ IntEdit::IntEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *
     iedit->setParent( parent );
 
     connect (iedit, SIGNAL(editingFinished()), this, SLOT(int_edit_finish()));
-
-    /*
-    para_button = new QPushButton();
-    para_button->setIcon(glob_mw->iconlist[2]);
-    para_button->setGeometry(x+210, y+25, 20, 20);
-    para_button->setParent( parent );
-    para_button->setToolTip( "Eigenschaft" );
-    connect (para_button, SIGNAL(clicked(bool)), this, SLOT(int_edit_para_button_pushed()));
-    */
 }
 //!
 //! \brief IntEdit::int_edit_finish
@@ -956,8 +947,7 @@ void IntEdit::int_edit_finish()
     struct _int_para_ *val = (struct _int_para_ *)cp->data;
 
     val->value = iedit->value();
-    // out_str->setText(QString("%1=%2").arg(QString(cp->para_name)).arg(QString::number(val->value)));
-    out_str->setText(QString("%1=%2 min=%3 max=%4")
+    out_str->setText(QString("%1=%2  min=%3  max=%4")
                       .arg(QString(cp->para_name))
                       .arg(QString::number(val->value))
                       .arg(QString::number(val->min))
@@ -1034,8 +1024,12 @@ DoubleEdit::DoubleEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWi
 
     struct _double_para_ *val = (struct _double_para_ *)cp->data;
 
-    out_str = new QLabel (QString("%1=%2").arg(QString(cp->para_name)).arg(QString::number(val->value)));
-    out_str->setGeometry(x, y, 200, 20);
+    out_str = new QLabel (QString("%1=%2  min=%3  max=%4")
+                          .arg(QString(cp->para_name))
+                          .arg(QString::number(val->value))
+                          .arg(QString::number(val->min))
+                          .arg(QString::number(val->max)));
+    out_str->setGeometry(x, y, 400, 20);
     out_str->setParent( parent );
 
     // printf ("%f\n", val->value);
@@ -1069,7 +1063,11 @@ void DoubleEdit::double_edit_finish()
     struct _double_para_ *val = (struct _double_para_ *)cp->data;
 
     val->value = dedit->value();
-    out_str->setText(QString("%1=%2").arg(QString(cp->para_name)).arg(QString::number(val->value)));
+    out_str->setText(QString("%1=%2  min=%3  max=%4")
+                     .arg(QString(cp->para_name))
+                     .arg(QString::number(val->value))
+                     .arg(QString::number(val->min))
+                     .arg(QString::number(val->max)));
 
     parawin->rewrite_para_data( cp );
 }
@@ -1079,7 +1077,7 @@ void DoubleEdit::double_edit_finish()
 //!
 void DoubleEdit::double_edit_para_button_pushed ()    // Eigenschaft
 {
-    printf ("Treffer double_edit_para_button_pushed\n");
+    // printf ("Treffer double_edit_para_button_pushed\n");
 }
 
 //!
