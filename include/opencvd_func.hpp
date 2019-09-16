@@ -273,6 +273,9 @@ CV_EXPORTS_W void normalize( cv::InputArray src, cv::InputOutputArray dst, doubl
                              int norm_type = cv::NORM_L2, int dtype = -1, cv::InputArray mask = cv::noArray(),
                              BUILDIN);
 
+CV_EXPORTS void normalize( const cv::SparseMat& src, cv::SparseMat& dst, double alpha, int normType,
+                           BUILDIN);
+
 CV_EXPORTS void calcHist( const cv::Mat* images, int nimages,
                           const int* channels, cv::InputArray mask,
                           cv::OutputArray hist, int dims, const int* histSize,
@@ -2052,6 +2055,52 @@ CV_EXPORTS void calcHist( const cv::Mat* images, int nimages,
     }
     foo->control_func_run_time ();
 } // calcHist
+
+//!
+//! \brief normalize
+//! \param src
+//! \param dst
+//! \param alpha norm value to normalize to or the lower range boundary in case of the range normalization.
+//! \param normType normalization type (see cv::NormTypes).
+//!
+CV_EXPORTS void normalize( const cv::SparseMat& src, cv::SparseMat& dst,
+                           double alpha, int normType
+                           BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::normalize (src, dst, alpha, normType);
+        return;
+    }
+    static std::vector<opencvd_func *> func{};  // reg vector for erode
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), NORMALIZE_2, "normalize",
+                               PARAMETER | FUNC_OFF,    // Menu
+                               BUILIN_PARA);  // Achtung: Funktion hat kein ON/OFF, kein Break und kein show !!!
+        func.push_back( foo );
+
+        struct _double_para_ al = {alpha, -1000.0, 1000.0, 2};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&al, "alpha" );
+
+        struct _enum_para_ ep = {normType, "NormTypes"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&ep, "normType" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+
+    if (foo->state.flag.func_off) {
+        src.copyTo ( dst );                     // dst = src
+    } else {
+        try {
+            cv::normalize (src, dst,
+                           *(double*)foo->para[0]->data,    // alpha
+                           *(int*)foo->para[1]->data);      // normType
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+}
 
 //!
 //! \brief normalize

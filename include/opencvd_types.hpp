@@ -84,6 +84,7 @@ enum _data_types_ {
     GETDERIVKERNELS = 0x1037,       // *
     CORNERMINEIGENVAL = 0x1038,     // *
     COREREIGENVALANDVECS = 0x1039,  // *
+    NORMALIZE_2 = 0x103A,           // *
 
     CVD_RECT_TYPE_1_INT = 0x1500,       // *
     CVD_RECT_TYPE_1_FLOAT = 0x1501,     // *

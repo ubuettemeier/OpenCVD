@@ -13,7 +13,7 @@
 //!
 //! \bug - class Slide, min max werden nicht korrekt berchnet. 09.09.19 erl.
 
-#define VERSION "v0.6-0029"
+#define VERSION "v0.6-0030"
 
 #include <cstring>
 #include <iostream>
@@ -808,6 +808,13 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case NORMALIZE_2: {
+            QString bo = grep_enum_text("NormTypes", *(int*)cf->first_para->next->data);        // normType
+            s = QString ("// CVD::normalize(src, dst, %1, %2);")
+                        .arg(QString::number(*(double*)cf->first_para->data))                   // alpha
+                        .arg(bo);                                                               // normType
+            }
+            break;
         case GETDERIVKERNELS: {
             QString bo = grep_enum_text("boolType", *(int*)cf->first_para->next->next->next->data);      // normalize
             QString kt = grep_enum_text("filterdepth_CV_32F_CV_64F", *(int*)cf->first_para->next->next->next->next->data);  // ktype
@@ -1039,12 +1046,20 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
                         .arg(QChar('"'));
             break;
             }
-        case GET_FILENAME:
-        case IMREAD: {
+        case GET_FILENAME: {
             s = QString ("// CVD::imread(%1%2%3);")
                          .arg(QChar('"'))
                          .arg(QString((char *)cf->first_para->data))
                          .arg(QChar('"'));
+            }
+            break;
+        case IMREAD: {
+            QString kt = grep_enum_text("ImreadModes", *(int*)cf->first_para->next->data);  // flags
+            s = QString ("// CVD::imread(%1%2%3, %4);")
+                         .arg(QChar('"'))
+                         .arg(QString((char *)cf->first_para->data))
+                         .arg(QChar('"'))
+                         .arg(kt);
             break;
             }
         case SET_TRACKBAR: {
@@ -1694,6 +1709,8 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "GETDERIVKERNELS") == 0) return GETDERIVKERNELS;
     if (strcmp(enum_name, "CORNERMINEIGENVAL") == 0) return CORNERMINEIGENVAL;
     if (strcmp(enum_name, "COREREIGENVALANDVECS") == 0) return COREREIGENVALANDVECS;
+    if (strcmp(enum_name, "NORMALIZE_2") == 0) return NORMALIZE_2;
+
 
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_INT") == 0) return CVD_RECT_TYPE_1_INT;
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_FLOAT") == 0) return CVD_RECT_TYPE_1_FLOAT;
@@ -1823,7 +1840,7 @@ char *MainWindow::get_enum_text (int val)
     if (val == GETGABORKERNEL) strcpy (buf, "GETGABORKERNEL");
     if (val == GETDERIVKERNELS) strcpy (buf, "GETDERIVKERNELS");
     if (val == CORNERMINEIGENVAL) strcpy (buf, "CORNERMINEIGENVAL");
-    if (val == COREREIGENVALANDVECS) strcpy (buf, "COREREIGENVALANDVECS");
+    if (val == NORMALIZE_2) strcpy (buf, "NORMALIZE_2");
 
     if (val == CVD_RECT_TYPE_1_INT) strcpy (buf, "CVD_RECT_TYPE_1_INT");
     if (val == CVD_RECT_TYPE_1_FLOAT) strcpy (buf, "CVD_RECT_TYPE_1_FLOAT");
