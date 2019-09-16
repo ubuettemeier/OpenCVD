@@ -158,7 +158,7 @@ void MainWindow::get_sys_path()
 //!
 MainWindow::~MainWindow()
 {
-    qDebug() << "~MainWindow\n";
+    // qDebug() << "~MainWindow\n";
     delete ui;
 }
 

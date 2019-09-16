@@ -16,7 +16,9 @@ SAMPLE_PATH = 	basic/ \
                 grabCut/ \
 		matchShapes/ \
 		sepFilter2D/ \
-		cornerDetection/
+		cornerDetection/ \
+		cornerEigenValsAndVecs/
+
 
 all:	
 	for dir in $(SAMPLE_PATH); do \

@@ -1747,7 +1747,7 @@ CV_EXPORTS_W void cornerHarris( cv::InputArray src, cv::OutputArray dst, int blo
         struct _int_para_ bs = {blockSize, 0, 255};
         foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&bs, "blockSize");
 
-        struct _int_para_ ks = {blockSize, 1, 31};
+        struct _int_para_ ks = {ksize, 1, 31};
         foo->new_para ( SLIDE_INT_TWO_STEP_PARA, sizeof(struct _int_para_), (uint8_t*)&ks, "ksize" );
 
         struct _double_para_ kp = {k, -1000.0, 1000.0, 2};
