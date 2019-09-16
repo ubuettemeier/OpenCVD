@@ -19,13 +19,13 @@ int main(int argc, char* argv[])
             imread_ok = true;
 
             template_img = CVD::imread("../../images/lena_eye.png", IMREAD_GRAYSCALE);
-            if (template_img.data == NULL) {
+            if (template_img.data == nullptr) {
                     printf("cv::imread() failed...\n");
                     imread_ok = false;
             }
 
             src_img = CVD::imread("../../images/lena.png", IMREAD_GRAYSCALE);
-            if (src_img.data == NULL) {
+            if (src_img.data == nullptr) {
                     printf("cv::imread() failed...\n");
                     imread_ok = false;
             }

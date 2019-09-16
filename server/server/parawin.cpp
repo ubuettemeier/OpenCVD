@@ -582,7 +582,7 @@ int ParaWin::rewrite_para_data (struct _cvd_para_ *foo)
     pd.type = foo->type;
     pd.func_addr = foo->func_addr;
     pd.para_id = foo->para_id;
-    strcpy (pd.para_name, foo->para_name);
+    strncpy (pd.para_name, foo->para_name, MAX_PARA_NAME_LEN);
     memcpy (pd.data, foo->data, MAX_PARA_DATA);
     // printf ("Sende bef=%4X\n", pd.type);
     mw->ack_detected = 0;
@@ -677,7 +677,7 @@ void StringEdit::ledit_finish()
         // printf ("edit finished\n");
         Q_ASSERT (ledit->text().toStdString().length() < MAX_STRING_VAL_LEN-1);
         struct _string_para_ *sp = (struct _string_para_ *)cp->data;
-        strcpy (sp->val, ledit->text().toStdString().c_str());
+        strncpy (sp->val, ledit->text().toStdString().c_str(), MAX_STRING_VAL_LEN);
 
         parawin->rewrite_para_data( cp );
         refresh_out_str (ledit->text());
@@ -756,7 +756,7 @@ void FileNameEdit::ledit_finish()
         // printf ("edit finished\n");
         Q_ASSERT (ledit->text().toStdString().length() < MAX_STRING_VAL_LEN-1);
         struct _string_para_ *sp = (struct _string_para_ *)cp->data;
-        strcpy (sp->val, ledit->text().toStdString().c_str());
+        strncpy (sp->val, ledit->text().toStdString().c_str(), MAX_STRING_VAL_LEN);
 
         parawin->rewrite_para_data( cp );
         refresh_out_str (ledit->text());

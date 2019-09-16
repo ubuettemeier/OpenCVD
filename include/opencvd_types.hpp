@@ -10,10 +10,11 @@
 #define BUFFERSIZE      8192
 
 
-#define MAX_FUNC_NAME_LEN 64
-#define MAX_PARA_NAME_LEN 64
-#define MAX_PARA_DATA 256
-#define MAX_FILENAME_LEN 256        // used for c-source filename
+#define MAX_FUNC_NAME_LEN 64        //! \see struct _cvd_func_
+#define MAX_FILENAME_LEN 256        //! \see struct _cvd_func_
+
+#define MAX_PARA_NAME_LEN 64        //! \see struct _cvd_para_
+#define MAX_PARA_DATA 256           //! \see struct _cvd_para_
 
 #define MAX_STRING_VAL_LEN 256      // used for cvd::imread, cvd::String, cvd::get_filename
 
@@ -330,7 +331,7 @@ struct _cvd_para_ {
     uint32_t para_id;
     uint16_t flags;
     uint16_t extra_para;
-    char para_name[64];
+    char para_name[MAX_PARA_NAME_LEN];
     void *tree_pointer;             // wird auf Server-Seite benötigt !
     struct _cvd_para_ *next, *prev;
     uint8_t data[MAX_PARA_DATA];    // erster Eintrag ist value
@@ -352,7 +353,7 @@ struct _cvd_func_ {
     uint8_t aktiv_icon;
     uint8_t func_is_modifyt;
 
-    char func_name[64];                         // Funktionsname
+    char func_name[MAX_FUNC_NAME_LEN];          // Funktionsname
     char filename[MAX_FILENAME_LEN];
     char window_name[72];
 

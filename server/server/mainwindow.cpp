@@ -13,7 +13,7 @@
 //!
 //! \bug - class Slide, min max werden nicht korrekt berchnet. 09.09.19 erl.
 
-#define VERSION "v0.6-0028"
+#define VERSION "v0.6-0029"
 
 #include <cstring>
 #include <iostream>
@@ -348,8 +348,8 @@ struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
     foo->type = cf->type;
     foo->func_addr = cf->func_addr;
     foo->line_nr = cf->line_nr;
-    strcpy (foo->func_name, cf->func_name);
-    strcpy (foo->filename, cf->file_name);
+    strncpy (foo->func_name, cf->func_name, MAX_FUNC_NAME_LEN);
+    strncpy (foo->filename, cf->file_name, MAX_FILENAME_LEN);
     foo->state.val = cf->state.val;
     foo->aktiv_icon = 0;
     foo->func_is_modifyt = 0;
@@ -488,7 +488,7 @@ struct _cvd_para_ *MainWindow::new_para (struct _cvd_func_ *cf, struct _para_dat
     foo->para_id = cp->para_id;
     foo->extra_para = cp->extra_para;
     foo->flags = 0; // cp->flags;
-    strcpy (foo->para_name, cp->para_name);
+    strncpy (foo->para_name, cp->para_name, MAX_PARA_NAME_LEN);
     memcpy (foo->data, cp->data, MAX_PARA_DATA);
     memcpy (foo->reset_data, cp->data, MAX_PARA_DATA);
 
