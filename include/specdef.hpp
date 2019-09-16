@@ -24,7 +24,7 @@
     template<typename T>
     T get_numval (T a, const char *val_name = "",
                   T min=std::numeric_limits<T>::min(),
-                  T max=std::numeric_limits<T>::max(),
+                  T max=std::numeric_limits<T>::max(),  // <unsigned int>::max() = <int>::max()
                   int line_nr = __builtin_LINE(),
                   const char *src_file = __builtin_FILE());
 
@@ -43,7 +43,7 @@
     int get_enumval (const char *enumlist_name, int val, const char *val_name = "");
 
     template<typename T>
-    T get_numval (T a, const char *val_name = "");
+    T get_numval (T a, const char *val_name = "", T min=0, T max=0);
 
     template<typename T>
     T set_trackbar (T a, const char *val_name = "",
@@ -214,7 +214,10 @@ T get_numval (T a, const char *val_name,
             struct _int_para_ ro = {static_cast<int>(a), static_cast<int>(min), static_cast<int>(max)};
             foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&ro, "val<int>");
         }
-        if (std::is_same<T, unsigned int>::value) {                                                             // unsigned int
+        if (std::is_same<T, unsigned int>::value) {                                                             // unsigned int. Kann mit SpinBox nicht korrekt abgebildet werden !
+            if (max > std::numeric_limits<int>::max())
+                        max = std::numeric_limits<int>::max();              // <unsigned int>::max() = <int>::max()
+
             struct _int_para_ uni = {static_cast<int>(a), static_cast<int>(min), static_cast<int>(max)};
             foo->new_para (INT_PARA, sizeof(struct _int_para_), (uint8_t*)&uni, "val<unsigned int>");
         }
@@ -241,8 +244,11 @@ T get_numval (T a, const char *val_name,
 
 #else
 template<typename T>
-T get_numval (T a, const char *val_name) {      // do nothing
+T get_numval (T a, const char *val_name,
+              T min, T max) {      // do nothing
     std::ignore = val_name;
+    std::ignore = min;
+    std::ignore = max;
     return a;
 }
 #endif

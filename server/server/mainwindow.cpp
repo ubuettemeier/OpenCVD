@@ -13,7 +13,7 @@
 //!
 //! \bug - class Slide, min max werden nicht korrekt berchnet. 09.09.19 erl.
 
-#define VERSION "v0.6-0026"
+#define VERSION "v0.6-0027"
 
 #include <cstring>
 #include <iostream>

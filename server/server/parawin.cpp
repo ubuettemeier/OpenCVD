@@ -922,14 +922,14 @@ IntEdit::IntEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWidget *
                           .arg(QString::number(val->value))
                           .arg(QString::number(val->min))
                           .arg(QString::number(val->max)));
-    out_str->setGeometry(x, y, 400, 20);
+    out_str->setGeometry(x, y, 600, 20);
     out_str->setParent( parent );
 
-    iedit = new QSpinBox();
+    iedit = new QSpinBox();     // Mit SpinBox kann kein korrektes unsigned int abgebildet werden. Als max ist maximal nur <int>::max() möglich.
     iedit->setRange( val->min, val->max );
     iedit->setValue( val->value );
     iedit->setMinimum( val->min );
-    iedit->setMaximum( val->max );
+    iedit->setMaximum( val->max );  // <unsigned int>::max() = <int>::max()
 
     iedit->setReadOnly( cp->flags & READ_ONLY );
     iedit->setVisible( !(cp->flags & READ_ONLY) );  // s.auch: setHidden
@@ -1029,7 +1029,7 @@ DoubleEdit::DoubleEdit (QTcpSocket *c, struct _cvd_para_ *foo, int x, int y, QWi
                           .arg(QString::number(val->value))
                           .arg(QString::number(val->min))
                           .arg(QString::number(val->max)));
-    out_str->setGeometry(x, y, 400, 20);
+    out_str->setGeometry(x, y, 600, 20);
     out_str->setParent( parent );
 
     // printf ("%f\n", val->value);
