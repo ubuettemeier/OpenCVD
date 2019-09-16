@@ -83,7 +83,7 @@ public:
     QPoint para_win_pos = {320, 150};
     QRect source_win_pos = {350, 10, 700, 300};         // Source Window Position and Size. See: Konstruktor class Sourcewin
 
-    struct _cvd_func_ *first_func = NULL, *last_func = NULL;
+    struct _cvd_func_ *first_func = nullptr, *last_func = nullptr;
 
 private slots:
     void closeEvent(QCloseEvent *event);
@@ -115,7 +115,7 @@ private:
 
     Ui::MainWindow *ui;
     QTcpServer *tcpServer;
-    QTcpSocket *client = NULL;
+    QTcpSocket *client = nullptr;
 
     void write_state (struct _cvd_func_ *cf);
     void write_header_bef (int befehl);

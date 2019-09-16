@@ -13,7 +13,7 @@
 //!
 //! \bug - class Slide, min max werden nicht korrekt berchnet. 09.09.19 erl.
 
-#define VERSION "v0.6-0027"
+#define VERSION "v0.6-0028"
 
 #include <cstring>
 #include <iostream>
@@ -38,7 +38,7 @@ QDir current_dir;
 QDir data_dir;
 QDir icon_dir;
 
-MainWindow *glob_mw = NULL;
+MainWindow *glob_mw = nullptr;
 
 //!
 //! \brief MainWindow::MainWindow
@@ -101,9 +101,9 @@ void MainWindow::trigger_timer ( void )
 {
     struct _cvd_func_ *foo = first_func;
 
-    while (foo != NULL) {
+    while (foo != nullptr) {
         QTreeWidgetItem *t = (QTreeWidgetItem *)foo->tree_pointer;      // Tree Eintrag für Funktionsnamen besorgen.
-        if (t != NULL) {            
+        if (t != nullptr) {
             if (foo->func_is_modifyt != 0)                              // Sind etweigige parameter verändert ?
                 t->setTextColor(0, QColor("red"));
             else
@@ -191,7 +191,7 @@ int MainWindow::get_level (QTreeWidgetItem *item)
 {
     int n = 0;
 
-    while ((item = item->parent()) != NULL)
+    while ((item = item->parent()) != nullptr)
         n++;
 
     return n;
@@ -306,18 +306,18 @@ void MainWindow::client_read_ready()
 void MainWindow::client_discontect()
 {
     printf ("client disconnect\n");
-    if (sourcewin != NULL)
+    if (sourcewin != nullptr)
         delete sourcewin;
 
-    sourcewin = NULL;
+    sourcewin = nullptr;
 
-    if (parawin != NULL)
+    if (parawin != nullptr)
         delete parawin;
 
-    parawin = NULL;
+    parawin = nullptr;
 
     clear_system();
-    client = NULL;
+    client = nullptr;
 }
 
 //!
@@ -354,7 +354,7 @@ struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
     foo->aktiv_icon = 0;
     foo->func_is_modifyt = 0;
 
-    foo->first_para = foo->end_para = NULL;
+    foo->first_para = foo->end_para = nullptr;
     // Level 0  func name
     QTreeWidgetItem *tw = new QTreeWidgetItem(ui->treeWidget);
     tw->setText(0, QString("%1 %2").arg(QString::number(foo->line_nr)).arg(QString(foo->func_name)));
@@ -363,7 +363,7 @@ struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
 
     // Level 1 Parameter
     if (cf->state.flag.use_parameter == 0) {        // 0x01
-        foo->para_pointer =NULL;
+        foo->para_pointer =nullptr;
     } else {
         QTreeWidgetItem *pa = new QTreeWidgetItem();
         pa->setText(0, QString("Parameter"));       // Parameter
@@ -373,7 +373,7 @@ struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
 
     // Level 1 Function ON/OFF
     if (cf->state.flag.func_off == 0) {             // 0x02
-        foo->func_off = NULL;
+        foo->func_off = nullptr;
     } else {
         QTreeWidgetItem *fo = new QTreeWidgetItem();
         fo->setText(0, QString("Function OFF"));    // func_off
@@ -383,7 +383,7 @@ struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
 
     // Level 1 Show Image
     if (cf->state.flag.show_image == 0) {           // 0x04
-        foo->show_image = NULL;
+        foo->show_image = nullptr;
     } else {
         QTreeWidgetItem *si = new QTreeWidgetItem();
         si->setText(0, QString("Show Image"));      // show Image
@@ -392,7 +392,7 @@ struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
     }
 
     if (cf->state.flag.func_break == 0) {           // 0x08
-        foo->break_func = NULL;
+        foo->break_func = nullptr;
     } else {
         QTreeWidgetItem *fb = new QTreeWidgetItem();
         fb->setText(0, QString("Break"));           // Break
@@ -401,11 +401,11 @@ struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
     }
 
     if (strlen(foo->filename) == 0)
-        foo->source_pointer = NULL;
+        foo->source_pointer = nullptr;
     else {        
         QFile qf(foo->filename);            // Prüfen, ob File existiert !
         if (!qf.exists()) {                 // file not found
-            foo->source_pointer = NULL;
+            foo->source_pointer = nullptr;
         } else {
             QTreeWidgetItem *fb = new QTreeWidgetItem();
             fb->setText(0, QString("Source"));              // Source
@@ -416,8 +416,8 @@ struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
 
     foo->state.val = 0x0000;
 
-    foo->next = foo->prev = NULL;
-    if (first_func == NULL) first_func = last_func = foo;
+    foo->next = foo->prev = nullptr;
+    if (first_func == nullptr) first_func = last_func = foo;
     else {
         last_func->next = foo;
         foo->prev = last_func;
@@ -436,8 +436,8 @@ struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
 void MainWindow::kill_func (struct _cvd_func_ *foo)
 {
     if (foo) {
-        if (foo->next != NULL) foo->next->prev = foo->prev;
-        if (foo->prev != NULL) foo->prev->next = foo->next;
+        if (foo->next != nullptr) foo->next->prev = foo->prev;
+        if (foo->prev != nullptr) foo->prev->next = foo->next;
         if (foo == last_func) last_func = foo->prev;
         if (foo == first_func) first_func = foo->next;
 
@@ -450,7 +450,7 @@ void MainWindow::kill_func (struct _cvd_func_ *foo)
 //!
 void MainWindow::kill_all_func ()
 {
-    while (first_func != NULL)
+    while (first_func != nullptr)
         kill_func (first_func);
 }
 
@@ -463,7 +463,7 @@ struct _cvd_func_ *MainWindow::grep_func_addr (uint64_t addr)
 {
     struct _cvd_func_ *foo = first_func;
 
-    while ((foo != NULL) && (foo->func_addr != addr))
+    while ((foo != nullptr) && (foo->func_addr != addr))
         foo = foo->next;
 
     return foo;
@@ -478,8 +478,8 @@ struct _cvd_func_ *MainWindow::grep_func_addr (uint64_t addr)
 #define CREATE_EINZEL_PARAMETER_
 struct _cvd_para_ *MainWindow::new_para (struct _cvd_func_ *cf, struct _para_data_transfer_ *cp)
 {
-    if (cf == NULL)
-       return NULL;
+    if (cf == nullptr)
+       return nullptr;
 
     struct _cvd_para_ *foo = (struct _cvd_para_ *) malloc (sizeof(struct _cvd_para_));
     foo->len = cp->len;
@@ -499,11 +499,11 @@ struct _cvd_para_ *MainWindow::new_para (struct _cvd_func_ *cf, struct _para_dat
     pw->addChild( tw );                                         // Als Paramter-Child anlegen !
     foo->tree_pointer = (void*)tw;
 #else
-    foo->tree_pointer = NULL;
+    foo->tree_pointer = nullptr;
 #endif
 
-    foo->next = foo->prev = NULL;
-    if (cf->first_para == NULL) cf->first_para = cf->end_para = foo;
+    foo->next = foo->prev = nullptr;
+    if (cf->first_para == nullptr) cf->first_para = cf->end_para = foo;
     else {
         cf->end_para->next = foo;
         foo->prev = cf->end_para;
@@ -522,7 +522,7 @@ struct _cvd_func_ *MainWindow::grep_func_by_para_pointer (QTreeWidgetItem *item)
 {
     struct _cvd_func_ *foo = first_func;
 
-    while ((foo != NULL) && (foo->para_pointer != item))
+    while ((foo != nullptr) && (foo->para_pointer != item))
         foo = foo->next;
 
     return foo;
@@ -537,7 +537,7 @@ struct _cvd_func_ *MainWindow::grep_func_by_func_off_pointer (QTreeWidgetItem *i
 {
     struct _cvd_func_ *foo = first_func;
 
-    while ((foo != NULL) && (foo->func_off != item))
+    while ((foo != nullptr) && (foo->func_off != item))
         foo = foo->next;
 
     return foo;
@@ -552,7 +552,7 @@ struct _cvd_func_ *MainWindow::grep_func_by_show_image_pointer (QTreeWidgetItem 
 {
     struct _cvd_func_ *foo = first_func;
 
-    while ((foo != NULL) && (foo->show_image != item))
+    while ((foo != nullptr) && (foo->show_image != item))
         foo = foo->next;
 
     return foo;
@@ -567,7 +567,7 @@ struct _cvd_func_ *MainWindow::grep_func_by_break_func_pointer (QTreeWidgetItem 
 {
     struct _cvd_func_ *foo = first_func;
 
-    while ((foo != NULL) && (foo->break_func != item))
+    while ((foo != nullptr) && (foo->break_func != item))
         foo = foo->next;
 
     return foo;
@@ -582,7 +582,7 @@ struct _cvd_func_ *MainWindow::grep_func_by_source_pointer (QTreeWidgetItem *ite
 {
     struct _cvd_func_ *foo = first_func;
 
-    while ((foo != NULL) && (foo->source_pointer != item))
+    while ((foo != nullptr) && (foo->source_pointer != item))
         foo = foo->next;
 
     return foo;
@@ -595,13 +595,13 @@ struct _cvd_func_ *MainWindow::grep_func_by_source_pointer (QTreeWidgetItem *ite
 //!
 struct _cvd_para_ *MainWindow::grep_para_by_tree_pointer (QTreeWidgetItem *item)
 {
-    struct _cvd_para_ *ret = NULL;
+    struct _cvd_para_ *ret = nullptr;
     struct _cvd_func_ *cf = first_func;
     struct _cvd_para_ *cp;
 
-    while ((cf != NULL) && (ret == NULL)) {
+    while ((cf != nullptr) && (ret == nullptr)) {
         cp = cf->first_para;
-        while ((cp != NULL) && (ret == NULL)) {
+        while ((cp != nullptr) && (ret == nullptr)) {
             if (cp->tree_pointer == (void*)item)
                 ret = cp;
             else
@@ -635,10 +635,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
     for (int i=0; i<5000; i++)
         usleep (100);
 
-    if (parawin != NULL)
+    if (parawin != nullptr)
         delete parawin;     // close Parameter Window
 
-    parawin = NULL;
+    parawin = nullptr;
 }
 
 //!
@@ -678,25 +678,25 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int colu
 void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 {
     Q_UNUSED (column);
-    struct _cvd_func_ *cf = NULL;
+    struct _cvd_func_ *cf = nullptr;
 
     int n = get_level( item );    
 
     if (n == 1) {
         cf = grep_func_by_para_pointer ( item );            // Parameter
         if (cf) {
-            if (parawin != NULL) {          // es ist ein Parameter-Fenster offen !
+            if (parawin != nullptr) {          // es ist ein Parameter-Fenster offen !
                 if (parawin->cf != cf) {
                     QTreeWidgetItem *i = (QTreeWidgetItem *)parawin->cf->para_pointer;
-                    if (i != NULL)                        
+                    if (i != nullptr)
                         i->setIcon(0, QIcon());
                     delete parawin;
-                    parawin = NULL;
+                    parawin = nullptr;
                 }
             }
 
-            if (parawin == NULL) {
-                if (item != NULL)
+            if (parawin == nullptr) {
+                if (item != nullptr)
                     item->setIcon(0, iconlist[OK_ICON]);
                 parawin = new ParaWin(client, cf, this);      // neues Parameter-Fenster oeffnen.
             }
@@ -752,14 +752,14 @@ void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
         cf = grep_func_by_source_pointer( item );           // Source Window
         if ( cf ) {
             // Achtung: Die beiden Abfragen 1) und 2) dürfen nicht zusammengefasst/optimiert werden !
-            if ((sourcewin != NULL) && (sourcewin->cf != cf)) { // Abfrage 1)
+            if ((sourcewin != nullptr) && (sourcewin->cf != cf)) { // Abfrage 1)
                 on_actionSource_Window_schlie_en_triggered();
             }
-            if ((sourcewin != NULL) && (sourcewin->cf == cf)) { // Abfrage 2)
+            if ((sourcewin != nullptr) && (sourcewin->cf == cf)) { // Abfrage 2)
                 on_actionSource_Window_schlie_en_triggered();
                 return;
             }
-            if (sourcewin == NULL) {
+            if (sourcewin == nullptr) {
                 item->setIcon(0, iconlist[OK_ICON]);
                 sourcewin = new Sourcewin (cf, this);
             }
@@ -1443,10 +1443,10 @@ void MainWindow::set_all_source_icon (bool wert)
 {
     struct _cvd_func_ *foo = first_func;
 
-    while (foo != NULL) {
-        if (foo->source_pointer != NULL) {
+    while (foo != nullptr) {
+        if (foo->source_pointer != nullptr) {
             QTreeWidgetItem *i = (QTreeWidgetItem *)foo->source_pointer;
-            if (i != NULL) {
+            if (i != nullptr) {
                 if (wert == false)
                     i->setIcon(0, QIcon());
             }
@@ -1473,10 +1473,10 @@ void MainWindow::on_actionSpeichern_triggered()
     struct _cvd_func_ *foo = first_func;
     struct _cvd_para_ *p;
 
-    while (foo != NULL) {
+    while (foo != nullptr) {
         printf ("%s ( ", foo->func_name);
         p = foo->first_para;
-        while (p != NULL) {
+        while (p != nullptr) {
             if (p != foo->first_para)
                 printf (", ");
             printf ("%s", p->para_name);
@@ -1496,10 +1496,10 @@ void MainWindow::on_actionAlle_Fenster_schli_en_triggered()
 {
     struct _cvd_func_ *foo = first_func;
 
-    while (foo != NULL) {
+    while (foo != nullptr) {
         if (foo->state.flag.show_image != 0) {
             foo->state.flag.show_image = 0;
-            if (foo->show_image != NULL) {
+            if (foo->show_image != nullptr) {
                 QTreeWidgetItem *item = (QTreeWidgetItem *)foo->show_image;
                 item->setIcon(0, QIcon());
                 item->setTextColor(0, QColor("black"));
@@ -1544,8 +1544,8 @@ void MainWindow::on_actionset_all_Function_OFF_triggered()
     struct _cvd_func_ *foo = first_func;
 
     if (ui->actionset_all_Function_OFF->isChecked()) {
-        while (foo != NULL) {
-            if (foo->func_off != NULL) {
+        while (foo != nullptr) {
+            if (foo->func_off != nullptr) {
                 if (foo->state.flag.func_off == 0) {
                     foo->state.flag.func_off = 1;
                     QTreeWidgetItem *item = (QTreeWidgetItem *)foo->func_off;
@@ -1557,8 +1557,8 @@ void MainWindow::on_actionset_all_Function_OFF_triggered()
             foo = foo->next;
         }
     } else {
-        while (foo != NULL) {
-            if (foo->func_off != NULL) {
+        while (foo != nullptr) {
+            if (foo->func_off != nullptr) {
                 if (foo->state.flag.func_off != 0) {
                     foo->state.flag.func_off = 0;
                     QTreeWidgetItem *item = (QTreeWidgetItem *)foo->func_off;
@@ -1580,19 +1580,19 @@ void MainWindow::on_actionall_Breakpoint_s_OFF_triggered()
 {
     struct _cvd_func_ *foo = first_func;
 
-    while (foo != NULL) {
+    while (foo != nullptr) {
         if (foo->state.flag.func_break) {
             foo->state.flag.func_break = 0;
             if (foo->state.flag.show_image) {
                 foo->state.flag.show_image = 0;
-                if (foo->show_image != NULL) {
+                if (foo->show_image != nullptr) {
                     QTreeWidgetItem *item = (QTreeWidgetItem *)foo->show_image;
                     item->setIcon(0, QIcon());                                      // Icon entfernen
                     item->setTextColor(0, QColor("black"));
                 }
                 write_state( foo );     // client benachrichtigen !
             }
-            if (foo->break_func != NULL) {
+            if (foo->break_func != nullptr) {
                 QTreeWidgetItem *item = (QTreeWidgetItem *)foo->break_func;     // QTree Item besorgen
                 item->setIcon(0, QIcon());                                      // Icon entfernen
                 item->setTextColor (0, QColor("black"));                        // Icon Text schwarz

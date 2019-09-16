@@ -63,7 +63,7 @@ public:
     void modify_source ( uint32_t z_nr );
 
 public:
-    struct _cvd_func_ *cf = NULL;
+    struct _cvd_func_ *cf = nullptr;
     QPlainTextEdit *te;
     Highlighter *highlighter;
 
@@ -77,13 +77,13 @@ private slots:
     void source_mod( void );
 
 private:
-    MainWindow *mw = NULL;    
-    QVBoxLayout *VBox = NULL;
-    QHBoxLayout *HBox = NULL;
-    QGroupBox *HGroup = NULL;
-    QWidget *wid = NULL;
-    QPushButton *mod_source = NULL;
-    QPushButton *close_win = NULL;
+    MainWindow *mw = nullptr;
+    QVBoxLayout *VBox = nullptr;
+    QHBoxLayout *HBox = nullptr;
+    QGroupBox *HGroup = nullptr;
+    QWidget *wid = nullptr;
+    QPushButton *mod_source = nullptr;
+    QPushButton *close_win = nullptr;
 };
 
 extern Sourcewin *sourcewin;

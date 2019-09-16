@@ -12,7 +12,7 @@
 #include "sourcewin.h"
 
 
-Sourcewin *sourcewin = NULL;    // global pointer
+Sourcewin *sourcewin = nullptr;    // global pointer
 
 //!
 //! \brief Sourcewin::Sourcewin
@@ -86,7 +86,7 @@ void Sourcewin::read_source ()
 {
     te->clear();
 
-    if (cf != NULL) {
+    if (cf != nullptr) {
         this->setWindowTitle(cf->func_name);
         QFile qf( cf->filename );
         if (qf.exists()) {
@@ -125,7 +125,7 @@ void Sourcewin::modify_source (uint32_t z_nr)
 {
     std::vector <QString> vs = {};
 
-    if (cf != NULL) {
+    if (cf != nullptr) {
         this->setWindowTitle(cf->func_name);
         QFile qf( cf->filename );
         if (qf.exists()) {
@@ -171,7 +171,7 @@ Sourcewin::~Sourcewin ()
     glob_mw->source_win_pos = this->geometry();     // get rectangle
 
     mw->set_all_source_icon ( false );
-    sourcewin = NULL;
+    sourcewin = nullptr;
 }
 
 //!
@@ -183,7 +183,7 @@ void Sourcewin::source_mod ()
 
     modify_source (cf->line_nr);
 
-    while (foo != NULL) {
+    while (foo != nullptr) {
         if (foo->line_nr > cf->line_nr)
             foo->line_nr++;
         foo = foo->next;

@@ -33,7 +33,7 @@ class ParaWin : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ParaWin(MainWindow *main_win = NULL, QWidget *parent = nullptr);
+    explicit ParaWin(MainWindow *main_win = nullptr, QWidget *parent = nullptr);
     explicit ParaWin(QTcpSocket *c, struct _cvd_func_ *cf, MainWindow *main_win, QWidget *parent = nullptr);
     ~ParaWin();
     void set_param_win(int y_pos, int width);
@@ -52,7 +52,7 @@ public slots:
     void keyPressEvent(QKeyEvent *event);
 
 private:
-    MainWindow *mw = NULL;
+    MainWindow *mw = nullptr;
 };
 
 extern ParaWin *parawin;
@@ -308,7 +308,7 @@ private:
 class mButton : public QWidget {
     Q_OBJECT
 public:
-    mButton(QTcpSocket *c, struct _cvd_func_ *foo, int x, int y, int b_type, QWidget *parent = 0, MainWindow *main_win = NULL);
+    mButton(QTcpSocket *c, struct _cvd_func_ *foo, int x, int y, int b_type, QWidget *parent = 0, MainWindow *main_win = nullptr);
     // void close_win();
 
     struct _cvd_func_ *cf;
@@ -319,7 +319,7 @@ public:
 private slots:
     void mpb_pushed();      // close OR reset pushed
 private:
-    MainWindow *mw = NULL;
+    MainWindow *mw = nullptr;
 };
 
 #endif // PARAWIN_H

@@ -12,7 +12,7 @@
 #include "mainwindow.h"
 #include "parawin.h"
 
-ParaWin *parawin = NULL;
+ParaWin *parawin = nullptr;
 
 //!
 //! \brief ParaWin::ParaWin
@@ -548,7 +548,7 @@ ParaWin::~ParaWin()
 {
     QRect r = this->geometry();
     glob_mw->para_win_pos = {r.x(), r.y()};
-    parawin = NULL;
+    parawin = nullptr;
 }
 
 //!
@@ -557,14 +557,14 @@ ParaWin::~ParaWin()
 //!
 void ParaWin::close_parawin()
 {
-    if (parawin != NULL) {
-        if (mw != NULL) {
+    if (parawin != nullptr) {
+        if (mw != nullptr) {
             QTreeWidgetItem *tw = (QTreeWidgetItem *)cf->para_pointer;
             tw->setIcon(0, QIcon());
         }
         delete parawin;     // close Parameter Window
     }
-    parawin = NULL;
+    parawin = nullptr;
 }
 
 //!
@@ -588,10 +588,10 @@ int ParaWin::rewrite_para_data (struct _cvd_para_ *foo)
     mw->ack_detected = 0;
     anz = mw->write_data((const char *)&pd, sizeof(struct _para_data_transfer_));
 
-    if (parawin != NULL) {
+    if (parawin != nullptr) {
         parawin->cf->func_is_modifyt = 0;
         struct _cvd_para_ *p = parawin->cf->first_para;
-        while (p != NULL) {                                 // Alle Parameter untersuchen.
+        while (p != nullptr) {                                 // Alle Parameter untersuchen.
             if (memcmp(p->data, p->reset_data, MAX_PARA_DATA) != 0)
                 parawin->cf->func_is_modifyt = 1;
             p = p->next;
@@ -609,9 +609,9 @@ void ParaWin::closeEvent(QCloseEvent *event)
 {
     Q_UNUSED (event);
 
-    if (cf != NULL) {
+    if (cf != nullptr) {
         QTreeWidgetItem *i = (QTreeWidgetItem *)cf->para_pointer;
-        if ((i != NULL) & (mw != NULL))
+        if ((i != nullptr) & (mw != nullptr))
             i->setIcon(0, QIcon());
     }
     delete this;
@@ -1553,7 +1553,7 @@ void mButton::mpb_pushed()
         case mRESET: {
                 struct _cvd_func_ *cf = parawin->cf;        // cf retten
                 struct _cvd_para_ *cp = cf->first_para;
-                while (cp != NULL) {
+                while (cp != nullptr) {
                     memcpy (cp->data, cp->reset_data, MAX_PARA_DATA);
                     parawin->rewrite_para_data( cp );
                     cp = cp->next;
@@ -1561,10 +1561,10 @@ void mButton::mpb_pushed()
 
                 parawin->close_parawin();                   // Parameter Fenster schliessen
                 // parawin->close();
-                parawin = NULL;
-                if (parawin == NULL) {
+                parawin = nullptr;
+                if (parawin == nullptr) {
                     QTreeWidgetItem *i = (QTreeWidgetItem *)cf->para_pointer;
-                    if (i != NULL)
+                    if (i != nullptr)
                         i->setIcon(0, mw->iconlist[OK_ICON]);
                     parawin = new ParaWin(client, cf, mw);      // neues Parameter-Fenster oeffnen.                    
                 }
