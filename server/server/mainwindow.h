@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#define USE_PARAM_XML_
+#define USE_PARAM_XML_      // the USE_PARAM_XML flag is not needed
 
 #include <QMainWindow>
 #include <QTcpServer>
@@ -19,10 +19,10 @@
 
 #include "opencvd_types.hpp"
 
+/* ----------------- Umleitung funktioniert nicht ---------------------
 //! @brief  control debug outputs
-#define DEBUG_OUTPUTS                        // controls debug outputs
+#define DEBUG_OUTPUTS_                        // controls debug outputs
 
-/*
 #ifdef DEBUG_OUTPUTS
     std::ostream &dout = std::cout;         // enable debug outputs to std::cout
 #else
@@ -30,7 +30,8 @@
     std::ostream &dout = dev_null;
 #endif
 */
-enum _icon_name_ {
+
+    enum _icon_name_ {
     OK_ICON = 0,            // Haken Zeichen
     PAUSE_ICON = 1,         // Pause Zeichen
     EIGENSCHAFT_ICON = 2,
@@ -101,6 +102,7 @@ private slots:
     void on_actionAlle_Fenster_schli_en_triggered();    // Ansicht / Alle Fenster schließen
     void on_actionSource_Window_schlie_en_triggered();  // Ansicht / Source Window schließen
     void on_actionOpenCv_Version_triggered();           // Ansicht / OpenCV Version
+    void on_actionshow_FPS_triggered();                 // show FPS
 
     void on_actionCVD_OFF_triggered();                  // Extra / set CVD OFF/ON
     void on_actionset_all_Function_OFF_triggered();     // Extra / all Function OFF/ON

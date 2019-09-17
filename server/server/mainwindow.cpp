@@ -13,7 +13,7 @@
 //!
 //! \bug - class Slide, min max werden nicht korrekt berchnet. 09.09.19 erl.
 
-#define VERSION "v0.6-0030"
+#define VERSION "v0.6-0031"
 
 #include <cstring>
 #include <iostream>
@@ -286,8 +286,16 @@ void MainWindow::client_read_ready()
                 case SET_CV_VERSION:    // 0xF004
                     struct _cvd_string_ cv;
                     memcpy (&cv, buf.data(), sizeof(struct _cvd_string_));
-                    printf ("%s\n", cv.val);
+                    // printf ("%s\n", cv.val);
                     ui->textEdit->insertPlainText(QString(cv.val));
+                    ui->textEdit->insertPlainText("\n");
+                    break;
+                case SET_SHORT_FPS_TICKS:
+                    struct _min_fps_time_ mft;
+                    memcpy (&mft, buf.data(), sizeof(struct _min_fps_time_));
+                    // printf ("%li\n", mft.min_fps_time);
+                    ui->textEdit->insertPlainText(QString("fps="));
+                    ui->textEdit->insertPlainText(QString::number(1000000.0 / (double)mft.max_fps_time));   // max_fps_time in [1 / 1000000s]
                     ui->textEdit->insertPlainText("\n");
                     break;
                 default:
@@ -298,7 +306,7 @@ void MainWindow::client_read_ready()
         } // if ((uint32_t)buf.size() >= *len)
         buf.remove(0, *len);            // Stream: cut the first bytes
     } // while (buf.size() >= 4)
-}
+} // client_read_ready()
 
 //!
 //! \brief MainWindow::client_discontect
@@ -332,6 +340,7 @@ void MainWindow::clear_system()
     ui->textEdit->clear();
     ui->treeWidget->clear();
     ui->actionOpenCv_Version->setEnabled( false );
+    ui->actionshow_FPS->setEnabled( false );
 }
 
 //!
@@ -425,6 +434,7 @@ struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
     }
 
     ui->actionOpenCv_Version->setEnabled( true );
+    ui->actionshow_FPS->setEnabled( true );
 
     return foo;
 }
@@ -1948,6 +1958,19 @@ void MainWindow::on_actionOpenCv_Version_triggered()
     struct _cvd_header_ h;
     h.len = sizeof (struct _cvd_header_);
     h.bef = GET_CV_VERSION;
+
+    write_data ((const char *)&h, sizeof(struct _cvd_header_));
+}
+
+//!
+//! \brief MainWindow::on_actionshow_FPS_triggered
+//!        Ansicht / show FPS
+//!
+void MainWindow::on_actionshow_FPS_triggered()
+{
+    struct _cvd_header_ h;
+    h.len = sizeof (struct _cvd_header_);
+    h.bef = GET_SHORT_FPS_TICKS;
 
     write_data ((const char *)&h, sizeof(struct _cvd_header_));
 }

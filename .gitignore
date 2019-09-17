@@ -25,6 +25,7 @@ config_doxygen
 set_group.sh
 Readme.odt
 todo.txt
+grep_find.txt
 
 # execute files
 basic_test

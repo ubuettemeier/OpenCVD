@@ -52,9 +52,12 @@ void control_socket ();
 void read_thread ( void );
 void show_func_list( void );
 void delete_cvd( void );
+uint64_t get_max_fps_time_ticks( void );    // Zeitdifferenz im Microsekunden = 1 / 1000000 s
 
-signed long long cvd_difference_micro (struct timeval *start, struct timeval *stop);
-signed long long cvd_time_differnce (struct timeval *start);
+// signed long long cvd_difference_micro (struct timeval *start, struct timeval *stop);
+// signed long long cvd_time_differnce (struct timeval *start);
+uint64_t cvd_difference_micro (struct timeval *start, struct timeval *stop);
+uint64_t cvd_time_differnce (struct timeval *start);
 
 //!
 //! \brief The opencvd_start class
@@ -74,6 +77,11 @@ class opencvd_para {
 public:
     opencvd_para(uint16_t type, uint64_t addr, void *p, const char *p_name, uint8_t *dat, int len, uint16_t extra_parameter = 0);
     ~opencvd_para();
+
+    opencvd_para(const opencvd_para&) = delete;
+    opencvd_para& operator = (const opencvd_para&) = delete;
+    // void *operator new(std::size_t) = delete;
+
     void write_para( void );
 public:
     uint16_t para_type;                 // See: enum _data_types_ 0x2000 ... 0x2FFFF
@@ -94,6 +102,11 @@ class opencvd_func {
 public:
     opencvd_func (uint64_t addr, uint16_t type, const char *f_name, uint8_t start_flags=0x0007, int line_no=0, const char *src_file=NULL);
     ~opencvd_func ();
+
+    opencvd_func(const opencvd_func&) = delete;             // copy construktor delete
+    opencvd_func& operator=(const opencvd_func&) = delete;  // move operator delete
+    // void *operator new(std::size_t) = delete;
+
     void new_para (uint16_t type, int len, uint8_t *data, const char *p_name, uint16_t extra_parameter = 0);
     void write_func ( void );
     void control_imshow ( cv::OutputArray dst );
@@ -119,8 +132,10 @@ public:
     uint8_t window_is_create = 0;       // sobald das Ausgabefenster mit namedWindow() erzeugt wird, ändert das Flag seinen Wert auf 1
                                         // See: control_imshow()
     uint8_t error_flag = 0;
+    uint64_t fps_ticks = 10000000000;   // Zeitdifferenz im Microsekunden = 1 / 1000000 s
 private:
     struct timeval time_stemp;
+    struct timeval last_trigger_time;
 };
 
 vector <opencvd_func *> func_list{};    // empty list (Global)
@@ -382,6 +397,9 @@ void control_socket ()
                 opencvd_func *f = opencvd_func::grep_func_from_liste( foo->func_addr );    // Funktion ermitteln
                 if (f != NULL) {
                     f->state.val = foo->state.val;
+                    if (f->state.flag.func_off == 1) {
+                        f->fps_ticks = 0;
+                    }
                     // printf ("es wurden flags empfangen %s %4X\n", f->func_name, f->state.val);
                     // printf ("%s\nbild stop = %i\nshow image = %i\n", f->func_name, f->state.flag.func_off, f->state.flag.show_image);
                 }
@@ -412,6 +430,13 @@ void control_socket ()
                 sprintf (cs.val, "CV_VERSION = %s", CV_VERSION);
                 write_data ((uint8_t*)&cs, sizeof(struct _cvd_string_));
                 }
+                break;
+            case GET_SHORT_FPS_TICKS:                               // get time ticks for fps
+                struct _min_fps_time_ mfpst;
+                mfpst.len = sizeof(struct _min_fps_time_);
+                mfpst.type = SET_SHORT_FPS_TICKS;
+                mfpst.max_fps_time = get_max_fps_time_ticks();      // get_max_fps_time_ticks() in [1 / 1000000s]
+                write_data ((uint8_t*)&mfpst, sizeof(struct _min_fps_time_));
                 break;
             default:
                 printf ("unbekanntes Datenpaket\n");
@@ -468,25 +493,41 @@ void delete_cvd( void )
 }
 
 //!
+//! \brief get_max_fps_time_ticks
+//! \return
+//!
+uint64_t get_max_fps_time_ticks()
+{
+    uint64_t max_ticks = 0;
+
+    for (int i=0; i<(int)func_list.size(); i++) {
+        if (func_list[i]->fps_ticks > max_ticks)
+            max_ticks = func_list[i]->fps_ticks;
+    }
+
+    return max_ticks;
+}
+
+//!
 //! \brief cvd_difference_micro
 //! \param start
 //! \param stop
-//! \return Zeitdifferenz im Microsekunden
+//! \return Zeitdifferenz im Microsekunden = 1 / 1000000 s
 //!
-signed long long cvd_difference_micro (struct timeval *start, struct timeval *stop)
+uint64_t cvd_difference_micro (struct timeval *start, struct timeval *stop)
 {
-    return ((signed long long) stop->tv_sec * 1000000ll +
-           (signed long long) stop->tv_usec) -
-           ((signed long long) start->tv_sec * 1000000ll +
-           (signed long long) start->tv_usec);
+    return ((uint64_t) stop->tv_sec * 1000000ll +
+           (uint64_t) stop->tv_usec) -
+           ((uint64_t) start->tv_sec * 1000000ll +
+           (uint64_t) start->tv_usec);
 }
 
 //!
 //! \brief cvd_time_differnce
 //! \param start
-//! \return
+//! \return Zeitdifferenz im Microsekunden = 1 / 1000000 s
 //!
-signed long long cvd_time_differnce (struct timeval *start)
+uint64_t cvd_time_differnce (struct timeval *start)
 {
     struct timeval akt;
 
@@ -566,6 +607,7 @@ opencvd_func::opencvd_func (uint64_t addr, uint16_t type, const char *f_name, ui
     func_list.push_back( this );
 
     gettimeofday(&time_stemp, NULL);
+    last_trigger_time = time_stemp;
     window_name = std::string(func_name) + std::string("_") + std::to_string(func_addr & 0x0000000000FFFFFF);   // create Window Name
 
     write_func ();
@@ -745,9 +787,12 @@ void opencvd_func::new_para (uint16_t type, int len, uint8_t *data, const char *
 //! \brief opencvd_func::control_func_run_time
 //! \return
 //!
-#define TRIGGER_TIME 400000  // 600000
+#define TRIGGER_TIME 400000  // 400ms      /* 1 tick = 1 / 1000000 s  */
 int opencvd_func::control_func_run_time ()
 {
+    fps_ticks = cvd_time_differnce (&last_trigger_time);    // wird für fps benoetigt
+    gettimeofday(&last_trigger_time, NULL);
+
     if ((cvd_time_differnce (&time_stemp)) > TRIGGER_TIME) {
         gettimeofday(&time_stemp, NULL);
         struct _time_trigger_ tt;
@@ -756,8 +801,7 @@ int opencvd_func::control_func_run_time ()
         tt.len = sizeof(struct _time_trigger_);
         tt.error_flag = error_flag;
         write_data( (uint8_t*)&tt, sizeof(struct _time_trigger_));
-    }
-
+    }    
     return 0;
 }
 

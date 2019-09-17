@@ -147,6 +147,8 @@ enum _data_types_ {
     SOCKET_ACK = 0xF002,        // currently unused
     GET_CV_VERSION = 0xF003,    // Server to Client
     SET_CV_VERSION = 0xF004,    // Client to Server
+    GET_SHORT_FPS_TICKS = 0xF005,   // Server to Client
+    SET_SHORT_FPS_TICKS = 0xF006,
 };
 
 //!
@@ -406,6 +408,13 @@ struct _cvd_string_ {
     uint16_t type;
     char val[MAX_STRING_VAL_LEN ];
 };
+
+struct _min_fps_time_ {
+    uint32_t len;
+    uint16_t type;
+    uint64_t max_fps_time;
+};
+
 #pragma pack()
 
 #endif // OPENCVD_TYPES_HPP

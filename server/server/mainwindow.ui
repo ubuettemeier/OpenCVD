@@ -129,6 +129,7 @@
     <addaction name="actionSource_Window_schlie_en"/>
     <addaction name="separator"/>
     <addaction name="actionOpenCv_Version"/>
+    <addaction name="actionshow_FPS"/>
    </widget>
    <widget class="QMenu" name="menuEinstellung">
     <property name="title">
@@ -248,6 +249,14 @@
    </property>
    <property name="text">
     <string>&amp;OpenCV Version</string>
+   </property>
+  </action>
+  <action name="actionshow_FPS">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>show FPS</string>
    </property>
   </action>
  </widget>
