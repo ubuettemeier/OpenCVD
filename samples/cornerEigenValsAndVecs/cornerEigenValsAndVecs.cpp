@@ -17,13 +17,13 @@ int main ()
     cv::TickMeter tm;
     char buf[256];
 
+    tm.reset(); tm.start();
     while (!ende) {
         int SHOW_FIELD = get_numval<int>(3, "SHOW_FIELD", 0, 3);
 
         cv::Mat img = CVD::imread("../../images/box_in_scene.png", cv::IMREAD_COLOR);
 
         if (!img.empty()) {
-            tm.reset(); tm.start();
 
             cv::Mat gray = cv::Mat();
             CVD::cvtColor(img, gray, cv::COLOR_BGR2GRAY);
@@ -79,8 +79,11 @@ int main ()
                      }
                  }
             }
+
             tm.stop();
-            sprintf (buf, "time=%6.1f ms", tm.getTimeMilli());
+            double t = tm.getTimeMilli();
+            sprintf (buf, "time=%6.1f ms => fps=%4.1f", t, 1000.0/t);
+            tm.reset(); tm.start();
             CVD::putText (img, buf, cv::Point (10, 20), cv::FONT_HERSHEY_PLAIN, 1.3, cv::Scalar(0, 255, 255), 2);
 
             cv::imshow("VectorField", vectorfield);

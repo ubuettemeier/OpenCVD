@@ -13,7 +13,7 @@
 //!
 //! \bug - class Slide, min max werden nicht korrekt berchnet. 09.09.19 erl.
 
-#define VERSION "v0.6-0031"
+#define VERSION "v0.6-0032"
 
 #include <cstring>
 #include <iostream>
@@ -283,20 +283,21 @@ void MainWindow::client_read_ready()
                     std::cout << "system message: CLOSE_CLIENT" << std::endl;
                     clear_system();
                     break;
-                case SET_CV_VERSION:    // 0xF004
-                    struct _cvd_string_ cv;
-                    memcpy (&cv, buf.data(), sizeof(struct _cvd_string_));
-                    // printf ("%s\n", cv.val);
-                    ui->textEdit->insertPlainText(QString(cv.val));
-                    ui->textEdit->insertPlainText("\n");
+                case SET_CV_VERSION: {    // 0xF004
+                        struct _cvd_string_ cv;
+                        memcpy (&cv, buf.data(), sizeof(struct _cvd_string_));
+                        // printf ("%s\n", cv.val);
+                        ui->textEdit->insertPlainText(QString(cv.val));
+                        ui->textEdit->insertPlainText("\n");
+                    }
                     break;
-                case SET_SHORT_FPS_TICKS:
-                    struct _min_fps_time_ mft;
-                    memcpy (&mft, buf.data(), sizeof(struct _min_fps_time_));
-                    // printf ("%li\n", mft.min_fps_time);
-                    ui->textEdit->insertPlainText(QString("fps="));
-                    ui->textEdit->insertPlainText(QString::number(1000000.0 / (double)mft.max_fps_time));   // max_fps_time in [1 / 1000000s]
-                    ui->textEdit->insertPlainText("\n");
+                case SET_SHORT_FPS_TICKS: {
+                        struct _min_fps_time_ mft;
+                        memcpy (&mft, buf.data(), sizeof(struct _min_fps_time_));
+                        // printf ("%li\n", mft.min_fps_time);
+                        double fps = (mft.max_fps_time != 0) ? 1000000.0 / (double)mft.max_fps_time : 0.0;      // calc fps
+                        ui->textEdit->insertPlainText(QString("fps=%1\n").arg(QString::number(fps)));
+                    }
                     break;
                 default:
                     std::cout << "system message: 0x" << std::hex << *bef << std::endl;
