@@ -31,7 +31,7 @@
 #endif
 */
 
-    enum _icon_name_ {
+enum _icon_name_ {
     OK_ICON = 0,            // Haken Zeichen
     PAUSE_ICON = 1,         // Pause Zeichen
     EIGENSCHAFT_ICON = 2,
@@ -77,6 +77,7 @@ private:
     void get_icon ( void );
 
 public:
+    static uint64_t min_fps_time;
     bool d_is_aktiv;
     QVector<QIcon> iconlist;        // see: enum _icon_name_
     QVector<QIcon> aktiv_icon;      // 0..3

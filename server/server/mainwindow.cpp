@@ -10,10 +10,12 @@
 //! \todo - Anzahl Nachkommastellen bei class DoubleEdit als Parameter festlegen    erl.
 //!       - close Parameter-Window, by Parameter-Node clicked.
 //!       - bei client close Menue: all Functio ON/OFF auf ON setzen !!!
+//!       - Menue: Property einfügen
+//!             static uint64_t MainWindow::min_fps_time = 1000;
 //!
-//! \bug - class Slide, min max werden nicht korrekt berchnet. 09.09.19 erl.
+//! \bug - class Slide, min max werden nicht korrekt berchnet. erl. 09.09.19
 
-#define VERSION "v0.6-0032"
+#define VERSION "v0.6-0033"
 
 #include <cstring>
 #include <iostream>
@@ -39,6 +41,9 @@ QDir data_dir;
 QDir icon_dir;
 
 MainWindow *glob_mw = nullptr;
+
+//! \brief static uint64_t MainWindow::min_fps_time
+uint64_t MainWindow::min_fps_time = 1000;               // Property
 
 //!
 //! \brief MainWindow::MainWindow
@@ -294,8 +299,8 @@ void MainWindow::client_read_ready()
                 case SET_SHORT_FPS_TICKS: {
                         struct _min_fps_time_ mft;
                         memcpy (&mft, buf.data(), sizeof(struct _min_fps_time_));
-                        // printf ("%li\n", mft.min_fps_time);
-                        double fps = (mft.max_fps_time != 0) ? 1000000.0 / (double)mft.max_fps_time : 0.0;      // calc fps
+                        printf ("%li\n", mft.max_fps_time);
+                        double fps = (mft.max_fps_time > min_fps_time) ? 1000000.0 / (double)mft.max_fps_time : 0.0;      // calc fps
                         ui->textEdit->insertPlainText(QString("fps=%1\n").arg(QString::number(fps)));
                     }
                     break;
