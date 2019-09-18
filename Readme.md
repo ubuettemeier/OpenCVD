@@ -1,4 +1,4 @@
-##OpenCVD
+## OpenCVD
 
 <p>OpenCVD ist eine interaktive Visualisierungssoftware.
 Sie ermöglicht eine schnelle und effektive Unterstützung bei der Entwicklung von Bildverarbeitungs Applikationen.
@@ -31,23 +31,23 @@ The working method is as follows:
 
 <hr></hr>
 
-###Example
+### Example
 
 see: samples/short_sample/short_sample.cpp
 
 <hr></hr>
 
-###Entwicklungsumgebung / development-environment
+### Entwicklungsumgebung / development-environment
 
 - Ubuntu 18.04.2 LTS
 - OpenCV 3.3.0
 
-###Server:
+### Server:
 
 - qtcreator
 - Qt 5.9.5
 
-###Samples:
+### Samples:
 
 - gcc version 7.3.0
 - g++ --std=c++11
@@ -56,7 +56,7 @@ see: samples/short_sample/short_sample.cpp
 
 <hr></hr>
 
-###aktuell sind folgende OpenCV Funktionen implementiert / currently the following OpenCV functions are implemented
+### aktuell sind folgende OpenCV Funktionen implementiert / currently the following OpenCV functions are implemented
 
 - adaptiveThreshold, approxPolyDP
 - blur, buildPyramid, bilateralFilter, boxFilter
@@ -75,7 +75,7 @@ see: samples/short_sample/short_sample.cpp
 - Scharr, Sobel, scaleAdd, sqrBoxFilter, sepFilter2D
 - threshold
 
-###cv::Mat Funktionen / cv::Mat functions
+### cv::Mat Funktionen / cv::Mat functions
 
 - Mat ( int rows, int cols, int type );
 - Mat ( Size size, int type );
@@ -93,26 +93,26 @@ see: samples/short_sample/short_sample.cpp
 - static MatExpr eye(int rows, int cols, int type);
 - static MatExpr eye(Size size, int type);
 
-###cv::Scalar Funktionen / cv::Scalar functions
+### cv::Scalar Funktionen / cv::Scalar functions
 
 - Scalar ( v0, v1, v2, v4 );
 - Scalar ( v0 );
 
-###cv::Rect Funktionen / cv::Rect functions
+### cv::Rect Funktionen / cv::Rect functions
 
 - Rect (x, y, width, height);
 
-###cv::Point Funktionen / cv::Point functions
+### cv::Point Funktionen / cv::Point functions
 
 - Point (x, y);
 
-###cv::String Funktionen / cv::String functions
+### cv::String Funktionen / cv::String functions
 
 - String (const char* s);
 - String (const String& str);
 - String (const std::string& str);
 
-###spezielle Funktionen / specific functions
+### spezielle Funktionen / specific functions
 
 - get_numval
 - set_trackbar
@@ -121,9 +121,9 @@ see: samples/short_sample/short_sample.cpp
 
 <hr></hr>
 
-##OpenCV Installation
+## OpenCV Installation
 
-####1. Update und Aktualisierungsoftware für Ubuntu
+#### 1. Update und Aktualisierungsoftware für Ubuntu
 ```	
 sudo su  
 sudo apt-get -y update
@@ -131,26 +131,26 @@ sudo apt-get -y upgrade
 sudo apt-get -y dist-upgrade
 sudo apt-get -y autoremove
 ```	
-###2. Abhängigkeiten installieren
+### 2. Abhängigkeiten installieren
 ```	
 sudo apt-get install libopencv-dev
 ```
-###3. OpenCV Build-Tools installieren
+### 3. OpenCV Build-Tools installieren
 ```	
 sudo apt-get install build-essential checkinstall cmake pkg-config
 ```
-###4. Zusatzbibliotheken für Bildausgabe
+### 4. Zusatzbibliotheken für Bildausgabe
 ```	
 sudo apt-get install \
-libtiff5-dev \
-libjpeg-dev \
-libjasper-dev \
-libpng12-dev \
-zlib1g-dev \
-libopenexr-dev \
-libgdal-dev
+    libtiff5-dev \
+    libjpeg-dev \
+    libjasper-dev \
+    libpng12-dev \
+    zlib1g-dev \
+    libopenexr-dev \
+    libgdal-dev
 ```
-###5. Zusartbibliotheken für Vidioausgabe
+### 5. Zusartbibliotheken für Vidioausgabe
 ```	
 sudo apt-get install \
     libavcodec-dev \
@@ -172,20 +172,20 @@ sudo apt-get install \
     x264 \
     yasm
 ```
-###6. weitere Bibliotheken  
+### 6. weitere Bibliotheken  
 ```	  
 sudo apt-get install \
     libtbb-dev \
     libeigen3-dev
 ```	
-###7. Bibliotheken für grafische Benutzeroberfläche
+### 7. Bibliotheken für grafische Benutzeroberfläche
 ```	
 sudo apt-get install \
     libqt4-dev \
     libgtk2.0-dev \
     qt5-default
 ```
-###8. OpenCV Quellcode  
+### 8. OpenCV Quellcode  
 ```	
 git clone https://github.com/opencv/opencv.git
 git clone https://github.com/opencv/opencv_contrib.git
@@ -216,7 +216,7 @@ make -j$(nproc)
 sudo make install
 sudo ldconfig
 ```	  
-###9. Installation prüfen  
+### 9. Installation prüfen  
 ```	  
 pkg-config --modversion opencv
 pkg-config --modversion opencv4
