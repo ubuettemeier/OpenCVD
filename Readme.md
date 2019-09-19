@@ -123,7 +123,7 @@ see: samples/short_sample/short_sample.cpp
 
 ## OpenCV Installation
 
-#### 1. Update und Aktualisierungsoftware für Ubuntu
+### 1. Update und Aktualisierungsoftware für Ubuntu
 ```	
 sudo su  
 sudo apt-get -y update
@@ -137,30 +137,29 @@ sudo apt-get install libopencv-dev
 ```
 ### 3. OpenCV Build-Tools installieren
 ```	
-sudo apt-get install build-essential checkinstall cmake pkg-config
+sudo apt-get install 
+     build-essential \
+     checkinstall \
+     cmake \
+     pkg-config
 ```
-### 4. Zusatzbibliotheken für Bildausgabe
+### 4. Zusatzbibliotheken für Bildverarbeitung
 ```	
 sudo apt-get install \
     libtiff5-dev \
     libjpeg-dev \
-    libjasper-dev \
-    libpng12-dev \
     zlib1g-dev \
     libopenexr-dev \
     libgdal-dev
 ```
-### 5. Zusartbibliotheken für Vidioausgabe
+### 5. Zusartbibliotheken für Vidioverarbeitung
 ```	
 sudo apt-get install \
     libavcodec-dev \
     libavformat-dev \
     libmp3lame-dev \
     libswscale-dev \
-    libdc1394–22-dev \
     libxine2-dev \
-    libgstreamer0.10-dev \
-    libgstreamer-plugins-base0.10-dev \
     libv4l-dev \
     v4l-utils \
     libfaac-dev \
@@ -204,12 +203,16 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
       -D WITH_LIBV4L=ON \
       -D WITH_QT=ON \
       -D WITH_OPENGL=ON \
+      -D WITH_EIGEN=ON \
       -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
       -D WITH_FFMPEG=ON \
       -D WITH_GTK=ON \
       -D WITH_CUBLAS=ON \
       -D WITH_CUDA=ON \
       -D CUDA_NVCC_FLAGS="-D_FORCE_INLINES" \
+      -D FORCE_VKT=TRUE \
+      -D WITH_VKT=ON \
+      -D BUILD_DOC=ON \
       -D BUILD_EXAMPLES=ON ..  
 
 make -j$(nproc)
