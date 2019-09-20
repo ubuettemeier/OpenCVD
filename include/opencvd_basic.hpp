@@ -501,8 +501,12 @@ uint64_t get_max_fps_time_ticks()
     uint64_t max_ticks = 0;
 
     for (int i=0; i<(int)func_list.size(); i++) {
-        if (func_list[i]->fps_ticks > max_ticks)
-            max_ticks = func_list[i]->fps_ticks;
+        if (!func_list[i]->state.flag.func_off && !func_list[i]->state.flag.func_break) {
+
+            if (func_list[i]->fps_ticks > max_ticks)
+                max_ticks = func_list[i]->fps_ticks;
+
+        }
     }
 
     return max_ticks;

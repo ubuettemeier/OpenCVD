@@ -1,6 +1,5 @@
 //!
 //! \author Ulrich Buettemeier
-//! \todo CVD::Mat zero = CVD::Mat::zeros(250, 300, CV_8U);  funktioniert nicht !!!
 //! \date 07-06-2019
 //! \brief the following functions are partially implemented:
 //!         cv::Point_, cv::Scalar_, cv::Rect_, cv::String_
@@ -26,9 +25,16 @@ template<typename _Tp>
 class Point_ : public cv::Point_<_Tp>
 {
 public:
-    using cv::Point_<_Tp>::Point_;
-
-    Point_(_Tp _x, _Tp _y, BUILD_IN_PROTO);
+    using cv::Point_<_Tp>::Point_;              // default construktor
+    Point_(_Tp _x, _Tp _y, BUILD_IN_PROTO);     // standard constructor
+    // Point_ (const Point_ &pt ) = delete;     // copy constructor
+    /*
+    Point_<_Tp>& operator = (const Point_<_Tp> &pt) {   // move operator
+        this->x = pt.x;
+        this->y = pt.y;
+        return *this;
+    }
+    */
 };
 
 typedef Point_<int> Point2i;

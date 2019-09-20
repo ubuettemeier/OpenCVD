@@ -102,6 +102,7 @@ enum _data_types_ {
     SET_TRACKBAR = 0x1701,          // *
     GET_FILENAME = 0x1702,          // *
     GET_ENUMVAL = 0x1703,           // *
+    SET_CAM_PARA = 0x1704,
 
     MAT_ROI = 0x1800,               // *
     MAT_CONVERTTO = 0x1801,         // *
@@ -248,6 +249,7 @@ struct _slide_double_para_ {
     double min;
     double max;
     double divisor;     // z.B  min=0.0 max=3.14 ====> divisor = 100.0
+    double last_value;
 };
 
 //!

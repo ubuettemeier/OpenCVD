@@ -16,6 +16,10 @@
 // #define USE_CVD
 
 #ifdef USE_CVD
+    void set_cam_para (cv::VideoCapture &cap,
+                        int line_nr  = __builtin_LINE(),
+                        const char *src_file = __builtin_FILE());
+
     //! \brief enumlist_name are defined in "enum.xml"
     int get_enumval (const char *enumlist_name, int val, const char *val_name = "",
                      int line_nr  = __builtin_LINE(),
@@ -40,6 +44,8 @@
                        int line_nr = __builtin_LINE(),
                        const char *src_file = __builtin_FILE());
 #else
+    void set_cam_para (cv::VideoCapture &cap);
+
     int get_enumval (const char *enumlist_name, int val, const char *val_name = "");
 
     template<typename T>
@@ -52,6 +58,86 @@
     template<typename T>
     void get_filename (T *fname, const char *val_name = "noname");
 
+#endif
+
+#ifdef USE_CVD
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//! \brief set_cam_param
+//! \param cap
+//!
+void set_cam_para (cv::VideoCapture &cap,
+                    int line_nr,
+                    const char *src_file)
+{
+    if (!cap.isOpened() || cvd_off)
+        return;
+
+    static std::vector<opencvd_func *> func{};  // reg vector
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), SET_CAM_PARA, "set_cam_para",
+                               PARAMETER | FUNC_OFF | SHOW_IMAGE,    // Menu
+                               line_nr, src_file);
+        func.push_back( foo );
+
+        double buf = cap.get(cv::CAP_PROP_BRIGHTNESS);
+        struct _slide_double_para_ bri = {buf, 0.0, 1.0, 100.0, buf};
+        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&bri, "BRIGHTNESS" );
+
+        buf=cap.get(cv::CAP_PROP_CONTRAST);
+        struct _slide_double_para_ con = {buf, 0.0, 1.0, 100.0, buf};
+        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&con, "CONTRAST" );
+
+        buf = cap.get(cv::CAP_PROP_SATURATION);
+        struct _slide_double_para_ sat = {buf, 0.0, 1.0, 100.0, buf};
+        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&sat, "SATURATION" );
+
+        buf = cap.get(cv::CAP_PROP_HUE);
+        struct _slide_double_para_ hu = {buf, 0.0, 1.0, 100.0, buf};
+        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&hu, "HUE" );
+
+        buf = cap.get(cv::CAP_PROP_GAIN);
+        struct _slide_double_para_ ga = {buf, 0.0, 1.0, 100.0, buf};
+        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&ga, "GAIN" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    if (foo->state.flag.func_off) {
+        // nothing to do
+    } else {
+        try {
+            int cap_para[5] = {
+                cv::CAP_PROP_BRIGHTNESS,
+                cv::CAP_PROP_CONTRAST,
+                cv::CAP_PROP_SATURATION,
+                cv::CAP_PROP_HUE,
+                cv::CAP_PROP_GAIN
+            };
+            int i;
+            for (i=0; i<5; i++) {
+                struct _slide_double_para_ *buf = (struct _slide_double_para_ *)foo->para[i]->data;
+                if (buf->last_value != buf->value) {
+                    cap.set(cap_para[i], *(double*)foo->para[i]->data);     // CAP_PROP_BRIGHTNESS
+                    buf->last_value = buf->value;
+                }
+            }
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+
+    cv::Mat dst;
+    if (foo->state.flag.show_image)
+        cap >> dst;
+
+    foo->control_imshow( dst );  // show Image
+}
+#else
+void set_cam_para (cv::VideoCapture &cap)
+{
+    std::ignore = cap;
+}
 #endif
 
 #ifdef USE_CVD

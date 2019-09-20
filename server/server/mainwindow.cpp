@@ -15,7 +15,7 @@
 //!
 //! \bug - class Slide, min max werden nicht korrekt berchnet. erl. 09.09.19
 
-#define VERSION "v0.6-0033"
+#define VERSION "v0.6-0034"
 
 #include <cstring>
 #include <iostream>
@@ -299,7 +299,7 @@ void MainWindow::client_read_ready()
                 case SET_SHORT_FPS_TICKS: {
                         struct _min_fps_time_ mft;
                         memcpy (&mft, buf.data(), sizeof(struct _min_fps_time_));
-                        printf ("%li\n", mft.max_fps_time);
+                        // printf ("%li\n", mft.max_fps_time);
                         double fps = (mft.max_fps_time > min_fps_time) ? 1000000.0 / (double)mft.max_fps_time : 0.0;      // calc fps
                         ui->textEdit->insertPlainText(QString("fps=%1\n").arg(QString::number(fps)));
                     }
@@ -824,6 +824,14 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
+        case SET_CAM_PARA:
+            s = QString ("/*\n%1\n%2\n%3\n%4\n%5\n*/")
+                        .arg(QString("cap.set(cv::CAP_PROP_BRIGHTNESS. %1);").arg(QString::number(*(double*)cf->first_para->data)))
+                        .arg(QString("cap.set(cv::CAP_PROP_CONTRAST. %1);").arg(QString::number(*(double*)cf->first_para->next->data)))
+                        .arg(QString("cap.set(cv::CAP_PROP_SATURATION. %1);").arg(QString::number(*(double*)cf->first_para->next->next->data)))
+                        .arg(QString("cap.set(cv::CAP_PROP_HUE. %1);").arg(QString::number(*(double*)cf->first_para->next->next->next->data)))
+                        .arg(QString("cap.set(cv::CAP_PROP_GAIN. %1);").arg(QString::number(*(double*)cf->first_para->next->next->next->next->data)));
+            break;
         case NORMALIZE_2: {
             QString bo = grep_enum_text("NormTypes", *(int*)cf->first_para->next->data);        // normType
             s = QString ("// CVD::normalize(src, dst, %1, %2);")
@@ -1744,6 +1752,7 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "SET_TRACKBAR") == 0) return SET_TRACKBAR;
     if (strcmp(enum_name, "GET_FILENAME") == 0) return GET_FILENAME;
     if (strcmp(enum_name, "GET_ENUMVAL") == 0) return GET_ENUMVAL;
+    if (strcmp(enum_name, "SET_CAM_PARA") == 0) return SET_CAM_PARA;
 
     if (strcmp(enum_name, "MAT_ROI") == 0) return MAT_ROI;
     if (strcmp(enum_name, "MAT_CONVERTTO") == 0) return MAT_CONVERTTO;
@@ -1874,6 +1883,7 @@ char *MainWindow::get_enum_text (int val)
     if (val == SET_TRACKBAR) strcpy (buf, "SET_TRACKBAR");
     if (val == GET_FILENAME) strcpy (buf, "GET_FILENAME");
     if (val == GET_ENUMVAL) strcpy (buf, "GET_ENUMVAL");
+    if (val == SET_CAM_PARA) strcpy (buf, "SET_CAM_PARA");
 
     if (val == MAT_ROI) strcpy (buf, "MAT_ROI");
     if (val == MAT_CONVERTTO) strcpy (buf, "MAT_CONVERTTO");
@@ -1908,7 +1918,7 @@ char *MainWindow::get_enum_text (int val)
     if (val == FUNC_FLAGS) strcpy (buf, "FUNC_FLAGS");
     if (val == TIME_TRIGGER) strcpy (buf, "TIME_TRIGGER");
     if (val == SET_CVD_OFF) strcpy (buf, "SET_CVD_OFF");
-    if (val == SET_CVD_ON) strcpy (buf, "SET_CVD_ON");
+    if (val == SET_CVD_ON) strcpy (buf, "SET_CVD_ON");    
 
     if (val == CLOSE_CLIENT) strcpy (buf, "CLOSE_CLIENT");
     if (val == CLOSE_SERVER) strcpy (buf, "CLOSE_SERVER");

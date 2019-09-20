@@ -45,6 +45,14 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
     mw = main_win;
 
     switch (cf->type) {
+    case SET_CAM_PARA:
+        new Slide (client, cf->first_para, LEFT_POS, 10+55*0, this );           // CAP_PROP_BRIGHTNESS
+        new Slide (client, cf->first_para->next, LEFT_POS, 10+55*1, this );           // CAP_PROP_CONTRAST
+        new Slide (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );           // CAP_PROP_SATURATION
+        new Slide (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );           // CAP_PROP_HUE
+        new Slide (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );           // CAP_PROP_GAIN
+        set_param_win( 5, 260 );
+        break;
     case NORMALIZE_2:
         new DoubleEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );      // alpha
         new EnumDrop (client, cf->first_para->next, LEFT_POS, 10+55*1, this );  // normtype

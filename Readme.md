@@ -118,6 +118,7 @@ see: samples/short_sample/short_sample.cpp
 - set_trackbar
 - get_filename
 - get_enumval
+- set_cam_para
 
 <hr></hr>
 
