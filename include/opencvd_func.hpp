@@ -152,6 +152,10 @@ CV_EXPORTS_W void cornerHarris( cv::InputArray src, cv::OutputArray dst, int blo
                                 int borderType = cv::BORDER_DEFAULT,
                                 BUILDIN );
 
+CV_EXPORTS_W void preCornerDetect( cv::InputArray src, cv::OutputArray dst, int ksize,
+                                   int borderType = cv::BORDER_DEFAULT,
+                                   BUILDIN );
+
 CV_EXPORTS_W void pyrUp( cv::InputArray src, cv::OutputArray dst,
                            const cv::Size& dstsize = cv::Size(), int borderType = cv::BORDER_DEFAULT,
                            BUILDIN );
@@ -1718,6 +1722,55 @@ CV_EXPORTS_W void cornerEigenValsAndVecs( cv::InputArray src, cv::OutputArray ds
 {
     cornerEigenVal (src, dst, blockSize, ksize, borderType, COREREIGENVALANDVECS, line_nr, src_file);
 }
+//!
+//! \brief preCornerDetect
+//! \param src Source single-channel 8-bit of floating-point image.
+//! \param dst Output image that has the type CV_32F and the same size as src .
+//! \param ksize %Aperture size of the Sobel .
+//! \param borderType Pixel extrapolation method. See cv::BorderTypes.
+//!
+CV_EXPORTS_W void preCornerDetect( cv::InputArray src, cv::OutputArray dst, int ksize,
+                                   int borderType
+                                   BUILDIN_FUNC )
+{
+    if (cvd_off) {
+        cv::preCornerDetect( src, dst, ksize, borderType );
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), PRECORNERDETECT, "preCornerDetect",
+                               PARAMETER | FUNC_OFF,    // Menu
+                               BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _int_para_ ks = {ksize, 1, 31};
+        foo->new_para ( SLIDE_INT_TWO_STEP_PARA, sizeof(struct _int_para_), (uint8_t*)&ks, "ksize" );
+
+        struct _enum_para_ bt = {borderType, "BorderTypes"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&bt, "borderType" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // --------------------------------------------
+    // NO break
+    // --------------------------------------------
+    if (foo->state.flag.func_off) {
+        // nothing to do
+    } else {
+        try {
+            cv::preCornerDetect( src, dst,
+                                *(int*)foo->para[0]->data,          // ksize
+                                *(int*)foo->para[1]->data);         // borderType
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief cornerHarris
 //! \param src Input single-channel 8-bit or floating-point image.

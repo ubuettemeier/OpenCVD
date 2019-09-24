@@ -70,7 +70,7 @@ see: samples/short_sample/short_sample.cpp
 - Laplacian
 - medianBlur, morphologyEx, matchTemplate, matchShapes
 - normalize
-- pyrDown, pyrUp, pyrMeanShiftFiltering, putText
+- pyrDown, pyrUp, pyrMeanShiftFiltering, putText, preCornerDetect
 - resize, rectangle
 - Scharr, Sobel, scaleAdd, sqrBoxFilter, sepFilter2D
 - threshold
@@ -124,7 +124,7 @@ see: samples/short_sample/short_sample.cpp
 
 ## OpenCV Installation
 
-### 1. Update und Aktualisierungsoftware für Ubuntu
+### 1. Update und Aktualisierungsoftware für Ubuntu / Update software for Ubuntu
 ```	
 sudo su  
 sudo apt-get -y update
@@ -132,11 +132,11 @@ sudo apt-get -y upgrade
 sudo apt-get -y dist-upgrade
 sudo apt-get -y autoremove
 ```	
-### 2. Abhängigkeiten installieren
+### 2. Abhängigkeiten installieren / Install dependencies
 ```	
 sudo apt-get install libopencv-dev
 ```
-### 3. OpenCV Build-Tools installieren
+### 3. OpenCV Build-Tools installieren / Installing OpenCV Build Tools
 ```	
 sudo apt-get install 
      build-essential \
@@ -144,7 +144,7 @@ sudo apt-get install
      cmake \
      pkg-config
 ```
-### 4. Zusatzbibliotheken für Bildverarbeitung
+### 4. Zusatzbibliotheken für Bildverarbeitung / Additional libraries for image processing
 ```	
 sudo apt-get install \
     libtiff5-dev \
@@ -153,7 +153,7 @@ sudo apt-get install \
     libopenexr-dev \
     libgdal-dev
 ```
-### 5. Zusartbibliotheken für Vidioverarbeitung
+### 5. Zusartbibliotheken für Vidioverarbeitung / Additional libraries for video processing
 ```	
 sudo apt-get install \
     libavcodec-dev \
@@ -172,20 +172,20 @@ sudo apt-get install \
     x264 \
     yasm
 ```
-### 6. weitere Bibliotheken  
+### 6. weitere Bibliotheken / other libraries
 ```	  
 sudo apt-get install \
     libtbb-dev \
     libeigen3-dev
 ```	
-### 7. Bibliotheken für grafische Benutzeroberfläche
+### 7. Bibliotheken für grafische Benutzeroberfläche / Libraries for graphical user interface
 ```	
 sudo apt-get install \
     libqt4-dev \
     libgtk2.0-dev \
     qt5-default
 ```
-### 8. OpenCV Quellcode  
+### 8. OpenCV Quellcode / OpenCV source code 
 ```	
 git clone https://github.com/opencv/opencv.git
 git clone https://github.com/opencv/opencv_contrib.git
@@ -220,7 +220,7 @@ make -j$(nproc)
 sudo make install
 sudo ldconfig
 ```	  
-### 9. Installation prüfen  
+### 9. Installation prüfen / Check installation
 ```	  
 pkg-config --modversion opencv
 pkg-config --modversion opencv4

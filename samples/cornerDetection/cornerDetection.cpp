@@ -15,15 +15,21 @@ int max_thresh = 255;
 const char* source_window = "Source image";
 const char* corners_window = "Corners detected";
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief cornerHarris_demo
 //!
+
+#define USE_CORNERHARRIS_
+
 void cornerHarris_demo( int, void* )
 {
     Mat dst = Mat::zeros( src.size(), CV_32FC1 );
 
+#ifdef USE_CORNERHARRIS
     CVD::cornerHarris( src_gray, dst, 2, 3, 0.04 );
+#else
+    CVD::preCornerDetect( src_gray, dst, 3);
+#endif
 
     Mat dst_norm, dst_norm_scaled;
     CVD::normalize( dst, dst_norm, 0, 255, NORM_MINMAX, CV_32FC1, Mat() );
