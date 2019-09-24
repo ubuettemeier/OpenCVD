@@ -156,6 +156,11 @@ CV_EXPORTS_W void preCornerDetect( cv::InputArray src, cv::OutputArray dst, int 
                                    int borderType = cv::BORDER_DEFAULT,
                                    BUILDIN );
 
+CV_EXPORTS_W void cornerSubPix( cv::InputArray image, cv::InputOutputArray corners,
+                                cv::Size winSize, cv::Size zeroZone,
+                                cv::TermCriteria criteria,
+                                BUILDIN );
+
 CV_EXPORTS_W void pyrUp( cv::InputArray src, cv::OutputArray dst,
                            const cv::Size& dstsize = cv::Size(), int borderType = cv::BORDER_DEFAULT,
                            BUILDIN );
@@ -1722,6 +1727,67 @@ CV_EXPORTS_W void cornerEigenValsAndVecs( cv::InputArray src, cv::OutputArray ds
 {
     cornerEigenVal (src, dst, blockSize, ksize, borderType, COREREIGENVALANDVECS, line_nr, src_file);
 }
+//!
+//! \brief cornerSubPix
+//! \param image Input image.
+//! \param corners corners Initial coordinates of the input corners and refined coordinates provided for output.
+//! \param winSize Half of the side length of the search window. For example, if winSize=Size(5,5) ,
+//!        then a \f$5*2+1 \times 5*2+1 = 11 \times 11\f$ search window is used.
+//! \param zeroZone Half of the size of the dead region in the middle of the search zone over which
+//!        the summation in the formula below is not done. It is used sometimes to avoid possible
+//!        singularities of the autocorrelation matrix. The value of (-1,-1) indicates that there is no such
+//!        a size.
+//! \param criteria Criteria for termination of the iterative process of corner refinement. That is,
+//!        the process of corner position refinement stops either after criteria.maxCount iterations or when
+//!        the corner position moves by less than criteria.epsilon on some iteration.
+//!
+CV_EXPORTS_W void cornerSubPix( cv::InputArray image, cv::InputOutputArray corners,
+                                cv::Size winSize, cv::Size zeroZone,
+                                cv::TermCriteria criteria
+                                BUILDIN_FUNC )
+{
+    if (cvd_off) {
+        cv::cornerSubPix( image, corners, winSize, zeroZone, criteria);
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), CORNERSUBPIX, "cornerSubPix",
+                               PARAMETER | FUNC_OFF,    // Menu
+                               BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _point_int_ ws = {winSize.width, 0, 20000, winSize.height, 0, 20000};
+        foo->new_para (POINT_INT, sizeof(struct _point_int_), (uint8_t*)&ws, "winSize");      // winSize
+
+        struct _point_int_ zz = {zeroZone.width, -1, 20000, zeroZone.height, -1, 20000};
+        foo->new_para (POINT_INT, sizeof(struct _point_int_), (uint8_t*)&zz, "winSize");      // zeroZone
+
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // --------------------------------------------
+    // NO break
+    // --------------------------------------------
+    if (foo->state.flag.func_off) {
+        // nothing to do
+    } else {
+        try {
+            struct _point_int_ *ws = (struct _point_int_ *)foo->para[0]->data;
+            struct _point_int_ *zz = (struct _point_int_ *)foo->para[1]->data;
+            cv::cornerSubPix( image, corners,
+                              cv::Size(ws->x, ws->y),           // winSize
+                              cv::Size(zz->x, zz->y),           // zeroZone
+                              criteria);
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+}
+
 //!
 //! \brief preCornerDetect
 //! \param src Source single-channel 8-bit of floating-point image.

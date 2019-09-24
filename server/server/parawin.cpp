@@ -267,6 +267,11 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new EnumDrop (client, cf->first_para->next, LEFT_POS, 10+55*1, this );              // borderType
         set_param_win( 2, 260 );
         break;
+    case CORNERSUBPIX:
+        new PointInt ( client, cf->first_para, LEFT_POS, 10+55*0, this );                   // winSize
+        new PointInt ( client, cf->first_para->next, LEFT_POS, 10+55*1, this );             // zeroZone
+        set_param_win( 2, 260 );
+        break;
     case CORNERHARRIS:
         new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );                     // blockSize
         new Slide (client, cf->first_para->next, LEFT_POS, 10+55*1, this );                 // ksize 3, 5, ...

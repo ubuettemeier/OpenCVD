@@ -60,7 +60,7 @@ see: samples/short_sample/short_sample.cpp
 
 - adaptiveThreshold, approxPolyDP
 - blur, buildPyramid, bilateralFilter, boxFilter
-- Canny, cvtColor, calcHist, convertScaleAbs, cornerHarris, cornerMinEigenVal, cornerEigenValsAndVecs, createLineSegmentDetector
+- Canny, cvtColor, calcHist, convertScaleAbs, cornerHarris, cornerMinEigenVal, cornerEigenValsAndVecs, createLineSegmentDetector, cornerSubPix
 - dilate, distanceTransform
 - erode
 - findContours, fitLine, filter2D

@@ -15,7 +15,7 @@
 //!
 //! \bug - class Slide, min max werden nicht korrekt berchnet. erl. 09.09.19
 
-#define VERSION "v0.6-0036"
+#define VERSION "v0.6-0037"
 
 #include <cstring>
 #include <iostream>
@@ -824,13 +824,24 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
     QString s;
 
     switch (cf->type) {
-        case SET_CAM_PARA:
+        case CORNERSUBPIX: {
+            struct _point_int_ *ws = (struct _point_int_ *)cf->first_para->data;          // cv::Size winSize
+            struct _point_int_ *zz = (struct _point_int_ *)cf->first_para->next->data;          // cv::Size zeroZone
+            s = QString ("// CVD::cornerSubPix(image, corners, cv::Size(%1, %2), cv::Size(%3, %4), criteria);")
+                        .arg(QString::number(ws->x))
+                        .arg(QString::number(ws->y))
+                        .arg(QString::number(zz->x))
+                        .arg(QString::number(zz->y));
+            }
+            break;
+        case SET_CAM_PARA: {
             s = QString ("/*\n%1\n%2\n%3\n%4\n%5\n*/")
                         .arg(QString("cap.set(cv::CAP_PROP_BRIGHTNESS. %1);").arg(QString::number(*(double*)cf->first_para->data)))
                         .arg(QString("cap.set(cv::CAP_PROP_CONTRAST. %1);").arg(QString::number(*(double*)cf->first_para->next->data)))
                         .arg(QString("cap.set(cv::CAP_PROP_SATURATION. %1);").arg(QString::number(*(double*)cf->first_para->next->next->data)))
                         .arg(QString("cap.set(cv::CAP_PROP_HUE. %1);").arg(QString::number(*(double*)cf->first_para->next->next->next->data)))
                         .arg(QString("cap.set(cv::CAP_PROP_GAIN. %1);").arg(QString::number(*(double*)cf->first_para->next->next->next->next->data)));
+            }
             break;
         case NORMALIZE_2: {
             QString bo = grep_enum_text("NormTypes", *(int*)cf->first_para->next->data);        // normType
@@ -1742,6 +1753,7 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "COREREIGENVALANDVECS") == 0) return COREREIGENVALANDVECS;
     if (strcmp(enum_name, "NORMALIZE_2") == 0) return NORMALIZE_2;
     if (strcmp(enum_name, "PRECORNERDETECT") == 0) return PRECORNERDETECT;
+    if (strcmp(enum_name, "CORNERSUBPIX") == 0) return CORNERSUBPIX;
 
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_INT") == 0) return CVD_RECT_TYPE_1_INT;
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_FLOAT") == 0) return CVD_RECT_TYPE_1_FLOAT;
@@ -1873,6 +1885,7 @@ char *MainWindow::get_enum_text (int val)
     if (val == GETDERIVKERNELS) strcpy (buf, "GETDERIVKERNELS");
     if (val == CORNERMINEIGENVAL) strcpy (buf, "CORNERMINEIGENVAL");
     if (val == PRECORNERDETECT) strcpy (buf, "PRECORNERDETECT");
+    if (val == CORNERSUBPIX) strcpy (buf, "CORNERSUBPIX");
 
     if (val == CVD_RECT_TYPE_1_INT) strcpy (buf, "CVD_RECT_TYPE_1_INT");
     if (val == CVD_RECT_TYPE_1_FLOAT) strcpy (buf, "CVD_RECT_TYPE_1_FLOAT");
