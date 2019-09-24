@@ -5,6 +5,9 @@
 //!        - template<typename T> get_numval
 //!        - template<typename T> set_trackbar
 //!        - void get_filename
+//!        - void set_cam_param
+//!
+//! these functions do not belong to any namespace
 //!
 //! \author Ulrich Büttemeier
 //!
@@ -255,7 +258,7 @@ T set_trackbar (T a, const char *val_name,      // do nothing
 //! \brief get_numval offers the possibility to manipulate a numeric value with the OpenCVD server.
 //! \param a from type <int, double, float>
 //! \return return nummeric value
-//! \example int a = get_numval<int>(34, "value a");
+//! \example int a = get_numval<int>(34, "value a", 0, 1000);
 //!
 template<typename T>
 T get_numval (T a, const char *val_name,

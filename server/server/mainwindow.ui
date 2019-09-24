@@ -256,7 +256,10 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>show FPS</string>
+    <string>show &amp;FPS</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
    </property>
   </action>
  </widget>
