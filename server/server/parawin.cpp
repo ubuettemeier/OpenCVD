@@ -51,6 +51,7 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new Slide (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );           // CAP_PROP_SATURATION
         new Slide (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );           // CAP_PROP_HUE
         new Slide (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );           // CAP_PROP_GAIN
+        // new Slide (client, cf->first_para->next->next->next->next->next, LEFT_POS, 10+55*5, this );           // CAP_PROP_AUTO_EXPOSURE 0,25 < > 0,75 Funktioniert nicht !
         set_param_win( 5, 260 );
         break;
     case NORMALIZE_2:

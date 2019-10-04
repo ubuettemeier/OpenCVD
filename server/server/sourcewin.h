@@ -60,7 +60,7 @@ public:
     Sourcewin (struct _cvd_func_ *func, MainWindow *main_win, QWidget *parent = nullptr);
     ~Sourcewin ();
     void read_source ();
-    void modify_source ( uint32_t z_nr );
+    void modify_source ( uint32_t z_nr, uint32_t *anzahl_zeile_eingefuegt );
 
 public:
     struct _cvd_func_ *cf = nullptr;

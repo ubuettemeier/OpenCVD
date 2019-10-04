@@ -2595,6 +2595,7 @@ CV_EXPORTS_W void morphologyEx( cv::InputArray src, cv::OutputArray dst,
 //! \param dst
 //! \param code
 //! \param dstCn
+//! \example: CVD:cvtColor (src, dst, cv::COLOR_BGR2GRAY);
 //!
 CV_EXPORTS_W void cvtColor( cv::InputArray src, cv::OutputArray dst, int code, int dstCn
                             BUILDIN_FUNC)
@@ -3174,6 +3175,7 @@ CV_EXPORTS_W void resize( cv::InputArray src, cv::OutputArray dst,
 //! \param dst destination array of the same size and type as src.
 //! \param ksize aperture linear size; it must be odd and greater than 1, for example: 3, 5, 7 ...
 //! \sa  bilateralFilter, blur, boxFilter, GaussianBlur
+//! \example CVD::medianBlur(src, dst, 7);
 //!
 CV_EXPORTS_W void medianBlur( cv::InputArray src, cv::OutputArray dst, int ksize
                               BUILDIN_FUNC)
@@ -3233,6 +3235,7 @@ CV_EXPORTS_W void medianBlur( cv::InputArray src, cv::OutputArray dst, int ksize
 //! \param ksize
 //! \param anchor
 //! \param borderType
+//! \example CVD::blur(src, gst, cv::Size(3, 3));
 //!
 CV_EXPORTS_W void blur( cv::InputArray src, cv::OutputArray dst,
                         cv::Size ksize, cv::Point anchor,

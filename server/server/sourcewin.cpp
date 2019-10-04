@@ -118,10 +118,10 @@ void Sourcewin::read_source ()
 }
 
 //!
-//! \brief Sourcewin::modify_source
+//! \brief Sourcewin::modify_source  Text ab Zeile z_nr einfügen !
 //! \param z_nr
 //!
-void Sourcewin::modify_source (uint32_t z_nr)
+void Sourcewin::modify_source (uint32_t z_nr, uint32_t *anzahl_zeile_eingefuegt)
 {
     std::vector <QString> vs = {};
 
@@ -135,9 +135,13 @@ void Sourcewin::modify_source (uint32_t z_nr)
                 while (!in.atEnd()) {
                     vs.push_back(in.readLine());    // Zeile einlesen
                     znr++;
-                    if (znr == z_nr)                // Kommentar einfuegen
-                        vs.push_back( mw->build_source_line_comment( cf ));
-
+                    if (znr == z_nr) {              // Kommentar einfuegen
+                        QString s = mw->build_source_line_comment( cf, anzahl_zeile_eingefuegt );
+                        vs.push_back( s );
+                        if (*anzahl_zeile_eingefuegt > 1) {
+                            znr += (*anzahl_zeile_eingefuegt - 1);
+                        }
+                    }
                 }
                 qf.close();
 
@@ -160,7 +164,6 @@ void Sourcewin::modify_source (uint32_t z_nr)
     } else {
         this->setWindowTitle("No source data");
     }
-
 }
 
 //!
@@ -180,12 +183,14 @@ Sourcewin::~Sourcewin ()
 void Sourcewin::source_mod ()
 {
     struct _cvd_func_ *foo = mw->first_func;
+    uint32_t anz_zeilen_eingefuegt = 1;
 
-    modify_source (cf->line_nr);
+    modify_source ( cf->line_nr, &anz_zeilen_eingefuegt );
 
     while (foo != nullptr) {
-        if (foo->line_nr > cf->line_nr)
-            foo->line_nr++;
+        if (foo->line_nr > cf->line_nr) {
+            foo->line_nr += anz_zeilen_eingefuegt;
+        }
         foo = foo->next;
     }
 

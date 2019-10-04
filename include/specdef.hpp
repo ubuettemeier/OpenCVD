@@ -103,6 +103,12 @@ void set_cam_para (cv::VideoCapture &cap,
         buf = cap.get(cv::CAP_PROP_GAIN);
         struct _slide_double_para_ ga = {buf, 0.0, 1.0, 100.0, buf};
         foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&ga, "GAIN" );
+
+        /* funktioniert nicht !!
+        buf = cap.get(cv::CAP_PROP_AUTO_EXPOSURE);
+        struct _slide_double_para_ ae= {buf, 0.0, 1.0, 100.0, buf};
+        foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&ae, "AUTO EXPOSURE" );
+        */
     }
     foo->error_flag &= ~FUNC_ERROR;     // clear func_error
     if (foo->state.flag.func_off) {
@@ -115,6 +121,7 @@ void set_cam_para (cv::VideoCapture &cap,
                 cv::CAP_PROP_SATURATION,
                 cv::CAP_PROP_HUE,
                 cv::CAP_PROP_GAIN
+                // cv::CAP_PROP_AUTO_EXPOSURE
             };
             int i;
             for (i=0; i<5; i++) {
@@ -349,7 +356,8 @@ T get_numval (T a, const char *val_name,
 //! \param val
 //! \param val_name
 //! \return
-//! \example int match_method = get_enumval("TemplateMatchMode", 3, "match_methode" );
+//! \example int match_method = get_enumval( "TemplateMatchMode", 3, "match_methode" );
+//!          bool show_color = get_enumval( "boolType", false, "show_color" );
 //!
 int get_enumval (const char *enumlist_name, int val, const char *val_name,
                  int line_nr,

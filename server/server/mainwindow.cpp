@@ -15,7 +15,7 @@
 //!
 //! \bug - class Slide, min max werden nicht korrekt berchnet. erl. 09.09.19
 
-#define VERSION "v0.6-0037"
+#define VERSION "v0.6-0039"
 
 #include <cstring>
 #include <iostream>
@@ -812,14 +812,18 @@ QString MainWindow::grep_enum_text (QString group_name, int enum_val)
 
 //!
 //! \brief MainWindow::build_source_line_comment
+//!        anz_zeilen_eingefuegt wird von Sourcewin::source_mod() mit einem Anfangswert von 1 uebergeben !!!
+//!        Wenn nur eine Zeile eingefuegt wird, braucht dieser Parameter nicht veraendert werden !!!
 //! \param cf
 //! \return
 //! \todo insert CVD_COMMENT
 //! \remark
+//! \sa Sourcewin::source_mod ()
+//!     Sourcewin::modify_source (uint32_t z_nr, uint32_t *anzahl_zeile_eingefuegt)
 //!
 #define CVD_COMMENT "// "
 
-QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
+QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf, uint32_t *anz_zeilen_eingefuegt )
 {
     QString s;
 
@@ -836,11 +840,12 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf )
             break;
         case SET_CAM_PARA: {
             s = QString ("/*\n%1\n%2\n%3\n%4\n%5\n*/")
-                        .arg(QString("cap.set(cv::CAP_PROP_BRIGHTNESS. %1);").arg(QString::number(*(double*)cf->first_para->data)))
-                        .arg(QString("cap.set(cv::CAP_PROP_CONTRAST. %1);").arg(QString::number(*(double*)cf->first_para->next->data)))
-                        .arg(QString("cap.set(cv::CAP_PROP_SATURATION. %1);").arg(QString::number(*(double*)cf->first_para->next->next->data)))
-                        .arg(QString("cap.set(cv::CAP_PROP_HUE. %1);").arg(QString::number(*(double*)cf->first_para->next->next->next->data)))
-                        .arg(QString("cap.set(cv::CAP_PROP_GAIN. %1);").arg(QString::number(*(double*)cf->first_para->next->next->next->next->data)));
+                        .arg(QString("cap.set(cv::CAP_PROP_BRIGHTNESS, %1);").arg(QString::number(*(double*)cf->first_para->data)))
+                        .arg(QString("cap.set(cv::CAP_PROP_CONTRAST, %1);").arg(QString::number(*(double*)cf->first_para->next->data)))
+                        .arg(QString("cap.set(cv::CAP_PROP_SATURATION, %1);").arg(QString::number(*(double*)cf->first_para->next->next->data)))
+                        .arg(QString("cap.set(cv::CAP_PROP_HUE, %1);").arg(QString::number(*(double*)cf->first_para->next->next->next->data)))
+                        .arg(QString("cap.set(cv::CAP_PROP_GAIN, %1);").arg(QString::number(*(double*)cf->first_para->next->next->next->next->data)));
+            *anz_zeilen_eingefuegt = 7;
             }
             break;
         case NORMALIZE_2: {
