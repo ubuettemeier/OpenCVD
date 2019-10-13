@@ -12,6 +12,9 @@ samples/versuche*/
 # Verzeichnis wiki ausschliessen
 wiki/
 
+# Verzeichnis literatur ausschliessen
+literatur/
+
 # no object-files
 *.o
 

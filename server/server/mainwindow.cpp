@@ -15,7 +15,7 @@
 //!
 //! \bug - class Slide, min max werden nicht korrekt berchnet. erl. 09.09.19
 
-#define VERSION "v0.6-0039"
+#define VERSION "v0.6-0040"
 
 #include <cstring>
 #include <iostream>
@@ -828,6 +828,21 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf, uint32_t 
     QString s;
 
     switch (cf->type) {
+        case DILATE:
+        case ERODE: {
+            QString func_name = (cf->type == ERODE) ? "erode" : "dilate";
+
+            struct _point_int_ *anchor = (struct _point_int_ *)cf->first_para->data;                // cv::Point anchor
+            QString bo = grep_enum_text("BorderTypes", *(int*)cf->first_para->next->next->data);    // normType
+            s = QString ("// CVD::%1(src, dst, kernel, cv::Point(%2, %3), %4, %5);")
+                    .arg(func_name)
+                    .arg(QString::number(anchor->x))
+                    .arg(QString::number(anchor->y))
+                    .arg(QString::number(*(int*)cf->first_para->next->data))                // iterations
+                    .arg(bo);
+            }
+            break;
+
         case CORNERSUBPIX: {
             struct _point_int_ *ws = (struct _point_int_ *)cf->first_para->data;          // cv::Size winSize
             struct _point_int_ *zz = (struct _point_int_ *)cf->first_para->next->data;          // cv::Size zeroZone

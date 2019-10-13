@@ -2595,7 +2595,7 @@ CV_EXPORTS_W void morphologyEx( cv::InputArray src, cv::OutputArray dst,
 //! \param dst
 //! \param code
 //! \param dstCn
-//! \example: CVD:cvtColor (src, dst, cv::COLOR_BGR2GRAY);
+//! \example: CVD::cvtColor (src, dst, cv::COLOR_BGR2GRAY);
 //!
 CV_EXPORTS_W void cvtColor( cv::InputArray src, cv::OutputArray dst, int code, int dstCn
                             BUILDIN_FUNC)
@@ -2747,6 +2747,7 @@ CV_EXPORTS_W void adaptiveThreshold( cv::InputArray src, cv::OutputArray dst,
 //! \param maxval
 //! \param type
 //! \return
+//! \example CVD::threshold( src, dst, 80, 230, THRESH_BINARY );
 //!
 CV_EXPORTS_W double threshold( cv::InputArray src, cv::OutputArray dst,
                                double thresh, double maxval, int type
@@ -3832,6 +3833,7 @@ CV_EXPORTS_W void Laplacian( cv::InputArray src, cv::OutputArray dst, int ddepth
 //! \param filename
 //! \param flags
 //! \return
+//! \example src = imread ( "images/board.jpg", cv::IMREAD_UNCHANGED );
 //!
 CV_EXPORTS_W Mat imread( const cv::String& filename, int flags
                              BUILDIN_FUNC)
