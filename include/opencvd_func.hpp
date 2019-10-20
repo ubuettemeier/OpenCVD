@@ -52,6 +52,15 @@ namespace cvd {
 
 
 //! \todo
+//! cv::warpAffine()
+//! cv::warpPerspective()
+//! cv::getRotationMatrix2D()
+//! cv::getPerspectiveTransform()
+//! cv::getAffineTransform()
+//! cv::invertAffineTransform()
+
+
+
 CV_EXPORTS_W void getDerivKernels( cv::OutputArray kx, cv::OutputArray ky,
                                    int dx, int dy, int ksize,
                                    bool normalize = false, int ktype = CV_32F,
@@ -249,6 +258,10 @@ CV_EXPORTS_W Mat getStructuringElement(int shape, cv::Size ksize, cv::Point anch
 
 CV_EXPORTS_W void scaleAdd(cv::InputArray src1, double alpha, cv::InputArray src2, cv::OutputArray dst,
                            BUILDIN);
+
+CV_EXPORTS_W void addWeighted(cv::InputArray src1, double alpha, cv::InputArray src2,
+                              double beta, double gamma, cv::OutputArray dst, int dtype = -1,
+                              BUILDIN);
 
 CV_EXPORTS_W void convertScaleAbs(cv::InputArray src, cv::OutputArray dst,
                                   double alpha = 1, double beta = 0,
@@ -2346,6 +2359,7 @@ CV_EXPORTS_W Mat getStructuringElement(int shape, cv::Size ksize, cv::Point anch
 //! @brief  Erodes an image by using a specific structuring element.
 //! @param  kernel = Mat (anchor.x, anchor.y)
 //! @param  default borderValue = __MAX_DBL__ = std::numeric_limits<double>::max()
+//! @example  CVD::erode(src, dst, Mat(), Point(-1, -1), 2, 1, 1);
 //!
 CV_EXPORTS_W void erode( cv::InputArray src, cv::OutputArray dst, cv::InputArray kernel,
                          cv::Point anchor, int iterations,
@@ -2427,6 +2441,7 @@ CV_EXPORTS_W void erode( cv::InputArray src, cv::OutputArray dst, cv::InputArray
 //! \param borderType
 //! \param borderValue
 //!        default borderValue = __MAX_DBL__ = std::numeric_limits<double>::max()
+//! \example CVD::dilate(src, dst, Mat(), Point(-1, -1), 2, 1, 1);
 //!
 CV_EXPORTS_W void dilate( cv::InputArray src, cv::OutputArray dst, cv::InputArray kernel,
                                cv::Point anchor, int iterations,
@@ -2663,6 +2678,7 @@ CV_EXPORTS_W void cvtColor( cv::InputArray src, cv::OutputArray dst, int code, i
 //! \param thresholdType
 //! \param blockSize
 //! \param C
+//! \example CVD::adaptiveThreshold(roi, roi, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY, 3, 4.0);
 //!
 CV_EXPORTS_W void adaptiveThreshold( cv::InputArray src, cv::OutputArray dst,
                                      double maxValue, int adaptiveMethod,
@@ -2842,6 +2858,7 @@ CV_EXPORTS_W double threshold( cv::InputArray src, cv::OutputArray dst,
 //! \param scale
 //! \param delta
 //! \param borderType
+//! \example CVD::Sobel(src, dst, CV_8U, 1, 1); // CV_8UC1
 //!
 CV_EXPORTS_W void Sobel( cv::InputArray src, cv::OutputArray dst, int ddepth,
                          int dx, int dy, int ksize,
@@ -2937,6 +2954,7 @@ CV_EXPORTS_W void Sobel( cv::InputArray src, cv::OutputArray dst, int ddepth,
 //! \param threshold2
 //! \param apertureSize
 //! \param L2gradient
+//! \example CVD::Canny( roi, roi, 47, 81, 3, false );
 //!
 CV_EXPORTS_W void Canny( cv::InputArray image, cv::OutputArray edges,
                          double threshold1, double threshold2,
@@ -2989,12 +3007,14 @@ CV_EXPORTS_W void Canny( cv::InputArray image, cv::OutputArray edges,
         }
     }
     // -----------------------------
-
     if (foo->state.flag.func_off) {         // Function OFF
+        image.copyTo(edges);                // 2019-11-20 NEW
+        /**** 2019-11-20 commented out ****
         cv::Mat a = image.getMat();
         a.convertTo(edges, CV_8UC1);
         cv::Mat b = edges.getMat();
         b = cv::Scalar(0);
+        */
     } else {
         try {
             cv::Canny (image, edges,
@@ -3534,6 +3554,87 @@ CV_EXPORTS_W void scaleAdd(cv::InputArray src1, double alpha, cv::InputArray src
 } // scaleAdd
 
 //!
+//! \brief addWeighted Calculates the weighted sum of two arrays.
+//!                    dst = src1*alpha + src2*beta + gamma
+//! \param src1
+//! \param alpha
+//! \param src2
+//! \param beta
+//! \param gamma
+//! \param dst
+//! \param dtype dtype optional depth of the output array; when both input arrays have the same depth, dtype
+//!              can be set to -1, which will be equivalent to src1.depth().
+//!
+CV_EXPORTS_W void addWeighted(cv::InputArray src1, double alpha, cv::InputArray src2,
+                              double beta, double gamma, cv::OutputArray dst, int dtype
+                              BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::addWeighted( src1, alpha, src2, beta, gamma, dst, dtype );
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector
+    opencvd_func *foo = NULL;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), ADDWEIGHTED, "addWeighted",
+                               PARAMETER | FUNC_OFF | SHOW_IMAGE | BREAK,    // Menu 0x000F,
+                               BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _double_para_ al = {alpha, -10000.0, std::numeric_limits<double>::max(), 2};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&al, "alpha");
+
+        struct _double_para_ be = {beta, -10000.0, std::numeric_limits<double>::max(), 2};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&be, "beta");
+
+        struct _double_para_ ga = {gamma, -10000.0, std::numeric_limits<double>::max(), 2};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&ga, "gamma");
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // -----------------------------------------------------------------
+    if (foo->state.flag.func_break) {                   // Break
+        foo->state.flag.show_image = 1;                 // Fenster automatisch einblenden
+        while (foo->state.flag.func_break) {
+            cv::Mat out;
+            try {
+                cv::addWeighted( src1,
+                                 *(double*)foo->para[0]->data,      // alpha
+                                 src2,
+                                 *(double*)foo->para[1]->data,      // beta
+                                 *(double*)foo->para[2]->data,      // gamma
+                                 out,
+                                 dtype);
+            } catch( cv::Exception& e ) {
+                foo->error_flag |= FUNC_ERROR;
+            }
+            foo->control_imshow( out );                 // Ausgabe
+            cv::waitKey(10);
+            foo->control_func_run_time ();
+        }
+    }
+    // ----------------------------------------------------------------------------------------------
+    if (foo->state.flag.func_off) {
+        src1.copyTo( dst );
+    } else {
+        try {
+            cv::addWeighted( src1,
+                             *(double*)foo->para[0]->data,      // alpha
+                             src2,
+                             *(double*)foo->para[1]->data,      // beta
+                             *(double*)foo->para[2]->data,      // gamma
+                             dst,
+                             dtype);
+        } catch( cv::Exception& e ) {
+            foo->error_flag |= FUNC_ERROR;
+        }
+        foo->control_func_run_time ();
+    }
+    foo->control_imshow( dst );
+} // addWeighted
+
+//!
 //! \brief cvd::convertScaleAbs
 //!        Scales, calculates absolute values, and converts the result to 8-bit.
 //! \param src
@@ -3557,10 +3658,10 @@ CV_EXPORTS_W void convertScaleAbs(cv::InputArray src, cv::OutputArray dst,
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), CONVERTSCALEABS, "convertScaleAbs", 0x000F, BUILIN_PARA);
         func.push_back( foo );
 
-        struct _double_para_ al = {alpha, 0.0, std::numeric_limits<double>::max(), 2};
+        struct _double_para_ al = {alpha, -10000.0, std::numeric_limits<double>::max(), 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&al, "alpha");
 
-        struct _double_para_ be = {beta, 0.0, std::numeric_limits<double>::max(), 2};
+        struct _double_para_ be = {beta, -10000.0, std::numeric_limits<double>::max(), 2};
         foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&be, "beta");
     }
     foo->error_flag &= ~FUNC_ERROR;     // clear func_error
@@ -4069,6 +4170,8 @@ CV_EXPORTS_W void HoughLinesP( cv::InputArray image, cv::OutputArray lines,
 //! \param stn For the multi-scale Hough transform, it is a divisor for the distance resolution theta.
 //! \param min_theta For standard and multi-scale Hough transform, minimum angle to check for lines. Must fall between 0 and max_theta.
 //! \param max_theta For standard and multi-scale Hough transform, maximum angle to check for lines. Must fall between min_theta and CV_PI.
+//! \example    vector<Vec2f> lines;
+//!             CVD::HoughLines( src, lines, 1, 0.0174533, 32, 0, 0, 0, 3.14159 );
 //!
 CV_EXPORTS_W void HoughLines( cv::InputArray image, cv::OutputArray lines,
                               double rho, double theta, int threshold,

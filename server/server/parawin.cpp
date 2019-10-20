@@ -438,6 +438,13 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new DoubleEdit (client, cf->first_para->next->next, LEFT_POS, 65+55, this );   // Double Edit für delta
         setGeometry(glob_mw->para_win_pos.x(), glob_mw->para_win_pos.y(), 260, 80+55+55);
         break;
+    case ADDWEIGHTED:
+        new DoubleEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );              // Double Edit für alpha
+        new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );        // Double Edit für beta
+        new DoubleEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );  // Double Edit für gamma
+
+        set_param_win( 3, 260 );
+        break;
     case CONVERTSCALEABS:
         new DoubleEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );            // Double Edit für alpha
         new DoubleEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );   // Double Edit für beta

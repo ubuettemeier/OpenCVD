@@ -15,7 +15,7 @@
 //!
 //! \bug - class Slide, min max werden nicht korrekt berchnet. erl. 09.09.19
 
-#define VERSION "v0.6-0040"
+#define VERSION "v0.6-0042"
 
 #include <cstring>
 #include <iostream>
@@ -816,12 +816,11 @@ QString MainWindow::grep_enum_text (QString group_name, int enum_val)
 //!        Wenn nur eine Zeile eingefuegt wird, braucht dieser Parameter nicht veraendert werden !!!
 //! \param cf
 //! \return
-//! \todo insert CVD_COMMENT
 //! \remark
 //! \sa Sourcewin::source_mod ()
 //!     Sourcewin::modify_source (uint32_t z_nr, uint32_t *anzahl_zeile_eingefuegt)
 //!
-#define CVD_COMMENT "// "
+// #define CVD_COMMENT "// "
 
 QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf, uint32_t *anz_zeilen_eingefuegt )
 {
@@ -1338,10 +1337,18 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf, uint32_t 
                         .arg(QString::number(r->h));
             }
             break;
-        case CONVERTSCALEABS:
+        case ADDWEIGHTED: {
+            s = QString ("// CVD::addWeighted ( src1, %1, src2, %2, %3, dst );")
+                    .arg(QString::number(*(double*)cf->first_para->data))               // alpha
+                    .arg(QString::number(*(double*)cf->first_para->next->data))         // beta
+                    .arg(QString::number(*(double*)cf->first_para->next->next->data));  // gamma
+            }
+            break;
+        case CONVERTSCALEABS: {
             s = QString ("// CVD::convertScaleAbs ( src, dst, %1, %2 );")
                         .arg(QString::number(*(double*)cf->first_para->data))           // alpha
                         .arg(QString::number(*(double*)cf->first_para->next->data));    // beta
+            }
             break;
         case THRESHOLD: {
             QString bt = grep_enum_text("ThresholdTypes", *(int*)cf->first_para->next->next->data);   // type
@@ -1410,8 +1417,7 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf, uint32_t 
             }
             break;
         case MEDIANBLUR:
-            s = QString("// CVD::medianBlur( src, dst, %2);")
-                        .arg(QString(CVD_COMMENT))
+            s = QString("// CVD::medianBlur( src, dst, %1);")
                         .arg(QString::number(*(int*)cf->first_para->data));
             break;
         case BLUR_FUNC: {
@@ -1774,6 +1780,7 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "NORMALIZE_2") == 0) return NORMALIZE_2;
     if (strcmp(enum_name, "PRECORNERDETECT") == 0) return PRECORNERDETECT;
     if (strcmp(enum_name, "CORNERSUBPIX") == 0) return CORNERSUBPIX;
+    if (strcmp(enum_name, "ADDWEIGHTED") == 0) return ADDWEIGHTED;
 
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_INT") == 0) return CVD_RECT_TYPE_1_INT;
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_FLOAT") == 0) return CVD_RECT_TYPE_1_FLOAT;
@@ -1906,6 +1913,7 @@ char *MainWindow::get_enum_text (int val)
     if (val == CORNERMINEIGENVAL) strcpy (buf, "CORNERMINEIGENVAL");
     if (val == PRECORNERDETECT) strcpy (buf, "PRECORNERDETECT");
     if (val == CORNERSUBPIX) strcpy (buf, "CORNERSUBPIX");
+    if (val == ADDWEIGHTED) strcpy (buf, "ADDWEIGHTED");
 
     if (val == CVD_RECT_TYPE_1_INT) strcpy (buf, "CVD_RECT_TYPE_1_INT");
     if (val == CVD_RECT_TYPE_1_FLOAT) strcpy (buf, "CVD_RECT_TYPE_1_FLOAT");

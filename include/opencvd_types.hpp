@@ -87,6 +87,7 @@ enum _data_types_ {
     NORMALIZE_2 = 0x103A,           // *
     PRECORNERDETECT = 0x103B,       // *
     CORNERSUBPIX = 0x103C,          // *
+    ADDWEIGHTED = 0x103D,           //
 
     CVD_RECT_TYPE_1_INT = 0x1500,       // *
     CVD_RECT_TYPE_1_FLOAT = 0x1501,     // *

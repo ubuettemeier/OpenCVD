@@ -17,7 +17,8 @@ SAMPLE_PATH = 	basic/ \
 		matchShapes/ \
 		sepFilter2D/ \
 		cornerDetection/ \
-		cornerEigenValsAndVecs/
+                cornerEigenValsAndVecs \
+                blending/
 
 
 all:	
