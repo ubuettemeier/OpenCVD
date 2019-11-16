@@ -3411,7 +3411,6 @@ CV_EXPORTS_W void bilateralFilter( cv::InputArray src, cv::OutputArray dst, int 
     foo->control_imshow( dst );  // show Image
 }
 
-
 //!
 //! \brief GaussianBlur
 //!        Blurs an image using a Gaussian filter.
@@ -3421,6 +3420,7 @@ CV_EXPORTS_W void bilateralFilter( cv::InputArray src, cv::OutputArray dst, int 
 //! \param sigmaX
 //! \param sigmaY
 //! \param borderType
+//! \example CVD::GaussianBlur(src, dst, cv::Size(9, 9), 1.0);
 //!
 CV_EXPORTS_W void GaussianBlur( cv::InputArray src, cv::OutputArray dst, cv::Size ksize,
                                 double sigmaX, double sigmaY,
@@ -3564,6 +3564,7 @@ CV_EXPORTS_W void scaleAdd(cv::InputArray src1, double alpha, cv::InputArray src
 //! \param dst
 //! \param dtype dtype optional depth of the output array; when both input arrays have the same depth, dtype
 //!              can be set to -1, which will be equivalent to src1.depth().
+//! \example CVD::addWeighted(src1, 0.5, src2, 0.5, 0.0, dst);
 //!
 CV_EXPORTS_W void addWeighted(cv::InputArray src1, double alpha, cv::InputArray src2,
                               double beta, double gamma, cv::OutputArray dst, int dtype

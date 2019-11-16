@@ -124,7 +124,7 @@ see: samples/short_sample/short_sample.cpp
 
 ## OpenCV Installation
 
-### 1. Update und Aktualisierungsoftware für Ubuntu / Update software for Ubuntu
+### 1. Update und Aktualisierungssoftware für Ubuntu / Update software for Ubuntu
 ```	
 sudo su  
 sudo apt-get -y update

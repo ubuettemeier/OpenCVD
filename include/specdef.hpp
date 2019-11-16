@@ -12,6 +12,9 @@
 //! \author Ulrich Büttemeier
 //!
 
+#ifndef SPECDEF_HPP
+#define SPECDEF_HPP
+
 #include "opencvd.hpp"
 #include <type_traits>
 
@@ -405,3 +408,5 @@ int get_enumval (const char *enumlist_name, int val, const char *val_name)
 
 
 #endif // #ifdef USE_CVD
+
+#endif // SPECDEF_HPP
