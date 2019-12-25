@@ -1,4 +1,4 @@
-//!
+﻿//!
 //! @author Ulrich Buettemeier
 //!
 
@@ -58,8 +58,7 @@ namespace cvd {
 //! cv::getPerspectiveTransform()
 //! cv::getAffineTransform()
 //! cv::invertAffineTransform()
-
-
+//! cv::goodFeatureToTrack()
 
 CV_EXPORTS_W void getDerivKernels( cv::OutputArray kx, cv::OutputArray ky,
                                    int dx, int dy, int ksize,
@@ -3755,7 +3754,7 @@ CV_EXPORTS_W void findContours( cv::InputOutputArray image,         // CVD::Mat
             } catch( cv::Exception& e ) {
                 foo->error_flag |= FUNC_ERROR;
             }
-            foo->control_contours_imshow ( image, break_contours, break_hierarchy );    // Contours Ausgabe
+              foo->control_contours_imshow ( image, break_contours, break_hierarchy );    // Contours Ausgabe
             cv::waitKey(10);
             foo->control_func_run_time ();
         }
@@ -3856,6 +3855,8 @@ CV_EXPORTS_W void approxPolyDP( cv::InputArray curve,           // vector < cv::
 //! \param scale
 //! \param delta
 //! \param borderType
+//! \example    CVD::Laplacian(foo, dummy, CV_16S, 3, 1, 0);
+//!             CVD::convertScaleAbs( dummy, foo );           // converting back to CV_8U
 //!
 CV_EXPORTS_W void Laplacian( cv::InputArray src, cv::OutputArray dst, int ddepth,
                              int ksize, double scale, double delta,
@@ -4245,6 +4246,8 @@ CV_EXPORTS_W void HoughLines( cv::InputArray image, cv::OutputArray lines,
 //!        applied (see getDerivKernels for details).
 //! \param delta optional delta value that is added to the results prior to storing them in dst.
 //! \param borderType pixel extrapolation method, see cv::BorderTypes
+//! \example    CVD::Scharr(foo[i], dummy[0], CV_8UC1, 1, 0, 1); // CV_8UC1
+//!             CVD::Scharr(foo[i], dummy[1], CV_8UC1, 1, 0, -1); // CV_8UC1
 //!
 CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           int dx, int dy, double scale, double delta,

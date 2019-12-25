@@ -70,6 +70,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief set_cam_param
 //! \param cap
+//! \example CVD::set_cam_para (cap);
 //!
 void set_cam_para (cv::VideoCapture &cap,
                     int line_nr,
@@ -107,6 +108,15 @@ void set_cam_para (cv::VideoCapture &cap,
         struct _slide_double_para_ ga = {buf, 0.0, 1.0, 100.0, buf};
         foo->new_para ( SLIDE_DOUBLE_PARA, sizeof(struct _slide_double_para_), (uint8_t*)&ga, "GAIN" );
 
+        /*
+        buf = cap.get(cv::CAP_PROP_FRAME_WIDTH);
+        struct _double_para_ wi = {buf, 0.0, 1920.0, 1};
+        foo->new_para (INT_PARA, sizeof(struct _double_para_), (uint8_t*)&wi, "WIDTH");
+
+        buf = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
+        struct _double_para_ he = {buf, 0.0, 1920.0, 1};
+        foo->new_para (DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&he, "HEIGHT");
+        */
         /* funktioniert nicht !!
         buf = cap.get(cv::CAP_PROP_AUTO_EXPOSURE);
         struct _slide_double_para_ ae= {buf, 0.0, 1.0, 100.0, buf};
@@ -124,6 +134,8 @@ void set_cam_para (cv::VideoCapture &cap,
                 cv::CAP_PROP_SATURATION,
                 cv::CAP_PROP_HUE,
                 cv::CAP_PROP_GAIN
+                // cv::CAP_PROP_FRAME_WIDTH,
+                // cv::CAP_PROP_FRAME_HEIGHT
                 // cv::CAP_PROP_AUTO_EXPOSURE
             };
             int i;
@@ -132,6 +144,7 @@ void set_cam_para (cv::VideoCapture &cap,
                 if (buf->last_value != buf->value) {
                     cap.set(cap_para[i], *(double*)foo->para[i]->data);     // CAP_PROP_BRIGHTNESS
                     buf->last_value = buf->value;
+
                 }
             }
         } catch( cv::Exception& e ) {
