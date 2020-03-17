@@ -3255,7 +3255,7 @@ CV_EXPORTS_W void medianBlur( cv::InputArray src, cv::OutputArray dst, int ksize
 //! \param ksize
 //! \param anchor
 //! \param borderType
-//! \example CVD::blur(src, gst, cv::Size(3, 3));
+//! \example CVD::blur(src, dst, cv::Size(3, 3));
 //!
 CV_EXPORTS_W void blur( cv::InputArray src, cv::OutputArray dst,
                         cv::Size ksize, cv::Point anchor,

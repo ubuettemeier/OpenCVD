@@ -107,7 +107,7 @@ void MainWindow::trigger_timer ( void )
     struct _cvd_func_ *foo = first_func;
 
     while (foo != nullptr) {
-        QTreeWidgetItem *t = (QTreeWidgetItem *)foo->tree_pointer;      // Tree Eintrag für Funktionsnamen besorgen.
+        QTreeWidgetItem *t = static_cast<QTreeWidgetItem *>(foo->tree_pointer);      // Tree Eintrag für Funktionsnamen besorgen.
         if (t != nullptr) {
             if (foo->func_is_modifyt != 0)                              // Sind etweigige parameter verändert ?
                 t->setTextColor(0, QColor("red"));
@@ -177,7 +177,7 @@ int MainWindow::write_data (const char *data, uint32_t len)
 {
     int anz = 0;
     if (client) {
-        anz = client->write((const char *)data, len);
+        anz = client->write(static_cast<const char *>(data), len);
         client->flush();
         client->waitForBytesWritten(3000);
     }
@@ -231,9 +231,9 @@ void MainWindow::client_read_ready()
     QByteArray buf = client->readAll();    // Daten einlesen
 
     while (buf.size() >= 4) {
-        len = (uint32_t*)buf.data();
-        if ((uint32_t)buf.size() >= *len) {
-            bef = (uint16_t*)(buf.data()+4);
+        len = reinterpret_cast<uint32_t*>(buf.data());
+        if (static_cast<uint32_t>(buf.size()) >= *len) {
+            bef = reinterpret_cast<uint16_t*>((buf.data()+4));
             // printf ("bef = %4X\n", *bef);
             // ---------------------------------------------------------------------------------------------------
             if ((*bef >= 0x1000) && (*bef <= 0x1FFF)) {     // func data
@@ -263,7 +263,7 @@ void MainWindow::client_read_ready()
 
                         if (cf) {
                             cf->aktiv_icon = (cf->aktiv_icon < 6) ? cf->aktiv_icon+1 : 0;                                   // calc icon number
-                            QTreeWidgetItem *tw = (QTreeWidgetItem *)cf->tree_pointer;                                      // get tree pointer
+                            QTreeWidgetItem *tw = static_cast<QTreeWidgetItem *>(cf->tree_pointer);                         // get tree pointer
                             if (tt.error_flag == 0) {                                                                       // no ERROR detected
                                 tw->setIcon(0, aktiv_icon[ (cf->aktiv_icon < 4) ? cf->aktiv_icon : 7-cf->aktiv_icon ]);     // set icon
                             } else {
@@ -300,7 +300,7 @@ void MainWindow::client_read_ready()
                         struct _min_fps_time_ mft;
                         memcpy (&mft, buf.data(), sizeof(struct _min_fps_time_));
                         // printf ("%li\n", mft.max_fps_time);
-                        double fps = (mft.max_fps_time > min_fps_time) ? 1000000.0 / (double)mft.max_fps_time : 0.0;      // calc fps
+                        double fps = (mft.max_fps_time > min_fps_time) ? 1000000.0 / static_cast<double>(mft.max_fps_time) : 0.0;      // calc fps
                         ui->textEdit->insertPlainText(QString("fps=%1\n").arg(QString::number(fps)));
                     }
                     break;
@@ -357,7 +357,7 @@ void MainWindow::clear_system()
 struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
 {
     // printf ("--- new_func\n");
-    struct _cvd_func_ *foo = (struct _cvd_func_ *) malloc (sizeof(struct _cvd_func_));
+    struct _cvd_func_ *foo = static_cast<struct _cvd_func_ *> (malloc (sizeof(struct _cvd_func_)));
 
     foo->len = cf->len;
     foo->type = cf->type;
@@ -374,7 +374,7 @@ struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
     QTreeWidgetItem *tw = new QTreeWidgetItem(ui->treeWidget);
     tw->setText(0, QString("%1 %2").arg(QString::number(foo->line_nr)).arg(QString(foo->func_name)));
     tw->setIcon(0, aktiv_icon[ foo->aktiv_icon ]);
-    foo->tree_pointer = (void *)tw;
+    foo->tree_pointer = static_cast<void *>(tw);
 
     // Level 1 Parameter
     if (cf->state.flag.use_parameter == 0) {        // 0x01
@@ -383,7 +383,7 @@ struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
         QTreeWidgetItem *pa = new QTreeWidgetItem();
         pa->setText(0, QString("Parameter"));       // Parameter
         tw->addChild( pa );
-        foo->para_pointer = (void *)pa;
+        foo->para_pointer = static_cast<void *>(pa);
     }
 
     // Level 1 Function ON/OFF
@@ -393,7 +393,7 @@ struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
         QTreeWidgetItem *fo = new QTreeWidgetItem();
         fo->setText(0, QString("Function OFF"));    // func_off
         tw->addChild( fo );
-        foo->func_off = (void *)fo;
+        foo->func_off = static_cast<void *>(fo);
     }
 
     // Level 1 Show Image
@@ -403,7 +403,7 @@ struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
         QTreeWidgetItem *si = new QTreeWidgetItem();
         si->setText(0, QString("Show Image"));      // show Image
         tw->addChild( si );
-        foo->show_image = (void *)si;
+        foo->show_image = static_cast<void *>(si);
     }
 
     if (cf->state.flag.func_break == 0) {           // 0x08
@@ -412,7 +412,7 @@ struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
         QTreeWidgetItem *fb = new QTreeWidgetItem();
         fb->setText(0, QString("Break"));           // Break
         tw->addChild( fb );
-        foo->break_func = (void *)fb;
+        foo->break_func = static_cast<void *>(fb);
     }
 
     if (strlen(foo->filename) == 0)
@@ -497,7 +497,7 @@ struct _cvd_para_ *MainWindow::new_para (struct _cvd_func_ *cf, struct _para_dat
     if (cf == nullptr)
        return nullptr;
 
-    struct _cvd_para_ *foo = (struct _cvd_para_ *) malloc (sizeof(struct _cvd_para_));
+    struct _cvd_para_ *foo = static_cast<struct _cvd_para_ *>(malloc (sizeof(struct _cvd_para_)));
     foo->len = cp->len;
     foo->type = cp->type;
     foo->func_addr = cp->func_addr;
@@ -618,7 +618,7 @@ struct _cvd_para_ *MainWindow::grep_para_by_tree_pointer (QTreeWidgetItem *item)
     while ((cf != nullptr) && (ret == nullptr)) {
         cp = cf->first_para;
         while ((cp != nullptr) && (ret == nullptr)) {
-            if (cp->tree_pointer == (void*)item)
+            if (cp->tree_pointer == static_cast<void*>(item))
                 ret = cp;
             else
                 cp = cp->next;
@@ -644,7 +644,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     h.len = sizeof (struct _cvd_header_);
     h.bef = CLOSE_SERVER;
 
-    write_data ((const char *)&h, sizeof(struct _cvd_header_));
+    write_data (reinterpret_cast<const char *>(&h), sizeof(struct _cvd_header_));
     // client->write((const char *)&h, sizeof(struct _cvd_header_));
     // client->flush();
 
@@ -670,7 +670,7 @@ void MainWindow::write_state (struct _cvd_func_ *cf)
     cfl.func_addr = cf->func_addr;
     cfl.state = cf->state;
 
-    write_data((const char *)&cfl, sizeof(struct _cvd_flags_));
+    write_data(reinterpret_cast<const char *>(&cfl), sizeof(struct _cvd_flags_));
 }
 
 //!
@@ -703,7 +703,7 @@ void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
         if (cf) {
             if (parawin != nullptr) {          // es ist ein Parameter-Fenster offen !
                 if (parawin->cf != cf) {
-                    QTreeWidgetItem *i = (QTreeWidgetItem *)parawin->cf->para_pointer;
+                    QTreeWidgetItem *i = static_cast<QTreeWidgetItem *>(parawin->cf->para_pointer);
                     if (i != nullptr)
                         i->setIcon(0, QIcon());
                     delete parawin;
@@ -831,20 +831,20 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf, uint32_t 
         case ERODE: {
             QString func_name = (cf->type == ERODE) ? "erode" : "dilate";
 
-            struct _point_int_ *anchor = (struct _point_int_ *)cf->first_para->data;                // cv::Point anchor
-            QString bo = grep_enum_text("BorderTypes", *(int*)cf->first_para->next->next->data);    // normType
+            struct _point_int_ *anchor = reinterpret_cast<struct _point_int_ *>(cf->first_para->data);                // cv::Point anchor
+            QString bo = grep_enum_text("BorderTypes", *reinterpret_cast<int*>(cf->first_para->next->next->data));    // normType
             s = QString ("// CVD::%1(src, dst, kernel, cv::Point(%2, %3), %4, %5);")
                     .arg(func_name)
                     .arg(QString::number(anchor->x))
                     .arg(QString::number(anchor->y))
-                    .arg(QString::number(*(int*)cf->first_para->next->data))                // iterations
+                    .arg(QString::number(*reinterpret_cast<int*>(cf->first_para->next->data)))                // iterations
                     .arg(bo);
             }
             break;
 
         case CORNERSUBPIX: {
-            struct _point_int_ *ws = (struct _point_int_ *)cf->first_para->data;          // cv::Size winSize
-            struct _point_int_ *zz = (struct _point_int_ *)cf->first_para->next->data;          // cv::Size zeroZone
+            struct _point_int_ *ws = reinterpret_cast<struct _point_int_ *>(cf->first_para->data);          // cv::Size winSize
+            struct _point_int_ *zz = reinterpret_cast<struct _point_int_ *>(cf->first_para->next->data);          // cv::Size zeroZone
             s = QString ("// CVD::cornerSubPix(image, corners, cv::Size(%1, %2), cv::Size(%3, %4), criteria);")
                         .arg(QString::number(ws->x))
                         .arg(QString::number(ws->y))
@@ -854,62 +854,62 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf, uint32_t 
             break;
         case SET_CAM_PARA: {
             s = QString ("/*\n%1\n%2\n%3\n%4\n%5\n*/")
-                        .arg(QString("cap.set(cv::CAP_PROP_BRIGHTNESS, %1);").arg(QString::number(*(double*)cf->first_para->data)))
-                        .arg(QString("cap.set(cv::CAP_PROP_CONTRAST, %1);").arg(QString::number(*(double*)cf->first_para->next->data)))
-                        .arg(QString("cap.set(cv::CAP_PROP_SATURATION, %1);").arg(QString::number(*(double*)cf->first_para->next->next->data)))
-                        .arg(QString("cap.set(cv::CAP_PROP_HUE, %1);").arg(QString::number(*(double*)cf->first_para->next->next->next->data)))
-                        .arg(QString("cap.set(cv::CAP_PROP_GAIN, %1);").arg(QString::number(*(double*)cf->first_para->next->next->next->next->data)));
+                        .arg(QString("cap.set(cv::CAP_PROP_BRIGHTNESS, %1);").arg(QString::number(*reinterpret_cast<double*>(cf->first_para->data))))
+                        .arg(QString("cap.set(cv::CAP_PROP_CONTRAST, %1);").arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->data))))
+                        .arg(QString("cap.set(cv::CAP_PROP_SATURATION, %1);").arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->next->data))))
+                        .arg(QString("cap.set(cv::CAP_PROP_HUE, %1);").arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->next->next->data))))
+                        .arg(QString("cap.set(cv::CAP_PROP_GAIN, %1);").arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->next->next->next->data))));
             *anz_zeilen_eingefuegt = 7;
             }
             break;
         case NORMALIZE_2: {
-            QString bo = grep_enum_text("NormTypes", *(int*)cf->first_para->next->data);        // normType
+            QString bo = grep_enum_text("NormTypes", *reinterpret_cast<int*>(cf->first_para->next->data));        // normType
             s = QString ("// CVD::normalize(src, dst, %1, %2);")
-                        .arg(QString::number(*(double*)cf->first_para->data))                   // alpha
+                        .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->data)))                   // alpha
                         .arg(bo);                                                               // normType
             }
             break;
         case GETDERIVKERNELS: {
-            QString bo = grep_enum_text("boolType", *(int*)cf->first_para->next->next->next->data);      // normalize
-            QString kt = grep_enum_text("filterdepth_CV_32F_CV_64F", *(int*)cf->first_para->next->next->next->next->data);  // ktype
+            QString bo = grep_enum_text("boolType", *reinterpret_cast<int*>(cf->first_para->next->next->next->data));      // normalize
+            QString kt = grep_enum_text("filterdepth_CV_32F_CV_64F", *reinterpret_cast<int*>(cf->first_para->next->next->next->next->data));  // ktype
             s = QString ("// CVD::getDerivKernels (kx, ky, %1, %2, %3, %4, %5);")
-                        .arg(QString::number(*(int*)cf->first_para->data))       // dx
-                        .arg(QString::number(*(int*)cf->first_para->next->data))       // dy
-                        .arg(QString::number(*(int*)cf->first_para->next->next->data))       // hsize
+                        .arg(QString::number(*reinterpret_cast<int*>(cf->first_para->data)))       // dx
+                        .arg(QString::number(*reinterpret_cast<int*>(cf->first_para->next->data)))       // dy
+                        .arg(QString::number(*reinterpret_cast<int*>(cf->first_para->next->next->data)))       // hsize
                         .arg(bo)
                         .arg(kt);
             }
             break;
         case GETGABORKERNEL: {
-            struct _point_int_ *ks = (struct _point_int_ *)cf->first_para->data;          // cv::Size ksize
-            QString kt = grep_enum_text("filterdepth_CV_32F_CV_64F", *(int*)cf->first_para->next->next->next->next->next->next->data);  // ktype
+            struct _point_int_ *ks = reinterpret_cast<struct _point_int_ *>(cf->first_para->data);          // cv::Size ksize
+            QString kt = grep_enum_text("filterdepth_CV_32F_CV_64F", *reinterpret_cast<int*>(cf->first_para->next->next->next->next->next->next->data));  // ktype
 
             s = QString ("// CVD::getGaborKernel (cv::size(%1, %2), %3, %4, %5, %6, %7, %8);")
                         .arg(QString::number(ks->x))
                         .arg(QString::number(ks->y))
-                        .arg(QString::number(*(double*)cf->first_para->next->data))       // sigma
-                        .arg(QString::number(*(double*)cf->first_para->next->next->data))       // theta
-                        .arg(QString::number(*(double*)cf->first_para->next->next->next->data))       // lambd
-                        .arg(QString::number(*(double*)cf->first_para->next->next->next->next->data))       // gamma
-                        .arg(QString::number(*(double*)cf->first_para->next->next->next->next->next->data))       // psi
+                        .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->data)))               // sigma
+                        .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->next->data)))         // theta
+                        .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->next->next->data)))       // lambd
+                        .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->next->next->next->data)))       // gamma
+                        .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->next->next->next->next->data)))       // psi
                         .arg(kt);       // ktype
 
             }
             break;
         case GETGAUSSIANKERNEL: {
-            QString kt = grep_enum_text("filterdepth_CV_32F_CV_64F", *(int*)cf->first_para->next->next->data);  // ktype
+            QString kt = grep_enum_text("filterdepth_CV_32F_CV_64F", *reinterpret_cast<int*>(cf->first_para->next->next->data));  // ktype
 
             s = QString ("// CVD::getGaussianKernel (%1, %2, %3);")
-                        .arg(QString::number(*(int*)cf->first_para->data))       // ksize
-                        .arg(QString::number(*(double*)cf->first_para->next->data))       // sigma
+                        .arg(QString::number(*reinterpret_cast<int*>(cf->first_para->data)))       // ksize
+                        .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->data)))       // sigma
                         .arg(kt);
             }
             break;
         case FILTER2D:
         case SEQFILTER2D: {
-                QString dt = grep_enum_text("Sobel_filterdepth", *(int*)cf->first_para->data);      // ddepth
-                struct _point_int_ *op = (struct _point_int_ *)cf->first_para->next->data;          // cv::Point
-                QString bt = grep_enum_text("BorderTypes", *(int*)cf->first_para->next->next->next->data);      // borderType
+                QString dt = grep_enum_text("Sobel_filterdepth", *reinterpret_cast<int*>(cf->first_para->data));      // ddepth
+                struct _point_int_ *op = reinterpret_cast<struct _point_int_ *>(cf->first_para->next->data);          // cv::Point
+                QString bt = grep_enum_text("BorderTypes", *reinterpret_cast<int*>(cf->first_para->next->next->next->data));      // borderType
 
                 s = QString ("// CVD::%1( src, dst, %2, %3, cv::Point(%4, %5), %6, cv::%7);")
                             .arg(QString((cf->type == FILTER2D) ? "filter2D" : "sepFilter2D"))
@@ -917,7 +917,7 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf, uint32_t 
                             .arg(QString((cf->type == FILTER2D) ? "kernel" : "kernelX, kernelY"))
                             .arg(QString::number(op->x))                                            // Point
                             .arg(QString::number(op->y))
-                            .arg(QString::number(*(double*)cf->first_para->next->next->data))       // delta
+                            .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->next->data)))       // delta
                             .arg(bt);                                                               // borderType
             }
             break;
