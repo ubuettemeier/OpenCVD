@@ -177,7 +177,7 @@ int MainWindow::write_data (const char *data, uint32_t len)
 {
     int anz = 0;
     if (client) {
-        anz = client->write(reinterpret_cast<const char *>(data), len);
+        anz = client->write(static_cast<const char *>(data), len);
         client->flush();
         client->waitForBytesWritten(3000);
     }
@@ -1378,7 +1378,7 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf, uint32_t 
 
         case CVTCOLOR: {
             QString bt = grep_enum_text("ColorConversionCodes", *reinterpret_cast<int*>(cf->first_para->data));   // ddepth
-            if (bt.length() == 0) bt = QString::number(*(int*)cf->first_para->data);
+            if (bt.length() == 0) bt = QString::number(*reinterpret_cast<int*>(cf->first_para->data));
 
             s = QString ("// CVD::cvtColor ( src, dst, %1, %2 );")
                         .arg(bt)                                                            // code
@@ -1601,7 +1601,7 @@ void MainWindow::write_header_bef (int befehl)
 {
     struct _cvd_header_ h;
     h.len = sizeof (struct _cvd_header_);
-    h.bef = befehl;
+    h.bef = static_cast<uint16_t>(befehl);
 
     write_data(reinterpret_cast<const char *>(&h), sizeof(struct _cvd_header_));
 }
