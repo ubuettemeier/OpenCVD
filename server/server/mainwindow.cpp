@@ -177,7 +177,7 @@ int MainWindow::write_data (const char *data, uint32_t len)
 {
     int anz = 0;
     if (client) {
-        anz = client->write(static_cast<const char *>(data), len);
+        anz = client->write(reinterpret_cast<const char *>(data), len);
         client->flush();
         client->waitForBytesWritten(3000);
     }
@@ -310,7 +310,7 @@ void MainWindow::client_read_ready()
                 }
             } // if (*bef >= 0xF000)
         } // if ((uint32_t)buf.size() >= *len)
-        buf.remove(0, *len);            // Stream: cut the first bytes
+        buf.remove(0, static_cast<int>(*len));            // Stream: cut the first bytes
     } // while (buf.size() >= 4)
 } // client_read_ready()
 
@@ -1346,8 +1346,8 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf, uint32_t 
             break;
         case CONVERTSCALEABS: {
             s = QString ("// CVD::convertScaleAbs ( src, dst, %1, %2 );")
-                        .arg(QString::number(*(double*)cf->first_para->data))           // alpha
-                        .arg(QString::number(*(double*)cf->first_para->next->data));    // beta
+                        .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->data)))           // alpha
+                        .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->data)));    // beta
             }
             break;
         case THRESHOLD: {
@@ -1528,7 +1528,7 @@ void MainWindow::set_all_source_icon (bool wert)
 
     while (foo != nullptr) {
         if (foo->source_pointer != nullptr) {
-            QTreeWidgetItem *i = (QTreeWidgetItem *)foo->source_pointer;
+            QTreeWidgetItem *i = static_cast<QTreeWidgetItem *>(foo->source_pointer);
             if (i != nullptr) {
                 if (wert == false)
                     i->setIcon(0, QIcon());
@@ -1583,7 +1583,7 @@ void MainWindow::on_actionAlle_Fenster_schli_en_triggered()
         if (foo->state.flag.show_image != 0) {
             foo->state.flag.show_image = 0;
             if (foo->show_image != nullptr) {
-                QTreeWidgetItem *item = (QTreeWidgetItem *)foo->show_image;
+                QTreeWidgetItem *item = static_cast<QTreeWidgetItem *>(foo->show_image);
                 item->setIcon(0, QIcon());
                 item->setTextColor(0, QColor("black"));
             }
@@ -1603,7 +1603,7 @@ void MainWindow::write_header_bef (int befehl)
     h.len = sizeof (struct _cvd_header_);
     h.bef = befehl;
 
-    write_data((const char *)&h, sizeof(struct _cvd_header_));
+    write_data(reinterpret_cast<const char *>(&h), sizeof(struct _cvd_header_));
 }
 
 //!
@@ -1631,7 +1631,7 @@ void MainWindow::on_actionset_all_Function_OFF_triggered()
             if (foo->func_off != nullptr) {
                 if (foo->state.flag.func_off == 0) {
                     foo->state.flag.func_off = 1;
-                    QTreeWidgetItem *item = (QTreeWidgetItem *)foo->func_off;
+                    QTreeWidgetItem *item = reinterpret_cast<QTreeWidgetItem *>(foo->func_off);
                     item->setIcon(0, iconlist[OK_ICON]);
                     item->setTextColor(0, QColor("red"));
                     write_state ( foo );                    // client benachrichtigen !
@@ -1644,7 +1644,7 @@ void MainWindow::on_actionset_all_Function_OFF_triggered()
             if (foo->func_off != nullptr) {
                 if (foo->state.flag.func_off != 0) {
                     foo->state.flag.func_off = 0;
-                    QTreeWidgetItem *item = (QTreeWidgetItem *)foo->func_off;
+                    QTreeWidgetItem *item = static_cast<QTreeWidgetItem *>(foo->func_off);
                     item->setIcon(0, QIcon());
                     item->setTextColor(0, QColor("black"));
                     write_state  ( foo );                   // client benachrichtigen !
@@ -1669,14 +1669,14 @@ void MainWindow::on_actionall_Breakpoint_s_OFF_triggered()
             if (foo->state.flag.show_image) {
                 foo->state.flag.show_image = 0;
                 if (foo->show_image != nullptr) {
-                    QTreeWidgetItem *item = (QTreeWidgetItem *)foo->show_image;
+                    QTreeWidgetItem *item = static_cast<QTreeWidgetItem *>(foo->show_image);
                     item->setIcon(0, QIcon());                                      // Icon entfernen
                     item->setTextColor(0, QColor("black"));
                 }
                 write_state( foo );     // client benachrichtigen !
             }
             if (foo->break_func != nullptr) {
-                QTreeWidgetItem *item = (QTreeWidgetItem *)foo->break_func;     // QTree Item besorgen
+                QTreeWidgetItem *item = static_cast<QTreeWidgetItem *>(foo->break_func);     // QTree Item besorgen
                 item->setIcon(0, QIcon());                                      // Icon entfernen
                 item->setTextColor (0, QColor("black"));                        // Icon Text schwarz
             }
@@ -2023,7 +2023,7 @@ void MainWindow::on_actionOpenCv_Version_triggered()
     h.len = sizeof (struct _cvd_header_);
     h.bef = GET_CV_VERSION;
 
-    write_data ((const char *)&h, sizeof(struct _cvd_header_));
+    write_data (reinterpret_cast<const char *>(&h), sizeof(struct _cvd_header_));
 }
 
 //!
@@ -2036,5 +2036,5 @@ void MainWindow::on_actionshow_FPS_triggered()
     h.len = sizeof (struct _cvd_header_);
     h.bef = GET_SHORT_FPS_TICKS;
 
-    write_data ((const char *)&h, sizeof(struct _cvd_header_));
+    write_data (reinterpret_cast<const char *>(&h), sizeof(struct _cvd_header_));
 }
