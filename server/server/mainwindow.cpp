@@ -17,6 +17,7 @@
 
 #define VERSION "v0.6-0042"
 
+#include <stdio.h>
 #include <cstring>
 #include <iostream>
 #include <unistd.h>
@@ -177,7 +178,7 @@ int MainWindow::write_data (const char *data, uint32_t len)
 {
     int anz = 0;
     if (client) {
-        anz = client->write(static_cast<const char *>(data), len);
+        anz = static_cast<int>(client->write(data, static_cast<qint64>(len)));
         client->flush();
         client->waitForBytesWritten(3000);
     }
