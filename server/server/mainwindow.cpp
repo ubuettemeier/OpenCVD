@@ -425,7 +425,7 @@ struct _cvd_func_ * MainWindow::new_func (struct _func_data_transfer_ *cf)
             QTreeWidgetItem *fb = new QTreeWidgetItem();
             fb->setText(0, QString("Source"));              // Source
             tw->addChild( fb );
-            foo->source_pointer = (void *)fb;
+            foo->source_pointer = static_cast<void *>(fb);
         }
     }
 
@@ -922,22 +922,22 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf, uint32_t 
             }
             break;
         case PUTTEXT: {
-            struct _point_int_ *op = (struct _point_int_ *)cf->first_para->data;          // cv::Point
-            QString ff = grep_enum_text("HersheyFonts", *(int*)cf->first_para->next->data);      // fontFace
-            struct _scalar_double_ *sc = (struct _scalar_double_*) cf->first_para->next->next->next->data;
-            QString lt = grep_enum_text("LineTypes", *(int*)cf->first_para->next->next->next->next->next->data);      // lineType
-            QString bo = grep_enum_text("boolType", *(int*)cf->first_para->next->next->next->next->next->next->data);      // bottomLeftOrigin
+            struct _point_int_ *op = reinterpret_cast<struct _point_int_ *>(cf->first_para->data);          // cv::Point
+            QString ff = grep_enum_text("HersheyFonts", *reinterpret_cast<int*>(cf->first_para->next->data));      // fontFace
+            struct _scalar_double_ *sc = reinterpret_cast<struct _scalar_double_*> (cf->first_para->next->next->next->data);
+            QString lt = grep_enum_text("LineTypes", *reinterpret_cast<int*>(cf->first_para->next->next->next->next->next->data));      // lineType
+            QString bo = grep_enum_text("boolType", *reinterpret_cast<int*>(cf->first_para->next->next->next->next->next->next->data));      // bottomLeftOrigin
 
             s = QString ("// CVD::putText (img, %12text%13, cv::Point(%1, %2), %3, %4, cv::Scalar(%5, %6, %7, %8), %9, %10, %11);")
                         .arg(QString::number(op->x))                                        // Point
                         .arg(QString::number(op->y))
                         .arg(ff)                                                            // fontFace
-                        .arg(QString::number(*(double*)cf->first_para->next->next->data))   // fontScale
+                        .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->next->data)))   // fontScale
                         .arg(QString::number(sc->val[0]))                                   // color
                         .arg(QString::number(sc->val[1]))
                         .arg(QString::number(sc->val[2]))
                         .arg(QString::number(sc->val[3]))
-                        .arg(QString::number(*(int*)cf->first_para->next->next->next->next->data))   // thickness
+                        .arg(QString::number(*reinterpret_cast<int*>(cf->first_para->next->next->next->next->data)))   // thickness
                         .arg(lt)
                         .arg(bo)
                         .arg(QChar('"'))
@@ -946,11 +946,11 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf, uint32_t 
             break;
         case SQRBOXFILTER:
         case BOXFILTER: {
-            QString dt = grep_enum_text("Sobel_filterdepth", *(int*)cf->first_para->data);      // ddepth
-            struct _point_int_ *ks = (struct _point_int_ *)cf->first_para->next->data;          // cv::Size ksize
-            struct _point_int_ *ac = (struct _point_int_ *)cf->first_para->next->next->data;          // cv::Point anchor
-            QString nm = grep_enum_text("boolType", *(int*)cf->first_para->next->next->next->data);      // normalize
-            QString bt = grep_enum_text("BorderTypes", *(int*)cf->first_para->next->next->next->next->data);      // borderType
+            QString dt = grep_enum_text("Sobel_filterdepth", *reinterpret_cast<int*>(cf->first_para->data));      // ddepth
+            struct _point_int_ *ks = reinterpret_cast<struct _point_int_ *>(cf->first_para->next->data);          // cv::Size ksize
+            struct _point_int_ *ac = reinterpret_cast<struct _point_int_ *>(cf->first_para->next->next->data);          // cv::Point anchor
+            QString nm = grep_enum_text("boolType", *reinterpret_cast<int*>(cf->first_para->next->next->next->data));      // normalize
+            QString bt = grep_enum_text("BorderTypes", *reinterpret_cast<int*>(cf->first_para->next->next->next->next->data));      // borderType
 
             s = QString ("// CVD::%8(src, dst, %1, cv::Size(%2, %3), cv::Point(%4, %5), %6, %7);")
                          .arg(dt)
@@ -964,51 +964,51 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf, uint32_t 
             }
             break;
         case MATCHSHAPES: {
-            QString dt = grep_enum_text("ShapeMatchModes", *(int*)cf->first_para->data);
+            QString dt = grep_enum_text("ShapeMatchModes", *reinterpret_cast<int*>(cf->first_para->data));
             s = QString ("// CVD::matchShapes(contour1, contour2, %1, parameter);")
                          .arg(dt);                                                   // method
             }
             break;
         case GRABCUT: {
-            struct _rect_int_ *val = (struct _rect_int_ *) cf->first_para->data;
-            QString dt = grep_enum_text("GrabCutModes", *(int*)cf->first_para->next->next->data);
+            struct _rect_int_ *val = reinterpret_cast<struct _rect_int_ *> (cf->first_para->data);
+            QString dt = grep_enum_text("GrabCutModes", *reinterpret_cast<int*>(cf->first_para->next->next->data));
             s = QString ("// CVD::grabCut(img, mask, cv::Rect(%1, %2, %3, %4), bgdModel, fgdModel, %5, %6);")
                         .arg(QString::number(val->x))                               // cv::Rect
                         .arg(QString::number(val->y))
                         .arg(QString::number(val->w))
                         .arg(QString::number(val->h))
-                        .arg(QString::number(*(int*)cf->first_para->next->data))    // iterCount
+                        .arg(QString::number(*reinterpret_cast<int*>(cf->first_para->next->data)))    // iterCount
                         .arg(dt);                                                   // mode
             }
             break;
         case MATCHTEMPLATE: {
-            QString dt = grep_enum_text("TemplateMatchModes", *(int*)cf->first_para->data);
+            QString dt = grep_enum_text("TemplateMatchModes", *reinterpret_cast<int*>(cf->first_para->data));
             s = QString ("// CVD::matchTemplate(image, templ, result, %1, mask);")
                         .arg(dt);
             }
             break;
         case DISTANCETRANSFORM: {
-            QString dt = grep_enum_text("DistanceTypes", *(int*)cf->first_para->data);
-            QString bt = grep_enum_text("depth_for_distanceTransform", *(int*)cf->first_para->next->next->data);
+            QString dt = grep_enum_text("DistanceTypes", *reinterpret_cast<int*>(cf->first_para->data));
+            QString bt = grep_enum_text("depth_for_distanceTransform", *reinterpret_cast<int*>(cf->first_para->next->next->data));
             s = QString ("// CVD::distanceTransform(src, dst, %1, %2, %3);")
                         .arg(dt)
-                        .arg(QString::number(*(int*)cf->first_para->next->data))
+                        .arg(QString::number(*reinterpret_cast<int*>(cf->first_para->next->data)))
                         .arg(bt);
             }
             break;
         case PYRMEANSHIFTFILTERING: {
             s = QString ("// CVD::pyrMeanShiftFiltering(src, dst, %1, %2, %3, termcrit);")
-                        .arg(QString::number(*(double*)cf->first_para->data))
-                        .arg(QString::number(*(double*)cf->first_para->next->data))
-                        .arg(QString::number(*(int*)cf->first_para->next->next->data));
+                        .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->data)))
+                        .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->data)))
+                        .arg(QString::number(*reinterpret_cast<int*>(cf->first_para->next->next->data)));
             }
             break;
         case BILATERALFILTER: {
-            QString bt = grep_enum_text("BorderTypes", *(int*)cf->first_para->next->next->next->data);   //
+            QString bt = grep_enum_text("BorderTypes", *reinterpret_cast<int*>(cf->first_para->next->next->next->data));   //
             s = QString ("// CVD::bilateralFilter(src, dst, %1, %2, %3, %4);")
-                        .arg(QString::number(*(int*)cf->first_para->data))
-                        .arg(QString::number(*(double*)cf->first_para->next->data))
-                        .arg(QString::number(*(double*)cf->first_para->next->next->data))
+                        .arg(QString::number(*reinterpret_cast<int*>(cf->first_para->data)))
+                        .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->data)))
+                        .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->next->data)))
                         .arg(bt);
             }
             break;
@@ -1016,18 +1016,18 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf, uint32_t 
             QString bt = grep_enum_text("LineSegmentDetectorModes", *(int*)cf->first_para->data);   // _refine
             s = QString ("// CVD::createLineSegmentDetector(%1, %2, %3, %4, %5, %6, %7, %8);")
                          .arg(bt)                                                                                       // _refine
-                         .arg(QString::number(*(double*)cf->first_para->next->data))                                    // _scale
-                         .arg(QString::number(*(double*)cf->first_para->next->next->data))                              // _sigma_scale
-                         .arg(QString::number(*(double*)cf->first_para->next->next->next->data))                        // _quant
-                         .arg(QString::number(*(double*)cf->first_para->next->next->next->next->data))                  // _ang_th
-                         .arg(QString::number(*(double*)cf->first_para->next->next->next->next->next->data))            // _log_eps
-                         .arg(QString::number(*(double*)cf->first_para->next->next->next->next->next->next->data))      // _density_th
-                         .arg(QString::number(*(int*)cf->first_para->next->next->next->next->next->next->next->data));  // _n_bins
+                         .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->data)))                                    // _scale
+                         .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->next->data)))                              // _sigma_scale
+                         .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->next->next->data)))                        // _quant
+                         .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->next->next->next->data)))                  // _ang_th
+                         .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->next->next->next->next->data)))            // _log_eps
+                         .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->next->next->next->next->next->data)))      // _density_th
+                         .arg(QString::number(*reinterpret_cast<int*>(cf->first_para->next->next->next->next->next->next->next->data)));  // _n_bins
             }
             break;
         case CVD_POINT_TYPE_1_FLOAT:
         case CVD_POINT_TYPE_1_DOUBLE: {
-            struct _point_double_ *ip = (struct _point_double_ *)cf->first_para->data;
+            struct _point_double_ *ip = reinterpret_cast<struct _point_double_ *>(cf->first_para->data);
             s = QString ("// CVD::Point(%1, %2);")
                          .arg(QString::number(ip->x))
                          .arg(QString::number(ip->y));
