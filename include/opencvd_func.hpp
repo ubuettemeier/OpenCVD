@@ -937,6 +937,7 @@ void box_Filter( cv::InputArray src, cv::OutputArray dst,
 //! \param normalize flag, specifying whether the kernel is to be normalized by it's area or not.
 //! \param borderType border mode used to extrapolate pixels outside of the image, see cv::BorderTypes
 //! \sa sqrBoxFilter
+//! \example    CVD::boxFilter (src, dst, -1, cv::Size(3, 6));
 //!
 CV_EXPORTS_W void boxFilter( cv::InputArray src, cv::OutputArray dst, int ddepth,
                              cv::Size ksize, cv::Point anchor,
@@ -958,6 +959,7 @@ CV_EXPORTS_W void boxFilter( cv::InputArray src, cv::OutputArray dst, int ddepth
 //! \param normalize flag, specifying whether the kernel is to be normalized by it's area or not.
 //! \param borderType border mode used to extrapolate pixels outside of the image, see cv::BorderTypes
 //! \sa boxFilter
+//! \example    CVD::sqrBoxFilter (src, dst, -1, cv::Size(3, 3));   // filtert sehr stark
 //!
 CV_EXPORTS_W void sqrBoxFilter( cv::InputArray _src, cv::OutputArray _dst, int ddepth,
                                 cv::Size ksize, cv::Point anchor,
@@ -1592,6 +1594,12 @@ CV_EXPORTS void rectangle(CV_IN_OUT cv::Mat& img, cv::Rect rec,
 //! \param param Numerical parameter ( C ) for some types of distances. If it is 0, an optimal value
 //! \param reps Sufficient accuracy for the radius (distance between the coordinate origin and the line).
 //! \param aeps Sufficient accuracy for the angle. 0.01 would be a good default value for reps and aeps.
+//! \example    std::vector<cv::Point> points;
+//!             ...
+//!             points.push_back( cv::Point{x, y} );    // die Liste muss mit Punkten gefuellt werden !
+//!             ...
+//!             cv::Vec4f line;
+//!             CVD::fitLine( points, line, CV_DIST_L12, 0, 0.001, 0.001);
 //!
 CV_EXPORTS_W void fitLine( cv::InputArray points, cv::OutputArray line, int distType,
                            double param, double reps, double aeps

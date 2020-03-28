@@ -141,12 +141,12 @@ private:
 vector <opencvd_func *> func_list{};    // empty list (Global)
 
 //!
-//! \brief init_socket
+//! \brief init_socket  new client to 127.0.0.1:51717
 //! \return succes=0  failure=1
 //!
 int init_socket ()
 {
-    sock = socket ( AF_INET, SOCK_STREAM, 0 );
+    sock = socket ( AF_INET, SOCK_STREAM, 0 );      // sys/socket.h
     if (sock < 0) {
         cout << "ERROR socket\n";
         return EXIT_FAILURE;
@@ -165,19 +165,19 @@ int init_socket ()
         memcpy ( (char*)&server.sin_addr, host_info->h_addr, host_info->h_length );
     }
     server.sin_family = AF_INET;
-    server.sin_port = htons( PORT );
+    server.sin_port = htons( PORT );                                            // s.opencvd_types.hpp  #define PORT 51717
 
-    if (connect( sock, (struct sockaddr*)&server, sizeof(server)) < 0) {
+    if (connect( sock, (struct sockaddr*)&server, sizeof(server)) < 0) {        // Es wurde kein server gefunden
         cout << "no connection to the server\n";
         close (sock);
         sock = -1;
         return EXIT_FAILURE;
-    } else {
+    } else {                                                                    // local server 127.0.0.1 gefunden
         cout << "I connect to the server on localhost\n";
     }
 
-    client_thread = new std::thread( read_thread );
-    client_thread->detach();
+    client_thread = new std::thread( read_thread );             // read thread einrichten.
+    client_thread->detach();                                    // read thread unabhängig machen.
 
     return EXIT_SUCCESS;
 }
@@ -448,8 +448,8 @@ void control_socket ()
     }   // while
 }
 
-//!
-//! \brief read_thread
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+//! \brief read_thread  Beenden mit <read_thread_end=1>
 //!
 void read_thread ()
 {
