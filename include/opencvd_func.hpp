@@ -350,7 +350,7 @@ CV_EXPORTS_W void getDerivKernels( cv::OutputArray kx, cv::OutputArray ky,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for getGaborKernel
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), GETDERIVKERNELS, "getDerivKernels()",
@@ -414,7 +414,7 @@ CV_EXPORTS_W Mat getGaborKernel( cv::Size ksize, double sigma, double theta, dou
 
     Mat ret;
     static std::vector<opencvd_func *> func{};  // reg vector for getGaborKernel
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), GETGABORKERNEL, "getGaborKernel()",
@@ -484,7 +484,7 @@ CV_EXPORTS_W Mat getGaussianKernel( int ksize, double sigma, int ktype
 
     Mat ret;
     static std::vector<opencvd_func *> func{};  // reg vector for boxFilter
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), GETGAUSSIANKERNEL, "getGaussianKernel()",
@@ -540,7 +540,7 @@ CV_EXPORTS_W void sepFilter2D( cv::InputArray src, cv::OutputArray dst, int ddep
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for boxFilter
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), SEQFILTER2D, "sepFilter2D()",
@@ -632,7 +632,7 @@ CV_EXPORTS_W void filter2D( cv::InputArray src, cv::OutputArray dst, int ddepth,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for boxFilter
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), FILTER2D, "filter2D()",
@@ -725,7 +725,7 @@ CV_EXPORTS_W void putText( cv::InputOutputArray img, const cv::String& text, cv:
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for boxFilter
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), PUTTEXT, "putText()",
@@ -837,7 +837,7 @@ void box_Filter( cv::InputArray src, cv::OutputArray dst,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for boxFilter
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0),
@@ -987,7 +987,7 @@ CV_EXPORTS_W double matchShapes( cv::InputArray contour1, cv::InputArray contour
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
     double ret = 1.0;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
@@ -1064,7 +1064,7 @@ CV_EXPORTS_W void grabCut( cv::InputArray img, cv::InputOutputArray mask, cv::Re
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), GRABCUT, "grabCut()",
@@ -1147,7 +1147,7 @@ CV_EXPORTS_W void matchTemplate( cv::InputArray image, cv::InputArray templ,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), MATCHTEMPLATE, "matchTemplate()",
@@ -1216,7 +1216,7 @@ CV_EXPORTS_W void distanceTransform( cv::InputArray src, cv::OutputArray dst,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), DISTANCETRANSFORM, "distanceTransform()",
@@ -1290,7 +1290,7 @@ CV_EXPORTS_W void pyrMeanShiftFiltering( cv::InputArray src, cv::OutputArray dst
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), PYRMEANSHIFTFILTERING, "pyrMeanShiftFiltering()",
@@ -1372,7 +1372,7 @@ CV_EXPORTS_W cv::Ptr<cv::LineSegmentDetector> createLineSegmentDetector(
     cv::Ptr<cv::LineSegmentDetector> ret; //  = nullptr;
 
     static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), CREATELINESEGMENTDETECTOR, "createLineSegmentDetector()",
@@ -1454,7 +1454,7 @@ CV_EXPORTS_W void rectangle(cv::InputOutputArray img, cv::Point pt1, cv::Point p
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), RECTANGLE_2, "rectangle(pt1, pt2)",
@@ -1529,7 +1529,7 @@ CV_EXPORTS void rectangle(CV_IN_OUT cv::Mat& img, cv::Rect rec,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), RECTANGLE_1, "rectangle(rec)",
@@ -1611,7 +1611,7 @@ CV_EXPORTS_W void fitLine( cv::InputArray points, cv::OutputArray line, int dist
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), FITLINE, "fitLine",
@@ -1669,7 +1669,7 @@ void cornerEigenVal (cv::InputArray src, cv::OutputArray dst,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for boxFilter
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0),
@@ -1772,7 +1772,7 @@ CV_EXPORTS_W void cornerSubPix( cv::InputArray image, cv::InputOutputArray corne
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), CORNERSUBPIX, "cornerSubPix",
@@ -1825,7 +1825,7 @@ CV_EXPORTS_W void preCornerDetect( cv::InputArray src, cv::OutputArray dst, int 
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), PRECORNERDETECT, "preCornerDetect",
@@ -1878,7 +1878,7 @@ CV_EXPORTS_W void cornerHarris( cv::InputArray src, cv::OutputArray dst, int blo
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), CORNERHARRIS, "cornerHarris",
@@ -1938,7 +1938,7 @@ CV_EXPORTS_W void pyrUp( cv::InputArray src, cv::OutputArray dst,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), PYRUP, "pyrUp",
@@ -2005,7 +2005,7 @@ CV_EXPORTS void buildPyramid( cv::InputArray src, cv::OutputArrayOfArrays dst,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for pyrDown
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), BUILDPYRAMID, "buildPyramid",
@@ -2079,7 +2079,7 @@ CV_EXPORTS_W void pyrDown( cv::InputArray src, cv::OutputArray dst,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for pyrDown
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), PYRDOWN, "pyrDown",
@@ -2159,7 +2159,7 @@ CV_EXPORTS void calcHist( const cv::Mat* images, int nimages,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for calcHist
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), CALCHIST, "calcHist",
@@ -2211,7 +2211,7 @@ CV_EXPORTS void normalize( const cv::SparseMat& src, cv::SparseMat& dst,
         return;
     }
     static std::vector<opencvd_func *> func{};  // reg vector for erode
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), NORMALIZE_2, "normalize",
@@ -2263,7 +2263,7 @@ CV_EXPORTS_W void normalize( cv::InputArray src, cv::InputOutputArray dst,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for erode
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), NORMALIZE, "normalize",
@@ -2329,7 +2329,7 @@ CV_EXPORTS_W Mat getStructuringElement(int shape, cv::Size ksize, cv::Point anch
 
     Mat ret;
     static std::vector<opencvd_func *> func{};  // reg vector for erode
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), GETSTRUCTURINGELEMENT, "getStructuringElement",
@@ -2380,7 +2380,7 @@ CV_EXPORTS_W void erode( cv::InputArray src, cv::OutputArray dst, cv::InputArray
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for erode
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), ERODE, "erode", 0x000F, BUILIN_PARA);
@@ -2462,7 +2462,7 @@ CV_EXPORTS_W void dilate( cv::InputArray src, cv::OutputArray dst, cv::InputArra
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for dilate
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), DILATE, "dilate", 0x000F, BUILIN_PARA);
@@ -2548,7 +2548,7 @@ CV_EXPORTS_W void morphologyEx( cv::InputArray src, cv::OutputArray dst,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for morphologyEx
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), MORPHOLOGYEX, "morphologyEx", 0x000F, BUILIN_PARA);
@@ -2628,7 +2628,7 @@ CV_EXPORTS_W void cvtColor( cv::InputArray src, cv::OutputArray dst, int code, i
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for cvtColor
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), CVTCOLOR, "cvtColor", 0x000F, BUILIN_PARA);
@@ -2698,7 +2698,7 @@ CV_EXPORTS_W void adaptiveThreshold( cv::InputArray src, cv::OutputArray dst,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for threshold
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), ADAPTIVETHRESHOLD, "adaptiveThreshold",
@@ -2781,7 +2781,7 @@ CV_EXPORTS_W double threshold( cv::InputArray src, cv::OutputArray dst,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for threshold
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
     double ret = 0.0;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
@@ -2865,7 +2865,8 @@ CV_EXPORTS_W double threshold( cv::InputArray src, cv::OutputArray dst,
 //! \param scale
 //! \param delta
 //! \param borderType
-//! \example CVD::Sobel(src, dst, CV_8U, 1, 1); // CV_8UC1
+//! \example    CVD::Sobel(src, dst, CV_8U, 1, 1); // CV_8UC1
+//!             CVD::Sobel(top, sobel, CV_8U, 1, 0, 3, 0.4, 128);   // Sobel X
 //!
 CV_EXPORTS_W void Sobel( cv::InputArray src, cv::OutputArray dst, int ddepth,
                          int dx, int dy, int ksize,
@@ -2879,7 +2880,7 @@ CV_EXPORTS_W void Sobel( cv::InputArray src, cv::OutputArray dst, int ddepth,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), SOBEL, "Sobel", 0x000F, BUILIN_PARA);
@@ -2974,7 +2975,7 @@ CV_EXPORTS_W void Canny( cv::InputArray image, cv::OutputArray edges,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), CANNY, "Canny", 0x000F, BUILIN_PARA);
@@ -3046,6 +3047,7 @@ CV_EXPORTS_W void Canny( cv::InputArray image, cv::OutputArray edges,
 //! \param threshold1
 //! \param threshold2
 //! \param L2gradient
+//! \example    CVD::Canny( gray, edge, 50, 150, 3);
 //!
 CV_EXPORTS_W void Canny( cv::InputArray dx, cv::InputArray dy,                      // Canny Typ 2
                          cv::OutputArray edges,
@@ -3059,7 +3061,7 @@ CV_EXPORTS_W void Canny( cv::InputArray dx, cv::InputArray dy,                  
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), CANNY_2, "Canny Typ 2", 0x000F, BUILIN_PARA);
@@ -3135,7 +3137,7 @@ CV_EXPORTS_W void resize( cv::InputArray src, cv::OutputArray dst,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), RESIZE, "resize", 0x000F, BUILIN_PARA);
@@ -3214,7 +3216,7 @@ CV_EXPORTS_W void medianBlur( cv::InputArray src, cv::OutputArray dst, int ksize
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), MEDIANBLUR, "medianBlur", 0x000F, BUILIN_PARA);
@@ -3276,7 +3278,7 @@ CV_EXPORTS_W void blur( cv::InputArray src, cv::OutputArray dst,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), BLUR_FUNC, "blur", 0x000F, BUILIN_PARA);
@@ -3360,7 +3362,7 @@ CV_EXPORTS_W void bilateralFilter( cv::InputArray src, cv::OutputArray dst, int 
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), BILATERALFILTER, "bilateralFilter()",
@@ -3440,7 +3442,7 @@ CV_EXPORTS_W void GaussianBlur( cv::InputArray src, cv::OutputArray dst, cv::Siz
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), GAUSSIANBLUR, "GaussianBlur", 0x000F, BUILIN_PARA);
@@ -3515,7 +3517,7 @@ CV_EXPORTS_W void scaleAdd(cv::InputArray src1, double alpha, cv::InputArray src
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), SCALEADD, "scaleAdd",
@@ -3583,7 +3585,7 @@ CV_EXPORTS_W void addWeighted(cv::InputArray src1, double alpha, cv::InputArray 
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), ADDWEIGHTED, "addWeighted",
@@ -3660,7 +3662,7 @@ CV_EXPORTS_W void convertScaleAbs(cv::InputArray src, cv::OutputArray dst,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), CONVERTSCALEABS, "convertScaleAbs", 0x000F, BUILIN_PARA);
@@ -3729,7 +3731,7 @@ CV_EXPORTS_W void findContours( cv::InputOutputArray image,         // CVD::Mat
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), FINDCONTOURS, "findContours", 0x000F, BUILIN_PARA);
@@ -3820,7 +3822,7 @@ CV_EXPORTS_W void approxPolyDP( cv::InputArray curve,           // vector < cv::
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector for pyrUp
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), APPROXPOLYPD, "approxPolyDP",
@@ -3877,7 +3879,7 @@ CV_EXPORTS_W void Laplacian( cv::InputArray src, cv::OutputArray dst, int ddepth
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), LAPLACIAN, "Laplacian", 0x000F, BUILIN_PARA);
@@ -3957,7 +3959,7 @@ CV_EXPORTS_W Mat imread( const cv::String& filename, int flags
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), IMREAD, "imread", 0x000F, BUILIN_PARA);
@@ -4055,7 +4057,7 @@ CV_EXPORTS_W void HoughCircles( cv::InputArray image, cv::OutputArray circles,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), HOUGHCIRCLES, "HoughCircles", 0x0003, BUILIN_PARA);
@@ -4126,7 +4128,7 @@ CV_EXPORTS_W void HoughLinesP( cv::InputArray image, cv::OutputArray lines,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), HOUGHLINESP, "HoughLinesP", 0x0003, BUILIN_PARA);
@@ -4195,7 +4197,7 @@ CV_EXPORTS_W void HoughLines( cv::InputArray image, cv::OutputArray lines,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), HOUGHLINES, "HoughLines", 0x0003, BUILIN_PARA);
@@ -4268,7 +4270,7 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), SCHARR, "Scharr", 0x000F, BUILIN_PARA);

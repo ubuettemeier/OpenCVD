@@ -19,7 +19,7 @@
 #include <type_traits>
 
 // ---------------------- Achtung: #define löschen -------------------------------------------------
-// #define USE_CVD
+#define USE_CVD
 
 #ifdef USE_CVD
     void set_cam_para (cv::VideoCapture &cap,
@@ -80,9 +80,9 @@ void set_cam_para (cv::VideoCapture &cap,
         return;
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
-    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == nullptr) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), SET_CAM_PARA, "set_cam_para",
                                PARAMETER | FUNC_OFF | SHOW_IMAGE,    // Menu
                                line_nr, src_file);
@@ -179,9 +179,9 @@ void get_filename (T *fname, const char *val_name,
                    const char *src_file)
 {
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
-    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == nullptr) {
         assert ((std::is_same<T, cv::String>::value |
                  std::is_same<T, std::string>::value));
 
@@ -235,9 +235,9 @@ T set_trackbar (T a, const char *val_name,
     T ret;
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
-    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == nullptr) {
         std::string str = "set_trackbar(";
         str += val_name;
         str += ")";
@@ -305,9 +305,9 @@ T get_numval (T a, const char *val_name,
     T ret;
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
-    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == nullptr) {
         std::string str = "get_numval(";
         str += val_name;
         str += ")";
@@ -384,9 +384,9 @@ int get_enumval (const char *enumlist_name, int val, const char *val_name,
     #endif
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
-    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == nullptr) {
         std::string str = "get_enumval(";
         str += val_name;
         str += ")";

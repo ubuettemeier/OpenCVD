@@ -74,9 +74,9 @@ Point_<_Tp>::Point_(_Tp _x, _Tp _y, int line_nr, const char *src_file) : cv::Poi
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
-    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == nullptr) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), type, fname,
                                PARAMETER | FUNC_OFF,    // Menu
                                line_nr, src_file);
@@ -156,9 +156,9 @@ Scalar_<_Tp>::Scalar_(_Tp v0, int line_nr, const char *src_file) : cv::Scalar_<_
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
-    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == nullptr) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), CVD_SCALAR_2, "cvd::Scalar",
                                PARAMETER | FUNC_OFF,    // Menu
                                line_nr, src_file);
@@ -199,9 +199,9 @@ Scalar_<_Tp>::Scalar_(_Tp v0, _Tp v1, _Tp v2, _Tp v3, int line_nr, const char *s
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
-    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == nullptr) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), CVD_SCALAR_1, "cvd::Scalar",
                                PARAMETER | FUNC_OFF,    // Menu
                                line_nr, src_file);
@@ -275,9 +275,9 @@ Rect_<_Tp>::Rect_(_Tp _x, _Tp _y, _Tp _width, _Tp _height, int line_nr, const ch
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
-    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == nullptr) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), type, "cvd::Rect",
                                PARAMETER | FUNC_OFF,    // Menu
                                line_nr, src_file);
@@ -465,9 +465,9 @@ char *String::string_func (const char *s,
 
     static char str[MAX_STRING_VAL_LEN] = "";
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
-    if ((foo = opencvd_func::grep_func(func, addr)) == NULL) {
+    if ((foo = opencvd_func::grep_func(func, addr)) == nullptr) {
         foo = new opencvd_func(addr, type, f_name,
                                PARAMETER,    // Menu
                                line_nr, src_file);
