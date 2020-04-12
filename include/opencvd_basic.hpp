@@ -37,7 +37,7 @@ unsigned long addr;
 uint8_t cvd_off = 0;
 uint8_t read_thread_end = 0;
 uint8_t write_data_blocked = 0;         // Atomic
-std::thread *client_thread = NULL;
+std::thread *client_thread = nullptr;
 
 uint32_t para_id_counter = 0x00000001;
 char cv_version[32] = "3.3.0";
@@ -100,7 +100,7 @@ public:
 //!
 class opencvd_func {
 public:
-    opencvd_func (uint64_t addr, uint16_t type, const char *f_name, uint8_t start_flags=0x0007, int line_no=0, const char *src_file=NULL);
+    opencvd_func (uint64_t addr, uint16_t type, const char *f_name, uint8_t start_flags=0x0007, int line_no=0, const char *src_file=nullptr);
     ~opencvd_func ();
 
     opencvd_func(const opencvd_func&) = delete;             // copy construktor delete
@@ -158,7 +158,7 @@ int init_socket ()
         memcpy ( (char*)&server.sin_addr, &addr, sizeof(addr));
     } else {
         host_info = gethostbyname( SERVER_ADDR );
-        if (NULL == host_info) {
+        if (nullptr == host_info) {
             cout << "unknown server\n";
             return EXIT_FAILURE;
         }
@@ -246,7 +246,7 @@ int read_data ( int sockfd, unsigned char *data, int data_len )
     FD_ZERO(&fds);              // tv now represents 1.5 seconds
     FD_SET(sockfd, &fds);       // adds sock to the file descriptor set
 
-    select(sockfd+1, &fds, NULL, NULL, &tv);      // wait 10ms for any data to be read from any single socket
+    select(sockfd+1, &fds, nullptr, nullptr, &tv);      // wait 10ms for any data to be read from any single socket
 
     if (FD_ISSET(sockfd, &fds)) {   // es sind Daten eingetroffen
         if ( (n = read(sockfd, data, data_len) ) < 0 ) {		// liest Daten vom Handle/Descriptor sockfd. Die Funktion liest blockierend
@@ -301,7 +301,7 @@ void control_socket ()
             case RECT_INT_PARA: {
                 struct _para_data_transfer_ *foo = (struct _para_data_transfer_ *)&buffer[pointer];   // buffer casten
                 opencvd_para *cp = opencvd_func::grep_para_id ( foo->para_id );              // Parameter finden. Es werden in allen Funktionen die Parameter durchgefummelt.
-                if (cp != NULL) {
+                if (cp != nullptr) {
                     // printf ("para %s\n", cp->para_name);
                     switch (cp->para_type) {
                     case RECT_DOUBLE_PARA: {
@@ -395,7 +395,7 @@ void control_socket ()
             case FUNC_FLAGS: {          // 0x3000 ... 0x3FFF
                 struct _cvd_flags_ *foo = (struct _cvd_flags_ *)&buffer[pointer];     // buffer casten
                 opencvd_func *f = opencvd_func::grep_func_from_liste( foo->func_addr );    // Funktion ermitteln
-                if (f != NULL) {
+                if (f != nullptr) {
                     f->state.val = foo->state.val;
                     if (f->state.flag.func_off == 1) {
                         f->fps_ticks = 0;
@@ -535,7 +535,7 @@ uint64_t cvd_time_differnce (struct timeval *start)
 {
     struct timeval akt;
 
-    gettimeofday (&akt, NULL);
+    gettimeofday (&akt, nullptr);
     return cvd_difference_micro(start, &akt);
 }
 
@@ -560,7 +560,7 @@ opencvd_start::~opencvd_start()
     h.bef = CLOSE_CLIENT;
     write_data ( (uint8_t*)&h, h.len );
 
-    if (client_thread != NULL) {            // read_thread beenden
+    if (client_thread != nullptr) {            // read_thread beenden
         read_thread_end = 1;
         while (read_thread_end == 1) {      // wait for for thread end
             usleep (100);
@@ -584,7 +584,7 @@ opencvd_func::opencvd_func (uint64_t addr, uint16_t type, const char *f_name, ui
     line_nr = line_no;
     state.val = start_flags;     // alle Menüpunkte EIN
 
-    if (src_file == NULL)       // Filename bearbeiten.
+    if (src_file == nullptr)       // Filename bearbeiten.
         strcpy (file_name, "");
     else {
         char foo[4096*2];
@@ -610,7 +610,7 @@ opencvd_func::opencvd_func (uint64_t addr, uint16_t type, const char *f_name, ui
 
     func_list.push_back( this );
 
-    gettimeofday(&time_stemp, NULL);
+    gettimeofday(&time_stemp, nullptr);
     last_trigger_time = time_stemp;
     window_name = std::string(func_name) + std::string("_") + std::to_string(func_addr & 0x0000000000FFFFFF);   // create Window Name
 
@@ -642,7 +642,7 @@ opencvd_func *opencvd_func::grep_func(std::vector<opencvd_func *>f,  uint64_t ad
             return f[i];
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 //!
@@ -657,7 +657,7 @@ opencvd_func *opencvd_func::grep_func_from_liste (uint64_t addr)
             return func_list[i];
     }
 
-    return NULL;
+    return nullptr;
 }
 
 //!
@@ -678,7 +678,7 @@ opencvd_para *opencvd_func::grep_para_id(uint32_t id)
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 //!
@@ -795,10 +795,10 @@ void opencvd_func::new_para (uint16_t type, int len, uint8_t *data, const char *
 int opencvd_func::control_func_run_time ()
 {
     fps_ticks = cvd_time_differnce (&last_trigger_time);    // wird für fps benoetigt
-    gettimeofday(&last_trigger_time, NULL);
+    gettimeofday(&last_trigger_time, nullptr);
 
     if ((cvd_time_differnce (&time_stemp)) > TRIGGER_TIME) {
-        gettimeofday(&time_stemp, NULL);
+        gettimeofday(&time_stemp, nullptr);
         struct _time_trigger_ tt;
         tt.func_addr = func_addr;
         tt.type = TIME_TRIGGER;

@@ -181,9 +181,9 @@ Mat::Mat(cv::Size size, int type, int line_nr, const char *src_file)
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
-    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == nullptr) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), MAT_SIZE_TYPE, "Mat(size, type)", 0x000F, line_nr, src_file);
         func.push_back( foo );
 
@@ -244,9 +244,9 @@ Mat::Mat(int rows, int cols, int type, int line_nr, const char *src_file)
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
-    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == nullptr) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), MAT_ROWS_COLS_TYPE, "Mat(rows, cols, type)", 0x000F, line_nr, src_file);
         func.push_back( foo );
 
@@ -310,9 +310,9 @@ Mat::Mat(cv::Size size, int type, const cv::Scalar& s, int line_nr, const char *
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
-    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == nullptr) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), MAT_SIZE_TYPE_SCALAR, "Mat(Size, type, Scalar)", 0x000F, line_nr, src_file);
         func.push_back( foo );
 
@@ -379,9 +379,9 @@ Mat::Mat(int rows, int cols, int type, const cv::Scalar& s, int line_nr, const c
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
-    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == nullptr) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), MAT_ROWS_COLS_TYPE_SCALAR, "Mat(rows, cols, type, Scalar)", 0x000F, line_nr, src_file);
         func.push_back( foo );
 
@@ -505,9 +505,9 @@ cv::MatExpr Mat::func_type_2(cv::Size size, int type,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
-    if ((foo = opencvd_func::grep_func(func, builtin_retunr_adresse)) == NULL) {
+    if ((foo = opencvd_func::grep_func(func, builtin_retunr_adresse)) == nullptr) {
         foo = new opencvd_func(builtin_retunr_adresse, cv_type, func_name,
                                PARAMETER | FUNC_OFF | BREAK | SHOW_IMAGE,    // Menu
                                line_nr, src_file);
@@ -628,9 +628,9 @@ cv::MatExpr Mat::func_type_3(int ndims, const int* sz, int type,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
-    if ((foo = opencvd_func::grep_func(func, builtin_retunr_adresse)) == NULL) {
+    if ((foo = opencvd_func::grep_func(func, builtin_retunr_adresse)) == nullptr) {
         foo = new opencvd_func(builtin_retunr_adresse, cv_type, func_name,
                                PARAMETER | FUNC_OFF | BREAK | SHOW_IMAGE,    // Menu
                                line_nr, src_file);
@@ -777,9 +777,9 @@ cv::MatExpr Mat::func_type_1(int rows, int cols, int type,
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
-    if ((foo = opencvd_func::grep_func(func, builtin_retunr_adresse)) == NULL) {
+    if ((foo = opencvd_func::grep_func(func, builtin_retunr_adresse)) == nullptr) {
         foo = new opencvd_func(builtin_retunr_adresse, cv_type, func_name,
                                PARAMETER | FUNC_OFF | BREAK | SHOW_IMAGE,    // Menu
                                line_nr, src_file);
@@ -863,9 +863,9 @@ Mat::Mat(const cv::Mat& m, const cv::Rect& roi, int line_nr, const char *src_fil
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
-    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == nullptr) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), MAT_ROI, "Mat(Mat& Rect&)", 0x000F, line_nr, src_file);
         func.push_back( foo );
 
@@ -919,9 +919,9 @@ void Mat::assignTo( cv::Mat& m, int type, int line_nr, const char *src_file ) co
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
-    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == nullptr) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), MAT_ASSIGNTO, "Mat::assignTo",
                                PARAMETER | FUNC_OFF | BREAK | SHOW_IMAGE,    // Menu
                                line_nr, src_file);
@@ -978,9 +978,9 @@ void Mat::convertTo( cv::OutputArray m, int rtype, double alpha, double beta, in
     }
 
     static std::vector<opencvd_func *> func{};  // reg vector
-    opencvd_func *foo = NULL;
+    opencvd_func *foo = nullptr;
 
-    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == NULL) {
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == nullptr) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), MAT_CONVERTTO, "Mat::converTo()", 0x000F, line_nr, src_file);
         func.push_back( foo );
 

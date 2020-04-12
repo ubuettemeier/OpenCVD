@@ -357,7 +357,7 @@ String::String(const char* str, int line_nr, const char *src_file) : cv::String(
         return;
     }
 
-    char *ret = NULL;
+    char *ret = nullptr;
     ret = string_func (str,
                  (uint64_t)__builtin_return_address(0),
                  STRING_FUNC,
@@ -377,7 +377,7 @@ String::String(const String& str, int line_nr, const char *src_file ) : cv::Stri
         *this = str.c_str();
         return;
     }
-    char *ret = NULL;
+    char *ret = nullptr;
     ret = string_func (str.c_str(),
                  (uint64_t)__builtin_return_address(0),
                  STRING_FUNC,
@@ -399,7 +399,7 @@ String::String(const std::string& str, int line_nr, const char *src_file ) : cv:
         return;
     }
 
-    char *ret = NULL;
+    char *ret = nullptr;
     ret = string_func (str.c_str(),
                  (uint64_t)__builtin_return_address(0),
                  STRING_FUNC,
