@@ -63,6 +63,16 @@ ParaWin::ParaWin(QTcpSocket *c, struct _cvd_func_ *foo, MainWindow *main_win, QW
         new EnumDrop (client, cf->first_para->next, LEFT_POS, 10+55*1, this );  // normtype
         set_param_win( 2, 260 );
         break;
+    case CALCOPTICALFLOWFARNEBACK:
+        new DoubleEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );      // pyr_scale
+        new IntEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );     // levels
+        new IntEdit (client, cf->first_para->next->next, LEFT_POS, 10+55*2, this );     // winsize
+        new IntEdit (client, cf->first_para->next->next->next, LEFT_POS, 10+55*3, this );     // iterations
+        new IntEdit (client, cf->first_para->next->next->next->next, LEFT_POS, 10+55*4, this );     // poly_n
+        new DoubleEdit (client, cf->first_para->next->next->next->next->next, LEFT_POS, 10+55*5, this );      // poly_sigma
+        new IntEdit (client, cf->first_para->next->next->next->next->next->next, LEFT_POS, 10+55*6, this );     // flags
+        set_param_win( 7, 260 );
+        break;
     case GETDERIVKERNELS:
         new IntEdit (client, cf->first_para, LEFT_POS, 10+55*0, this );     // dx
         new IntEdit (client, cf->first_para->next, LEFT_POS, 10+55*1, this );     // dy

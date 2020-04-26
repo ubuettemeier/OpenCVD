@@ -15,7 +15,7 @@
 //!
 //! \bug - class Slide, min max werden nicht korrekt berchnet. erl. 09.09.19
 
-#define VERSION "v0.6-0042"
+#define VERSION "v0.6-0043"
 
 #include <stdio.h>
 #include <cstring>
@@ -868,6 +868,17 @@ QString MainWindow::build_source_line_comment ( struct _cvd_func_ *cf, uint32_t 
             s = QString ("// CVD::normalize(src, dst, %1, %2);")
                         .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->data)))                   // alpha
                         .arg(bo);                                                               // normType
+            }
+            break;
+    case CALCOPTICALFLOWFARNEBACK: {
+            s = QString ("// CVD::cornerSubPix(prev, next, flow, %1);")
+                        .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->data)))        // pyr_scale
+                        .arg(QString::number(*reinterpret_cast<int*>(cf->first_para->next->data)))      // levels
+                        .arg(QString::number(*reinterpret_cast<int*>(cf->first_para->next->next->data)))      // winsize
+                        .arg(QString::number(*reinterpret_cast<int*>(cf->first_para->next->next->next->data)))      // iterations
+                        .arg(QString::number(*reinterpret_cast<int*>(cf->first_para->next->next->next->next->data)))      // poly_n
+                        .arg(QString::number(*reinterpret_cast<double*>(cf->first_para->next->next->next->next->next->data)))      // poly_sigma
+                        .arg(QString::number(*reinterpret_cast<int*>(cf->first_para->next->next->next->next->next->next->data)));      // flags
             }
             break;
         case GETDERIVKERNELS: {
@@ -1782,6 +1793,7 @@ int MainWindow::grep_enum (const char *enum_name)
     if (strcmp(enum_name, "PRECORNERDETECT") == 0) return PRECORNERDETECT;
     if (strcmp(enum_name, "CORNERSUBPIX") == 0) return CORNERSUBPIX;
     if (strcmp(enum_name, "ADDWEIGHTED") == 0) return ADDWEIGHTED;
+    if (strcmp(enum_name, "CALCOPTICALFLOWFARNEBACK") == 0) return CALCOPTICALFLOWFARNEBACK;
 
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_INT") == 0) return CVD_RECT_TYPE_1_INT;
     if (strcmp(enum_name, "CVD_RECT_TYPE_1_FLOAT") == 0) return CVD_RECT_TYPE_1_FLOAT;
@@ -1915,6 +1927,7 @@ char *MainWindow::get_enum_text (int val)
     if (val == PRECORNERDETECT) strcpy (buf, "PRECORNERDETECT");
     if (val == CORNERSUBPIX) strcpy (buf, "CORNERSUBPIX");
     if (val == ADDWEIGHTED) strcpy (buf, "ADDWEIGHTED");
+    if (val == CALCOPTICALFLOWFARNEBACK) strcpy (buf, "CALCOPTICALFLOWFARNEBACK");
 
     if (val == CVD_RECT_TYPE_1_INT) strcpy (buf, "CVD_RECT_TYPE_1_INT");
     if (val == CVD_RECT_TYPE_1_FLOAT) strcpy (buf, "CVD_RECT_TYPE_1_FLOAT");

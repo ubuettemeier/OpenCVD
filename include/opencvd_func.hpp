@@ -60,6 +60,12 @@ namespace cvd {
 //! cv::invertAffineTransform()
 //! cv::goodFeatureToTrack()
 
+CV_EXPORTS_W void calcOpticalFlowFarneback( cv::InputArray prev, cv::InputArray next, cv::InputOutputArray flow,
+                                            double pyr_scale, int levels, int winsize,
+                                            int iterations, int poly_n, double poly_sigma,
+                                            int flags,
+                                            BUILDIN);
+
 CV_EXPORTS_W void getDerivKernels( cv::OutputArray kx, cv::OutputArray ky,
                                    int dx, int dy, int ksize,
                                    bool normalize = false, int ktype = CV_32F,
@@ -325,7 +331,82 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           int borderType = cv::BORDER_DEFAULT,
                           BUILDIN);
 
-//!
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief calcOpticalFlowFarneback
+/// \param prev
+/// \param next
+/// \param flow
+/// \param pyr_scale
+/// \param levels
+/// \param winsize
+/// \param iterations
+/// \param poly_n
+/// \param poly_sigma
+/// \param flags
+///
+CV_EXPORTS_W void calcOpticalFlowFarneback( cv::InputArray prev, cv::InputArray next, cv::InputOutputArray flow,
+                                            double pyr_scale, int levels, int winsize,
+                                            int iterations, int poly_n, double poly_sigma,
+                                            int flags
+                                            BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::calcOpticalFlowFarneback( prev, next, flow, pyr_scale, levels, winsize, iterations, poly_n, poly_sigma, flags );
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for getGaborKernel
+    opencvd_func *foo = nullptr;
+
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == nullptr) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), CALCOPTICALFLOWFARNEBACK, "calcOpticalFlowFarneback()",
+                                PARAMETER,              // Menu
+                                BUILIN_PARA);
+        func.push_back( foo );
+
+        struct _double_para_ ps = {pyr_scale, 0.0, 0.9999, 4};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&ps, "pyr_scale" );
+
+        struct _int_para_ lev = {levels, 1, 12};
+        foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&lev, "levels" );
+
+        struct _int_para_ ws = {winsize, -40000, 40000};
+        foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&ws, "winsize" );
+
+        struct _int_para_ ite = {iterations, 1, 100};
+        foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&ite, "iterations" );
+
+        struct _int_para_ pon = {poly_n, 1, 50};
+        foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&pon, "poly_n" );
+
+        struct _double_para_ poly = {poly_sigma, -10.0, 10.0, 3};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&poly, "poly_sigma" );
+
+        struct _int_para_ fl = {flags, -40000, 40000};
+        foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&fl, "flags" );
+    }
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // -----------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------
+    try {
+        cv::calcOpticalFlowFarneback(prev, next, flow,
+                                    *(double *)foo->para[0]->data,       // pyr_scale
+                                    *(int *)foo->para[1]->data,       // levels
+                                    *(int *)foo->para[2]->data,       // winsize
+                                    *(int *)foo->para[3]->data,       // iterations
+                                    *(int *)foo->para[4]->data,      // poly_n
+                                    *(double *)foo->para[5]->data,      // poly_sigma
+                                    *(int *)foo->para[6]->data);      // flags
+
+    } catch( cv::Exception& e ) {
+        foo->error_flag |= FUNC_ERROR;
+    }
+    foo->control_func_run_time ();
+
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief getDerivKernels
 //! \param kx
 //! \param ky
@@ -620,6 +701,10 @@ CV_EXPORTS_W void sepFilter2D( cv::InputArray src, cv::OutputArray dst, int ddep
 //!        is at the kernel center.
 //! \param delta optional value added to the filtered pixels before storing them in dst.
 //! \param borderType pixel extrapolation method, see cv::BorderTypes
+//! \example    Mat_ <char> kernel(1, 5);
+//!             kernel << 1, 0, -1;                 // Gradientenfilter
+//!             CVD::filter2D( src, dst, CV_32F, kernel);
+//!             dst.convertTo( result, CV_8U);
 //!
 CV_EXPORTS_W void filter2D( cv::InputArray src, cv::OutputArray dst, int ddepth,
                             cv::InputArray kernel, cv::Point anchor,

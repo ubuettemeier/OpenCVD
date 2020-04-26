@@ -88,6 +88,7 @@ enum _data_types_ {
     PRECORNERDETECT = 0x103B,       // *
     CORNERSUBPIX = 0x103C,          // *
     ADDWEIGHTED = 0x103D,           //
+    CALCOPTICALFLOWFARNEBACK = 0x103E,  //
 
     CVD_RECT_TYPE_1_INT = 0x1500,       // *
     CVD_RECT_TYPE_1_FLOAT = 0x1501,     // *
@@ -161,10 +162,10 @@ enum _data_types_ {
 //! \see class opencvd_func, union _stateflags_ state.
 //!
 enum _menu_types_ {
-    PARAMETER = 1,
-    FUNC_OFF = 2,
-    SHOW_IMAGE = 4,
-    BREAK = 8,
+    PARAMETER = 1,      // Parameter, Source
+    FUNC_OFF = 2,       // Function OFF
+    SHOW_IMAGE = 4,     // Show Image
+    BREAK = 8,          // Break
 };
 
 enum _error_flags_ {        // used for opencvd_func::error_flag

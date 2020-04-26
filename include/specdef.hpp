@@ -19,7 +19,7 @@
 #include <type_traits>
 
 // ---------------------- Achtung: #define löschen -------------------------------------------------
-#define USE_CVD
+// #define USE_CVD
 
 #ifdef USE_CVD
     void set_cam_para (cv::VideoCapture &cap,
