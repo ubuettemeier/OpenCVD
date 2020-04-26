@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
     <enum>
+        <!-- see: calcOpticalFlowPyrLK(), calcOpticalFlowFarneback() Parameter flags -->
+        <FlowFlags>
+            <OPTFLOW_NO_FLAG> 0 </OPTFLOW_NO_FLAG>
+            <OPTFLOW_USE_INITIAL_FLOW> 4 </OPTFLOW_USE_INITIAL_FLOW>
+            <OPTFLOW_LK_GET_MIN_EIGENVALS> 8 </OPTFLOW_LK_GET_MIN_EIGENVALS>
+            <OPTFLOW_FARNEBACK_GAUSSIAN> 256 </OPTFLOW_FARNEBACK_GAUSSIAN>
+        </FlowFlags>
         <!-- Binary_Descriptor_Type used for stereo -->
         <Binary_Descriptor_Type>
             <CV_DENSE_CENSUS> 0 </CV_DENSE_CENSUS>

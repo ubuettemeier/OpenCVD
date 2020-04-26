@@ -60,6 +60,14 @@ namespace cvd {
 //! cv::invertAffineTransform()
 //! cv::goodFeatureToTrack()
 
+CV_EXPORTS_W void calcOpticalFlowPyrLK( cv::InputArray prevImg, cv::InputArray nextImg,
+                                        cv::InputArray prevPts, cv::InputOutputArray nextPts,
+                                        cv::OutputArray status, cv::OutputArray err,
+                                        cv::Size winSize = cv::Size(21,21), int maxLevel = 3,
+                                        cv::TermCriteria criteria = cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, 0.01),
+                                        int flags = 0, double minEigThreshold = 1e-4,
+                                        BUILDIN);
+
 CV_EXPORTS_W void calcOpticalFlowFarneback( cv::InputArray prev, cv::InputArray next, cv::InputOutputArray flow,
                                             double pyr_scale, int levels, int winsize,
                                             int iterations, int poly_n, double poly_sigma,
@@ -332,17 +340,92 @@ CV_EXPORTS_W void Scharr( cv::InputArray src, cv::OutputArray dst, int ddepth,
                           BUILDIN);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief calcOpticalFlowPyrLK
+/// \param prevImg
+/// \param nextImg
+/// \param prevPts
+/// \param nextPts
+/// \param status
+/// \param err
+/// \param winSize
+/// \param maxLevel
+/// \param criteria
+/// \param flags
+/// \param minEigThreshold
+///
+CV_EXPORTS_W void calcOpticalFlowPyrLK( cv::InputArray prevImg, cv::InputArray nextImg,
+                                        cv::InputArray prevPts, cv::InputOutputArray nextPts,
+                                        cv::OutputArray status, cv::OutputArray err,
+                                        cv::Size winSize, int maxLevel,
+                                        cv::TermCriteria criteria,
+                                        int flags, double minEigThreshold
+                                        BUILDIN_FUNC)
+{
+    if (cvd_off) {
+        cv::calcOpticalFlowPyrLK( prevImg, nextImg,
+                              prevPts, nextPts,
+                              status, err,
+                              winSize, maxLevel,
+                              criteria,
+                              flags, minEigThreshold);
+        return;
+    }
+
+    static std::vector<opencvd_func *> func{};  // reg vector for getGaborKernel
+    opencvd_func *foo = nullptr;
+
+    if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == nullptr) {
+        foo = new opencvd_func((uint64_t)__builtin_return_address(0), CALCOPTICALFLOWPYRLK, "calcOpticalFlowPyrLK()",
+                                PARAMETER,              // Parameter, Source
+                                BUILIN_PARA);
+
+        func.push_back( foo );
+
+        struct _point_int_ ws = {winSize.width, 1, 20000, winSize.height, 1, 20000};
+        foo->new_para (POINT_INT, sizeof(struct _point_int_), (uint8_t*)&ws, "winSize");      // cv::Size winSize
+
+        struct _int_para_ lev = {maxLevel, 0, 1000};
+        foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&lev, "maxLevel" );
+
+        struct _enum_para_ fl = {flags, "FlowFlags"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&fl, "FlowFlags" );
+
+        struct _double_para_ met = {minEigThreshold, 0.0, 0.9999, 4};
+        foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&met, "minEigThreshold" );
+    }
+
+    foo->error_flag &= ~FUNC_ERROR;     // clear func_error
+    // -----------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------
+    try {
+        struct _point_int_ *ws = (struct _point_int_ *)foo->para[0]->data;
+        cv::calcOpticalFlowPyrLK( prevImg, nextImg,
+                                  prevPts, nextPts,
+                                  status, err,
+                                  cv::Size(ws->x, ws->y),           // ksize
+                                  *(int *)foo->para[1]->data,       // maxLevels
+                                  criteria,
+                                  *(int *)foo->para[2]->data,       // flags enum <FlowFlags>
+                                  *(double *)foo->para[3]->data);   // minEigThreshold
+
+    } catch( cv::Exception& e ) {
+        foo->error_flag |= FUNC_ERROR;
+    }
+    foo->control_func_run_time ();
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief calcOpticalFlowFarneback
 /// \param prev
 /// \param next
 /// \param flow
-/// \param pyr_scale
+/// \param pyr_scale 0.0 ... 0.999
 /// \param levels
 /// \param winsize
 /// \param iterations
 /// \param poly_n
 /// \param poly_sigma
-/// \param flags
+/// \param flags    see: OPTFLOW_USE_INITIAL_FLOW, OPTFLOW_FARNEBACK_GAUSSIAN
 ///
 CV_EXPORTS_W void calcOpticalFlowFarneback( cv::InputArray prev, cv::InputArray next, cv::InputOutputArray flow,
                                             double pyr_scale, int levels, int winsize,
@@ -361,7 +444,7 @@ CV_EXPORTS_W void calcOpticalFlowFarneback( cv::InputArray prev, cv::InputArray 
 
     if ((foo = opencvd_func::grep_func(func, (uint64_t)__builtin_return_address(0))) == nullptr) {
         foo = new opencvd_func((uint64_t)__builtin_return_address(0), CALCOPTICALFLOWFARNEBACK, "calcOpticalFlowFarneback()",
-                                PARAMETER,              // Menu
+                                PARAMETER,              // Parameter, Source
                                 BUILIN_PARA);
         func.push_back( foo );
 
@@ -383,8 +466,8 @@ CV_EXPORTS_W void calcOpticalFlowFarneback( cv::InputArray prev, cv::InputArray 
         struct _double_para_ poly = {poly_sigma, -10.0, 10.0, 3};
         foo->new_para ( DOUBLE_PARA, sizeof(struct _double_para_), (uint8_t*)&poly, "poly_sigma" );
 
-        struct _int_para_ fl = {flags, -40000, 40000};
-        foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&fl, "flags" );
+        struct _enum_para_ fl = {flags, "FlowFlags"};
+        foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&fl, "FlowFlags" );
     }
     foo->error_flag &= ~FUNC_ERROR;     // clear func_error
     // -----------------------------------------------------------------------------------------------
@@ -392,19 +475,18 @@ CV_EXPORTS_W void calcOpticalFlowFarneback( cv::InputArray prev, cv::InputArray 
     // -----------------------------------------------------------------------------------------------
     try {
         cv::calcOpticalFlowFarneback(prev, next, flow,
-                                    *(double *)foo->para[0]->data,       // pyr_scale
-                                    *(int *)foo->para[1]->data,       // levels
-                                    *(int *)foo->para[2]->data,       // winsize
-                                    *(int *)foo->para[3]->data,       // iterations
-                                    *(int *)foo->para[4]->data,      // poly_n
+                                    *(double *)foo->para[0]->data,      // pyr_scale
+                                    *(int *)foo->para[1]->data,         // levels
+                                    *(int *)foo->para[2]->data,         // winsize
+                                    *(int *)foo->para[3]->data,         // iterations
+                                    *(int *)foo->para[4]->data,         // poly_n
                                     *(double *)foo->para[5]->data,      // poly_sigma
-                                    *(int *)foo->para[6]->data);      // flags
+                                    *(int *)foo->para[6]->data);        // flags enum <FlowFlags>
 
     } catch( cv::Exception& e ) {
         foo->error_flag |= FUNC_ERROR;
     }
     foo->control_func_run_time ();
-
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \brief getDerivKernels

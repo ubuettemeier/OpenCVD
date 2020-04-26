@@ -89,6 +89,7 @@ enum _data_types_ {
     CORNERSUBPIX = 0x103C,          // *
     ADDWEIGHTED = 0x103D,           //
     CALCOPTICALFLOWFARNEBACK = 0x103E,  //
+    CALCOPTICALFLOWPYRLK = 0x103F,
 
     CVD_RECT_TYPE_1_INT = 0x1500,       // *
     CVD_RECT_TYPE_1_FLOAT = 0x1501,     // *
