@@ -783,7 +783,7 @@ CV_EXPORTS_W void sepFilter2D( cv::InputArray src, cv::OutputArray dst, int ddep
 //!        is at the kernel center.
 //! \param delta optional value added to the filtered pixels before storing them in dst.
 //! \param borderType pixel extrapolation method, see cv::BorderTypes
-//! \example    Mat_ <char> kernel(1, 5);
+//! \example    Mat_ <char> kernel(1, 3);
 //!             kernel << 1, 0, -1;                 // Gradientenfilter
 //!             CVD::filter2D( src, dst, CV_32F, kernel);
 //!             dst.convertTo( result, CV_8U);
@@ -1372,6 +1372,7 @@ CV_EXPORTS_W void matchTemplate( cv::InputArray image, cv::InputArray templ,
 //!                 the same result as \f$5\times 5\f$ or any larger aperture.
 //! \param dstType Type of output image. It can be CV_8U or CV_32F. Type CV_8U can be used only for
 //!                 the first variant of the function and distanceType == DIST_L1.
+//! \example    CVD::distanceTransform (src, dst, DIST_L2, 3, CV_8U);
 //!
 CV_EXPORTS_W void distanceTransform( cv::InputArray src, cv::OutputArray dst,
                                      int distanceType, int maskSize, int dstType
@@ -2882,7 +2883,7 @@ CV_EXPORTS_W void adaptiveThreshold( cv::InputArray src, cv::OutputArray dst,
         struct _enum_para_ ep = {thresholdType, "ThresholdTypes_2"};
         foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&ep, "thresholdType" );
 
-        struct _int_para_ bs = {blockSize, 3, 31};
+        struct _int_para_ bs = {blockSize, 3, 61};
         foo->new_para ( SLIDE_INT_TWO_STEP_PARA, sizeof(struct _int_para_), (uint8_t*)&bs, "blockSize" );
 
         struct _double_para_ cv = {C, -1000.0, 1000.0, 2};
@@ -3056,13 +3057,13 @@ CV_EXPORTS_W void Sobel( cv::InputArray src, cv::OutputArray dst, int ddepth,
         struct _enum_para_ dd = {ddepth, "Sobel_filterdepth"};
         foo->new_para ( ENUM_DROP_DOWN, sizeof(struct _enum_para_), (uint8_t*)&dd, "ddepth" );
 
-        struct _int_para_ sx = {dx, 0, 30};                                             // dx < ksize
+        struct _int_para_ sx = {dx, 0, 30};                                            // dx < ksize
         foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&sx, "dx" );
 
         struct _int_para_ sy = {dy, 0, 30};                                             // dy < ksize
         foo->new_para ( INT_PARA, sizeof(struct _int_para_), (uint8_t*)&sy, "dy" );
 
-        struct _int_para_ sp = {ksize, 1, 31};    // 1, 3, 5, 7, ...
+        struct _int_para_ sp = {ksize, -1, 7};    // -1, 1, 3, 5, 7;  CV_SCHARR =-1;  CV_MAX_SOBEL_KSIZE =7
         foo->new_para ( SLIDE_INT_TWO_STEP_PARA, sizeof(struct _int_para_), (uint8_t*)&sp, "ksize" );
 
         struct _double_para_ sc = {scale, -100000.0, 100000.0, 2};
@@ -4339,8 +4340,8 @@ CV_EXPORTS_W void HoughLinesP( cv::InputArray image, cv::OutputArray lines,
 //! \brief HoughLines
 //! \param image 8-bit, single-channel binary source image. The image may be modified by the function.
 //! \param lines
-//! \param rho Distance resolution of the accumulator in pixels.
-//! \param theta Angle resolution of the accumulator in radians.
+//! \param rho Distance resolution of the accumulator in pixels. (Abstandsauflösung des Akkumulators in Pixeln.)
+//! \param theta Angle resolution of the accumulator in radians. (Winkelauflösung des Akkumulators im Bogenmaß.)
 //! \param threshold
 //! \param srn For the multi-scale Hough transform, it is a divisor for the distance resolution rho .
 //! The coarse accumulator distance resolution is rho and the accurate accumulator resolution is
