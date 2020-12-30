@@ -138,7 +138,7 @@ sudo apt-get install libopencv-dev
 ```
 ### 3. OpenCV Build-Tools installieren / Installing OpenCV Build Tools
 ```	
-sudo apt-get install 
+sudo apt-get install \
      build-essential \
      checkinstall \
      cmake \
