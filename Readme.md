@@ -1,6 +1,6 @@
 ## OpenCVD
 
-<p>OpenCVD ist eine interaktive Visualisierungssoftware.
+<p>OpenCVD (v0.6.1) ist eine interaktive Visualisierungssoftware.
 Sie ermöglicht eine schnelle und effektive Unterstützung bei der Entwicklung von Bildverarbeitungs Applikationen.
 Sie unterstützt eine Großzahl von OpenCV Funktionen. 
 Darüber hinaus sind auch spezialisierte Bausteine verfügbar.</p>

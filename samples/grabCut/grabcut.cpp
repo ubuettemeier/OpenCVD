@@ -35,6 +35,7 @@ int main( )
             cv::Mat foreground(image.size(), CV_8UC3, cv::Scalar(255,255,255));     // foreground fill with white
             image.copyTo(foreground, result);                                       // bg pixels not copied !!!
 
+	        cv::rectangle (image, rectangle, cv::Scalar(0, 0, 255), 3);     // draw rectngle
             cv::imshow("Image", image);
             cv::imshow("Segmented Image", foreground);      // display result
         }

@@ -11,6 +11,7 @@ samples/versuche*/
 
 # Verzeichnis wiki ausschliessen
 wiki/
+.vscode/
 
 # Verzeichnis literatur ausschliessen
 literatur/
