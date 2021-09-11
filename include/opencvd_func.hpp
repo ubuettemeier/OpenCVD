@@ -2095,6 +2095,7 @@ CV_EXPORTS_W void cornerHarris( cv::InputArray src, cv::OutputArray dst, int blo
 //! \param borderType
 //! \param line_nr
 //! \param src_file
+//! \example        CVD::pyrUp( src, dst, Size(src.cols*2, src.rows*2));
 //!
 CV_EXPORTS_W void pyrUp( cv::InputArray src, cv::OutputArray dst,
                            const cv::Size& dstsize, int borderType
@@ -2236,6 +2237,7 @@ CV_EXPORTS void buildPyramid( cv::InputArray src, cv::OutputArrayOfArrays dst,
 //! \param borderType
 //! \param line_nr
 //! \param src_file
+//! \example        CVD::pyrDown( src, dst, Size(src.cols/2, src.rows/2));
 //!
 CV_EXPORTS_W void pyrDown( cv::InputArray src, cv::OutputArray dst,
                            const cv::Size& dstsize, int borderType

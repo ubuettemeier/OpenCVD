@@ -5,20 +5,21 @@ SAMPLE_PATH = 	basic/ \
 		edge/ \
 		filtering/ \
 		findcontours/ \
+		gabor/ \
 		imread/ \
 		short_sample/ \
 		demhist/ \
 		HoughCircles/ \
 		HoughLines/ \
-                buildPyramid/ \
-                LSD/ \
-                matchTemplate/ \
-                grabCut/ \
+		buildPyramid/ \
+		LSD/ \
+		matchTemplate/ \
+		grabCut/ \
 		matchShapes/ \
 		sepFilter2D/ \
 		cornerDetection/ \
-                cornerEigenValsAndVecs \
-                blending/
+		cornerEigenValsAndVecs \
+		blending/
 
 
 all:	
