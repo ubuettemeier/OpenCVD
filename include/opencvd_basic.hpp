@@ -545,7 +545,7 @@ uint64_t cvd_time_differnce (struct timeval *start)
 //!
 opencvd_start::opencvd_start()
 {
-    cout << "app gestartet\n";
+    cout << "opencvd started\n";
     init_socket ();
 }
 
@@ -567,7 +567,7 @@ opencvd_start::~opencvd_start()
         }
     }
 
-    cout << "app beendet\n";
+    cout << "opencvd finished\n";
 }
 
 //!
