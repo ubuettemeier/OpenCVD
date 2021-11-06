@@ -16,10 +16,14 @@
 #include "opencv2/opencv.hpp"
 // #include "/usr/include/opencv4/opencv2/opencv.hpp"
 
-#include "opencvd_types.hpp"
-#include "opencvd_basic.hpp"
-#include "opencvd_func.hpp"
-#include "opencvd_mat.hpp"
-#include "opencvd_cvdstd.hpp"
+#ifdef USE_CVD
+    #include "opencvd_types.hpp"
+    #include "opencvd_basic.hpp"
+    #include "opencvd_func.hpp"
+    #include "opencvd_mat.hpp"
+    #include "opencvd_cvdstd.hpp"
+#endif
+
+
 
 #endif // OPENCVD_HPP

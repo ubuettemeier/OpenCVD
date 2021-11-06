@@ -64,7 +64,9 @@ int main()
         if (taste != -1) {
             // printf ("%i\n", taste);
             if (taste == 27) ende = 1;          // ESC
+            #ifdef USE_CVD
             if (taste == 97) show_func_list();  // a
+            #endif
         }
     }
     KILL_CVD

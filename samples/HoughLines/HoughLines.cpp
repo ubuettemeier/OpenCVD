@@ -2,7 +2,7 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 
-#define USE_CVD
+#define USE_CVD_
 #include "opencvd.hpp"
 
 using namespace cv;
